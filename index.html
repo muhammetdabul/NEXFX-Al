@@ -3,638 +3,495 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#061226">
-<title>NEXFX AI | منصة التحليل المالي الذكية</title>
+<meta name="theme-color" content="#061326">
+<meta name="description" content="NEXFX AI - منصة موحدة لمراقبة الأسواق والتحليل">
+<title>NEXFX AI | منصة الأسواق الذكية</title>
 <style>
 :root{
- --bg:#061226;--panel:#0b1b34;--panel2:#102544;
- --gold:#eab64c;--gold2:#ffda82;--blue:#123d78;
- --text:#f5f7fb;--muted:#9eacc2;--green:#20d69a;
- --red:#ff5c70;--border:rgba(234,182,76,.28);
+--bg:#061326;--bg2:#081a31;--panel:#0a1b31;--panel2:#0d2340;
+--gold:#d5a63b;--gold2:#f4d47b;--white:#f5f7fb;--muted:#aab8ca;
+--line:rgba(213,166,59,.34);--green:#18c98b;--red:#f06473;
+--shadow:0 12px 35px rgba(0,0,0,.32)
 }
 *{box-sizing:border-box}
-body{
- margin:0;background:var(--bg);color:var(--text);
- font-family:Tahoma,Arial,sans-serif;
- background-image:
- radial-gradient(ellipse at 50% 18%,rgba(20,65,130,.45),transparent 45%),
- linear-gradient(180deg,#07152c,#030b18);
-}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{margin:0;background:radial-gradient(ellipse at 50% 18%,#10284a 0,#061326 55%);color:var(--white);font-family:Arial,Tahoma,sans-serif;line-height:1.55}
 button,input,select{font:inherit}
 button{cursor:pointer}
-.topbar{
- min-height:65px;padding:10px 3%;display:flex;align-items:center;
- justify-content:space-between;gap:15px;flex-wrap:wrap;
- background:rgba(3,12,27,.95);border-bottom:1px solid var(--border);
- position:sticky;top:0;z-index:10;
-}
-.brand{display:flex;align-items:center;gap:12px}
-.brand-icon{font-size:35px;color:var(--gold)}
-.brand-name{font-size:25px;font-weight:bold;letter-spacing:1px;color:var(--gold)}
-.brand-name span{color:white}
-.brand small{display:block;color:var(--muted);font-size:9px;letter-spacing:1px}
-nav{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-nav a{color:#d8dfeb;text-decoration:none;font-size:12px;padding:9px}
-nav a:hover{color:var(--gold)}
-.nav-btn,.gold-btn{
- border:1px solid var(--gold);background:linear-gradient(135deg,#f7d47e,#c58a25);
- color:#17120a;border-radius:22px;padding:9px 17px;font-weight:bold;
-}
-.container{width:min(1250px,94%);margin:auto}
-.hero{
- position:relative;overflow:hidden;min-height:255px;margin:18px auto;
- border:1px solid var(--border);border-radius:16px;
- background:linear-gradient(100deg,#06152c,#0c2b54 55%,#07152b);
- display:grid;grid-template-columns:1fr 1.3fr 1fr;
- align-items:center;padding:15px 22px;gap:10px;
-}
-.hero:before{
- content:"";position:absolute;inset:0;opacity:.3;pointer-events:none;
- background:repeating-linear-gradient(90deg,transparent 0 34px,rgba(234,182,76,.1) 35px 36px);
-}
-.hero-art{position:relative;z-index:1;display:flex;justify-content:center;align-items:center}
-.globe{
- width:190px;height:190px;border-radius:50%;position:relative;overflow:hidden;
- border:2px solid #8fc9ff;
- box-shadow:0 0 25px #3189e8, inset -20px -10px 35px #001024;
- background:
- radial-gradient(ellipse at 35% 35%,rgba(255,220,120,.95),transparent 4%),
- radial-gradient(ellipse at 62% 28%,#d3a94d 0 5%,transparent 6%),
- radial-gradient(ellipse at 32% 58%,#b58b36 0 9%,transparent 10%),
- radial-gradient(ellipse at 70% 65%,#c79d4b 0 7%,transparent 8%),
- radial-gradient(circle at 35% 35%,#2469a8,#09274d 55%,#020b1b);
-}
-.globe:before,.globe:after{
- content:"";position:absolute;border:1px solid rgba(160,207,255,.6);
- border-radius:50%;inset:8px 38px;
-}
-.globe:after{inset:0 55px}
-.globe-grid{
- position:absolute;inset:0;border-radius:50%;
- background:repeating-linear-gradient(0deg,transparent 0 27px,rgba(130,190,255,.2) 28px 29px);
-}
-.hero-copy{position:relative;z-index:2;text-align:center}
-.hero-copy h1{margin:0 0 10px;font-size:clamp(24px,4vw,39px);color:var(--gold)}
-.hero-copy h1 span{color:white}
-.hero-copy p{margin:5px 0;color:#d6deeb;font-size:14px}
-.hero-copy .gold-btn{margin-top:13px}
-.bull{width:210px;max-width:100%;filter:drop-shadow(0 0 12px rgba(234,182,76,.5))}
-.ticker{
- display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:12px 0;
-}
-.ticker-item,.stat,.panel,.category-card{
- background:linear-gradient(145deg,rgba(15,37,68,.95),rgba(7,21,42,.98));
- border:1px solid var(--border);border-radius:12px;
-}
-.ticker-item{padding:11px;text-align:center;font-size:12px}
-.ticker-item b{display:block;color:var(--gold);margin:5px}
-.up{color:var(--green)}.down{color:var(--red)}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}
-.stat{padding:14px;text-align:center}
-.stat small{color:var(--muted)}
-.stat strong{display:block;color:var(--gold);font-size:22px;margin-top:7px}
-.section-title{font-size:18px;color:var(--gold);margin:24px 0 12px}
-.categories{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.category-card{
- padding:16px 10px;text-align:center;color:white;transition:.2s;
-}
-.category-card:hover,.category-card.active{
- border-color:var(--gold);background:linear-gradient(145deg,#173e70,#10233e);
- transform:translateY(-2px)
-}
-.category-card .emoji{font-size:30px;display:block;margin-bottom:8px}
-.category-card b{color:var(--gold)}
-.category-card small{display:block;color:var(--muted);margin-top:6px}
-.panel{padding:15px;margin:12px 0}
-.controls{
- display:grid;grid-template-columns:repeat(4,1fr);gap:10px;align-items:end;
-}
-.field label{display:block;color:var(--muted);font-size:12px;margin-bottom:7px}
-.field input,.field select{
- width:100%;padding:11px;border-radius:8px;border:1px solid #29476c;
- background:#07172d;color:white;outline:none;
-}
-.field input:focus,.field select:focus{border-color:var(--gold)}
-.gold-btn:hover{filter:brightness(1.1)}
-.market-layout{display:grid;grid-template-columns:1fr 2fr;gap:12px}
-.market-list{max-height:420px;overflow:auto}
-.asset-row{
- display:flex;justify-content:space-between;align-items:center;gap:8px;
- padding:11px 7px;border-bottom:1px solid rgba(255,255,255,.07);
- font-size:12px;cursor:pointer;
-}
-.asset-row:hover,.asset-row.selected{background:#142e50}
-.asset-name{font-weight:bold}
-.asset-price{text-align:left}
-.star{color:#65758d;font-size:17px;border:0;background:none}
-.star.on{color:var(--gold)}
-.chart-head{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
-.chart-head h3{color:var(--gold);font-size:15px}
-.timeframes{display:flex;gap:5px;flex-wrap:wrap}
-.timeframes button,.mode-buttons button{
- color:#dce5f3;background:#102440;border:1px solid #29476c;
- border-radius:6px;padding:7px 10px;font-size:11px;
-}
-.timeframes button.active,.mode-buttons button.active{
- background:var(--gold);color:#17120a;border-color:var(--gold)
-}
-.chart{
- height:290px;position:relative;margin-top:10px;
- background-color:#07172b;
- background-image:linear-gradient(rgba(112,154,202,.09) 1px,transparent 1px),
- linear-gradient(90deg,rgba(112,154,202,.09) 1px,transparent 1px);
- background-size:40px 35px;border:1px solid #203b5e;border-radius:8px;
- overflow:hidden;
-}
-.chart svg{width:100%;height:100%}
-.chart-note{color:var(--muted);font-size:10px;margin-top:7px}
-.analysis-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:12px}
-.mode-buttons{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}
-.result{
- padding:13px;border:1px solid var(--border);border-radius:10px;
- background:#08172b;min-height:125px;
-}
-.result h3{color:var(--gold);margin:0 0 10px}
-.result-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.result-cell{background:#102440;border-radius:7px;padding:9px;font-size:12px}
-.result-cell b{display:block;color:var(--gold);margin-top:5px}
-.warning{color:#f0c879;font-size:11px;line-height:1.7}
-.trade-row{display:flex;justify-content:space-between;padding:12px 5px;border-bottom:1px solid #233a57;font-size:12px}
-footer{text-align:center;padding:25px;color:var(--muted);font-size:11px}
-@media(max-width:800px){
- .hero{grid-template-columns:1fr 1.5fr 1fr;min-height:190px;padding:10px}
- .globe{width:120px;height:120px}.bull{width:130px}
- .ticker{grid-template-columns:repeat(3,1fr)}
- .controls{grid-template-columns:repeat(2,1fr)}
- .market-layout{grid-template-columns:1fr}
-}
-@media(max-width:520px){
- nav{width:100%;justify-content:center}
- nav a{padding:5px;font-size:10px}
- .hero{grid-template-columns:1fr 1fr}
- .hero-copy{grid-column:1/-1;grid-row:1}
- .hero-art{grid-row:2}
- .globe{width:100px;height:100px}
- .bull{width:110px}
- .stats{grid-template-columns:repeat(2,1fr)}
- .categories{grid-template-columns:repeat(2,1fr)}
- .ticker{grid-template-columns:repeat(2,1fr)}
- .analysis-grid{grid-template-columns:1fr}
-}
+a{color:inherit;text-decoration:none}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:12px 3.5%;background:rgba(4,15,30,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}
+.brand{display:flex;align-items:center;gap:10px;white-space:nowrap}
+.brand-mark{width:42px;height:42px;border:1px solid var(--gold);border-radius:11px;display:grid;place-items:center;color:var(--gold2);font-size:25px;background:linear-gradient(145deg,#173253,#071426)}
+.brand-name{font-weight:900;font-size:22px;letter-spacing:.4px;color:var(--gold2);line-height:1}
+.brand-name span{color:#fff}
+.brand small{display:block;font-size:8px;letter-spacing:1px;color:#d5c18b;margin-top:5px}
+.navlinks{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.navlinks a,.navlinks button{border:0;background:transparent;color:#dbe2ec;padding:9px 11px;border-radius:8px;font-size:12px}
+.navlinks a:hover,.navlinks button:hover,.navlinks .selected{color:var(--gold2);background:#142743}
+.top-actions{display:flex;gap:8px;align-items:center}
+.pill{border:1px solid var(--line);border-radius:20px;padding:7px 11px;color:var(--gold2);font-size:11px;background:#0b1d33}
+.container{width:min(1440px,96%);margin:18px auto 35px}
+.hero{position:relative;overflow:hidden;min-height:215px;border:1px solid var(--line);border-radius:17px;padding:30px 5%;display:flex;align-items:center;background:radial-gradient(ellipse at 78% 55%,rgba(23,83,137,.65),transparent 35%),linear-gradient(100deg,#07172c,#0a2442 60%,#07172c);box-shadow:var(--shadow)}
+.hero:before{content:"";position:absolute;width:260px;height:260px;border-radius:50%;left:9%;top:-75px;border:1px solid rgba(220,174,68,.5);box-shadow:0 0 0 12px rgba(220,174,68,.04),0 0 0 28px rgba(220,174,68,.035),inset 0 0 35px rgba(39,139,210,.3);background:radial-gradient(circle at 35% 35%,#28608a,#07182e 65%)}
+.hero:after{content:"♉";position:absolute;left:14%;top:35px;font-size:112px;color:rgba(229,181,74,.72);text-shadow:0 0 25px #a87520;transform:rotate(-8deg)}
+.hero-copy{position:relative;z-index:1;max-width:650px;margin-right:auto;text-align:right}
+.eyebrow{color:var(--gold2);font-size:12px;letter-spacing:1px}
+.hero h1{font-size:clamp(25px,4vw,42px);line-height:1.2;margin:8px 0;color:var(--gold2)}
+.hero p{margin:7px 0 16px;color:#e0e6ef}
+.primary{background:linear-gradient(135deg,#f4d47b,#c28b22);border:1px solid #ffe5a0;color:#152033;font-weight:800;border-radius:22px;padding:10px 22px;box-shadow:0 5px 18px rgba(199,146,37,.22)}
+.primary:hover{filter:brightness(1.08)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.stat{background:linear-gradient(145deg,#0e2340,#09182b);border:1px solid var(--line);border-radius:12px;padding:12px 15px;text-align:center}
+.stat small{display:block;color:var(--muted);font-size:11px}
+.stat strong{display:block;color:var(--gold2);font-size:20px;margin-top:3px}
+.ticker{display:flex;gap:8px;overflow:auto;padding:9px;margin:14px 0;background:#08182b;border:1px solid var(--line);border-radius:12px;scrollbar-width:thin}
+.tick{flex:1 0 150px;padding:7px 10px;border-left:1px solid var(--line);font-size:11px}
+.tick b{display:block;color:var(--gold2);direction:ltr;text-align:right}
+.tick span{color:var(--muted);direction:ltr;display:block;text-align:right}
+.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 13px}
+h2{font-size:17px;color:var(--gold2);margin:0}
+h3{font-size:14px;margin:0 0 10px;color:var(--gold2)}
+.muted,.note{color:var(--muted);font-size:11px}
+.market-categories{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin:14px 0}
+.category{min-height:102px;border:1px solid var(--line);border-radius:13px;background:linear-gradient(140deg,#102746,#09182c);padding:14px;display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:right}
+.category:hover,.category.active{border-color:var(--gold2);box-shadow:0 0 18px rgba(213,166,59,.12)}
+.category .symbol{font-size:29px;color:var(--gold2)}
+.category b{display:block;color:var(--gold2);font-size:14px}
+.category small{display:block;color:var(--muted);font-size:10px}
+.panel{background:linear-gradient(145deg,rgba(13,34,60,.97),rgba(7,22,40,.98));border:1px solid var(--line);border-radius:14px;padding:16px;margin:13px 0;box-shadow:var(--shadow)}
+.toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0;flex:1}
+label{font-size:11px;color:var(--gold2)}
+input,select{width:100%;min-height:40px;background:#07172a;color:#fff;border:1px solid rgba(213,166,59,.4);border-radius:8px;padding:8px 10px;outline:none}
+input:focus,select:focus{border-color:var(--gold2)}
+.market-layout{display:grid;grid-template-columns:245px minmax(0,1fr) 285px;gap:12px;align-items:start}
+.asset-tools{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.small-btn{background:#102744;border:1px solid var(--line);color:#eaf0f8;border-radius:7px;padding:7px 10px;font-size:10px}
+.small-btn.active{background:var(--gold);color:#152033;font-weight:bold}
+.asset-list{display:flex;flex-direction:column;gap:5px;max-height:420px;overflow:auto}
+.asset-row{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:8px;border-bottom:1px solid rgba(255,255,255,.06);font-size:11px;cursor:pointer}
+.asset-row:hover,.asset-row.active{background:#142c49;border-radius:7px}
+.asset-row strong{direction:ltr;color:#f3d27a}
+.asset-row small{display:block;color:var(--muted);font-size:9px}
+.chart-card{min-width:0}
+.chart-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.chart-pair{color:var(--gold2);font-weight:bold;direction:ltr}
+.chart-area{height:310px;position:relative;overflow:hidden;border:1px solid rgba(160,185,210,.16);border-radius:9px;background-color:#061629;background-image:linear-gradient(rgba(147,173,201,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(147,173,201,.09) 1px,transparent 1px);background-size:100% 20%,10% 100%}
+.candles{position:absolute;inset:10px;display:flex;align-items:stretch;justify-content:space-around;gap:4px}
+.candle{position:relative;flex:1;max-width:18px;min-width:3px;height:100%}
+.wick{position:absolute;width:2px;left:50%;transform:translateX(-50%);border-radius:2px}
+.candle-body{position:absolute;left:12%;width:76%;min-height:3px;border-radius:2px}
+.bullish .wick,.bullish .candle-body{background:var(--green)}
+.bearish .wick,.bearish .candle-body{background:var(--red)}
+.axis{display:flex;justify-content:space-between;direction:ltr;color:var(--muted);font-size:9px;padding-top:7px}
+.indicators{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.indicator{border:1px solid rgba(213,166,59,.2);border-radius:7px;padding:6px 9px;color:#d9e2ee;font-size:10px}
+.signal-box{border:1px solid var(--line);border-radius:10px;padding:12px;background:#081a2d;margin-top:10px}
+.signal-value{font-size:23px;font-weight:900;color:var(--gold2)}
+.signal-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
+.signal-cell{background:#102640;border-radius:8px;padding:8px}
+.signal-cell small{display:block;color:var(--muted);font-size:9px}
+.signal-cell b{display:block;color:var(--gold2);direction:ltr;text-align:right;font-size:12px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.result{display:none}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;font-size:11px;min-width:480px}
+th,td{padding:10px;text-align:right;border-bottom:1px solid rgba(255,255,255,.08)}
+th{color:var(--gold2);font-weight:bold}
+td{color:#e1e8f0}
+.green{color:var(--green)!important}.red{color:var(--red)!important}
+footer{text-align:center;color:var(--muted);padding:25px 10px;border-top:1px solid var(--line);font-size:10px}
+.disclaimer{border-right:3px solid var(--gold);padding:8px 11px;background:rgba(213,166,59,.06);font-size:10px;color:#c4ceda}
+@media(max-width:1000px){.market-layout{grid-template-columns:220px minmax(0,1fr)}.analysis-side{grid-column:1/-1}.hero:before{left:2%}.hero:after{left:8%}}
+@media(max-width:700px){.topbar{position:relative;justify-content:center}.navlinks{justify-content:center}.top-actions{display:none}.container{width:94%}.hero{min-height:190px;padding:22px 5%}.hero:before{opacity:.35;left:-80px}.hero:after{opacity:.28;left:-5px}.hero-copy{margin:0;max-width:100%}.stats{grid-template-columns:repeat(2,1fr)}.market-categories{grid-template-columns:repeat(2,1fr)}.market-layout{grid-template-columns:1fr}.analysis-side{grid-column:auto}.asset-list{max-height:260px;display:grid;grid-template-columns:1fr 1fr}.chart-area{height:235px}.two-col{grid-template-columns:1fr}.panel{padding:13px}}
+@media(max-width:390px){.brand-name{font-size:19px}.market-categories{gap:7px}.category{padding:10px}.toolbar>.field{flex-basis:100%}}
 </style>
 </head>
 <body>
-
 <header class="topbar">
- <div class="brand">
-  <div class="brand-icon">◢</div>
-  <div><div class="brand-name">NEXFX <span>AI</span></div>
-  <small>SMART TRADING • SMARTER DECISIONS</small></div>
- </div>
- <nav>
-  <a href="#home">الرئيسية</a>
-  <a href="#markets">الأسواق</a>
-  <a href="#analysis">التحليل الذكي</a>
-  <a href="#about">حول المنصة</a>
-  <button class="nav-btn" onclick="alert('سيتم تفعيل تسجيل الدخول في إصدار لاحق')">تسجيل الدخول</button>
- </nav>
+<a class="brand" href="#home" aria-label="NEXFX AI">
+<span class="brand-mark">◢</span>
+<span><span class="brand-name">NEXFX <span>AI</span></span><small>SMART TRADING • SMARTER DECISIONS</small></span>
+</a>
+<nav class="navlinks" aria-label="التنقل الرئيسي">
+<a class="selected" href="#home">الرئيسية</a>
+<a href="#markets">الأسواق</a>
+<a href="#analysis">التحليل الذكي</a>
+<a href="#trades">الصفقات</a>
+<a href="#about">حول المنصة</a>
+</nav>
+<div class="top-actions"><span class="pill">● الواجهة تعمل</span><span class="pill">العربية</span></div>
 </header>
 
 <main class="container" id="home">
-
 <section class="hero">
- <div class="hero-art">
-  <div class="globe"><div class="globe-grid"></div></div>
- </div>
- <div class="hero-copy">
-  <h1>NEXFX <span>AI</span></h1>
-  <p>منصة تحليل مالي ذكية</p>
-  <p>باستخدام الذكاء الاصطناعي وبيانات الأسواق</p>
-  <p class="warning">تحليل • مراقبة • إدارة المخاطر</p>
-  <button class="gold-btn" onclick="document.getElementById('analysis').scrollIntoView({behavior:'smooth'})">ابدأ التحليل الآن</button>
- </div>
- <div class="hero-art">
-  <svg class="bull" viewBox="0 0 260 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ثور ذهبي">
-   <defs>
-    <linearGradient id="goldBull" x1="0" y1="0" x2="1" y2="1">
-     <stop offset="0" stop-color="#fff0a8"/>
-     <stop offset=".35" stop-color="#e5ad38"/>
-     <stop offset=".7" stop-color="#9e6416"/>
-     <stop offset="1" stop-color="#ffe28b"/>
-    </linearGradient>
-   </defs>
-   <g fill="url(#goldBull)" stroke="#f5ce70" stroke-width="2" stroke-linejoin="round">
-    <path d="M49 82 Q25 64 17 29 Q40 48 62 45 Q80 34 96 49 Q123 25 148 43 Q178 26 202 47 Q229 39 246 18 Q242 56 218 70 Q235 92 220 111 L204 127 L198 181 L181 181 L178 129 L148 140 L142 185 L125 185 L126 135 L91 128 L79 181 L62 181 L68 120 Q40 111 49 82Z"/>
-    <path d="M57 53 Q24 12 5 42 Q25 37 48 76Z"/>
-    <path d="M207 53 Q233 7 256 34 Q232 34 218 76Z"/>
-    <path d="M74 74 Q90 54 111 65 L119 95 L94 111 L68 99Z"/>
-    <path d="M133 66 Q157 48 179 66 L187 99 L158 114 L132 99Z"/>
-    <path d="M95 112 Q132 126 168 111 L187 131 Q144 155 89 132Z"/>
-    <path d="M48 82 Q29 105 40 125 L58 119 L63 91Z"/>
-    <path d="M195 82 Q220 94 217 119 L198 127 L187 96Z"/>
-   </g>
-   <path d="M112 87 L122 91 M166 85 L176 89" stroke="#33200a" stroke-width="5" stroke-linecap="round"/>
-   <path d="M122 119 Q143 127 161 117" fill="none" stroke="#5b370b" stroke-width="3"/>
-  </svg>
- </div>
+<div class="hero-copy">
+<div class="eyebrow">NEXFX AI · SMART MARKET INTELLIGENCE</div>
+<h1>منصة تحليل مالي ذكية</h1>
+<p>واجهة موحدة لمتابعة الأسواق وتحليل الأصول المالية — بوضوح ودقة وشفافية.</p>
+<a class="primary" href="#analysis">ابدأ التحليل الآن　↗</a>
+</div>
 </section>
 
-<section class="ticker" id="ticker">
- <div class="ticker-item">₿ BTC <b>—</b><span class="up">بيانات تجريبية</span></div>
- <div class="ticker-item">EUR/USD <b>—</b><span class="up">بيانات تجريبية</span></div>
- <div class="ticker-item">XAU/USD <b>—</b><span class="up">بيانات تجريبية</span></div>
- <div class="ticker-item">AAPL <b>—</b><span class="down">بيانات تجريبية</span></div>
- <div class="ticker-item">TSLA <b>—</b><span class="up">بيانات تجريبية</span></div>
+<section class="stats" aria-label="ملخص المنصة">
+<div class="stat"><small>الأسواق المدعومة بالواجهة</small><strong>4</strong></div>
+<div class="stat"><small>أنواع التحليل</small><strong>3</strong></div>
+<div class="stat"><small>حالة بيانات السوق</small><strong style="font-size:14px">بانتظار الربط</strong></div>
+<div class="stat"><small>محرك الذكاء الاصطناعي</small><strong style="font-size:14px">قيد التجهيز</strong></div>
 </section>
 
-<section class="stats">
- <div class="stat"><small>الأصول المتاحة</small><strong id="assetCount">0</strong></div>
- <div class="stat"><small>فئات الأسواق</small><strong>4</strong></div>
- <div class="stat"><small>الأطر الزمنية</small><strong>9</strong></div>
- <div class="stat"><small>حالة البيانات</small><strong style="font-size:15px">تجريبية</strong></div>
+<section class="ticker" aria-label="شريط الأسواق">
+<div class="tick"><b>BTC/USDT</b><span>بيانات غير متصلة</span></div>
+<div class="tick"><b>EUR/USD</b><span>بانتظار مزود البيانات</span></div>
+<div class="tick"><b>XAU/USD</b><span>بانتظار مزود البيانات</span></div>
+<div class="tick"><b>AAPL</b><span>بانتظار مزود البيانات</span></div>
+<div class="tick"><b>TSLA</b><span>بانتظار مزود البيانات</span></div>
 </section>
 
-<h2 class="section-title">فئات الأسواق الرئيسية</h2>
-<section class="categories">
- <button class="category-card active" data-category="crypto">
-  <span class="emoji">₿</span><b>العملات الرقمية</b><small>Crypto</small>
- </button>
- <button class="category-card" data-category="forex">
-  <span class="emoji">💱</span><b>الفوركس</b><small>Forex</small>
- </button>
- <button class="category-card" data-category="metals">
-  <span class="emoji">🪙</span><b>الذهب والمعادن</b><small>Gold & Metals</small>
- </button>
- <button class="category-card" data-category="stocks">
-  <span class="emoji">📈</span><b>الأسهم</b><small>Stocks</small>
- </button>
+<section id="markets">
+<div class="section-title"><h2>استكشف الأسواق العالمية</h2><span class="muted">اختر فئة السوق</span></div>
+<div class="market-categories">
+<button class="category active" data-market="crypto"><span><b>العملات الرقمية</b><small>CRYPTO · أصول متعددة</small></span><span class="symbol">₿</span></button>
+<button class="category" data-market="forex"><span><b>الفوركس</b><small>FOREX · أزواج العملات</small></span><span class="symbol">€</span></button>
+<button class="category" data-market="gold"><span><b>الذهب والمعادن</b><small>GOLD & METALS</small></span><span class="symbol">◆</span></button>
+<button class="category" data-market="stocks"><span><b>الأسهم العالمية</b><small>STOCKS · شركات عالمية</small></span><span class="symbol">▥</span></button>
+</div>
 </section>
 
-<h2 class="section-title" id="markets">أدوات السوق ومراقبة الأصول</h2>
 <section class="panel">
- <div class="controls">
-  <div class="field">
-   <label for="searchAsset">ابحث عن أصل</label>
-   <input id="searchAsset" placeholder="مثال BTC أو Bitcoin">
-  </div>
-  <div class="field">
-   <label for="assetSelect">اختيار الأصل</label>
-   <select id="assetSelect"></select>
-  </div>
-  <div class="field">
-   <label for="timeSelect">الإطار الزمني</label>
-   <select id="timeSelect">
-    <option>1m</option><option>5m</option><option>15m</option>
-    <option selected>1H</option><option>4H</option>
-    <option>1D</option><option>1W</option><option>1M</option><option>1Y</option>
-   </select>
-  </div>
-  <button class="gold-btn" onclick="selectCurrentAsset()">عرض الأصل</button>
- </div>
-</section>
-
+<div class="section-title"><h2>لوحة الأسواق والتحليل</h2><span class="muted" id="marketCaption">CRYPTO</span></div>
 <div class="market-layout">
- <section class="panel">
-  <div class="chart-head"><h3>قائمة الأصول</h3><span class="warning">قائمة تجريبية</span></div>
-  <div class="market-list" id="marketList"></div>
- </section>
-
- <section class="panel">
-  <div class="chart-head">
-   <h3 id="chartTitle">BTC/USDT</h3>
-   <div class="timeframes">
-    <button data-time="1m">1M</button><button data-time="5m">5M</button>
-    <button data-time="15m">15M</button><button class="active" data-time="1H">1H</button>
-    <button data-time="4H">4H</button><button data-time="1D">1D</button>
-   </div>
-  </div>
-  <div class="chart" id="chartArea">
-   <svg id="chartSvg" viewBox="0 0 800 290" preserveAspectRatio="none"></svg>
-  </div>
-  <div class="chart-note">رسم توضيحي تجريبي، وليس مخطط أسعار لحظي.</div>
- </section>
+<aside class="panel" style="margin:0;padding:12px">
+<h3>أدوات السوق</h3>
+<input id="assetSearch" type="search" placeholder="ابحث عن أصل أو رمز..." aria-label="ابحث عن أصل">
+<div class="asset-tools">
+<button class="small-btn active" id="allAssets">الكل</button>
+<button class="small-btn" id="favoritesOnly">المفضلة ☆</button>
 </div>
+<div class="asset-list" id="assetList"></div>
+<p class="note">القائمة تضم رموزاً شائعة، وقد تختلف الإتاحة حسب مزود البيانات والوسيط.</p>
+</aside>
 
-<h2 class="section-title" id="analysis">نتائج التحليل الذكي</h2>
-<div class="analysis-grid">
- <section class="panel">
-  <h3 style="color:var(--gold)">إعداد التحليل</h3>
-  <div class="mode-buttons">
-   <button class="active" data-mode="auto">تحليل تلقائي تجريبي</button>
-   <button data-mode="technical">تحليل فني</button>
-   <button data-mode="manual">إدخال يدوي</button>
-  </div>
-  <div id="manualFields" style="display:none">
-   <div class="controls">
-    <div class="field"><label>سعر الدخول</label><input id="entry" type="number" step="any" placeholder="مثال 100"></div>
-    <div class="field"><label>وقف الخسارة</label><input id="stop" type="number" step="any" placeholder="مثال 98"></div>
-    <div class="field"><label>الهدف الأول</label><input id="target1" type="number" step="any" placeholder="مثال 103"></div>
-    <div class="field"><label>الهدف الثاني</label><input id="target2" type="number" step="any" placeholder="مثال 106"></div>
-   </div>
-  </div>
-  <button class="gold-btn" style="margin-top:12px" onclick="runAnalysis()">تنفيذ التحليل</button>
-  <p class="warning">التحليل التلقائي والفني هنا توضيحي فقط، ولا يعتمد على بيانات سوق مباشرة.</p>
- </section>
- <section class="panel">
-  <div class="result" id="analysisResult">
-   <h3>نتيجة التحليل</h3>
-   <p class="warning">اختر الأصل ونمط التحليل ثم اضغط تنفيذ التحليل لعرض النتيجة.</p>
-  </div>
- </section>
+<section class="chart-card panel" style="margin:0">
+<div class="chart-head">
+<div><div class="chart-pair" id="chartPair">BTC/USDT</div><small class="muted" id="chartMeta">السعر غير متصل بمصدر مباشر</small></div>
+<div class="toolbar">
+<select id="timeframe" aria-label="الإطار الزمني" style="width:auto;min-width:115px">
+<option value="1m">1 دقيقة</option>
+<option value="5m">5 دقائق</option>
+<option value="15m" selected>15 دقيقة</option>
+<option value="1h">ساعة</option>
+<option value="4h">4 ساعات</option>
+<option value="1d">يومي</option>
+<option value="1w">أسبوعي</option>
+<option value="1M">شهري</option>
+</select>
+<button class="small-btn" id="favoriteBtn">☆ إضافة للمفضلة</button>
 </div>
+</div>
+<div class="chart-area"><div class="candles" id="chart"></div></div>
+<div class="axis"><span>09:00</span><span>12:00</span><span>15:00</span><span>18:00</span></div>
+<div class="indicators">
+<span class="indicator">RSI: بانتظار بيانات</span>
+<span class="indicator">MACD: بانتظار بيانات</span>
+<span class="indicator">EMA: بانتظار بيانات</span>
+<span class="indicator">شموع توضيحية</span>
+</div>
+<p class="disclaimer" style="margin-top:12px">الرسم الظاهر توضيحي وليس مخطط أسعار حقيقياً. سيحتاج الرسم المباشر إلى مزود بيانات سوق وربط تقني.</p>
+</section>
 
-<h2 class="section-title">مراقبة العقود والصفقات</h2>
-<section class="panel">
- <div class="chart-head"><h3 style="color:var(--gold)">قائمة المتابعة</h3>
- <button class="gold-btn" onclick="addWatch()">إضافة الأصل الحالي</button></div>
- <div id="watchList"><p class="warning">لا توجد أصول مضافة بعد.</p></div>
- <p class="warning">هذه القائمة للمتابعة فقط، ولا تنفذ أوامر شراء أو بيع لدى أي وسيط.</p>
+<aside class="panel analysis-side" style="margin:0">
+<div class="section-title"><h2>نتائج التحليل الذكي</h2><span class="muted">NEXFX AI</span></div>
+<div class="signal-box">
+<small class="muted">حالة محرك التحليل</small>
+<div class="signal-value" style="font-size:17px">بانتظار البيانات</div>
+<p class="note">لن نصدر إشارة شراء أو بيع قبل توافر بيانات موثوقة وتشغيل محرك التحليل.</p>
+</div>
+<div class="signal-grid">
+<div class="signal-cell"><small>الأصل المحدد</small><b id="sidePair">BTC/USDT</b></div>
+<div class="signal-cell"><small>الإطار الزمني</small><b id="sideTime">15m</b></div>
+<div class="signal-cell"><small>الاتجاه</small><b>غير محدد</b></div>
+<div class="signal-cell"><small>قوة الإشارة</small><b>غير متاحة</b></div>
+</div>
+<a class="primary" href="#analysis" style="display:block;text-align:center;margin-top:13px">إعداد التحليل الذكي</a>
+</aside>
+</div>
+</section>
+
+<section class="panel" id="analysis">
+<div class="section-title"><h2>مركز التحليل NEXFX AI</h2><span class="muted">فني · يدوي · تلقائي</span></div>
+<div class="two-col">
+<div>
+<div class="field"><label for="analysisMode">نوع التحليل</label>
+<select id="analysisMode">
+<option value="technical">التحليل الفني</option>
+<option value="manual">التحليل اليدوي</option>
+<option value="auto">التحليل التلقائي</option>
+</select>
+</div>
+<div class="field" style="margin-top:10px"><label for="direction">اتجاه الصفقة (للتحليل اليدوي)</label>
+<select id="direction"><option value="buy">شراء / LONG</option><option value="sell">بيع / SHORT</option></select>
+</div>
+<div class="two-col" style="margin-top:10px">
+<div class="field"><label for="entry">سعر الدخول (يدوي)</label><input id="entry" type="number" step="any" placeholder="أدخل سعر الدخول"></div>
+<div class="field"><label for="stop">وقف الخسارة SL</label><input id="stop" type="number" step="any" placeholder="أدخل وقف الخسارة"></div>
+<div class="field"><label for="target1">الهدف الأول TP1</label><input id="target1" type="number" step="any" placeholder="اختياري"></div>
+<div class="field"><label for="target2">الهدف الثاني TP2</label><input id="target2" type="number" step="any" placeholder="اختياري"></div>
+</div>
+<button class="primary" id="runAnalysis" style="width:100%;margin-top:14px">تشغيل التحليل</button>
+</div>
+<div>
+<h3>مخرجات التحليل</h3>
+<div class="signal-box result" id="analysisResult" style="display:block">
+<div class="muted">النتيجة</div>
+<div class="signal-value" id="resultTitle" style="font-size:17px">لم يتم تشغيل تحليل</div>
+<p class="note" id="resultText">اختر نوع التحليل. التحليل الفني والتلقائي يحتاجان بيانات سوق حقيقية ومحركاً متصلاً. التحليل اليدوي يمكنه تنظيم المستويات التي تدخلها.</p>
+<div class="signal-grid">
+<div class="signal-cell"><small>نوع التحليل</small><b id="outMode">—</b></div>
+<div class="signal-cell"><small>الأصل</small><b id="outPair">—</b></div>
+<div class="signal-cell"><small>الدخول</small><b id="outEntry">—</b></div>
+<div class="signal-cell"><small>وقف الخسارة</small><b id="outStop">—</b></div>
+<div class="signal-cell"><small>TP1</small><b id="outTP1">—</b></div>
+<div class="signal-cell"><small>TP2</small><b id="outTP2">—</b></div>
+</div>
+</div>
+</div>
+</div>
+<p class="disclaimer" style="margin-top:14px">تنبيه: هذه النسخة واجهة أمامية فقط. لا يوجد حالياً اتصال مثبت ببورصات أو مزود أسعار أو خادم ذكاء اصطناعي. لا تعتبر أي بيانات توضيحية توصية استثمارية.</p>
+</section>
+
+<section class="panel" id="trades">
+<div class="section-title"><h2>مراقبة العقود والصفقات</h2><span class="muted">لوحة متابعة</span></div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>الأصل</th><th>النوع</th><th>الدخول</th><th>وقف الخسارة</th><th>الهدف</th><th>الحالة</th></tr></thead>
+<tbody id="tradeRows"><tr><td colspan="6" class="muted">لا توجد صفقات متصلة حالياً. يمكن إضافة الربط عند توفير واجهة الوسيط أو مصدر البيانات.</td></tr></tbody>
+</table>
+</div>
 </section>
 
 <section class="panel" id="about">
- <h2 class="section-title" style="margin-top:0">حول NEXFX AI</h2>
- <p style="line-height:2;color:#c3cede;font-size:13px">
-  NEXFX AI واجهة تجريبية لمتابعة فئات متعددة من الأسواق المالية،
-  وتنظيم الأصول والأطر الزمنية وعرض أدوات تحليل توضيحية.
-  الهدف هو تطوير منصة واضحة تساعد المستخدم على متابعة السوق وإدارة معلوماته.
- </p>
- <p class="warning">تنبيه المخاطر: لا تعتبر النتائج المعروضة توصية استثمارية أو ضماناً للربح. التداول ينطوي على مخاطر وقد يؤدي إلى خسارة رأس المال.</p>
+<div class="section-title"><h2>عن NEXFX AI</h2></div>
+<p class="muted">منصة موحدة لاستعراض العملات الرقمية وأزواج الفوركس والذهب والفضة والمعادن والأسهم، مع مساحة مخصصة للتحليل الفني واليدوي والتلقائي ومراقبة الأسواق والصفقات.</p>
+<p class="note">توسيع قوائم الأصول لا يعني أن أسعارها متصلة أو أن التداول متاح عليها تلقائياً؛ يلزم تحديد مزود بيانات ووسيط يدعمان كل فئة.</p>
 </section>
 </main>
 
-<footer>
- <div class="brand-name">NEXFX <span>AI</span></div>
- SMART TRADING • SMARTER DECISIONS
- <p>© 2026 NEXFX AI — جميع الحقوق محفوظة</p>
-</footer>
+<footer>NEXFX AI © 2026 · SMART TRADING • SMARTER DECISIONS</footer>
 
 <script>
+"use strict";
+
 const assets={
- crypto:[
-  ["BTC/USDT","Bitcoin","₿",67432.18],
-  ["ETH/USDT","Ethereum","◆",3475.21],
-  ["BNB/USDT","BNB","◆",598.32],
-  ["SOL/USDT","Solana","◎",148.27],
-  ["XRP/USDT","XRP","✕",0.5321],
-  ["DOGE/USDT","Dogecoin","Ð",0.1623],
-  ["ADA/USDT","Cardano","₳",0.4512],
-  ["AVAX/USDT","Avalanche","▲",36.82],
-  ["DOT/USDT","Polkadot","●",7.12],
-  ["LINK/USDT","Chainlink","⬡",18.45],
-  ["LTC/USDT","Litecoin","Ł",82.31],
-  ["TRX/USDT","TRON","T",0.124],
-  ["TON/USDT","Toncoin","◆",5.42],
-  ["SHIB/USDT","Shiba Inu","🐕",0.000024],
-  ["BCH/USDT","Bitcoin Cash","฿",412.6],
-  ["NEAR/USDT","NEAR Protocol","N",6.12],
-  ["APT/USDT","Aptos","A",8.31],
-  ["ARB/USDT","Arbitrum","A",1.02],
-  ["OP/USDT","Optimism","O",2.21],
-  ["UNI/USDT","Uniswap","U",9.81]
- ],
- forex:[
-  ["EUR/USD","Euro / US Dollar","€",1.0874],
-  ["GBP/USD","British Pound / US Dollar","£",1.2742],
-  ["USD/JPY","US Dollar / Japanese Yen","¥",149.52],
-  ["USD/CHF","US Dollar / Swiss Franc","₣",0.8841],
-  ["AUD/USD","Australian Dollar / US Dollar","A",0.6542],
-  ["USD/CAD","US Dollar / Canadian Dollar","C",1.3712],
-  ["NZD/USD","New Zealand Dollar / US Dollar","N",0.6121],
-  ["EUR/GBP","Euro / British Pound","€",0.8531],
-  ["EUR/JPY","Euro / Japanese Yen","€",162.54],
-  ["GBP/JPY","Pound / Yen","£",190.62],
-  ["EUR/CHF","Euro / Swiss Franc","€",0.9612],
-  ["USD/TRY","US Dollar / Turkish Lira","₺",34.12]
- ],
- metals:[
-  ["XAU/USD","Gold","🥇",2348.75],
-  ["XAG/USD","Silver","🥈",29.42],
-  ["XPT/USD","Platinum","◆",1012.5],
-  ["XPD/USD","Palladium","◆",985.3],
-  ["COPPER","Copper","🟠",4.52]
- ],
- stocks:[
-  ["AAPL","Apple","●",189.32],
-  ["TSLA","Tesla","T",242.17],
-  ["MSFT","Microsoft","M",420.15],
-  ["NVDA","NVIDIA","N",120.91],
-  ["AMZN","Amazon","A",185.07],
-  ["GOOGL","Alphabet","G",176.42],
-  ["META","Meta","M",505.23],
-  ["NFLX","Netflix","N",642.15],
-  ["AMD","AMD","A",162.45],
-  ["INTC","Intel","I",31.82],
-  ["JPM","JPMorgan","J",198.23],
-  ["KO","Coca-Cola","C",62.15]
- ]
+crypto:[
+"BTC/USDT","ETH/USDT","BNB/USDT","SOL/USDT","XRP/USDT","ADA/USDT","DOGE/USDT","TRX/USDT","TON/USDT","AVAX/USDT","LINK/USDT","DOT/USDT","BCH/USDT","LTC/USDT","SHIB/USDT","NEAR/USDT","APT/USDT","ARB/USDT","OP/USDT","ATOM/USDT","ETC/USDT","FIL/USDT","ICP/USDT","SUI/USDT","AAVE/USDT","UNI/USDT","XLM/USDT","HBAR/USDT","VET/USDT","INJ/USDT","MKR/USDT","RUNE/USDT","ALGO/USDT","FTM/USDT","GRT/USDT","EGLD/USDT","SAND/USDT","MANA/USDT","AXS/USDT","CRV/USDT"
+],
+forex:[
+"EUR/USD","GBP/USD","USD/JPY","USD/CHF","AUD/USD","USD/CAD","NZD/USD","EUR/GBP","EUR/JPY","EUR/CHF","EUR/AUD","EUR/CAD","EUR/NZD","GBP/JPY","GBP/CHF","GBP/AUD","GBP/CAD","GBP/NZD","AUD/JPY","AUD/CHF","AUD/CAD","AUD/NZD","CAD/JPY","CAD/CHF","NZD/JPY","NZD/CHF","CHF/JPY","USD/TRY","USD/CNH","USD/MXN","USD/ZAR","USD/SEK","USD/NOK","USD/SGD","USD/HKD"
+],
+gold:[
+"XAU/USD","XAG/USD","XPT/USD","XPD/USD","XCU/USD","GOLD","SILVER","PLATINUM","PALLADIUM","COPPER","ALUMINUM","NICKEL","ZINC","WTI","BRENT","NATGAS"
+],
+stocks:[
+"AAPL","MSFT","NVDA","AMZN","GOOGL","GOOG","META","TSLA","BRK.B","LLY","AVGO","JPM","WMT","V","MA","XOM","COST","ORCL","NFLX","AMD","CRM","BAC","KO","PEP","ADBE","CSCO","TMO","MCD","DIS","INTC","QCOM","UBER","SHOP","PLTR","NKE","PFE","GE","CAT","IBM","BA","TSM","BABA","SONY","SAP","ASML","NESN.SW","MC.PA","7203.T","005930.KS"
+]
 };
 
-let currentCategory="crypto";
-let currentAsset=assets.crypto[0];
-let currentMode="auto";
-let favorites=new Set();
-let watchItems=[];
+let currentMarket="crypto";
+let selectedAsset="BTC/USDT";
+let showFavorites=false;
+const favorites=new Set();
 
-const allAssets=Object.values(assets).flat();
-document.getElementById("assetCount").textContent=allAssets.length;
+const $=id=>document.getElementById(id);
 
-function formatPrice(n){
- return n<0.001?n.toFixed(6):n<1?n.toFixed(4):n.toLocaleString("en-US",{maximumFractionDigits:2});
-}
-function getCategoryAssets(){return assets[currentCategory]}
+function renderAssetList(){
+const list=$("assetList");
+const query=$("assetSearch").value.trim().toLowerCase();
+list.innerHTML="";
 
-function renderAssets(filter=""){
- const list=document.getElementById("marketList");
- const filtered=getCategoryAssets().filter(a=>
-  (a[0]+" "+a[1]).toLowerCase().includes(filter.toLowerCase())
- );
- list.innerHTML="";
- if(!filtered.length){
-  list.innerHTML='<p class="warning">لا توجد نتائج مطابقة.</p>';return;
- }
- filtered.forEach(a=>{
-  const row=document.createElement("div");
-  row.className="asset-row"+(a[0]===currentAsset[0]?" selected":"");
-  const name=document.createElement("div");
-  name.innerHTML='<span class="asset-name"></span><br><span style="color:#91a2ba"></span>';
-  name.children[0].textContent=a[2]+" "+a[0];
-  name.children[1].textContent=a[1];
-  const price=document.createElement("div");
-  price.className="asset-price";
-  price.innerHTML='<b></b><br><span class="up">تجريبي</span>';
-  price.children[0].textContent=formatPrice(a[3]);
-  const star=document.createElement("button");
-  star.className="star"+(favorites.has(a[0])?" on":"");
-  star.textContent="★";
-  star.title="إضافة للمفضلة";
-  star.onclick=(e)=>{
-   e.stopPropagation();
-   if(favorites.has(a[0]))favorites.delete(a[0]);else favorites.add(a[0]);
-   renderAssets(document.getElementById("searchAsset").value);
-  };
-  row.append(name,price,star);
-  row.onclick=()=>chooseAsset(a);
-  list.appendChild(row);
- });
+const filtered=assets[currentMarket].filter(asset=>
+(!query||asset.toLowerCase().includes(query))&&
+(!showFavorites||favorites.has(asset))
+);
+
+if(!filtered.length){
+list.innerHTML='<p class="muted">لا توجد نتائج مطابقة.</p>';
+return;
 }
 
-function fillSelect(){
- const select=document.getElementById("assetSelect");
- select.innerHTML="";
- getCategoryAssets().forEach(a=>{
-  const op=document.createElement("option");
-  op.value=a[0];op.textContent=a[0]+" — "+a[1];
-  select.appendChild(op);
- });
- select.value=currentAsset[0];
-}
+filtered.forEach(asset=>{
+const row=document.createElement("div");
+row.className="asset-row"+(asset===selectedAsset?" active":"");
 
-function chooseAsset(a){
- currentAsset=a;
- document.getElementById("chartTitle").textContent=a[0];
- document.getElementById("assetSelect").value=a[0];
- renderAssets(document.getElementById("searchAsset").value);
- drawChart();
-}
-function selectCurrentAsset(){
- const found=getCategoryAssets().find(a=>a[0]===document.getElementById("assetSelect").value);
- if(found)chooseAsset(found);
-}
-function changeCategory(category){
- currentCategory=category;
- currentAsset=assets[category][0];
- document.querySelectorAll(".category-card").forEach(b=>
-  b.classList.toggle("active",b.dataset.category===category)
- );
- document.getElementById("searchAsset").value="";
- fillSelect();renderAssets();chooseAsset(currentAsset);
-}
-document.querySelectorAll(".category-card").forEach(b=>{
- b.addEventListener("click",()=>changeCategory(b.dataset.category));
+const name=document.createElement("span");
+name.textContent=asset;
+
+const meta=document.createElement("small");
+meta.textContent="اضغط للاختيار";
+name.appendChild(meta);
+
+const star=document.createElement("strong");
+star.textContent=favorites.has(asset)?"★":"☆";
+
+row.append(name,star);
+row.addEventListener("click",()=>selectAsset(asset));
+list.appendChild(row);
 });
-document.getElementById("searchAsset").addEventListener("input",e=>{
- renderAssets(e.target.value);
-});
-document.getElementById("assetSelect").addEventListener("change",selectCurrentAsset);
-
-function drawChart(){
- const svg=document.getElementById("chartSvg");
- const seed=currentAsset[0].split("").reduce((s,c)=>s+c.charCodeAt(0),0);
- let random=seed;
- function rnd(){random=(random*9301+49297)%233280;return random/233280}
- let value=125,items="";
- for(let i=0;i<58;i++){
-  const change=(rnd()-.47)*28;
-  const open=value;value=Math.max(35,Math.min(240,value+change));
-  const close=value;
-  const high=Math.max(open,close)+rnd()*12;
-  const low=Math.min(open,close)-rnd()*12;
-  const x=12+i*13.4;
-  const color=close>=open?"#20d69a":"#ff5c70";
-  const y1=265-high,y2=265-low;
-  const top=265-Math.max(open,close),height=Math.max(3,Math.abs(close-open));
-  items+=`<line x1="${x+4}" y1="${y1}" x2="${x+4}" y2="${y2}" stroke="${color}" stroke-width="1.4"/>`;
-  items+=`<rect x="${x}" y="${top}" width="8" height="${height}" fill="${color}" rx="1"/>`;
- }
- svg.innerHTML=`
- <defs><linearGradient id="chartGlow" x1="0" x2="0" y1="0" y2="1">
- <stop offset="0" stop-color="#eab64c" stop-opacity=".18"/>
- <stop offset="1" stop-color="#eab64c" stop-opacity="0"/>
- </linearGradient></defs>
- <path d="M0 180 Q100 150 180 170 T340 130 T500 150 T800 95 L800 290 L0 290Z" fill="url(#chartGlow)"/>
- ${items}
- <path d="M0 190 Q100 170 180 180 T340 140 T500 160 T800 110" fill="none" stroke="#eab64c" stroke-width="2" opacity=".8"/>
- `;
 }
-document.querySelectorAll(".timeframes button").forEach(b=>{
- b.onclick=()=>{
-  document.querySelectorAll(".timeframes button").forEach(x=>x.classList.remove("active"));
-  b.classList.add("active");
-  document.getElementById("timeSelect").value=b.dataset.time;
-  drawChart();
- };
-});
-document.getElementById("timeSelect").addEventListener("change",drawChart);
 
-document.querySelectorAll(".mode-buttons button").forEach(b=>{
- b.onclick=()=>{
-  currentMode=b.dataset.mode;
-  document.querySelectorAll(".mode-buttons button").forEach(x=>x.classList.remove("active"));
-  b.classList.add("active");
-  document.getElementById("manualFields").style.display=
-   currentMode==="manual"?"block":"none";
- };
+function selectAsset(asset){
+selectedAsset=asset;
+$("chartPair").textContent=asset;
+$("sidePair").textContent=asset;
+$("chartMeta").textContent="لا توجد أسعار مباشرة متصلة";
+$("favoriteBtn").textContent=favorites.has(asset)?"★ إزالة من المفضلة":"☆ إضافة للمفضلة";
+renderAssetList();
+}
+
+function changeMarket(market){
+currentMarket=market;
+showFavorites=false;
+$("assetSearch").value="";
+
+document.querySelectorAll(".category").forEach(button=>{
+button.classList.toggle("active",button.dataset.market===market);
 });
+
+$("marketCaption").textContent=market.toUpperCase();
+selectedAsset=assets[market][0];
+selectAsset(selectedAsset);
+renderAssetList();
+
+$("allAssets").classList.add("active");
+$("favoritesOnly").classList.remove("active");
+}
+
+document.querySelectorAll(".category").forEach(button=>{
+button.addEventListener("click",()=>changeMarket(button.dataset.market));
+});
+
+$("assetSearch").addEventListener("input",renderAssetList);
+
+$("allAssets").addEventListener("click",()=>{
+showFavorites=false;
+$("allAssets").classList.add("active");
+$("favoritesOnly").classList.remove("active");
+renderAssetList();
+});
+
+$("favoritesOnly").addEventListener("click",()=>{
+showFavorites=true;
+$("favoritesOnly").classList.add("active");
+$("allAssets").classList.remove("active");
+renderAssetList();
+});
+
+$("favoriteBtn").addEventListener("click",()=>{
+if(favorites.has(selectedAsset)){
+favorites.delete(selectedAsset);
+}else{
+favorites.add(selectedAsset);
+}
+$("favoriteBtn").textContent=favorites.has(selectedAsset)?"★ إزالة من المفضلة":"☆ إضافة للمفضلة";
+renderAssetList();
+});
+
+$("timeframe").addEventListener("change",()=>{
+$("sideTime").textContent=$("timeframe").value;
+});
+
+function renderDemoCandles(){
+const chart=$("chart");
+chart.innerHTML="";
+
+const values=[
+[35,65,25,72],[70,48,42,78],[40,60,32,66],[78,55,48,84],
+[60,82,52,88],[68,45,38,73],[38,58,30,64],[75,52,45,81],
+[63,85,55,91],[72,55,46,79],[42,65,35,71],[78,50,44,84],
+[65,88,57,94],[76,58,50,82],[48,69,40,75],[80,55,47,86],
+[68,90,60,96],[78,60,53,84],[48,69,40,75],[83,57,49,89],
+[60,76,50,82],[45,66,38,73],[72,51,43,79],[55,80,47,86],
+[78,61,54,85],[50,70,43,76],[70,48,40,77],[58,79,49,87],
+[80,59,51,86],[62,83,55,91]
+];
+
+values.forEach(data=>{
+const [open,close,low,high]=data;
+const bullish=close>=open;
+const candle=document.createElement("div");
+candle.className="candle "+(bullish?"bullish":"bearish");
+
+const wick=document.createElement("div");
+wick.className="wick";
+wick.style.top=(100-high)+"%";
+wick.style.height=(high-low)+"%";
+
+const body=document.createElement("div");
+body.className="candle-body";
+body.style.top=(100-Math.max(open,close))+"%";
+body.style.height=Math.max(3,Math.abs(close-open))+"%";
+
+candle.append(wick,body);
+chart.appendChild(candle);
+});
+}
 
 function runAnalysis(){
- const box=document.getElementById("analysisResult");
- if(currentMode==="manual"){
-  const entry=Number(document.getElementById("entry").value);
-  const stop=Number(document.getElementById("stop").value);
-  const t1=Number(document.getElementById("target1").value);
-  const t2=Number(document.getElementById("target2").value);
-  if(!entry||!stop||!t1||!t2){
-   box.innerHTML='<h3>بيانات غير مكتملة</h3><p class="warning">يرجى إدخال سعر الدخول ووقف الخسارة والهدفين.</p>';return;
-  }
-  if(stop===entry||t1===entry||t2===entry){
-   box.innerHTML='<h3>تحقق من القيم</h3><p class="warning">يجب أن تختلف مستويات الدخول والوقف والأهداف.</p>';return;
-  }
-  box.innerHTML=`
-   <h3>مستوياتك اليدوية — ${currentAsset[0]}</h3>
-   <div class="result-grid">
-    <div class="result-cell">سعر الدخول<b>${entry}</b></div>
-    <div class="result-cell">وقف الخسارة<b>${stop}</b></div>
-    <div class="result-cell">الهدف الأول<b>${t1}</b></div>
-    <div class="result-cell">الهدف الثاني<b>${t2}</b></div>
-   </div><p class="warning">تم عرض المستويات التي أدخلتها فقط. هذه ليست توصية تداول.</p>`;
-  return;
- }
- const label=currentMode==="auto"?"تحليل تلقائي توضيحي":"تحليل فني توضيحي";
- box.innerHTML=`
-  <h3>${label} — ${currentAsset[0]}</h3>
-  <p class="warning">لا يمكن إصدار إشارة شراء أو بيع موثوقة قبل ربط بيانات الأسعار الحقيقية ومحرك التحليل.</p>
-  <div class="result-grid">
-   <div class="result-cell">الأصل<b>${currentAsset[0]}</b></div>
-   <div class="result-cell">الإطار الزمني<b>${document.getElementById("timeSelect").value}</b></div>
-   <div class="result-cell">السعر المرجعي التجريبي<b>${formatPrice(currentAsset[3])}</b></div>
-   <div class="result-cell">حالة التحليل<b>بانتظار بيانات حقيقية</b></div>
-  </div>`;
+const mode=$("analysisMode").value;
+const names={
+technical:"التحليل الفني",
+manual:"التحليل اليدوي",
+auto:"التحليل التلقائي"
+};
+
+$("outMode").textContent=names[mode];
+$("outPair").textContent=selectedAsset;
+$("resultTitle").className="signal-value";
+$("resultTitle").style.color="var(--gold2)";
+
+if(mode!=="manual"){
+$("resultTitle").textContent="التحليل غير متاح حالياً";
+$("resultText").textContent=mode==="technical"
+?"يتطلب التحليل الفني شموعاً وأسعاراً حقيقية لحساب المؤشرات، ولا يوجد مزود بيانات متصل في هذه النسخة."
+:"يتطلب التحليل التلقائي اتصالاً بمصدر بيانات وخادم محرك الذكاء الاصطناعي. لم يتم تفعيلهما بعد.";
+
+["outEntry","outStop","outTP1","outTP2"].forEach(id=>{
+$(id).textContent="—";
+});
+return;
 }
 
-function addWatch(){
- if(watchItems.some(a=>a[0]===currentAsset[0])){
-  alert("هذا الأصل موجود بالفعل في قائمة المتابعة.");return;
- }
- watchItems.push(currentAsset);
- renderWatch();
-}
-function removeWatch(symbol){
- watchItems=watchItems.filter(a=>a[0]!==symbol);
- renderWatch();
-}
-function renderWatch(){
- const box=document.getElementById("watchList");
- if(!watchItems.length){
-  box.innerHTML='<p class="warning">لا توجد أصول مضافة بعد.</p>';return;
- }
- box.innerHTML="";
- watchItems.forEach(a=>{
-  const row=document.createElement("div");
-  row.className="trade-row";
-  const name=document.createElement("b");name.textContent=a[0]+" — "+a[1];
-  const price=document.createElement("span");price.textContent=formatPrice(a[3])+" (تجريبي)";
-  const del=document.createElement("button");
-  del.textContent="حذف";del.className="star";del.onclick=()=>removeWatch(a[0]);
-  row.append(name,price,del);box.appendChild(row);
- });
+const entry=Number($("entry").value);
+const stop=Number($("stop").value);
+const tp1=$("target1").value.trim();
+const tp2=$("target2").value.trim();
+const direction=$("direction").value;
+
+if(!Number.isFinite(entry)||entry<=0||!Number.isFinite(stop)||stop<=0){
+$("resultTitle").textContent="أدخل الدخول ووقف الخسارة";
+$("resultText").textContent="التحليل اليدوي يحتاج قيمة موجبة لسعر الدخول ووقف الخسارة.";
+return;
 }
 
-function init(){
- fillSelect();
- renderAssets();
- drawChart();
+if((direction==="buy"&&stop>=entry)||(direction==="sell"&&stop<=entry)){
+$("resultTitle").textContent="راجع مستويات الأسعار";
+$("resultText").textContent="في الشراء يجب أن يكون وقف الخسارة أقل من الدخول، وفي البيع يجب أن يكون أعلى منه.";
+return;
 }
-init();
+
+$("resultTitle").textContent=direction==="buy"?"خطة يدوية — شراء":"خطة يدوية — بيع";
+$("resultText").textContent="تم تنظيم المستويات التي أدخلتها فقط. هذه ليست إشارة سوق أو توصية استثمارية.";
+
+$("outEntry").textContent=entry;
+$("outStop").textContent=stop;
+$("outTP1").textContent=tp1||"—";
+$("outTP2").textContent=tp2||"—";
+}
+
+$("runAnalysis").addEventListener("click",runAnalysis);
+
+renderDemoCandles();
+changeMarket("crypto");
 </script>
 </body>
 </html>
