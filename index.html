@@ -3,283 +3,310 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEXFX AI</title>
-
+<meta name="theme-color" content="#07111f">
+<title>NEXFX AI | منصة الأسواق الذكية</title>
 <style>
-* {
-  box-sizing: border-box;
+:root{
+  --bg:#07111f;
+  --panel:#10243a;
+  --panel2:#142b43;
+  --gold:#d6b36a;
+  --gold2:#f1d99b;
+  --text:#f5f2e9;
+  --muted:#a8b3c1;
+  --green:#43c99a;
+  --red:#ef7777;
+  --border:rgba(214,179,106,.25);
 }
-
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #061326;
-  color: white;
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Arial,sans-serif;
+  background-image:radial-gradient(ellipse at top,#172d45,transparent 60%);
 }
-
-header {
-  background: #020b19;
-  padding: 20px;
-  text-align: center;
-  border-bottom: 2px solid #087bff;
+header{
+  padding:20px 5%;background:#050d18;
+  border-bottom:1px solid var(--border);
+  display:flex;justify-content:space-between;
+  align-items:center;gap:15px;flex-wrap:wrap;
 }
-
-header h1 {
-  margin: 0;
-  font-size: 32px;
-  color: #168cff;
+.logo{font-size:27px;font-weight:900;color:var(--gold2)}
+.logo span{color:white}
+.status{font-size:12px;color:var(--green)}
+.container{width:min(1200px,94%);margin:25px auto}
+h2{color:var(--gold2);font-size:19px}
+h3{font-size:16px}
+.grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
 }
-
-header p {
-  color: #b7c9df;
+.panel{
+  background:linear-gradient(145deg,var(--panel),#0b192a);
+  border:1px solid var(--border);border-radius:16px;
+  padding:18px;margin-bottom:17px;
+  box-shadow:0 10px 30px #0003;
 }
-
-.container {
-  max-width: 850px;
-  margin: 25px auto;
-  padding: 15px;
+.stat{color:var(--muted);font-size:13px}
+.stat strong{display:block;color:var(--gold2);font-size:22px;margin-top:10px}
+.navigation{
+  display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;
 }
-
-.panel {
-  background: #0d2039;
-  border: 1px solid #1766aa;
-  border-radius: 16px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 0 15px #001c3d;
+button,select{
+  font:inherit;border-radius:10px;
 }
-
-h2 {
-  color: #39a6ff;
-  text-align: center;
+button{
+  cursor:pointer;border:1px solid var(--border);
+  background:var(--panel2);color:var(--text);
+  padding:12px 15px;transition:.2s;
 }
-
-.market-buttons {
-  display: flex;
-  gap: 10px;
+button:hover{border-color:var(--gold)}
+button.active,.primary{
+  background:linear-gradient(120deg,#b58a3f,var(--gold2));
+  color:#17130a;border-color:var(--gold2);font-weight:bold;
 }
-
-button, select {
-  font-size: 17px;
-  border-radius: 10px;
-  padding: 14px;
+select{
+  width:100%;padding:13px;background:#081626;
+  color:white;border:1px solid var(--border);
+  min-height:45px;
 }
-
-.market-buttons button {
-  flex: 1;
-  background: #142b49;
-  color: white;
-  border: 1px solid #168cff;
-  cursor: pointer;
+label{display:block;color:var(--gold2);margin:15px 0 8px;font-size:13px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.full{width:100%;margin-top:17px}
+.market-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:12px;
 }
-
-.market-buttons button.active {
-  background: #087bff;
+.market-item{
+  background:#081626;border:1px solid var(--border);
+  padding:14px;border-radius:12px;
 }
-
-label {
-  display: block;
-  margin: 20px 0 8px;
-  color: #c8e3ff;
+.market-item small{color:var(--muted)}
+.market-item strong{display:block;margin-top:8px;direction:ltr;text-align:right}
+.up{color:var(--green)}
+.down{color:var(--red)}
+.result{
+  display:none;margin-top:18px;padding:16px;
+  border:1px solid var(--green);border-radius:12px;
+  background:#071b1b;
 }
-
-select {
-  width: 100%;
-  background: #07182d;
-  color: white;
-  border: 1px solid #168cff;
+.result-row{
+  display:flex;justify-content:space-between;
+  padding:11px 0;border-bottom:1px solid #ffffff12;
+  gap:10px;
 }
-
-.analyze {
-  width: 100%;
-  margin-top: 25px;
-  background: linear-gradient(90deg,#087bff,#00b8ff);
-  color: white;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 20px;
+.result-row strong{color:var(--gold2);direction:ltr}
+.chart{
+  height:190px;display:flex;align-items:end;
+  gap:7px;padding:15px 5px 5px;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(#10243a,#091827);
+  border-radius:10px;overflow:hidden;
 }
-
-.result {
-  display: none;
-  margin-top: 25px;
-  padding: 20px;
-  background: #071a2c;
-  border: 2px solid #00d995;
-  border-radius: 14px;
+.bar{
+  flex:1;min-width:5px;border-radius:4px 4px 0 0;
+  background:linear-gradient(var(--gold2),#8a642b);
 }
-
-.result h2 {
-  color: #00e69a;
+.note{color:var(--muted);font-size:12px;line-height:1.9}
+.hidden{display:none!important}
+footer{
+  text-align:center;padding:25px;color:var(--muted);
+  border-top:1px solid var(--border);font-size:12px;
 }
-
-.result p {
-  font-size: 18px;
-  border-bottom: 1px solid #25405c;
-  padding: 8px;
+@media(max-width:700px){
+  header{justify-content:center;text-align:center}
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .market-grid{grid-template-columns:1fr}
+  .container{width:94%}
 }
-
-.note {
-  color: #ffcf63;
-  font-size: 13px;
-  line-height: 1.8;
-}
-
-footer {
-  text-align: center;
-  color: #8ca9c8;
-  padding: 20px;
+@media(max-width:380px){
+  .grid{grid-template-columns:1fr}
+  button{padding:10px;font-size:13px}
 }
 </style>
 </head>
-
 <body>
 
 <header>
-  <h1>NEXFX AI</h1>
-  <p>منصة تحليل أسواق الفوركس والعملات الرقمية</p>
+  <div class="logo">NEXFX <span>AI</span></div>
+  <div class="status">● واجهة المنصة تعمل</div>
 </header>
 
-<div class="container">
+<main class="container">
 
-  <div class="panel">
-    <h2>اختر سوق التداول</h2>
-
-    <div class="market-buttons">
-      <button id="forexBtn" class="active"
-        onclick="changeMarket('forex')">
-        Forex - الفوركس
-      </button>
-
-      <button id="cryptoBtn"
-        onclick="changeMarket('crypto')">
-        Crypto - العملات الرقمية
-      </button>
+  <section class="grid">
+    <div class="panel stat">الأسواق
+      <strong>4</strong>
     </div>
+    <div class="panel stat">أقسام التحليل
+      <strong>4</strong>
+    </div>
+    <div class="panel stat">حالة المنصة
+      <strong style="font-size:17px">جاهزة</strong>
+    </div>
+    <div class="panel stat">الذكاء الاصطناعي
+      <strong style="font-size:17px">قيد الربط</strong>
+    </div>
+  </section>
 
-    <label>اختر زوج التداول:</label>
+  <section class="panel">
+    <h2>لوحة التحكم الرئيسية</h2>
+    <p class="note">اختر السوق الذي تريد استعراضه وتحليله.</p>
+    <nav class="navigation">
+      <button class="active" onclick="changeMarket('crypto',this)">Crypto</button>
+      <button onclick="changeMarket('forex',this)">Forex</button>
+      <button onclick="changeMarket('gold',this)">Gold</button>
+      <button onclick="changeMarket('stocks',this)">Stocks</button>
+    </nav>
 
-    <select id="pair">
+    <div class="actions">
+      <div>
+        <label for="pair">الأصل المالي</label>
+        <select id="pair"></select>
+      </div>
+      <div>
+        <label for="timeframe">الإطار الزمني</label>
+        <select id="timeframe">
+          <option>5 دقائق</option>
+          <option>15 دقيقة</option>
+          <option>ساعة</option>
+          <option>4 ساعات</option>
+          <option>يومي</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>مراقبة الأسواق</h2>
+    <div class="market-grid" id="marketList"></div>
+    <p class="note">هذه قيم توضيحية للواجهة وليست أسعاراً مباشرة من السوق.</p>
+  </section>
+
+  <section class="panel">
+    <h2>الرسم البياني</h2>
+    <div class="chart" id="chart"></div>
+    <p class="note">الرسم الحالي تجريبي. سيتم ربط بيانات الأسعار الحقيقية لاحقاً.</p>
+  </section>
+
+  <section class="panel">
+    <h2>التحليل الذكي NEXFX AI</h2>
+    <label for="analysisMode">نوع التحليل</label>
+    <select id="analysisMode">
+      <option value="auto">تحليل تلقائي</option>
+      <option value="technical">تحليل فني</option>
+      <option value="manual">تحليل يدوي</option>
     </select>
-
-    <label>طريقة التحليل:</label>
-
-    <select id="mode">
-      <option value="auto">تحليل تلقائي تجريبي</option>
-      <option value="manual">تحليل يدوي تجريبي</option>
-    </select>
-
-    <button class="analyze" onclick="analyze()">
-      بدء التحليل
-    </button>
+    <button class="primary full" onclick="analyze()">بدء التحليل</button>
 
     <div class="result" id="result">
-      <h2 id="signal">نتيجة التحليل</h2>
-
-      <p>زوج التداول: <strong id="selectedPair"></strong></p>
-      <p>سعر الدخول: <strong id="entry"></strong></p>
-      <p>وقف الخسارة SL: <strong id="sl"></strong></p>
-      <p>الهدف الأول TP1: <strong id="tp1"></strong></p>
-      <p>الهدف الثاني TP2: <strong id="tp2"></strong></p>
-
-      <p class="note">
-        هذه نتائج تجريبية للواجهة وليست توصية تداول حقيقية.
-        لا تعتمد عليها لاتخاذ قرارات مالية.
-      </p>
+      <h3 id="signal">نتيجة التحليل التجريبية</h3>
+      <div class="result-row"><span>الأصل</span><strong id="selectedPair"></strong></div>
+      <div class="result-row"><span>سعر الدخول</span><strong id="entry"></strong></div>
+      <div class="result-row"><span>وقف الخسارة SL</span><strong id="sl"></strong></div>
+      <div class="result-row"><span>الهدف الأول TP1</span><strong id="tp1"></strong></div>
+      <div class="result-row"><span>الهدف الثاني TP2</span><strong id="tp2"></strong></div>
+      <p class="note">نتيجة تجريبية فقط، وليست توصية تداول أو إشارة مبنية على بيانات السوق.</p>
     </div>
-  </div>
+  </section>
 
-  <div class="panel">
+  <section class="panel">
+    <h2>مراقبة العقود والصفقات</h2>
+    <div class="market-grid">
+      <div class="market-item">
+        <small>العقود المفتوحة</small>
+        <strong>لا توجد بيانات متصلة</strong>
+      </div>
+      <div class="market-item">
+        <small>حالة المراقبة</small>
+        <strong class="up">واجهة جاهزة للربط</strong>
+      </div>
+    </div>
+    <p class="note">تحتاج مراقبة العقود الفعلية إلى مصدر بيانات أو اتصال بمنصة التداول.</p>
+  </section>
+
+  <section class="panel">
     <h2>عن NEXFX AI</h2>
-    <p>
-      نعمل على تطوير منصة تجمع أسواق الفوركس والعملات الرقمية
-      في مكان واحد، مع أدوات تحليل ومؤشرات تداول متقدمة.
-    </p>
     <p class="note">
-      الأسعار المباشرة والتحليل الحقيقي بالذكاء الاصطناعي
-      سيتم ربطهما في مرحلة لاحقة.
+      منصة موحدة لاستعراض أسواق العملات الرقمية والفوركس والذهب والأسهم،
+      مع أدوات التحليل الفني والذكاء الاصطناعي ومراقبة الأسواق.
+      يجري تجهيز هذه النسخة للربط بمصادر البيانات والخدمات الخارجية.
     </p>
-  </div>
+  </section>
 
-</div>
+</main>
 
-<footer>
-  NEXFX AI © 2026
-</footer>
+<footer>NEXFX AI © 2026</footer>
 
 <script>
-const pairs = {
-  forex: [
-    "EUR/USD",
-    "GBP/USD",
-    "USD/JPY",
-    "USD/CHF",
-    "AUD/USD",
-    "USD/CAD",
-    "NZD/USD",
-    "EUR/GBP",
-    "EUR/JPY",
-    "GBP/JPY",
-    "XAU/USD"
-  ],
-
-  crypto: [
-    "BTC/USDT",
-    "ETH/USDT",
-    "BNB/USDT",
-    "SOL/USDT",
-    "XRP/USDT",
-    "ADA/USDT",
-    "DOGE/USDT",
-    "TRX/USDT",
-    "AVAX/USDT",
-    "LINK/USDT"
-  ]
+const assets = {
+  crypto:["BTC/USDT","ETH/USDT","BNB/USDT","SOL/USDT","XRP/USDT","ADA/USDT"],
+  forex:["EUR/USD","GBP/USD","USD/JPY","USD/CHF","AUD/USD","USD/CAD"],
+  gold:["XAU/USD"],
+  stocks:["AAPL","MSFT","NVDA","TSLA","AMZN","GOOGL"]
 };
 
-let currentMarket = "forex";
+let currentMarket="crypto";
 
-function changeMarket(market) {
-  currentMarket = market;
+function changeMarket(market,button){
+  currentMarket=market;
+  document.querySelectorAll(".navigation button")
+    .forEach(b=>b.classList.remove("active"));
+  if(button) button.classList.add("active");
 
-  document.getElementById("forexBtn")
-    .classList.toggle("active", market === "forex");
-
-  document.getElementById("cryptoBtn")
-    .classList.toggle("active", market === "crypto");
-
-  const pairSelect = document.getElementById("pair");
-  pairSelect.innerHTML = "";
-
-  pairs[market].forEach(pair => {
-    const option = document.createElement("option");
-    option.value = pair;
-    option.textContent = pair;
-    pairSelect.appendChild(option);
+  const select=document.getElementById("pair");
+  select.innerHTML="";
+  assets[market].forEach(asset=>{
+    const option=document.createElement("option");
+    option.value=asset;
+    option.textContent=asset;
+    select.appendChild(option);
   });
 
-  document.getElementById("result").style.display = "none";
+  document.getElementById("result").style.display="none";
+  renderMarkets();
+  renderChart();
 }
 
-function analyze() {
-  const pair = document.getElementById("pair").value;
-
-  document.getElementById("selectedPair").textContent = pair;
-
-  document.getElementById("signal").textContent =
-    "نتيجة تجريبية - شراء";
-
-  document.getElementById("entry").textContent = "1.0000";
-  document.getElementById("sl").textContent = "0.9950";
-  document.getElementById("tp1").textContent = "1.0050";
-  document.getElementById("tp2").textContent = "1.0100";
-
-  document.getElementById("result").style.display = "block";
+function renderMarkets(){
+  const list=document.getElementById("marketList");
+  list.innerHTML="";
+  assets[currentMarket].slice(0,4).forEach((asset,index)=>{
+    const item=document.createElement("div");
+    item.className="market-item";
+    const label=document.createElement("small");
+    label.textContent=asset;
+    const value=document.createElement("strong");
+    value.className=index%2===0?"up":"down";
+    value.textContent=index%2===0?"+1.25%":"+0.45%";
+    item.append(label,value);
+    list.appendChild(item);
+  });
 }
 
-changeMarket("forex");
+function renderChart(){
+  const chart=document.getElementById("chart");
+  chart.innerHTML="";
+  const heights=[35,48,42,62,55,73,65,83,70,92,78,88,66,80];
+  heights.forEach(height=>{
+    const bar=document.createElement("div");
+    bar.className="bar";
+    bar.style.height=height+"%";
+    chart.appendChild(bar);
+  });
+}
+
+function analyze(){
+  const pair=document.getElementById("pair").value;
+  if(!pair)return;
+
+  document.getElementById("selectedPair").textContent=pair;
+  document.getElementById("signal").textContent="نتيجة تجريبية - شراء";
+  document.getElementById("entry").textContent="1.0000";
+  document.getElementById("sl").textContent="0.9950";
+  document.getElementById("tp1").textContent="1.0050";
+  document.getElementById("tp2").textContent="1.0100";
+  document.getElementById("result").style.display="block";
+}
+
+changeMarket("crypto",document.querySelector(".navigation button"));
 </script>
-<script src="https://cdn.jsdelivr.net/npm/nexfx-ai.js"></script>
 </body>
 </html>
