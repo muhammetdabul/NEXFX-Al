@@ -1,1 +1,201 @@
-!DOCTYPE html 
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXFX AI</title>
+<style>
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #080d18;
+  color: white;
+}
+header {
+  background: #111a2b;
+  padding: 22px;
+  text-align: center;
+  border-bottom: 2px solid #00d9ff;
+}
+header h1 {
+  color: #00d9ff;
+  margin: 0;
+  font-size: 30px;
+}
+header p {
+  color: #aaa;
+}
+.container {
+  max-width: 850px;
+  margin: auto;
+  padding: 20px;
+}
+.card {
+  background: #121c30;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  border: 1px solid #263650;
+}
+h2 {
+  color: #00d9ff;
+}
+label {
+  display: block;
+  margin: 15px 0 8px;
+}
+input, select {
+  width: 100%;
+  padding: 13px;
+  border-radius: 8px;
+  border: 1px solid #34445e;
+  background: #080d18;
+  color: white;
+  font-size: 16px;
+}
+.buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+button {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 17px;
+  cursor: pointer;
+}
+.buy {
+  background: #00a86b;
+}
+.sell {
+  background: #e04455;
+}
+.result {
+  background: #080d18;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 20px;
+  line-height: 2;
+}
+.status {
+  color: #00d9ff;
+  font-weight: bold;
+}
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #777;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>NEXFX AI</h1>
+<p>منصة تحليل الأسواق بالذكاء الاصطناعي</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+<h2>📊 لوحة التحكم</h2>
+<p>مرحباً بك في NEXFX AI</p>
+<p class="status">● النظام التجريبي جاهز</p>
+</div>
+
+<div class="card">
+<h2>تحليل التداول</h2>
+
+<label>اختر العملة:</label>
+<select id="pair">
+<option>BTC / USDT</option>
+<option>ETH / USDT</option>
+<option>BNB / USDT</option>
+<option>SOL / USDT</option>
+<option>XRP / USDT</option>
+</select>
+
+<label>سعر الدخول:</label>
+<input type="number" id="entry" placeholder="أدخل سعر الدخول">
+
+<label>وقف الخسارة SL:</label>
+<input type="number" id="sl" placeholder="أدخل وقف الخسارة">
+
+<label>الهدف الأول TP1:</label>
+<input type="number" id="tp1" placeholder="أدخل الهدف الأول">
+
+<label>الهدف الثاني TP2:</label>
+<input type="number" id="tp2" placeholder="أدخل الهدف الثاني">
+
+<div class="buttons">
+<button class="buy" onclick="analyze('شراء')">شراء LONG</button>
+<button class="sell" onclick="analyze('بيع')">بيع SHORT</button>
+</div>
+
+<div class="result" id="result">
+نتائج التحليل ستظهر هنا.
+</div>
+
+</div>
+
+<div class="card">
+<h2>🤖 مساعد NEXFX AI</h2>
+<p>واجهة تجريبية لمتابعة صفقات التداول وتحليل مستويات الدخول والأهداف ووقف الخسارة.</p>
+</div>
+
+</div>
+
+<footer>
+NEXFX AI © 2026
+<br>
+Powered by Artificial Intelligence
+</footer>
+
+<script>
+function analyze(type) {
+
+const pair = document.getElementById("pair").value;
+const entry = Number(document.getElementById("entry").value);
+const sl = Number(document.getElementById("sl").value);
+const tp1 = Number(document.getElementById("tp1").value);
+const tp2 = Number(document.getElementById("tp2").value);
+
+const result = document.getElementById("result");
+
+if (!entry || !sl || !tp1 || !tp2) {
+result.innerHTML = "يرجى إدخال جميع الأسعار أولاً.";
+return;
+}
+
+if (type === "شراء" && !(sl < entry && tp1 > entry && tp2 > tp1)) {
+result.innerHTML = "تأكد من ترتيب الأسعار لصفقة الشراء.";
+return;
+}
+
+if (type === "بيع" && !(sl > entry && tp1 < entry && tp2 < tp1)) {
+result.innerHTML = "تأكد من ترتيب الأسعار لصفقة البيع.";
+return;
+}
+
+result.innerHTML =
+"<h3>نتيجة الصفقة التجريبية</h3>" +
+"العملة: " + pair + "<br>" +
+"نوع الصفقة: " + type + "<br>" +
+"نقطة الدخول: " + entry + "<br>" +
+"وقف الخسارة SL: " + sl + "<br>" +
+"الهدف الأول TP1: " + tp1 + "<br>" +
+"الهدف الثاني TP2: " + tp2 + "<br>" +
+"<span class='status'>تم إنشاء مستويات الصفقة التجريبية.</span>";
+
+}
+</script>
+
+</body>
+</html>
