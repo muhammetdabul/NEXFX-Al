@@ -4,93 +4,132 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NEXFX AI</title>
+
 <style>
 * {
   box-sizing: border-box;
 }
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #080d18;
+  background: #061326;
   color: white;
 }
+
 header {
-  background: #111a2b;
-  padding: 22px;
+  background: #020b19;
+  padding: 20px;
   text-align: center;
-  border-bottom: 2px solid #00d9ff;
+  border-bottom: 2px solid #087bff;
 }
+
 header h1 {
-  color: #00d9ff;
   margin: 0;
-  font-size: 30px;
+  font-size: 32px;
+  color: #168cff;
 }
+
 header p {
-  color: #aaa;
+  color: #b7c9df;
 }
+
 .container {
   max-width: 850px;
-  margin: auto;
-  padding: 20px;
+  margin: 25px auto;
+  padding: 15px;
 }
-.card {
-  background: #121c30;
+
+.panel {
+  background: #0d2039;
+  border: 1px solid #1766aa;
+  border-radius: 16px;
   padding: 20px;
-  border-radius: 15px;
   margin-bottom: 20px;
-  border: 1px solid #263650;
+  box-shadow: 0 0 15px #001c3d;
 }
+
 h2 {
-  color: #00d9ff;
+  color: #39a6ff;
+  text-align: center;
 }
-label {
-  display: block;
-  margin: 15px 0 8px;
-}
-input, select {
-  width: 100%;
-  padding: 13px;
-  border-radius: 8px;
-  border: 1px solid #34445e;
-  background: #080d18;
-  color: white;
-  font-size: 16px;
-}
-.buttons {
+
+.market-buttons {
   display: flex;
-  gap: 12px;
-  margin-top: 20px;
+  gap: 10px;
 }
-button {
-  flex: 1;
-  padding: 14px;
-  border: none;
-  border-radius: 8px;
-  color: white;
+
+button, select {
   font-size: 17px;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.market-buttons button {
+  flex: 1;
+  background: #142b49;
+  color: white;
+  border: 1px solid #168cff;
   cursor: pointer;
 }
-.buy {
-  background: #00a86b;
+
+.market-buttons button.active {
+  background: #087bff;
 }
-.sell {
-  background: #e04455;
+
+label {
+  display: block;
+  margin: 20px 0 8px;
+  color: #c8e3ff;
 }
-.result {
-  background: #080d18;
-  padding: 15px;
-  border-radius: 10px;
-  margin-top: 20px;
-  line-height: 2;
+
+select {
+  width: 100%;
+  background: #07182d;
+  color: white;
+  border: 1px solid #168cff;
 }
-.status {
-  color: #00d9ff;
+
+.analyze {
+  width: 100%;
+  margin-top: 25px;
+  background: linear-gradient(90deg,#087bff,#00b8ff);
+  color: white;
+  border: none;
   font-weight: bold;
+  cursor: pointer;
+  font-size: 20px;
 }
+
+.result {
+  display: none;
+  margin-top: 25px;
+  padding: 20px;
+  background: #071a2c;
+  border: 2px solid #00d995;
+  border-radius: 14px;
+}
+
+.result h2 {
+  color: #00e69a;
+}
+
+.result p {
+  font-size: 18px;
+  border-bottom: 1px solid #25405c;
+  padding: 8px;
+}
+
+.note {
+  color: #ffcf63;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
 footer {
   text-align: center;
-  padding: 25px;
-  color: #777;
+  color: #8ca9c8;
+  padding: 20px;
 }
 </style>
 </head>
@@ -98,103 +137,148 @@ footer {
 <body>
 
 <header>
-<h1>NEXFX AI</h1>
-<p>منصة تحليل الأسواق بالذكاء الاصطناعي</p>
+  <h1>NEXFX AI</h1>
+  <p>منصة تحليل أسواق الفوركس والعملات الرقمية</p>
 </header>
 
 <div class="container">
 
-<div class="card">
-<h2>📊 لوحة التحكم</h2>
-<p>مرحباً بك في NEXFX AI</p>
-<p class="status">● النظام التجريبي جاهز</p>
-</div>
+  <div class="panel">
+    <h2>اختر سوق التداول</h2>
 
-<div class="card">
-<h2>تحليل التداول</h2>
+    <div class="market-buttons">
+      <button id="forexBtn" class="active"
+        onclick="changeMarket('forex')">
+        Forex - الفوركس
+      </button>
 
-<label>اختر العملة:</label>
-<select id="pair">
-<option>BTC / USDT</option>
-<option>ETH / USDT</option>
-<option>BNB / USDT</option>
-<option>SOL / USDT</option>
-<option>XRP / USDT</option>
-</select>
+      <button id="cryptoBtn"
+        onclick="changeMarket('crypto')">
+        Crypto - العملات الرقمية
+      </button>
+    </div>
 
-<label>سعر الدخول:</label>
-<input type="number" id="entry" placeholder="أدخل سعر الدخول">
+    <label>اختر زوج التداول:</label>
 
-<label>وقف الخسارة SL:</label>
-<input type="number" id="sl" placeholder="أدخل وقف الخسارة">
+    <select id="pair">
+    </select>
 
-<label>الهدف الأول TP1:</label>
-<input type="number" id="tp1" placeholder="أدخل الهدف الأول">
+    <label>طريقة التحليل:</label>
 
-<label>الهدف الثاني TP2:</label>
-<input type="number" id="tp2" placeholder="أدخل الهدف الثاني">
+    <select id="mode">
+      <option value="auto">تحليل تلقائي تجريبي</option>
+      <option value="manual">تحليل يدوي تجريبي</option>
+    </select>
 
-<div class="buttons">
-<button class="buy" onclick="analyze('شراء')">شراء LONG</button>
-<button class="sell" onclick="analyze('بيع')">بيع SHORT</button>
-</div>
+    <button class="analyze" onclick="analyze()">
+      بدء التحليل
+    </button>
 
-<div class="result" id="result">
-نتائج التحليل ستظهر هنا.
-</div>
+    <div class="result" id="result">
+      <h2 id="signal">نتيجة التحليل</h2>
 
-</div>
+      <p>زوج التداول: <strong id="selectedPair"></strong></p>
+      <p>سعر الدخول: <strong id="entry"></strong></p>
+      <p>وقف الخسارة SL: <strong id="sl"></strong></p>
+      <p>الهدف الأول TP1: <strong id="tp1"></strong></p>
+      <p>الهدف الثاني TP2: <strong id="tp2"></strong></p>
 
-<div class="card">
-<h2>🤖 مساعد NEXFX AI</h2>
-<p>واجهة تجريبية لمتابعة صفقات التداول وتحليل مستويات الدخول والأهداف ووقف الخسارة.</p>
-</div>
+      <p class="note">
+        هذه نتائج تجريبية للواجهة وليست توصية تداول حقيقية.
+        لا تعتمد عليها لاتخاذ قرارات مالية.
+      </p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>عن NEXFX AI</h2>
+    <p>
+      نعمل على تطوير منصة تجمع أسواق الفوركس والعملات الرقمية
+      في مكان واحد، مع أدوات تحليل ومؤشرات تداول متقدمة.
+    </p>
+    <p class="note">
+      الأسعار المباشرة والتحليل الحقيقي بالذكاء الاصطناعي
+      سيتم ربطهما في مرحلة لاحقة.
+    </p>
+  </div>
 
 </div>
 
 <footer>
-NEXFX AI © 2026
-<br>
-Powered by Artificial Intelligence
+  NEXFX AI © 2026
 </footer>
 
 <script>
-function analyze(type) {
+const pairs = {
+  forex: [
+    "EUR/USD",
+    "GBP/USD",
+    "USD/JPY",
+    "USD/CHF",
+    "AUD/USD",
+    "USD/CAD",
+    "NZD/USD",
+    "EUR/GBP",
+    "EUR/JPY",
+    "GBP/JPY",
+    "XAU/USD"
+  ],
 
-const pair = document.getElementById("pair").value;
-const entry = Number(document.getElementById("entry").value);
-const sl = Number(document.getElementById("sl").value);
-const tp1 = Number(document.getElementById("tp1").value);
-const tp2 = Number(document.getElementById("tp2").value);
+  crypto: [
+    "BTC/USDT",
+    "ETH/USDT",
+    "BNB/USDT",
+    "SOL/USDT",
+    "XRP/USDT",
+    "ADA/USDT",
+    "DOGE/USDT",
+    "TRX/USDT",
+    "AVAX/USDT",
+    "LINK/USDT"
+  ]
+};
 
-const result = document.getElementById("result");
+let currentMarket = "forex";
 
-if (!entry || !sl || !tp1 || !tp2) {
-result.innerHTML = "يرجى إدخال جميع الأسعار أولاً.";
-return;
+function changeMarket(market) {
+  currentMarket = market;
+
+  document.getElementById("forexBtn")
+    .classList.toggle("active", market === "forex");
+
+  document.getElementById("cryptoBtn")
+    .classList.toggle("active", market === "crypto");
+
+  const pairSelect = document.getElementById("pair");
+  pairSelect.innerHTML = "";
+
+  pairs[market].forEach(pair => {
+    const option = document.createElement("option");
+    option.value = pair;
+    option.textContent = pair;
+    pairSelect.appendChild(option);
+  });
+
+  document.getElementById("result").style.display = "none";
 }
 
-if (type === "شراء" && !(sl < entry && tp1 > entry && tp2 > tp1)) {
-result.innerHTML = "تأكد من ترتيب الأسعار لصفقة الشراء.";
-return;
+function analyze() {
+  const pair = document.getElementById("pair").value;
+
+  document.getElementById("selectedPair").textContent = pair;
+
+  document.getElementById("signal").textContent =
+    "نتيجة تجريبية - شراء";
+
+  document.getElementById("entry").textContent = "1.0000";
+  document.getElementById("sl").textContent = "0.9950";
+  document.getElementById("tp1").textContent = "1.0050";
+  document.getElementById("tp2").textContent = "1.0100";
+
+  document.getElementById("result").style.display = "block";
 }
 
-if (type === "بيع" && !(sl > entry && tp1 < entry && tp2 < tp1)) {
-result.innerHTML = "تأكد من ترتيب الأسعار لصفقة البيع.";
-return;
-}
-
-result.innerHTML =
-"<h3>نتيجة الصفقة التجريبية</h3>" +
-"العملة: " + pair + "<br>" +
-"نوع الصفقة: " + type + "<br>" +
-"نقطة الدخول: " + entry + "<br>" +
-"وقف الخسارة SL: " + sl + "<br>" +
-"الهدف الأول TP1: " + tp1 + "<br>" +
-"الهدف الثاني TP2: " + tp2 + "<br>" +
-"<span class='status'>تم إنشاء مستويات الصفقة التجريبية.</span>";
-
-}
+changeMarket("forex");
 </script>
 
 </body>
