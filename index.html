@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -6,30 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#071321">
 <title>NEXFX AI | منصة الأسواق الذكية</title>
-
 <style>
 :root{
   --bg:#071321;
   --panel:#0d1d30;
   --panel2:#11253b;
   --panel3:#152c43;
-  --gold:#d6b36a;
-  --gold-light:#f1d99b;
-  --text:#f4f5f7;
-  --muted:#9eacbc;
+  --gold:#C9A24A;
+  --gold-light:#F0D58A;
+  --text:#F4F5F7;
+  --muted:#C5A66A;
   --green:#20c997;
   --red:#ed6675;
   --border:rgba(180,197,215,.13);
-  --gold-border:rgba(214,179,106,.24);
+  --gold-border:rgba(201,162,74,.32);
 }
-
 *{box-sizing:border-box}
-
 html{
   scroll-behavior:smooth;
   background:var(--bg);
 }
-
 body{
   margin:0;
   min-height:100vh;
@@ -38,9 +33,7 @@ body{
   font-family:Arial,Tahoma,sans-serif;
   line-height:1.6;
 }
-
 button,select{font:inherit}
-
 header{
   min-height:76px;
   padding:16px 5%;
@@ -52,40 +45,32 @@ header{
   gap:15px;
   flex-wrap:wrap;
 }
-
 .logo{
   font-size:27px;
   font-weight:900;
   letter-spacing:1px;
   color:var(--gold-light);
 }
-
 .logo span{color:white}
-
 .status{
   color:var(--green);
   font-size:12px;
 }
-
 .container{
   width:min(1200px,94%);
   margin:26px auto;
 }
-
 h2{
   color:var(--gold-light);
   font-size:19px;
   margin:0 0 15px;
 }
-
 h3{font-size:16px}
-
 .grid{
   display:grid;
   grid-template-columns:repeat(4,minmax(0,1fr));
   gap:14px;
 }
-
 .panel{
   background:var(--panel);
   border:1px solid var(--border);
@@ -94,27 +79,23 @@ h3{font-size:16px}
   margin-bottom:17px;
   box-shadow:0 8px 24px rgba(0,0,0,.16);
 }
-
 .stat{
   color:var(--muted);
   font-size:13px;
   min-height:105px;
 }
-
 .stat strong{
   display:block;
   color:var(--gold-light);
   font-size:22px;
   margin-top:10px;
 }
-
 .navigation{
   display:flex;
   gap:8px;
   flex-wrap:wrap;
   margin-bottom:18px;
 }
-
 button{
   cursor:pointer;
   border:1px solid var(--border);
@@ -124,32 +105,27 @@ button{
   padding:11px 15px;
   transition:background .2s,border-color .2s;
 }
-
 button:hover{
   border-color:var(--gold);
   background:var(--panel3);
 }
-
 button.active,.primary{
   background:var(--gold);
   color:#101820;
   border-color:var(--gold-light);
   font-weight:bold;
 }
-
 .actions{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:14px;
 }
-
 label{
   display:block;
   color:var(--gold-light);
   margin:12px 0 8px;
   font-size:13px;
 }
-
 select{
   width:100%;
   min-height:46px;
@@ -160,15 +136,12 @@ select{
   border-radius:9px;
   outline:none;
 }
-
 select:focus{border-color:var(--gold)}
-
 .market-grid{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
   gap:12px;
 }
-
 .market-item{
   background:#0a1a2b;
   border:1px solid var(--border);
@@ -176,9 +149,7 @@ select:focus{border-color:var(--gold)}
   border-radius:11px;
   min-width:0;
 }
-
 .market-item small{color:var(--muted)}
-
 .market-item strong{
   display:block;
   margin-top:8px;
@@ -186,21 +157,17 @@ select:focus{border-color:var(--gold)}
   text-align:right;
   overflow-wrap:anywhere;
 }
-
 .up{color:var(--green)}
 .down{color:var(--red)}
-
 .note{
   color:var(--muted);
   font-size:12px;
   line-height:1.9;
 }
-
 .full{
   width:100%;
   margin-top:17px;
 }
-
 .chart-wrapper{
   background:#081522;
   border:1px solid var(--border);
@@ -208,7 +175,6 @@ select:focus{border-color:var(--gold)}
   padding:14px 12px 10px;
   overflow:hidden;
 }
-
 .chart-heading{
   display:flex;
   justify-content:space-between;
@@ -217,18 +183,15 @@ select:focus{border-color:var(--gold)}
   gap:8px;
   margin-bottom:12px;
 }
-
 .chart-pair{
   color:var(--gold-light);
   font-weight:bold;
   direction:ltr;
 }
-
 .chart-status{
   font-size:11px;
   color:var(--muted);
 }
-
 .chart-area{
   height:245px;
   display:flex;
@@ -243,7 +206,6 @@ select:focus{border-color:var(--gold)}
   background-size:100% 25%,10% 100%;
   border-bottom:1px solid rgba(180,197,215,.18);
 }
-
 .candles{
   position:absolute;
   inset:8px;
@@ -252,7 +214,6 @@ select:focus{border-color:var(--gold)}
   justify-content:space-around;
   gap:5px;
 }
-
 .candle{
   position:relative;
   flex:1;
@@ -260,7 +221,6 @@ select:focus{border-color:var(--gold)}
   min-width:5px;
   height:100%;
 }
-
 .wick{
   position:absolute;
   width:2px;
@@ -268,7 +228,6 @@ select:focus{border-color:var(--gold)}
   transform:translateX(-50%);
   border-radius:2px;
 }
-
 .candle-body{
   position:absolute;
   left:15%;
@@ -276,26 +235,22 @@ select:focus{border-color:var(--gold)}
   min-height:4px;
   border-radius:2px;
 }
-
 .bullish .wick,
 .bullish .candle-body{
   background:var(--green);
 }
-
 .bearish .wick,
 .bearish .candle-body{
   background:var(--red);
 }
-
 .chart-axis{
   display:flex;
   justify-content:space-between;
   padding:8px 3px 0;
-  color:#8192a6;
+  color:var(--muted);
   font-size:10px;
   direction:ltr;
 }
-
 .result{
   display:none;
   margin-top:18px;
@@ -304,7 +259,6 @@ select:focus{border-color:var(--gold)}
   border-radius:12px;
   background:#0b2028;
 }
-
 .result-row{
   display:flex;
   justify-content:space-between;
@@ -312,14 +266,11 @@ select:focus{border-color:var(--gold)}
   border-bottom:1px solid var(--border);
   gap:10px;
 }
-
 .result-row strong{
   color:var(--gold-light);
   direction:ltr;
 }
-
 .result-heading{color:var(--green)}
-
 footer{
   text-align:center;
   padding:25px;
@@ -327,23 +278,19 @@ footer{
   border-top:1px solid var(--border);
   font-size:12px;
 }
-
 @media(max-width:700px){
   header{
     justify-content:center;
     text-align:center;
   }
-
   .grid{
     grid-template-columns:repeat(2,minmax(0,1fr));
   }
-
   .market-grid{grid-template-columns:1fr}
   .container{width:94%}
   .panel{padding:15px}
   .chart-area{height:210px}
 }
-
 @media(max-width:380px){
   .grid{grid-template-columns:1fr}
   .actions{grid-template-columns:1fr}
@@ -351,55 +298,44 @@ footer{
 }
 </style>
 </head>
-
 <body>
-
 <header>
   <div class="logo">NEXFX <span>AI</span></div>
   <div class="status">● واجهة المنصة تعمل</div>
 </header>
-
 <main class="container">
-
   <section class="grid">
     <div class="panel stat">
       الأسواق
       <strong>4</strong>
     </div>
-
     <div class="panel stat">
       أقسام التحليل
       <strong>4</strong>
     </div>
-
     <div class="panel stat">
       حالة المنصة
       <strong style="font-size:17px">جاهزة</strong>
     </div>
-
     <div class="panel stat">
       الذكاء الاصطناعي
       <strong style="font-size:17px">قيد الربط</strong>
     </div>
   </section>
-
   <section class="panel">
     <h2>لوحة التحكم الرئيسية</h2>
     <p class="note">اختر السوق والأصل المالي والإطار الزمني.</p>
-
     <nav class="navigation">
       <button class="active" onclick="changeMarket('crypto',this)">Crypto</button>
       <button onclick="changeMarket('forex',this)">Forex</button>
       <button onclick="changeMarket('gold',this)">Gold</button>
       <button onclick="changeMarket('stocks',this)">Stocks</button>
     </nav>
-
     <div class="actions">
       <div>
         <label for="pair">الأصل المالي</label>
         <select id="pair" onchange="updateChartTitle()"></select>
       </div>
-
       <div>
         <label for="timeframe">الإطار الزمني</label>
         <select id="timeframe" onchange="updateChartTitle()">
@@ -413,7 +349,6 @@ footer{
       </div>
     </div>
   </section>
-
   <section class="panel">
     <h2>مراقبة الأسواق</h2>
     <div class="market-grid" id="marketList"></div>
@@ -421,20 +356,16 @@ footer{
       القيم المعروضة تجريبية وليست أسعاراً مباشرة من السوق.
     </p>
   </section>
-
   <section class="panel">
     <h2>الرسم البياني الاحترافي</h2>
-
     <div class="chart-wrapper">
       <div class="chart-heading">
         <span class="chart-pair" id="chartPair">BTC/USDT</span>
         <span class="chart-status">عرض شموع تجريبي</span>
       </div>
-
       <div class="chart-area">
         <div class="candles" id="chart"></div>
       </div>
-
       <div class="chart-axis">
         <span>09:00</span>
         <span>12:00</span>
@@ -442,179 +373,139 @@ footer{
         <span>18:00</span>
       </div>
     </div>
-
     <p class="note">
       هذا رسم تجريبي بتصميم الشموع اليابانية. سيتم ربطه ببيانات الأسعار الحقيقية لاحقاً.
     </p>
   </section>
-
   <section class="panel">
     <h2>التحليل الذكي NEXFX AI</h2>
-
     <label for="analysisMode">نوع التحليل</label>
     <select id="analysisMode">
       <option value="auto">تحليل تلقائي</option>
       <option value="technical">تحليل فني</option>
       <option value="manual">تحليل يدوي</option>
     </select>
-
     <button class="primary full" onclick="analyze()">
       بدء التحليل
     </button>
-
     <div class="result" id="result">
       <h3 class="result-heading" id="signal">نتيجة التحليل التجريبية</h3>
-
       <div class="result-row">
         <span>نوع التحليل</span>
         <strong id="analysisType"></strong>
       </div>
-
       <div class="result-row">
         <span>الأصل</span>
         <strong id="selectedPair"></strong>
       </div>
-
       <div class="result-row">
         <span>الإطار الزمني</span>
         <strong id="selectedTimeframe"></strong>
       </div>
-
       <div class="result-row">
         <span>سعر الدخول التجريبي</span>
         <strong id="entry"></strong>
       </div>
-
       <div class="result-row">
         <span>وقف الخسارة SL</span>
         <strong id="sl"></strong>
       </div>
-
       <div class="result-row">
         <span>الهدف الأول TP1</span>
         <strong id="tp1"></strong>
       </div>
-
       <div class="result-row">
         <span>الهدف الثاني TP2</span>
         <strong id="tp2"></strong>
       </div>
-
       <p class="note">
         هذه نتيجة توضيحية لا تعتمد على بيانات السوق، وليست توصية تداول.
       </p>
     </div>
   </section>
-
   <section class="panel">
     <h2>مراقبة العقود والصفقات</h2>
-
     <div class="market-grid">
       <div class="market-item">
         <small>العقود المفتوحة</small>
         <strong>لا توجد بيانات متصلة</strong>
       </div>
-
       <div class="market-item">
         <small>حالة المراقبة</small>
         <strong class="up">واجهة جاهزة للربط</strong>
       </div>
     </div>
-
     <p class="note">
       تحتاج مراقبة العقود الفعلية إلى مصدر بيانات أو اتصال بمنصة التداول.
     </p>
   </section>
-
   <section class="panel">
     <h2>عن NEXFX AI</h2>
-
     <p class="note">
       منصة موحدة لاستعراض أسواق العملات الرقمية والفوركس والذهب والفضة والأسهم،
       مع أدوات التحليل الفني والذكاء الاصطناعي ومراقبة الأسواق.
       يجري تجهيز هذه النسخة للربط بمصادر البيانات والخدمات الخارجية.
     </p>
   </section>
-
 </main>
-
 <footer>NEXFX AI © 2026</footer>
-
 <script>
 const assets = {
   crypto:[
     "BTC/USDT","ETH/USDT","BNB/USDT",
     "SOL/USDT","XRP/USDT","ADA/USDT"
   ],
-
   forex:[
     "EUR/USD","GBP/USD","USD/JPY",
     "USD/CHF","AUD/USD","USD/CAD"
   ],
-
   gold:[
     "XAU/USD","XAG/USD"
   ],
-
   stocks:[
     "AAPL","MSFT","NVDA",
     "TSLA","AMZN","GOOGL"
   ]
 };
-
 let currentMarket="crypto";
-
 function changeMarket(market,button){
   currentMarket=market;
-
   document.querySelectorAll(".navigation button")
     .forEach(b=>b.classList.remove("active"));
-
   if(button){
     button.classList.add("active");
   }
-
   const select=document.getElementById("pair");
   select.innerHTML="";
-
   assets[market].forEach(asset=>{
     const option=document.createElement("option");
     option.value=asset;
     option.textContent=asset;
     select.appendChild(option);
   });
-
   document.getElementById("result").style.display="none";
-
   renderMarkets();
   renderChart();
   updateChartTitle();
 }
-
 function renderMarkets(){
   const list=document.getElementById("marketList");
   list.innerHTML="";
-
   assets[currentMarket].slice(0,4).forEach((asset,index)=>{
     const item=document.createElement("div");
     item.className="market-item";
-
     const label=document.createElement("small");
     label.textContent=asset;
-
     const value=document.createElement("strong");
     value.className=index%2===0?"up":"down";
     value.textContent=index%2===0?"+1.25%":"-0.45%";
-
     item.append(label,value);
     list.appendChild(item);
   });
 }
-
 function renderChart(){
   const chart=document.getElementById("chart");
   chart.innerHTML="";
-
   const candles=[
     [35,65,25,72],
     [70,48,42,78],
@@ -637,78 +528,61 @@ function renderChart(){
     [48,69,40,75],
     [83,57,49,89]
   ];
-
   candles.forEach(data=>{
     const [open,close,low,high]=data;
     const bullish=close>=open;
-
     const candle=document.createElement("div");
     candle.className="candle "+(bullish?"bullish":"bearish");
-
     const wick=document.createElement("div");
     wick.className="wick";
     wick.style.top=(100-high)+"%";
     wick.style.height=(high-low)+"%";
-
     const body=document.createElement("div");
     body.className="candle-body";
     body.style.top=(100-Math.max(open,close))+"%";
     body.style.height=Math.max(4,Math.abs(close-open))+"%";
-
     candle.append(wick,body);
     chart.appendChild(candle);
   });
 }
-
 function updateChartTitle(){
   const pair=document.getElementById("pair").value;
   const timeframe=document.getElementById("timeframe").value;
-
   document.getElementById("chartPair").textContent=
     pair+" | "+timeframe;
 }
-
 function analyze(){
   const pair=document.getElementById("pair").value;
   const mode=document.getElementById("analysisMode").value;
   const timeframe=document.getElementById("timeframe").value;
-
   if(!pair){
     alert("يرجى اختيار الأصل المالي أولاً");
     return;
   }
-
   const modes={
     auto:"تحليل تلقائي تجريبي",
     technical:"تحليل فني تجريبي",
     manual:"تحليل يدوي تجريبي"
   };
-
   document.getElementById("analysisType").textContent=modes[mode];
   document.getElementById("selectedPair").textContent=pair;
   document.getElementById("selectedTimeframe").textContent=timeframe;
-
   document.getElementById("signal").textContent=
     "نتيجة توضيحية - شراء";
-
   document.getElementById("entry").textContent="1.0000";
   document.getElementById("sl").textContent="0.9950";
   document.getElementById("tp1").textContent="1.0050";
   document.getElementById("tp2").textContent="1.0100";
-
   document.getElementById("result").style.display="block";
-
   document.getElementById("result").scrollIntoView({
     behavior:"smooth",
     block:"nearest"
   });
 }
-
 changeMarket(
   "crypto",
   document.querySelector(".navigation button")
 );
 </script>
-
 </body>
 </html>
