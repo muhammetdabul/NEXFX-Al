@@ -69,6 +69,11 @@ nav a:hover{color:var(--gold2)}
 .language-option img{width:25px;height:17px;object-fit:cover;border-radius:2px}
 .language-empty{padding:10px;color:var(--muted);font-size:12px}
 
+/* Approved NEXFX AI main banner */
+.site-banner{width:min(1500px,97%);margin:12px auto 0;overflow:hidden;border:1px solid var(--line);border-radius:14px;background:#020817;box-shadow:0 12px 35px #0008}
+.site-banner img{display:block;width:100%;height:auto;object-fit:contain}
+@media(max-width:700px){.site-banner{width:100%;margin:0;border-radius:0;border-inline:0}}
+
 .hero{
   position:relative;isolation:isolate;min-height:310px;
   border:1px solid var(--line);border-radius:16px;
@@ -235,20 +240,14 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
 </head>
 
 <body>
+<div class="site-banner" role="img" aria-label="NEXFX AI - الأسواق الذكية والتحليل المالي">
+  <img src="nexfx-ai-banner.png" alt="NEXFX AI — الأسواق الذكية والتحليل المالي" fetchpriority="high">
+</div>
 <header class="topbar">
   <div class="brand">
     <div class="logo">📈</div>
     <div class="brand-name">NEXFX AI<small>SMART TRADING • SMARTER DECISIONS</small></div>
   </div>
-
-  <nav>
-    <a href="#home" data-t="home">الرئيسية</a>
-    <a href="#markets" data-t="markets">الأسواق</a>
-    <a href="#analysis" data-t="analysis">التحليل</a>
-    <a href="#trades" data-t="trades">الصفقات</a>
-    <a href="#about" data-t="about">حول المنصة</a>
-  </nav>
-
   <div class="language-wrap">
     <button class="language-trigger" id="languageTrigger" type="button" aria-expanded="false">
       <span>🌐</span>
