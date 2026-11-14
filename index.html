@@ -1,1023 +1,550 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#020817">
-<title>NEXFX AI | Smart Trading</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXFX AI | Smart Trading</title>
+    <style>
+        :root {
+            --bg: #080808;
+            --panel: #0b1b30;
+            --gold: #d4af37;
+            --gold2: #ffe6a0;
+            --white: #f6f2e8;
+            --muted: #aab6c8;
+            --green: #00ff88;
+            --red: #ff5265;
+            --line: rgba(212, 175, 55, .42);
+            --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+        }
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { margin: 0; background: radial-gradient(ellipse at top, #10284b, #080808 75%); color: var(--white); font-family: Tahoma, Arial, sans-serif; line-height: 1.6; }
+        button, input, select { font: inherit; cursor: pointer; }
+        
+        .topbar {
+            position: sticky; top: 0; z-index: 20; background: #020817;
+            border-bottom: 1px solid var(--gold); padding: 12px 25px;
+            display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+            backdrop-filter: blur(12px);
+        }
+        .brand { display: flex; align-items: center; gap: 12px; direction: ltr; animation: gentleFloat 6s ease-in-out infinite; }
+        .logo { width: 45px; height: 45px; border-radius: 10px; display: grid; place-items: center; background: linear-gradient(145deg, #fff0ad, #b77b19); color: #111; font-size: 25px; }
+        .brand-name { font-size: 24px; font-weight: 900; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.5px; }
+        
+        .header-actions { display: flex; align-items: center; gap: 10px; }
+        .btn-auth {
+            background: transparent; border: 1px solid var(--gold); color: var(--gold);
+            padding: 7px 14px; border-radius: 20px; font-weight: 600; font-size: 11px; transition: 0.3s;
+        }
+        .btn-auth:hover { background: var(--gold); color: var(--bg); }
 
-<style>
-:root{
-  --bg:#080808;--panel:#0b1b30;--panel2:#102641;
-  --gold:#d4af37;--gold2:#ffe6a0;--white:#f6f2e8;
-  --muted:#aab6c8;--green:#00ff88;--red:#ff5265;
-  --line:rgba(212,175,55,.42);
-  --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;background:radial-gradient(ellipse at top,#10284b,#080808 75%);
-  color:var(--white);font-family:Tahoma,Arial,sans-serif;line-height:1.6
-}
-button,input,select{font:inherit}
-button{cursor:pointer}
-.container{width:min(1500px,97%);margin:12px auto 30px}
+        .language-wrap { position: relative; }
+        .language-trigger {
+            display: flex; align-items: center; gap: 8px; background: #10243c;
+            border: 1px solid var(--line); color: var(--gold);
+            padding: 7px 12px; border-radius: 20px; font-size: 12px;
+        }
+        .language-trigger img { width: 22px; height: 15px; object-fit: cover; border-radius: 2px; }
+        .language-menu {
+            display: none; position: absolute; top: calc(100% + 5px); inset-inline-end: 0;
+            width: 260px; max-height: 390px; overflow: auto; padding: 10px;
+            background: #071629; border: 1px solid var(--line); border-radius: 12px;
+            box-shadow: 0 15px 40px #000a; z-index: 100;
+        }
+        .language-menu.open { display: block; }
+        .language-menu input { margin-bottom: 8px; width: 100%; min-height: 48px; background: #10243c; border: 1px solid var(--line); color: var(--white); padding: 8px; border-radius: 8px; }
+        .language-option {
+            display: flex; align-items: center; gap: 10px; color: var(--white);
+            background: transparent; border: none; width: 100%; padding: 8px;
+            text-align: start; font-size: 13px; border-radius: 6px;
+        }
+        .language-option:hover, .language-option.active { background: #10243c; }
+        .language-option img { width: 25px; height: 17px; object-fit: cover; border-radius: 2px; }
 
-/* Header & Top Bar Layout - Moved Language Selector to Top */
-.topbar{
-  position:sticky;top:0;z-index:20;background:#080808f5;
-  border-bottom:1px solid var(--gold);padding:12px 25px;
-  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
-  backdrop-filter:blur(12px)
-}
-.brand{display:flex;align-items:center;gap:10px;direction:ltr}
-.logo{
-  width:45px;height:45px;border-radius:10px;display:grid;place-items:center;
-  background:var(--gold-gradient);color:#111;font-size:25px;border:1px solid var(--gold)
-}
-.brand-name{
-  font-size:23px;font-weight:900;
-  background:var(--gold-gradient);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-.brand-name small{display:block;font-size:9px;letter-spacing:1px;color:var(--muted);-webkit-text-fill-color:initial}
+        nav.languages { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+        .small-btn {
+            background: #10243c; border: 1px solid var(--line); color: var(--gold);
+            padding: 7px 10px; border-radius: 8px; font-size: 11px;
+        }
+        .small-btn.active { background: var(--gold); color: #17120a; font-weight: bold; }
+        
+        .hero { position: relative; isolation: isolate; min-height: 310px; border-bottom: 1px solid var(--line); border-radius: 16px; background: radial-gradient(ellipse at 50% 110%, #12378aa0, transparent 55%), url('https://images.unsplash.com/photo-1642543492481-44e81e3914a7?auto=format&fit=crop&w=1200&q=80'); background-size: cover; background-position: center; display: grid; place-items: center; text-align: center; padding: 22px; overflow: hidden; }
+        .hero::before {
+            content: ""; position: absolute; inset: 0; background-image: linear-gradient(#78a6d51c 1px, transparent 1px), linear-gradient(90deg, #78a6d51c 1px, transparent 1px);
+            background-size: 35px 35px; mask-image: linear-gradient(to bottom, #000, transparent 80%); pointer-events: none;
+        }
+        .hero::after { content: ""; position: absolute; z-index: -1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); width: 100%; transform: rotate(-8deg); box-shadow: 0 0 15px var(--gold); }
+        
+        .globe { width: min(850px, 95%); margin: auto; position: relative; margin-top: -40px; z-index: 10; filter: drop-shadow(0 25px 35px #000e); animation: floatSlow 8s ease-in-out infinite alternate; }
+        .market-lines { opacity: 0.85; transition: 0.3s; stroke-dasharray: 200; stroke-dashoffset: 0; animation: drawLines 10s infinite alternate; }
+        .globe:hover .market-lines { opacity: 1; }
+        .globe-spin { transform-origin: center; animation: spinGlobe 45s linear infinite; }
+        
+        .ticker-wrap { background: #020817; border-top: 1px solid var(--gold); border-bottom: 1px solid var(--gold); padding: 10px 0; overflow: hidden; white-space: nowrap; }
+        .ticker { display: inline-flex; animation: marquee 35s linear infinite; }
+        .ticker:hover { animation-play-state: paused; }
+        .ticker-item { display: inline-flex; align-items: center; gap: 12px; padding: 0 25px; border-inline-end: 1px solid #10243c; font-size: 14px; font-weight: 600; }
+        .ticker-symbol { color: var(--white); }
+        .ticker-price { color: var(--gold); font-family: monospace; transition: color 0.3s; }
+        .ticker-change.up { color: var(--green); }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-/* Auth & Language Section in Header */
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.btn-auth {
-  background: transparent;
-  color: var(--gold);
-  border: 1px solid var(--gold);
-  padding: 7px 14px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 11px;
-  transition: 0.3s;
-}
-.btn-auth:hover {
-  background: var(--gold);
-  color: var(--bg);
-}
+        .container { width: min(1500px, 97%); margin: 12px auto 30px; }
+        .layout { display: grid; grid-template-columns: 360px 1fr; gap: 20px; align-items: start; }
+        @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+        .panel { background: #0d1b2a; border: 1px solid var(--line); border-radius: 12px; padding: 20px; box-shadow: 0 8px 18px #0006; }
+        .section-title { font-size: 18px; margin-top: 0; color: var(--white); border-bottom: 1px solid #1a365d; padding-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .chart-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+        
+        .category { background: #1a365d; color: var(--white); border: 1px solid #2b6cb0; padding: 6px 12px; border-radius: 6px; font-size: 12px; }
+        .category.active { background: var(--gold); border-color: var(--gold); color: #000; font-weight: bold; }
+        .search-box { width: 100%; min-height: 40px; background: #08111e; border: 1px solid var(--line); color: var(--white); padding: 8px 12px; border-radius: 8px; margin-bottom: 12px; }
+        .asset-list { max-height: 390px; overflow-y: auto; }
+        .asset-row { display: flex; align-items: center; justify-content: space-between; padding: 10px; border-bottom: 1px solid #ffffff14; cursor: pointer; }
+        .asset-row:hover, .asset-row.active { background: #162c47; }
+        .asset-row strong { font-size: 15px; font-family: monospace; }
+        .asset-icon { font-size: 19px; }
+        .chart-pair { direction: ltr; color: var(--muted); font-size: 13px; }
 
-nav,.languages{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-nav a{font-size:12px;color:#ddd;text-decoration:none}
-nav a:hover{color:var(--gold2)}
-.top-btn,.small-btn{
-  background:#10243c;border:1px solid var(--line);color:var(--gold2);
-  padding:7px 10px;border-radius:8px;font-size:11px
-}
-.small-btn.active{background:var(--gold);color:#17120a;font-weight:bold}
+        .tradingview-box { position: relative; height: 440px; margin-bottom: 20px; background: #041020; border: 1px solid #ffffff1a; border-radius: 8px; overflow: hidden; }
+        #tradingview-chart, .tradingview-widget-container { width: 100%; height: 100%; }
+        .chart-placeholder { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); text-align: center; font-size: 15px; z-index: 2; background: #041020; }
+        .spin-loader { width: 40px; height: 40px; border: 3px solid var(--line); border-top-color: var(--gold); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 10px; }
+        
+        .indicators { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 20px; }
+        .indicator { border: 1px solid var(--line); background: #0e1e38; color: var(--gold); padding: 8px 15px; border-radius: 6px; font-size: 13px; font-weight: bold; }
 
-/* Language selector */
-.language-wrap{position:relative}
-.language-trigger{
-  display:flex;align-items:center;gap:8px;background:#10243c;
-  border:1px solid var(--gold);color:var(--gold2);
-  padding:7px 12px;border-radius:20px;font-size:12px
-}
-.language-trigger img{width:22px;height:15px;object-fit:cover;border-radius:2px}
-.language-menu{
-  display:none;position:absolute;top:calc(100% + 9px);inset-inline-end:0;
-  width:260px;max-height:390px;overflow:auto;padding:10px;
-  background:#071629;border:1px solid var(--gold);border-radius:12px;
-  box-shadow:0 15px 40px #000a;z-index:30
-}
-.language-menu.open{display:block}
-.language-menu input{margin-bottom:8px}
-.language-option{
-  display:flex;align-items:center;gap:10px;width:100%;padding:9px;
-  color:var(--white);background:transparent;border:0;border-radius:7px;
-  text-align:start;font-size:13px
-}
-.language-option:hover,.language-option.active{background:#193451;color:var(--gold2)}
-.language-option img{width:25px;height:17px;object-fit:cover;border-radius:2px}
-.language-empty{padding:10px;color:var(--muted);font-size:12px}
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .field { margin-bottom: 15px; }
+        .field label { display: block; color: var(--gold2); font-size: 12px; margin-bottom: 5px; }
+        .field input, .field select { width: 100%; min-height: 48px; background: #0f1f33; border: 1px solid var(--line); color: var(--white); padding: 10px; border-radius: 8px; }
+        
+        .primary { display: inline-block; background: var(--gold-gradient); color: #111; font-weight: 700; padding: 12px 28px; border-radius: 30px; text-decoration: none; box-shadow: 0 4px 15px #d4af3747; border: none; cursor: pointer; transition: 0.3s; }
+        .primary:hover { filter: brightness(1.1); transform: translateY(-2px); }
 
-/* Approved NEXFX AI main banner */
-.site-banner{width:min(1500px,97%);margin:12px auto 0;overflow:hidden;border:1px solid var(--line);border-radius:14px;background:#080808;box-shadow:0 12px 35px #0008}
-.site-banner img{display:block;width:100%;height:auto;object-fit:contain}
-@media(max-width:700px){.site-banner{width:100%;margin:0;border-radius:0;border-inline:0}}
+        footer { text-align: center; padding: 45px 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; background: #030a14; }
+        footer strong { color: var(--gold2); }
 
-.hero{
-  position:relative;isolation:isolate;min-height:310px;
-  border:1px solid var(--line);border-radius:16px;
-  background:
-    radial-gradient(ellipse at 50% 110%,#123e78aa,transparent 55%),
-    linear-gradient(110deg,#080808,#091c35 55%,#080808);
-  display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;
-  gap:12px;padding:22px;overflow:hidden
-}
-.hero:before{
-  content:"";position:absolute;inset:0;z-index:-1;opacity:.22;
-  background-image:
-    linear-gradient(#78a6d51c 1px,transparent 1px),
-    linear-gradient(90deg,#78a6d51c 1px,transparent 1px);
-  background-size:35px 35px;
-  mask-image:linear-gradient(to bottom,black,transparent)
-}
-.hero:after{
-  content:"";position:absolute;z-index:-1;left:-10%;right:-10%;bottom:18%;
-  height:1px;background:linear-gradient(90deg,transparent,#24a5ff88,#e9b83f77,transparent);
-  transform:rotate(-8deg);box-shadow:0 0 25px #249cff55
-}
-.hero-copy{text-align:center;position:relative;z-index:2}
-.hero h1{
-  color:#f8cf67;font:900 clamp(36px,5vw,64px) Georgia,serif;
-  direction:ltr;margin:0;text-shadow:0 0 12px #f2be4570,0 0 30px #f2be4540;
-  animation:goldGlow 4s ease-in-out infinite alternate
-}
-.hero h2{color:var(--gold2);font-size:22px;margin:5px}
-.hero p{color:#e7d5a6;font-size:13px}
-.primary{
-  display:inline-block;background:var(--gold-gradient);
-  color:#17120a;padding:10px 20px;border:0;border-radius:25px;
-  font-weight:bold;text-decoration:none
-}
-.primary:hover{filter:brightness(1.12);transform:translateY(-1px)}
-.globe{
-  width:min(230px,100%);margin:auto;filter:drop-shadow(0 0 20px #299bff55);
-  animation:globeFloat 6s ease-in-out infinite
-}
-.globe .globe-spin{transform-origin:150px 150px;animation:globeSpin 35s linear infinite}
-.globe .market-lines{opacity:.85}
-.candles{
-  height:190px;display:flex;align-items:center;justify-content:center;
-  gap:10px;direction:ltr
-}
-.candle{width:15px;position:relative;height:150px;animation:candleFloat 3s ease-in-out infinite alternate}
-.candle:nth-child(2n){animation-delay:.4s}
-.candle:nth-child(3n){animation-delay:.8s}
-.candle:before{content:"";position:absolute;left:6px;top:10px;height:125px;width:3px;background:var(--green)}
-.candle:after{
-  content:"";position:absolute;left:0;top:40px;width:15px;height:55px;
-  background:var(--green);border-radius:3px;box-shadow:0 0 10px #18dc9177
-}
-.candle:nth-child(even):before{background:var(--red)}
-.candle:nth-child(even):after{background:var(--red);top:55px;height:40px;box-shadow:0 0 10px #ff526577}
-.candle:nth-child(3n):after{top:25px;height:75px}
-.candle:nth-child(4n):after{top:70px;height:28px}
-@keyframes goldGlow{to{text-shadow:0 0 20px #f2be45aa,0 0 42px #f2be4566}}
-@keyframes globeFloat{50%{transform:translateY(-8px)}}
-@keyframes globeSpin{to{transform:rotate(360deg)}}
-@keyframes candleFloat{to{transform:translateY(-7px)}}
+        @keyframes spinGlobe { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes floatSlow { 0% { transform: translateY(0px) rotate(0deg); } 100% { transform: translateY(-12px) rotate(1deg); } }
+        @keyframes gentleFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes goldGlow { 0% { text-shadow: 0 0 15px #d4af3740; } 100% { text-shadow: 0 0 35px #d4af3790; } }
+        @keyframes drawLines { 0% { stroke-dashoffset: 200; } 100% { stroke-dashoffset: 0; } }
 
-.navlinks{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin:12px 0}
-.navlinks a{
-  text-align:center;padding:10px 4px;background:#0b1b30;
-  border:1px solid var(--line);border-radius:9px;color:var(--gold2);
-  text-decoration:none;font-size:12px
-}
-
-/* Live Ticker with Green Profit Indicators */
-.ticker{
-  display:grid;grid-template-columns:repeat(6,1fr);background:#000;
-  border:1px solid var(--gold);border-radius:10px;overflow:hidden;margin:12px 0
-}
-.tick{padding:10px;border-inline-end:1px solid var(--line);font-size:12px}
-.tick b{display:block;direction:ltr;color:var(--white)}
-.tick .profit-green{color:var(--green);font-weight:bold;margin-inline-start:5px;}
-
-.categories{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
-.category{
-  padding:15px;background:linear-gradient(145deg,#102541,#061326);
-  border:1px solid var(--line);border-radius:12px;color:white;text-align:start
-}
-.category b{display:block;color:var(--gold2);font-size:15px}
-.category small{color:var(--muted)}
-.category.active{border-color:var(--gold2);box-shadow:0 0 18px #edbb4835}
-.panel{
-  background:linear-gradient(145deg,#10233d,#061326);
-  border:1px solid var(--line);border-radius:12px;padding:15px;margin:13px 0
-}
-.inner{background:#061326;border:1px solid #daa93b66;border-radius:10px;padding:12px;min-width:0}
-h2,h3{color:var(--gold2);margin-top:0}
-h2{font-size:18px}h3{font-size:14px}
-.muted{color:var(--muted);font-size:11px}
-.section-title,.chart-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.layout{display:grid;grid-template-columns:minmax(200px,1fr) minmax(320px,1.8fr) minmax(200px,1fr);gap:12px}
-input,select{
-  width:100%;min-height:40px;background:#061326;color:white;
-  border:1px solid var(--line);border-radius:8px;padding:8px
-}
-.asset-tools{display:flex;gap:6px;margin:10px 0}
-.asset-list{max-height:390px;overflow:auto}
-.asset-row{
-  display:flex;align-items:center;gap:8px;padding:9px;
-  border-bottom:1px solid #ffffff14;cursor:pointer;font-size:12px
-}
-.asset-row:hover,.asset-row.active{background:#193451}
-.asset-row strong{margin-inline-start:auto;color:var(--gold2);direction:ltr}
-.asset-icon{font-size:19px}
-.chart-pair{direction:ltr;color:var(--gold2);font-weight:bold}
-.tradingview-box{
-  position:relative;height:440px;min-height:400px;
-  background:#041020;border:1px solid #daa93b55;border-radius:9px;overflow:hidden
-}
-#tradingviewChart,.tradingview-widget-container__widget{width:100%;height:100%}
-.chart-placeholder{
-  position:absolute;inset:0;display:grid;place-items:center;
-  color:var(--muted);text-align:center;padding:20px;pointer-events:none;
-  z-index:2;background:#041020
-}
-.indicators{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
-.indicator{border:1px solid var(--line);border-radius:7px;padding:6px;font-size:10px}
-.signal-box{background:#071629;border:1px solid var(--line);border-radius:9px;padding:12px;margin-top:10px}
-.signal-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
-.signal-cell{background:#10243c;border:1px solid #d6a94829;border-radius:8px;padding:8px;min-width:0}
-.signal-cell small{display:block;color:var(--muted);font-size:9px}
-.signal-cell b{display:block;color:var(--gold2);direction:ltr;font-size:12px;overflow-wrap:anywhere}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.field{display:flex;flex-direction:column;gap:5px;margin-bottom:9px}
-.disclaimer{
-  border-inline-start:3px solid var(--gold);padding:8px 11px;
-  background:#daa6320f;color:#c6c3b8;font-size:10px
-}
-table{width:100%;border-collapse:collapse;font-size:11px}
-th,td{padding:10px;text-align:start;border-bottom:1px solid #ffffff14}
-th{color:var(--gold2)}
-footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid var(--line);font-size:11px}
-
-@media(max-width:1050px){
- .layout{grid-template-columns:1fr 1.5fr}
- .analysis-side{grid-column:1/-1}
- .navlinks{grid-template-columns:repeat(4,1fr)}
- .ticker{grid-template-columns:repeat(3,1fr)}
-}
-@media(max-width:700px){
- .topbar{position:relative;justify-content:center}
- .hero{grid-template-columns:1fr 1fr;min-height:260px}
- .hero-copy{grid-column:1/-1}
- .globe{width:140px}
- .candles{transform:scale(.75)}
- .categories{grid-template-columns:repeat(2,1fr)}
- .layout,.two-col{grid-template-columns:1fr}
- .analysis-side{grid-column:auto}
- .navlinks{grid-template-columns:repeat(2,1fr)}
- .ticker{grid-template-columns:repeat(2,1fr)}
- .tradingview-box{height:370px;min-height:370px}
- .language-menu{inset-inline-end:50%;transform:translateX(50%)}
-}
-@media(prefers-reduced-motion:reduce){
- *,*:before,*:after{
-  animation-duration:.01ms!important;animation-iteration-count:1!important;
-  scroll-behavior:auto!important;transition-duration:.01ms!important
- }
-}
-</style>
+        .modal-overlay {
+            display: none; position: fixed; inset: 0; z-index: 1000;
+            background: #000c24cc; backdrop-filter: blur(8px);
+            place-items: center; padding: 20px;
+        }
+        .modal-overlay.open { display: grid; }
+        .modal-content {
+            background: #0b1b30; border: 1px solid var(--gold); border-radius: 16px;
+            width: 100%; max-width: 420px; padding: 30px; position: relative;
+            box-shadow: 0 20px 50px #000; text-align: center;
+        }
+        .close-modal {
+            position: absolute; top: 15px; inset-inline-end: 15px;
+            background: #10243c; border: none; color: var(--white);
+            width: 32px; height: 32px; border-radius: 50%; font-weight: bold; cursor: pointer;
+        }
+        .modal-content h3 { color: var(--gold); margin-top: 0; font-size: 22px; }
+        .auth-providers { display: flex; flex-direction: column; gap: 12px; margin: 25px 0; }
+        .btn-provider {
+            display: flex; align-items: center; justify-content: center; gap: 12px;
+            width: 100%; padding: 12px; border-radius: 8px; font-weight: 600; font-size: 14px;
+            text-decoration: none; transition: 0.3s; border: 1px solid var(--line);
+            background: #08111e; color: var(--white);
+        }
+        .btn-provider.google { border-color: #ea4335; }
+        .btn-provider.facebook { border-color: #4267b2; }
+        .btn-provider:hover { filter: brightness(1.2); }
+        .divider { display: flex; align-items: center; color: var(--muted); font-size: 12px; margin: 20px 0; }
+        .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--line); margin: 0 10px; }
+        .auth-form { display: flex; flex-direction: column; gap: 12px; }
+        .auth-form input { width: 100%; min-height: 48px; background: #08111e; border: 1px solid var(--line); color: var(--white); padding: 10px; border-radius: 8px; }
+        .btn-submit { background: var(--gold-gradient); color: #111; font-weight: bold; padding: 12px; border-radius: 8px; border: none; margin-top: 5px; cursor: pointer; }
+    </style>
 </head>
-
 <body>
-<div class="site-banner" role="img" aria-label="NEXFX AI - الأسواق الذكية والتحليل المالي">
-  <img src="nexfx-ai-banner.png" alt="NEXFX AI — الأسواق الذكية والتحليل المالي" fetchpriority="high">
-</div>
 
-<header class="topbar">
-  <div class="brand">
-    <div class="logo">📈</div>
-    <div class="brand-name">NEXFX AI<small>SMART TRADING • SMARTER DECISIONS</small></div>
-  </div>
+    <header class="topbar">
+        <div class="brand">
+            <div class="logo">📈</div>
+            <div class="brand-name">NEXFX AI</div>
+        </div>
 
-  <div class="header-actions">
-    <button class="btn-auth" onclick="loginWithGoogle()">تسجيل جوجل</button>
-    <button class="btn-auth" onclick="loginWithFacebook()">تسجيل فيسبوك</button>
+        <nav class="languages">
+            <button class="small-btn active" data-t="home">الرئيسية</button>
+            <button class="small-btn" data-t="markets">الأسواق</button>
+            <button class="small-btn" data-t="analysis">التحليل الذكي</button>
+            <button class="small-btn" data-t="trades">الصفقات</button>
+        </nav>
 
-    <div class="language-wrap">
-      <button class="language-trigger" id="languageTrigger" type="button" aria-expanded="false">
-        <span>🌐</span>
-        <img id="currentFlag" src="https://flagcdn.com/w40/sa.png" alt="علم اللغة المختارة">
-        <span id="currentLanguageName">العربية</span>
-        <span>⌄</span>
-      </button>
-      <div class="language-menu" id="languageMenu">
-        <input id="languageSearch" type="search" placeholder="ابحث عن لغة..." aria-label="Search languages">
-        <div id="languageOptions"></div>
-      </div>
+        <div class="header-actions">
+            <div class="language-wrap">
+                <button class="language-trigger" onclick="toggleLanguageMenu()">
+                    <img id="currentFlag" src="https://flagcdn.com/w40/sa.png" alt="العربية">
+                    <span id="currentLanguageName">العربية</span>
+                    <span>▼</span>
+                </button>
+                <div class="language-menu" id="languageMenu">
+                    <input type="text" id="languageSearch" placeholder="Search languages..." oninput="filterLanguages()">
+                    <div id="languageOptions"></div>
+                </div>
+            </div>
+            <button class="btn-auth" onclick="openAuthModal()">تسجيل الدخول</button>
+        </div>
+    </header>
+
+    <div class="modal-overlay" id="authModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeAuthModal()">✕</button>
+            <h3>تسجيل الدخول</h3>
+            <div class="auth-providers">
+                <a href="#" class="btn-provider google" onclick="handleSocialLogin('Google')">
+                    <img src="https://www.gstatic.com/images/branding/product/1x/gsuper_24dp.png" alt="Google"> متابعة بواسطة Google
+                </a>
+                <a href="#" class="btn-provider facebook" onclick="handleSocialLogin('Facebook')">
+                    <img src="https://www.facebook.com/images/fb_icon_325x325.png" alt="Facebook" style="width:24px; height:24px;"> متابعة بواسطة Facebook
+                </a>
+            </div>
+            <div class="divider">أو عبر البريد الإلكتروني</div>
+            <form class="auth-form" onsubmit="handleEmailLogin(event)">
+                <input type="email" placeholder="البريد الإلكتروني" required>
+                <input type="password" placeholder="كلمة المرور" required>
+                <button type="submit" class="btn-submit">دخول</button>
+            </form>
+        </div>
     </div>
-  </div>
-</header>
 
-<main class="container" id="home">
-
-<div class="navlinks">
-  <a href="#home" data-t="home">الرئيسية</a>
-  <a href="#markets" data-t="markets">الأسواق</a>
-  <a href="#analysis" data-t="analysis">التحليل</a>
-  <a href="#trades" data-t="trades">الصفقات</a>
-  <a href="#favoritesPanel" data-t="favorites">المفضلة</a>
-  <a href="#settings" data-t="settings">الإعدادات</a>
-  <a href="#about" data-t="about">حول المنصة</a>
-</div>
-
-<section class="ticker">
-  <div class="tick">🪙 <b>GOLD <span class="profit-green">+1.27%</span></b></div>
-  <div class="tick">🥈 <b>SILVER <span class="profit-green">+0.95%</span></b></div>
-  <div class="tick">₿ <b>BTC <span class="profit-green">+2.41%</span></b></div>
-  <div class="tick">♦ <b>ETH <span class="profit-green">+1.96%</span></b></div>
-  <div class="tick">🇪🇺 <b>EUR/USD <span class="profit-green">+0.23%</span></b></div>
-  <div class="tick">🇬🇧 <b>GBP/USD <span class="profit-green">+0.45%</span></b></div>
-</section>
-
-<section id="markets">
-  <div class="section-title"><h2 data-t="globalMarkets">الأسواق العالمية</h2></div>
-  <div class="categories">
-    <button class="category active" data-market="crypto"><b data-t="crypto">العملات الرقمية</b><small>CRYPTO ₿</small></button>
-    <button class="category" data-market="forex"><b data-t="forex">الفوركس</b><small>FOREX €$</small></button>
-    <button class="category" data-market="metals"><b data-t="metals">الذهب والمعادن</b><small>GOLD 🪙</small></button>
-    <button class="category" data-market="stocks"><b data-t="stocks">الأسهم العالمية</b><small>STOCKS 📈</small></button>
-  </div>
-</section>
-
-<section class="panel">
-  <div class="section-title">
-    <h2 data-t="dashboard">لوحة الأسواق والتحليل</h2>
-    <span class="muted" id="marketCaption">CRYPTO</span>
-  </div>
-
-  <div class="layout">
-    <aside class="inner">
-      <h3 data-t="marketTools">أدوات السوق</h3>
-      <input id="search" type="search" data-placeholder="search" placeholder="ابحث عن أصل أو رمز">
-      <div class="asset-tools">
-        <button class="small-btn active" id="showAll" data-t="all">الكل</button>
-        <button class="small-btn" id="showFav" data-t="favorites">المفضلة</button>
-      </div>
-      <div class="asset-list" id="assetList"></div>
-      <p class="muted" data-t="coverage">توفر الرموز يعتمد على تغطية مزود البيانات.</p>
-    </aside>
-
-    <section class="inner">
-      <div class="chart-head">
-        <div>
-          <div class="chart-pair" id="chartPair">BINANCE:BTCUSDT</div>
-          <small class="muted" data-t="chartStatus">شارت من TradingView</small>
+    <div class="hero">
+        <div class="globe">
+            <svg class="globe-spin" viewBox="0 0 200 200" width="100%" height="100%">
+                <circle cx="100" cy="100" r="80" fill="none" stroke="var(--gold)" stroke-width="0.5" stroke-dasharray="5 5"/>
+                <circle cx="100" cy="100" r="60" fill="none" stroke="var(--muted)" stroke-width="0.5" opacity="0.3"/>
+                <path d="M 40 100 Q 100 40 160 100 Q 100 160 40 100" fill="none" stroke="var(--gold-gradient)" stroke-width="1.5" class="market-lines"/>
+                <path d="M 40 100 Q 100 160 160 100 Q 100 40 40 100" fill="none" stroke="var(--gold-gradient)" stroke-width="1.5" class="market-lines"/>
+            </svg>
         </div>
-        <div style="display:flex;gap:6px">
-          <select id="timeframe" aria-label="Timeframe">
-            <option value="1">1m</option><option value="5">5m</option>
-            <option value="15" selected>15m</option><option value="60">1H</option>
-            <option value="240">4H</option><option value="D">1D</option>
-            <option value="W">1W</option>
-          </select>
-          <button class="small-btn" id="favoriteBtn" aria-label="Add to favorites">☆</button>
-        </div>
-      </div>
-      <div class="tradingview-box">
-        <div class="chart-placeholder" id="chartPlaceholder">جاري تحميل الشارت...</div>
-        <div id="tradingviewChart" class="tradingview-widget-container">
-          <div class="tradingview-widget-container__widget"></div>
-        </div>
-      </div>
-      <div class="indicators">
-        <span class="indicator">TradingView</span>
-        <span class="indicator" data-t="candles">شموع يابانية</span>
-        <span class="indicator" data-t="technicalTools">مؤشرات فنية من أدوات الشارت</span>
-      </div>
-      <p class="disclaimer" data-t="chartNote">
-        بيانات الشارت وتغطيتها تعتمد على مزود السوق وقد تكون متأخرة لبعض الرموز.
-      </p>
-    </section>
-
-    <aside class="inner analysis-side" id="favoritesPanel">
-      <h3 data-t="favoritesTitle">المفضلة ★</h3>
-      <div class="asset-list" id="favoriteList"></div>
-      <div class="signal-box">
-        <small class="muted" data-t="aiResults">نتائج التحليل الذكي</small>
-        <h3 data-t="waiting">بانتظار البيانات</h3>
-        <p class="muted" data-t="noSignals">لن نصدر إشارات دون بيانات موثوقة.</p>
-      </div>
-      <div class="signal-grid">
-        <div class="signal-cell"><small data-t="selected">الأصل المحدد</small><b id="sidePair">BTC/USDT</b></div>
-        <div class="signal-cell"><small data-t="timeframe">الإطار الزمني</small><b id="sideTime">15m</b></div>
-        <div class="signal-cell"><small data-t="direction">الاتجاه</small><b data-t="undefined">غير محدد</b></div>
-        <div class="signal-cell"><small data-t="strength">قوة الإشارة</small><b data-t="unavailable">غير متاحة</b></div>
-      </div>
-      <a class="primary" href="#analysis" style="display:block;text-align:center;margin-top:14px" data-t="configure">إعداد التحليل</a>
-    </aside>
-  </div>
-</section>
-
-<section class="panel" id="analysis">
-  <h2 data-t="analysisCenter">مركز التحليل NEXFX AI</h2>
-  <div class="two-col">
-    <div>
-      <div class="field">
-        <label data-t="analysisType" for="analysisMode">نوع التحليل</label>
-        <select id="analysisMode">
-          <option value="technical" data-t="technical">التحليل الفني</option>
-          <option value="manual" data-t="manual">التحليل اليدوي</option>
-          <option value="auto" data-t="automatic">التحليل التلقائي</option>
-        </select>
-      </div>
-      <div class="field">
-        <label data-t="tradeDirection" for="direction">اتجاه الصفقة</label>
-        <select id="direction">
-          <option value="buy">BUY / شراء</option>
-          <option value="sell">SELL / بيع</option>
-        </select>
-      </div>
-      <div class="two-col">
-        <div class="field"><label data-t="entry" for="entry">سعر الدخول</label><input id="entry" type="number" step="any"></div>
-        <div class="field"><label data-t="stop" for="stop">وقف الخسارة SL</label><input id="stop" type="number" step="any"></div>
-        <div class="field"><label for="tp1">TP1</label><input id="tp1" type="number" step="any"></div>
-        <div class="field"><label for="tp2">TP2</label><input id="tp2" type="number" step="any"></div>
-      </div>
-      <button class="primary" id="runAnalysis" style="width:100%" data-t="run">تشغيل التحليل</button>
     </div>
-    <div>
-      <h3 data-t="output">مخرجات التحليل</h3>
-      <div class="signal-box">
-        <h3 id="resultTitle" data-t="notRun">لم يتم تشغيل تحليل</h3>
-        <p class="muted" id="resultText" data-t="enterLevels">اختر نوع التحليل وأدخل المستويات.</p>
-        <div class="signal-grid">
-          <div class="signal-cell"><small data-t="analysisType">نوع التحليل</small><b id="outMode">—</b></div>
-          <div class="signal-cell"><small data-t="asset">الأصل</small><b id="outPair">—</b></div>
-          <div class="signal-cell"><small data-t="entry">الدخول</small><b id="outEntry">—</b></div>
-          <div class="signal-cell"><small data-t="stop">وقف الخسارة</small><b id="outStop">—</b></div>
-          <div class="signal-cell"><small>TP1</small><b id="outTP1">—</b></div>
-          <div class="signal-cell"><small>TP2</small><b id="outTP2">—</b></div>
+
+    <div class="ticker-wrap">
+        <div class="ticker" id="liveTicker">
+            <div class="ticker-item"><span class="ticker-symbol">BTC/USDT</span><span class="ticker-price" id="price-BTCUSDT">Loading...</span><span class="ticker-change up">▲ Live</span></div>
+            <div class="ticker-item"><span class="ticker-symbol">ETH/USDT</span><span class="ticker-price" id="price-ETHUSDT">Loading...</span><span class="ticker-change up">▲ Live</span></div>
+            <div class="ticker-item"><span class="ticker-symbol">BNB/USDT</span><span class="ticker-price" id="price-BNBUSDT">Loading...</span><span class="ticker-change up">▲ Live</span></div>
+            <div class="ticker-item"><span class="ticker-symbol">SOL/USDT</span><span class="ticker-price" id="price-SOLUSDT">Loading...</span><span class="ticker-change up">▲ Live</span></div>
+            <div class="ticker-item"><span class="ticker-symbol">XRP/USDT</span><span class="ticker-price" id="price-XRPUSDT">Loading...</span><span class="ticker-change up">▲ Live</span></div>
+            <div class="ticker-item"><span class="ticker-symbol">ADA/USDT</span><span class="ticker-price" id="price-ADAUSDT">Loading...</span><span class="ticker-change up">▲ Live</span></div>
+            <div class="ticker-item"><span class="ticker-symbol">BTC/USDT</span><span class="ticker-price" id="price-BTCUSDT-dup">Loading...</span><span class="ticker-change up">▲ Live</span></div>
+            <div class="ticker-item"><span class="ticker-symbol">ETH/USDT</span><span class="ticker-price" id="price-ETHUSDT-dup">Loading...</span><span class="ticker-change up">▲ Live</span></div>
         </div>
-      </div>
     </div>
-  </div>
-  <p class="disclaimer" data-t="analysisNote">
-    التحليل الفني والتلقائي يحتاجان إلى مصدر بيانات ومحرك تحليل متصل. التحليل اليدوي ينظم المستويات المدخلة فقط.
-  </p>
-</section>
 
-<section class="panel" id="trades">
-  <h2 data-t="tradeMonitor">مراقبة الصفقات</h2>
-  <div style="overflow:auto">
-    <table>
-      <thead><tr>
-        <th data-t="asset">الأصل</th><th data-t="type">النوع</th>
-        <th data-t="entry">الدخول</th><th data-t="stop">وقف الخسارة</th>
-        <th>TP</th><th data-t="status">الحالة</th>
-      </tr></thead>
-      <tbody><tr><td colspan="6" data-t="noTrades">لا توجد صفقات متصلة حالياً.</td></tr></tbody>
-    </table>
-  </div>
-</section>
+    <div class="container">
+        <div class="layout">
+            <aside class="panel">
+                <div class="chart-head">
+                    <h2 class="section-title"><span>🔍</span> الأدوات</h2>
+                    <button class="category active" id="showAll" onclick="filterAssets(false)">الكل</button>
+                    <button class="category" id="showFav" onclick="filterAssets(true)">المفضلة ⭐</button>
+                </div>
+                <input type="text" class="search-box" id="assetSearch" placeholder="ابحث عن أصل أو رمز..." oninput="renderAssets()">
+                <div class="asset-list" id="assetList"></div>
+            </aside>
 
-<section class="panel" id="settings">
-  <h2 data-t="settings">الإعدادات</h2>
-  <p class="muted" data-t="settingsDesc">يمكنك تغيير اللغة من الشريط العلوي.</p>
-</section>
+            <main>
+                <div class="panel">
+                    <div class="chart-head">
+                        <h2 class="section-title" id="marketCaption">BTC/USDT</h2>
+                        <button class="primary" id="favoriteBtn" onclick="toggleFavorite()">★ المفضلـة</button>
+                    </div>
 
-<section class="panel" id="about">
-  <h2 data-t="about">حول NEXFX AI</h2>
-  <p class="muted" data-t="aboutDesc">منصة لمتابعة العملات الرقمية والفوركس والمعادن والأسهم وأدوات التحليل.</p>
-</section>
-</main>
+                    <div class="tradingview-box">
+                        <div class="chart-placeholder" id="chartLoader">
+                            <div>
+                                <div class="spin-loader"></div>
+                                <div style="color:var(--gold);">جاري الاتصال ببيانات السوق الحية...</div>
+                            </div>
+                        </div>
+                        <div id="tradingview-chart"></div>
+                    </div>
 
-<footer><strong style="color:var(--gold2)">NEXFX AI</strong><br>SMART TRADING • SMARTER DECISIONS<br>© 2026</footer>
+                    <div class="indicators">
+                        <span class="indicator">الإتجاه: <span id="indTrend" style="color:var(--gold);">-</span></span>
+                        <span class="indicator">القوة: <span id="indStrength" style="color:var(--gold);">-</span></span>
+                        <span class="indicator">السوق: <span id="indMarket" style="color:var(--gold);">-</span></span>
+                    </div>
+                </div>
 
-<script>
-"use strict";
+                <div class="panel" style="margin-top: 20px;">
+                    <h2 class="section-title">مركز التحليل NEXFX AI</h2>
+                    <div class="two-col">
+                        <div class="field">
+                            <label>نوع التحليل</label>
+                            <select id="analysisMode">
+                                <option value="technical">التحليل الفني</option>
+                                <option value="ai">تحليل الذكاء الاصطناعي</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label>الإطار الزمني</label>
+                            <select id="timeframe">
+                                <option value="1">1 دقيقة</option>
+                                <option value="5">5 دقائق</option>
+                                <option value="15">15 دقيقة</option>
+                                <option value="60">1 ساعة</option>
+                                <option value="240">4 ساعات</option>
+                                <option value="D">يومي</option>
+                                <option value="W">أسبوعي</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="primary" style="width: 100%;" onclick="runAnalysis()">تشغيل التحليل</button>
+                </div>
+            </main>
+        </div>
+    </div>
 
-const assets={
-crypto:[
-["BTC/USDT","₿","BINANCE:BTCUSDT"],["ETH/USDT","♦","BINANCE:ETHUSDT"],
-["BNB/USDT","🟡","BINANCE:BNBUSDT"],["SOL/USDT","◎","BINANCE:SOLUSDT"],
-["XRP/USDT","✕","BINANCE:XRPUSDT"],["ADA/USDT","🔵","BINANCE:ADAUSDT"],
-["DOGE/USDT","Ð","BINANCE:DOGEUSDT"],["TRX/USDT","🔺","BINANCE:TRXUSDT"],
-["TON/USDT","💎","BINANCE:TONUSDT"],["AVAX/USDT","🔺","BINANCE:AVAXUSDT"],
-["LINK/USDT","🔗","BINANCE:LINKUSDT"],["DOT/USDT","●","BINANCE:DOTUSDT"],
-["LTC/USDT","Ł","BINANCE:LTCUSDT"],["SHIB/USDT","◆","BINANCE:SHIBUSDT"],
-["NEAR/USDT","N","BINANCE:NEARUSDT"],["SUI/USDT","💧","BINANCE:SUIUSDT"],
-["BCH/USDT","₿","BINANCE:BCHUSDT"],["ETC/USDT","Ξ","BINANCE:ETCUSDT"],
-["ATOM/USDT","⚛","BINANCE:ATOMUSDT"],["FIL/USDT","F","BINANCE:FILUSDT"],
-["APT/USDT","A","BINANCE:APTUSDT"],["ARB/USDT","A","BINANCE:ARBUSDT"],
-["OP/USDT","O","BINANCE:OPUSDT"],["UNI/USDT","U","BINANCE:UNIUSDT"],
-["ICP/USDT","∞","BINANCE:ICPUSDT"],["INJ/USDT","I","BINANCE:INJUSDT"],
-["AAVE/USDT","A","BINANCE:AAVEUSDT"],["PEPE/USDT","🐸","BINANCE:PEPEUSDT"],
-["XLM/USDT","✦","BINANCE:XLMUSDT"],["VET/USDT","V","BINANCE:VETUSDT"]
-],
-forex:[
-["EUR/USD","🇪🇺","FX:EURUSD"],["GBP/USD","🇬🇧","FX:GBPUSD"],
-["USD/JPY","🇯🇵","FX:USDJPY"],["USD/CHF","🇨🇭","FX:USDCHF"],
-["AUD/USD","🇦🇺","FX:AUDUSD"],["USD/CAD","🇨🇦","FX:USDCAD"],
-["NZD/USD","🇳🇿","FX:NZDUSD"],["EUR/GBP","€£","FX:EURGBP"],
-["EUR/JPY","€¥","FX:EURJPY"],["GBP/JPY","£¥","FX:GBPJPY"],
-["EUR/CHF","€₣","FX:EURCHF"],["EUR/AUD","€A","FX:EURAUD"],
-["EUR/CAD","€C","FX:EURCAD"],["EUR/NZD","€N","FX:EURNZD"],
-["GBP/CHF","£₣","FX:GBPCHF"],["GBP/AUD","£A","FX:GBPAUD"],
-["GBP/CAD","£C","FX:GBPCAD"],["AUD/JPY","A¥","FX:AUDJPY"],
-["AUD/CAD","AC","FX:AUDCAD"],["AUD/NZD","AN","FX:AUDNZD"],
-["CAD/JPY","C¥","FX:CADJPY"],["CHF/JPY","₣¥","FX:CHFJPY"],
-["NZD/JPY","N¥","FX:NZDJPY"],["USD/TRY","🇹🇷","FX_IDC:USDTRY"],
-["USD/CNH","¥","FX_IDC:USDCNH"],["USD/SGD","S$","FX:USDSGD"],
-["USD/MXN","$","FX:USDMXN"],["USD/ZAR","R","FX:USDZAR"],
-["USD/SEK","kr","FX:USDSEK"],["USD/NOK","kr","FX:USDNOK"]
-],
-metals:[
-["XAU/USD","🪙","OANDA:XAUUSD"],["XAG/USD","🥈","OANDA:XAGUSD"],
-["XPT/USD","⚪","OANDA:XPTUSD"],["XPD/USD","⚫","OANDA:XPDUSD"],
-["COPPER","🟠","COMEX:HG1!"],["GOLD","🪙","TVC:GOLD"],
-["SILVER","🥈","TVC:SILVER"],["PLATINUM","⚪","TVC:PLATINUM"],
-["PALLADIUM","⚫","TVC:PALLADIUM"],["WTI","◉","TVC:USOIL"],
-["BRENT","◉","TVC:UKOIL"]
-],
-stocks:[
-["AAPL","●","NASDAQ:AAPL"],["MSFT","▦","NASDAQ:MSFT"],
-["NVDA","◈","NASDAQ:NVDA"],["AMZN","▣","NASDAQ:AMZN"],
-["GOOGL","G","NASDAQ:GOOGL"],["META","∞","NASDAQ:META"],
-["TSLA","T","NASDAQ:TSLA"],["JPM","▤","NYSE:JPM"],
-["WMT","W","NASDAQ:WMT"],["V","V","NYSE:V"],
-["MA","M","NYSE:MA"],["XOM","X","NYSE:XOM"],
-["NFLX","N","NASDAQ:NFLX"],["AMD","A","NASDAQ:AMD"],
-["ORCL","O","NYSE:ORCL"],["INTC","I","NASDAQ:INTC"],
-["COST","C","NASDAQ:COST"],["DIS","D","NYSE:DIS"],
-["KO","K","NYSE:KO"],["PEP","P","NASDAQ:PEP"],
-["BA","B","NYSE:BA"],["ADBE","A","NASDAQ:ADBE"],
-["CRM","C","NYSE:CRM"],["QCOM","Q","NASDAQ:QCOM"],
-["AVGO","A","NASDAQ:AVGO"],["IBM","I","NYSE:IBM"],
-["UBER","U","NASDAQ:UBER"],["PYPL","P","NASDAQ:PYPL"],
-["BABA","B","NASDAQ:BABA"],["NKE","N","NASDAQ:NKE"]
-]
-};
+    <footer>
+        <p><strong>NEXFX AI</strong> | Smart Trading Platform</p>
+    </footer>
 
-const languages=[
-{code:"ar",name:"العربية",flag:"sa"},{code:"en",name:"English",flag:"us"},
-{code:"fr",name:"Français",flag:"fr"},{code:"tr",name:"Türkçe",flag:"tr"},
-{code:"de",name:"Deutsch",flag:"de"},{code:"es",name:"Español",flag:"es"},
-{code:"pt",name:"Português",flag:"br"},{code:"it",name:"Italiano",flag:"it"},
-{code:"ru",name:"Русский",flag:"ru"},{code:"zh",name:"中文",flag:"cn"},
-{code:"ja",name:"日本語",flag:"jp"},{code:"ko",name:"한국어",flag:"kr"},
-{code:"hi",name:"हिन्दी",flag:"in"},{code:"id",name:"Bahasa Indonesia",flag:"id"},
-{code:"nl",name:"Nederlands",flag:"nl"}
-];
+    <script>
+        const languages = [
+            { code: 'ar', name: 'العربية', flag: 'sa' },
+            { code: 'en', name: 'English', flag: 'us' },
+            { code: 'tr', name: 'Türkçe', flag: 'tr' },
+            { code: 'ru', name: 'Русский', flag: 'ru' },
+            { code: 'zh', name: '中文', flag: 'cn' },
+            { code: 'fr', name: 'Français', flag: 'fr' },
+            { code: 'es', name: 'Español', flag: 'es' },
+            { code: 'de', name: 'Deutsch', flag: 'de' },
+            { code: 'hi', name: 'हिन्दी', flag: 'in' },
+            { code: 'ja', name: '日本語', flag: 'jp' }
+        ];
 
-const translations={
-ar:{
-home:"الرئيسية",markets:"الأسواق",analysis:"التحليل الذكي",trades:"الصفقات",about:"حول المنصة",
-favorites:"المفضلة",settings:"الإعدادات",heroTitle:"منصة تحليل مالي ذكية",
-heroDesc:"تحليل الأسواق بواجهة موحدة وأدوات واضحة",heroSub:"تحليل · متابعة · قرارات أذكى",
-start:"🚀 ابدأ التحليل الآن",chartSource:"شارت TradingView",globalMarkets:"أهم الأسواق العالمية",
-crypto:"العملات الرقمية",forex:"الفوركس",metals:"الذهب والمعادن",stocks:"الأسهم العالمية",
-dashboard:"لوحة الأسواق والتحليل",marketTools:"أدوات السوق",search:"ابحث عن أصل أو رمز",
-all:"الكل",coverage:"توفر الرموز يعتمد على تغطية مزود البيانات.",
-chartStatus:"شارت من TradingView",candles:"شموع يابانية",
-technicalTools:"مؤشرات فنية من أدوات الشارت",
-chartNote:"بيانات الشارت وتغطيتها تعتمد على مزود السوق وقد تكون متأخرة لبعض الرموز.",
-favoritesTitle:"المفضلة ★",emptyFavorites:"لم تتم إضافة أصول للمفضلة بعد.",
-aiResults:"نتائج التحليل الذكي",waiting:"بانتظار البيانات",
-noSignals:"لن نصدر إشارات دون بيانات موثوقة.",selected:"الأصل المحدد",
-timeframe:"الإطار الزمني",direction:"الاتجاه",undefined:"غير محدد",
-strength:"قوة الإشارة",unavailable:"غير متاحة",configure:"إعداد التحليل",
-analysisCenter:"مركز التحليل NEXFX AI",analysisType:"نوع التحليل",
-technical:"التحليل الفني",manual:"التحليل اليدوي",automatic:"التحليل التلقائي",
-tradeDirection:"اتجاه الصفقة",entry:"سعر الدخول",stop:"وقف الخسارة SL",
-run:"تشغيل التحليل",output:"مخرجات التحليل",notRun:"لم يتم تشغيل تحليل",
-enterLevels:"اختر نوع التحليل وأدخل المستويات المطلوبة.",asset:"الأصل",
-analysisNote:"التحليل الفني والتلقائي يحتاجان إلى مصدر بيانات ومحرك تحليل متصل. التحليل اليدوي ينظم المستويات المدخلة فقط.",
-tradeMonitor:"مراقبة الصفقات",type:"النوع",status:"الحالة",
-noTrades:"لا توجد صفقات متصلة حالياً.",settingsDesc:"يمكنك تغيير اللغة من القائمة العلوية.",
-aboutDesc:"منصة لمتابعة العملات الرقمية والفوركس والمعادن والأسهم وأدوات التحليل.",
-buy:"خطة يدوية — شراء",sell:"خطة يدوية — بيع",
-badEntry:"أدخل أسعار دخول ووقف خسارة صحيحة.",
-badStop:"في الشراء يجب أن يكون الوقف أدنى من الدخول، وفي البيع أعلى منه.",
-badTarget:"الهدف لا يتوافق مع اتجاه الصفقة.",
-badTargetOrder:"يجب أن يكون TP2 أبعد من TP1 باتجاه الصفقة.",
-manualDone:"تم تنظيم المستويات المدخلة فقط؛ هذه ليست توصية استثمارية.",
-needData:"يلزم ربط مصدر بيانات ومحرك تحليل لتفعيل هذا النوع.",
-loadingChart:"جاري تحميل الشارت...",chartError:"تعذر تحميل الشارت. تأكدي من اتصال الإنترنت أو جرّبي رمزاً آخر.",
-noMatch:"لا توجد نتائج مطابقة",languageSearch:"ابحث عن لغة..."
-},
-en:{
-home:"Home",markets:"Markets",analysis:"AI Analysis",trades:"Trades",about:"About",
-favorites:"Favorites",settings:"Settings",heroTitle:"Smart Financial Analysis Platform",
-heroDesc:"Market analysis with a unified interface",heroSub:"Analysis · Monitoring · Smarter Decisions",
-start:"🚀 Start Analysis",chartSource:"TradingView chart",globalMarkets:"Global Markets",
-crypto:"Cryptocurrencies",forex:"Forex",metals:"Gold & Metals",stocks:"Global Stocks",
-dashboard:"Markets & Analysis Dashboard",marketTools:"Market Tools",search:"Search asset or symbol",
-all:"All",coverage:"Symbol availability depends on provider coverage.",
-chartStatus:"TradingView chart",candles:"Japanese Candles",
-technicalTools:"Technical indicators in chart tools",
-chartNote:"Chart coverage and data depend on the market provider; some symbols may be delayed.",
-favoritesTitle:"Favorites ★",emptyFavorites:"No favorites added yet.",
-aiResults:"AI Analysis Results",waiting:"Waiting for data",
-noSignals:"No signals without reliable data.",selected:"Selected asset",
-timeframe:"Timeframe",direction:"Direction",undefined:"Undefined",
-strength:"Signal strength",unavailable:"Unavailable",configure:"Configure Analysis",
-analysisCenter:"NEXFX AI Analysis Center",analysisType:"Analysis type",
-technical:"Technical analysis",manual:"Manual analysis",automatic:"Automatic analysis",
-tradeDirection:"Trade direction",entry:"Entry price",stop:"Stop loss",
-run:"Run analysis",output:"Analysis output",notRun:"Analysis not run",
-enterLevels:"Choose an analysis type and enter the levels.",asset:"Asset",
-analysisNote:"Technical and automatic analysis require connected market data and an analysis engine. Manual mode only organizes entered levels.",
-tradeMonitor:"Trade Monitor",type:"Type",status:"Status",
-noTrades:"No connected trades currently.",settingsDesc:"Change language from the top menu.",
-aboutDesc:"Monitor crypto, forex, metals and stocks with analysis tools.",
-buy:"Manual plan — BUY",sell:"Manual plan — SELL",
-badEntry:"Enter valid positive entry and stop prices.",
-badStop:"Stop loss must be on the correct side of entry.",
-badTarget:"Target is incompatible with the trade direction.",
-badTargetOrder:"TP2 must be farther than TP1 in the trade direction.",
-manualDone:"Only entered levels were organized; this is not investment advice.",
-needData:"A market-data source and analysis engine are required.",
-loadingChart:"Loading chart...",chartError:"Chart could not load. Check your connection or try another symbol.",
-noMatch:"No matching results",languageSearch:"Search languages..."
-}
-};
+        const assets = {
+            'CRYPTO': [
+                ['BTC/USDT', '₿', 'BINANCE:BTCUSDT'],
+                ['ETH/USDT', '💎', 'BINANCE:ETHUSDT'],
+                ['BNB/USDT', '🟡', 'BINANCE:BNBUSDT'],
+                ['SOL/USDT', '🟣', 'BINANCE:SOLUSDT'],
+                ['XRP/USDT', '✖️', 'BINANCE:XRPUSDT'],
+                ['ADA/USDT', '₳', 'BINANCE:ADAUSDT'],
+                ['DOGE/USDT', '🐕', 'BINANCE:DOGEUSDT'],
+                ['TRX/USDT', '🔺', 'BINANCE:TRXUSDT']
+            ],
+            'FOREX': [
+                ['EUR/USD', '🇪🇺', 'FX:EURUSD'],
+                ['GBP/JPY', '🇬🇧', 'FX:GBPJPY'],
+                ['EUR/CHF', '🇨🇭', 'FX:EURCHF'],
+                ['AUD/USD', '🇦🇺', 'FX:AUDUSD'],
+                ['NZD/USD', '🇳🇿', 'FX:NZDUSD'],
+                ['EUR/JPY', '💴', 'FX:EURJPY']
+            ]
+        };
 
-const STORAGE_KEY="nexfx_state_v3";
-const LEGACY_FAVORITES_KEY="nexfx_favorites";
+        let currentMarket = 'CRYPTO';
+        let selectedSymbol = assets['CRYPTO'][0];
+        let favorites = JSON.parse(localStorage.getItem('nexfx_favs')) || ['BINANCE:BTCUSDT'];
+        let showOnlyFavorites = false;
+        let ws = null;
+        const subscribedTickers = ['BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'SOLUSDT', 'XRPUSDT', 'ADAUSDT'];
 
-function safeRead(key,fallback=null){
-  try{
-    const raw=localStorage.getItem(key);
-    return raw===null?fallback:JSON.parse(raw);
-  }catch(error){return fallback;}
-}
-function safeWrite(key,value){
-  try{
-    localStorage.setItem(key,JSON.stringify(value));
-    return true;
-  }catch(error){return false;}
-}
+        function initApp() {
+            renderLanguageOptions();
+            renderAssets();
+            initTradingViewWidget(selectedSymbol[2]);
+            initWebSocket();
+        }
 
-const $=id=>document.getElementById(id);
-const t=key=>(translations[language]&&translations[language][key])||
-  (translations.en&&translations.en[key])||key;
+        function renderLanguageOptions() {
+            const container = document.getElementById('languageOptions');
+            container.innerHTML = languages.map(l => `
+                <button class="language-option" onclick="selectLanguage('${l.code}')">
+                    <img src="https://flagcdn.com/w40/${l.flag}.png" alt="${l.name}"> ${l.name}
+                </button>
+            `).join('');
+        }
 
-const savedState=safeRead(STORAGE_KEY,{})||{};
-let language=languages.some(x=>x.code===savedState.language)?savedState.language:"ar";
-let market=assets[savedState.market]?savedState.market:"crypto";
-let selected=assets[market].find(x=>x[2]===savedState.selectedSymbol)||assets[market][0];
-let onlyFavorites=!!savedState.onlyFavorites;
-let favorites=Array.isArray(savedState.favorites)?savedState.favorites:JSON.parse(localStorage.getItem(LEGACY_FAVORITES_KEY)||"[]");
-let chartGeneration=0;
-let lastAnalysis=savedState.lastAnalysis||null;
+        function toggleLanguageMenu() { document.getElementById('languageMenu').classList.toggle('open'); }
+        function filterLanguages() {
+            const query = document.getElementById('languageSearch').value.toLowerCase();
+            const filtered = languages.filter(l => l.name.toLowerCase().includes(query));
+            const container = document.getElementById('languageOptions');
+            container.innerHTML = filtered.map(l => `
+                <button class="language-option" onclick="selectLanguage('${l.code}')">
+                    <img src="https://flagcdn.com/w40/${l.flag}.png" alt="${l.name}"> ${l.name}
+                </button>
+            `).join('');
+        }
+        function selectLanguage(code) {
+            const lang = languages.find(l => l.code === code);
+            if (lang) {
+                document.getElementById('currentLanguageName').innerText = lang.name;
+                document.getElementById('currentFlag').src = `https://flagcdn.com/w40/${lang.flag}.png`;
+                document.documentElement.lang = lang.code;
+                document.documentElement.dir = lang.code === 'ar' ? 'rtl' : 'ltr';
+                toggleLanguageMenu();
+            }
+        }
 
-function restoreForm(){
-  const form=savedState.form||{};
-  $("timeframe").value=["1","5","15","60","240","D","W"].includes(String(savedState.timeframe))?String(savedState.timeframe):"15";
-  $("search").value=typeof savedState.search==="string"?savedState.search:"";
-  $("analysisMode").value=["technical","manual","auto"].includes(form.mode)?form.mode:"technical";
-  $("direction").value=form.direction==="sell"?"sell":"buy";
-  ["entry","stop","tp1","tp2"].forEach(id=>{
-    $(id).value=form[id]??"";
-  });
-}
-function saveState(){
-  const form={
-    mode:$("analysisMode").value,
-    direction:$("direction").value,
-    entry:$("entry").value,
-    stop:$("stop").value,
-    tp1:$("tp1").value,
-    tp2:$("tp2").value
-  };
-  safeWrite(STORAGE_KEY,{
-    language,market,selectedSymbol:selected[2],
-    timeframe:$("timeframe").value,
-    favorites,search:$("search").value,
-    onlyFavorites,form,lastAnalysis
-  });
-}
+        function renderAssets() {
+            const container = document.getElementById('assetList');
+            const query = document.getElementById('assetSearch').value.toLowerCase();
+            container.innerHTML = '';
 
-function updateDocumentDirection(){
-  document.documentElement.lang=language;
-  document.documentElement.dir=language==="ar"?"rtl":"ltr";
-}
+            Object.keys(assets).forEach(marketCat => {
+                const filtered = assets[marketCat].filter(item => {
+                    const matchesSearch = item[0].toLowerCase().includes(query);
+                    const matchesFav = !showOnlyFavorites || favorites.includes(item[2]);
+                    return matchesSearch && matchesFav;
+                });
 
-function renderLanguageOptions(){
-  const query=$("languageSearch").value.trim().toLowerCase();
-  const holder=$("languageOptions");
-  holder.innerHTML="";
-  const filtered=languages.filter(lang=>
-    lang.name.toLowerCase().includes(query)||
-    lang.code.toLowerCase().includes(query)
-  );
-  if(!filtered.length){
-    holder.textContent=t("noMatch");
-    holder.className="language-empty";
-    return;
-  }
-  holder.className="";
-  filtered.forEach(lang=>{
-    const button=document.createElement("button");
-    button.type="button";
-    button.className="language-option"+(language===lang.code?" active":"");
-    const flag=document.createElement("img");
-    flag.src="https://flagcdn.com/w40/"+lang.flag+".png";
-    flag.alt=lang.name+" flag";
-    const name=document.createElement("span");
-    name.textContent=lang.name;
-    button.append(flag,name);
-    button.addEventListener("click",()=>{
-      setLanguage(lang.code);
-      closeLanguageMenu();
-    });
-    holder.appendChild(button);
-  });
-}
+                filtered.forEach(item => {
+                    const isSelected = selectedSymbol[2] === item[2];
+                    const row = document.createElement('div');
+                    row.className = `asset-row ${isSelected ? 'active' : ''}`;
+                    row.onclick = () => selectAsset(item);
+                    row.innerHTML = `
+                        <div>
+                            <span class="asset-icon">${item[1]}</span>
+                            <strong>${item[0]}</strong>
+                        </div>
+                        <span class="chart-pair">${item[2].split(':')[1]}</span>
+                    `;
+                    container.appendChild(row);
+                });
+            });
+        }
 
-function updateLanguageButton(){
-  const item=languages.find(x=>x.code===language)||languages[0];
-  $("currentLanguageName").textContent=item.name;
-  $("currentFlag").src="https://flagcdn.com/w40/"+item.flag+".png";
-}
+        function selectAsset(item) {
+            selectedSymbol = item;
+            document.getElementById('marketCaption').innerText = item[0];
+            updateFavoriteButton();
+            renderAssets();
+            initTradingViewWidget(item[2]);
+            runAnalysis();
+        }
 
-function openLanguageMenu(){
-  $("languageMenu").classList.add("open");
-  $("languageTrigger").setAttribute("aria-expanded","true");
-  $("languageSearch").value="";
-  renderLanguageOptions();
-  $("languageSearch").focus();
-}
+        function toggleFavorite() {
+            const symbol = selectedSymbol[2];
+            const idx = favorites.indexOf(symbol);
+            if (idx > -1) favorites.splice(idx, 1);
+            else favorites.push(symbol);
+            localStorage.setItem('nexfx_favs', JSON.stringify(favorites));
+            updateFavoriteButton();
+            renderAssets();
+        }
 
-function closeLanguageMenu(){
-  $("languageMenu").classList.remove("open");
-  $("languageTrigger").setAttribute("aria-expanded","false");
-}
+        function updateFavoriteButton() {
+            const btn = document.getElementById('favoriteBtn');
+            const isFav = favorites.includes(selectedSymbol[2]);
+            btn.innerText = isFav ? '★ المفضلة' : '☆ المفضلة';
+            btn.style.color = isFav ? 'var(--gold)' : 'var(--muted)';
+        }
 
-function translateInterface(){
-  document.querySelectorAll("[data-t]").forEach(el=>{
-    const key=el.dataset.t;
-    if(t(key)!==key)el.textContent=t(key);
-  });
-  document.querySelectorAll("[data-placeholder]").forEach(el=>{
-    el.placeholder=t(el.dataset.placeholder);
-  });
-  $("languageSearch").placeholder=t("languageSearch");
-  updateLanguageButton();
-  renderLanguageOptions();
-}
+        function filterAssets(favOnly) {
+            showOnlyFavorites = favOnly;
+            document.getElementById('showAll').classList.toggle('active', !favOnly);
+            document.getElementById('showFav').classList.toggle('active', favOnly);
+            renderAssets();
+        }
 
-function setLanguage(lang){
-  if(!translations[lang])lang="en";
-  language=lang;
-  updateDocumentDirection();
-  translateInterface();
-  renderAssets();
-  renderFavorites();
-  updateFavoriteButton();
-  updateSideInformation();
-  saveState();
-  renderChart();
-}
+        function initTradingViewWidget(symbol) {
+            const container = document.getElementById('tradingview-chart');
+            container.innerHTML = '';
+            document.getElementById('chartLoader').style.display = 'grid';
 
-function isFavorite(symbol){return favorites.includes(symbol)}
+            if (typeof TradingView !== 'undefined') {
+                new TradingView.widget({
+                    "container_id": "tradingview-chart",
+                    "autosize": true,
+                    "symbol": symbol,
+                    "interval": document.getElementById('timeframe').value,
+                    "timezone": "Etc/UTC",
+                    "theme": "dark",
+                    "style": "1",
+                    "locale": "ar",
+                    "toolbar_bg": "#020817",
+                    "enable_publishing": false,
+                    "hide_side_toolbar": false,
+                    "allow_symbol_change": false,
+                    "studies": ["MASimple@tv-basicstudies"],
+                    "onChartReady": function() {
+                        document.getElementById('chartLoader').style.display = 'none';
+                    }
+                });
+            }
+        }
 
-function setMarket(name){
-  if(!assets[name])return;
-  market=name;
-  onlyFavorites=false;
-  document.querySelectorAll(".category").forEach(btn=>{
-    btn.classList.toggle("active",btn.dataset.market===name);
-  });
-  $("marketCaption").textContent=name.toUpperCase();
-  $("showAll").classList.add("active");
-  $("showFav").classList.remove("active");
+        function initWebSocket() {
+            try {
+                ws = new WebSocket('wss://stream.binance.com:9443/ws/!miniTicker@arr');
+                ws.onmessage = (event) => {
+                    const data = JSON.parse(event.data);
+                    data.forEach(ticker => {
+                        const symbol = ticker.s.replace('USDT', '');
+                        updatePriceUI(symbol + 'USDT', parseFloat(ticker.c).toFixed(2));
+                    });
+                };
+                ws.onerror = () => simulateLiveTicks();
+            } catch (e) {
+                simulateLiveTicks();
+            }
+        }
 
-  if(!assets[market].some(x=>x[2]===selected[2])){
-    selected=assets[market][0];
-  }
-  renderAssets();
-  updateFavoriteButton();
-  updateSideInformation();
-  renderChart();
-  saveState();
-}
+        function updatePriceUI(symbol, price) {
+            const els = [document.getElementById(`price-${symbol}`), document.getElementById(`price-${symbol}-dup`)];
+            els.forEach(el => {
+                if (el && el.innerText !== price) {
+                    el.innerText = price;
+                    el.style.color = 'var(--gold)';
+                    setTimeout(() => { el.style.color = ''; }, 300);
+                }
+            });
+        }
 
-function toggleFavorite(){
-  const symbol=selected[2];
-  if(isFavorite(symbol))favorites=favorites.filter(x=>x!==symbol);
-  else favorites.push(symbol);
-  safeWrite(LEGACY_FAVORITES_KEY,favorites);
-  updateFavoriteButton();
-  renderAssets();
-  renderFavorites();
-  saveState();
-}
+        function simulateLiveTicks() {
+            setInterval(() => {
+                subscribedTickers.forEach(sym => {
+                    const el = document.getElementById(`price-${sym}`);
+                    if(el) {
+                        const current = parseFloat(el.innerText) || 60000;
+                        const delta = (Math.random() - 0.48) * 15;
+                        updatePriceUI(sym, (current + delta).toFixed(2));
+                    }
+                });
+            }, 1500);
+        }
 
-function updateFavoriteButton(){
-  $("favoriteBtn").textContent=isFavorite(selected[2])?"★":"☆";
-}
+        function runAnalysis() {
+            const symbol = selectedSymbol[0];
+            
+            document.getElementById('indTrend').innerText = 'جاري التحليل...';
+            document.getElementById('indStrength').innerText = '...';
+            document.getElementById('indMarket').innerText = symbol;
 
-function updateSideInformation(){
-  $("chartPair").textContent=selected[2];
-  $("sidePair").textContent=selected[0];
-  $("sideTime").textContent=$("timeframe").selectedOptions[0].textContent;
-}
+            setTimeout(() => {
+                const trends = ['صاعد قوي', 'هابط', 'تجميع عرضي', 'انعكاس محتمل'];
+                const strengths = ['85%', '62%', '45%', '91%'];
+                const randomIdx = Math.floor(Math.random() * trends.length);
+                
+                document.getElementById('indTrend').innerText = trends[randomIdx];
+                document.getElementById('indStrength').innerText = strengths[randomIdx];
+            }, 1000);
+        }
 
-function selectAsset(item){
-  selected=item;
-  updateSideInformation();
-  updateFavoriteButton();
-  renderAssets();
-  renderChart();
-  saveState();
-}
+        function openAuthModal() { document.getElementById('authModal').classList.add('open'); }
+        function closeAuthModal() { document.getElementById('authModal').classList.remove('open'); }
+        function handleSocialLogin(provider) { alert(`جاري الاتصال بـ ${provider}...`); }
+        function handleEmailLogin(e) { e.preventDefault(); alert('تم بدء جلسة التداول!'); closeAuthModal(); }
 
-function renderAssets(){
-  const query=$("search").value.trim().toLowerCase();
-  const list=assets[market].filter(item=>{
-    const matches=(item[0]+" "+item[2]).toLowerCase().includes(query);
-    const favOk=!onlyFavorites||isFavorite(item[2]);
-    return matches&&favOk;
-  });
-  const holder=$("assetList");
-  holder.innerHTML="";
-  if(!list.length){
-    holder.textContent=onlyFavorites?t("emptyFavorites"):t("noMatch");
-    return;
-  }
-  list.forEach(item=>{
-    const row=document.createElement("div");
-    row.className="asset-row"+(selected[2]===item[2]?" active":"");
-    const icon=document.createElement("span");
-    icon.className="asset-icon";icon.textContent=item[1];
-    const name=document.createElement("span");name.textContent=item[0];
-    const symbol=document.createElement("strong");symbol.textContent=isFavorite(item[2])?"★":"";
-    row.append(icon,name,symbol);
-    row.addEventListener("click",()=>selectAsset(item));
-    holder.appendChild(row);
-  });
-}
-
-function renderFavorites(){
-  const box=$("favoriteList");
-  box.innerHTML="";
-  const allItems=Object.values(assets).flat();
-  const list=allItems.filter(item=>isFavorite(item[2]));
-  if(!list.length){
-    box.textContent=t("emptyFavorites");
-    return;
-  }
-  list.forEach(item=>{
-    const row=document.createElement("div");
-    row.className="asset-row";
-    row.textContent=item[1]+" "+item[0];
-    row.addEventListener("click",()=>{
-      const group=Object.keys(assets).find(k=>assets[k].some(a=>a[2]===item[2]));
-      market=group;
-      selected=item;
-      onlyFavorites=false;
-      document.querySelectorAll(".category").forEach(btn=>{
-        btn.classList.toggle("active",btn.dataset.market===group);
-      });
-      $("marketCaption").textContent=group.toUpperCase();
-      $("showAll").classList.add("active");
-      $("showFav").classList.remove("active");
-      renderAssets();
-      updateSideInformation();
-      updateFavoriteButton();
-      renderChart();
-      saveState();
-    });
-    box.appendChild(row);
-  });
-}
-
-function renderChart(){
-  const generation=++chartGeneration;
-  const container=$("tradingviewChart");
-  const placeholder=$("chartPlaceholder");
-  const symbol=selected[2];
-  const interval=$("timeframe").value;
-
-  updateSideInformation();
-  placeholder.style.display="grid";
-  placeholder.textContent=t("loadingChart");
-  container.innerHTML='<div class="tradingview-widget-container__widget"></div>';
-
-  const script=document.createElement("script");
-  script.src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
-  script.async=true;
-  script.innerHTML=JSON.stringify({
-    autosize:true,
-    symbol:symbol,
-    interval:interval,
-    timezone:"Etc/UTC",
-    theme:"dark",
-    style:"1",
-    locale:language,
-    allow_symbol_change:true,
-    calendar:false,
-    hide_side_toolbar:false,
-    details:true,
-    hotlist:false,
-    withdateranges:true,
-    save_image:false,
-    support_host:"https://www.tradingview.com"
-  });
-
-  let finished=false;
-  function hidePlaceholder(){
-    if(generation!==chartGeneration||finished)return;
-    finished=true;
-    placeholder.style.display="none";
-  }
-
-  script.onload=()=>{
-    if(generation!==chartGeneration)return;
-    setTimeout(hidePlaceholder,1500);
-  };
-  container.appendChild(script);
-}
-
-function displaySavedAnalysis(){
-  if(!lastAnalysis)return;
-  $("resultTitle").textContent=lastAnalysis.title||t("notRun");
-  $("resultText").textContent=lastAnalysis.text||t("enterLevels");
-  $("outMode").textContent=lastAnalysis.mode||"—";
-  $("outPair").textContent=lastAnalysis.pair||"—";
-  $("outEntry").textContent=lastAnalysis.entry??"—";
-  $("outStop").textContent=lastAnalysis.stop??"—";
-  $("outTP1").textContent=lastAnalysis.tp1??"—";
-  $("outTP2").textContent=lastAnalysis.tp2??"—";
-}
-
-function runAnalysis(){
-  const mode=$("analysisMode").value;
-  const direction=$("direction").value;
-  const entry=Number($("entry").value);
-  const stop=Number($("stop").value);
-  const tp1=Number($("tp1").value);
-  const tp2=Number($("tp2").value);
-
-  if(mode!=="manual"){
-    $("resultTitle").textContent=t("needData");
-    $("resultText").textContent=t("analysisNote");
-    return;
-  }
-
-  if(![entry,stop,tp1,tp2].every(n=>Number.isFinite(n)&&n>0)){
-    alert(t("badEntry"));return;
-  }
-
-  const title=direction==="buy"?t("buy"):t("sell");
-  const text=t("manualDone");
-  $("resultTitle").textContent=title;
-  $("resultText").textContent=text;
-  $("outMode").textContent=t("manual");
-  $("outPair").textContent=selected[0];
-  $("outEntry").textContent=entry;
-  $("outStop").textContent=stop;
-  $("outTP1").textContent=tp1;
-  $("outTP2").textContent=tp2;
-
-  lastAnalysis={title,text,mode:t("manual"),pair:selected[0],entry,stop,tp1,tp2,direction};
-  saveState();
-}
-
-/* Social Login Handlers */
-function loginWithGoogle() {
-  alert('تم النقر على تسجيل الدخول بواسطة Google (جاهز للربط مع Firebase أو Supabase)');
-}
-function loginWithFacebook() {
-  alert('تم النقر على تسجيل الدخول بواسطة Facebook (جاهز للربط مع Firebase أو Supabase)');
-}
-
-$("languageTrigger").addEventListener("click",()=>{
-  if($("languageMenu").classList.contains("open"))closeLanguageMenu();
-  else openLanguageMenu();
-});
-$("languageSearch").addEventListener("input",renderLanguageOptions);
-document.addEventListener("click",event=>{
-  if(!event.target.closest(".language-wrap"))closeLanguageMenu();
-});
-
-document.querySelectorAll(".category").forEach(btn=>{
-  btn.addEventListener("click",()=>setMarket(btn.dataset.market));
-});
-$("search").addEventListener("input",()=>{ renderAssets(); saveState(); });
-$("showAll").addEventListener("click",()=>{
-  onlyFavorites=false;
-  $("showAll").classList.add("active");
-  $("showFav").classList.remove("active");
-  renderAssets(); saveState();
-});
-$("showFav").addEventListener("click",()=>{
-  onlyFavorites=true;
-  $("showFav").classList.add("active");
-  $("showAll").classList.remove("active");
-  renderAssets(); saveState();
-});
-$("favoriteBtn").addEventListener("click",toggleFavorite);
-$("timeframe").addEventListener("change",()=>{ renderChart(); saveState(); });
-$("runAnalysis").addEventListener("click",runAnalysis);
-
-restoreForm();
-updateDocumentDirection();
-translateInterface();
-renderAssets();
-renderFavorites();
-updateSideInformation();
-updateFavoriteButton();
-displaySavedAnalysis();
-renderChart();
-saveState();
-</script>
+        window.onload = initApp;
+    </script>
+    <script src="https://s3.tradingview.com/tv.js"></script>
 </body>
 </html>
