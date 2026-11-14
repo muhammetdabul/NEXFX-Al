@@ -965,7 +965,15 @@ function runAnalysis(){
 
 /* Social Login Handlers */
 function loginWithGoogle() {
-  alert('تم النقر على تسجيل الدخول بواسطة Google (جاهز للربط مع Firebase أو Supabase)');
+signInWithPopup(auth, provider)
+  .then((result) => {
+    const user = result.user;
+  }).catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+  });
+
+
 }
 function loginWithFacebook() {
   alert('تم النقر على تسجيل الدخول بواسطة Facebook (جاهز للربط مع Firebase أو Supabase)');
