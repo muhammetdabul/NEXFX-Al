@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#020817">
-<title>NEXFX AI | Smart Trading</title>
+<title>NEXFX AI | Smart Trading (Staging)</title>
 
 <style>
 :root{
@@ -20,7 +20,7 @@ body{
   margin:0;background:radial-gradient(ellipse at top,#10284b,#080808 75%);
   color:var(--white);font-family:Tahoma,Arial,sans-serif;line-height:1.6
 }
-  body { background-color: #0b132b; color: #ffffff; }
+body { background-color: #0b132b; color: #ffffff; }
 
 button,input,select{font:inherit}
 button{cursor:pointer}
@@ -63,10 +63,27 @@ button{cursor:pointer}
   font-weight: 600;
   font-size: 11px;
   transition: 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 .btn-auth:hover {
   background: var(--gold);
   color: var(--bg);
+}
+.user-badge {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  background: #10243c;
+  border: 1px solid var(--line);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  color: var(--gold2);
+}
+.user-badge.active {
+  display: inline-flex;
 }
 
 nav,.languages{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
@@ -283,13 +300,16 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
 
 <header class="topbar">
   <div class="brand">
-
-    
+    <div class="logo" aria-hidden="true">N</div>
   </div>
 
   <div class="header-actions">
-    <button class="btn-auth" onclick="loginWithGoogle()">تسجيل جوجل</button>
- 
+    <div class="user-badge" id="userBadge">
+      <span id="userDisplayEmail"></span>
+    </div>
+    <button class="btn-auth" id="googleAuthBtn" type="button" translate="no" onclick="handleGoogleAuth()">
+      <span id="googleAuthLabel" data-t="googleSignIn">تسجيل الدخول عبر Google</span>
+    </button>
 
     <div class="language-wrap">
       <button class="language-trigger" id="languageTrigger" type="button" aria-expanded="false">
@@ -466,6 +486,17 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
       <tbody><tr><td colspan="6" data-t="noTrades">لا توجد صفقات متصلة حالياً.</td></tr></tbody>
     </table>
   </div>
+</section>
+
+<section class="panel" id="settings">
+  <h2 data-t="settings">الإعدادات</h2>
+  <p class="muted" data-t="settingsDesc">يمكنك تغيير اللغة من القائمة العلوية.</p>
+</section>
+
+<section class="panel" id="about">
+  <h2 data-t="about">حول المنصة</h2>
+  <p class="muted" data-t="aboutDesc">منصة لمتابعة العملات الرقمية والفوركس والمعادن والأسهم وأدوات التحليل.</p>
+</section>
 
 </main>
 
@@ -528,7 +559,7 @@ stocks:[
 ["ORCL","O","NYSE:ORCL"],["INTC","I","NASDAQ:INTC"],
 ["COST","C","NASDAQ:COST"],["DIS","D","NYSE:DIS"],
 ["KO","K","NYSE:KO"],["PEP","P","NASDAQ:PEP"],
-["BA","B","NYSE:BA"],["ADBE","A","NASDAQ:ADBE"],
+["BA","B","NASDAQ:BA"],["ADBE","A","NASDAQ:ADBE"],
 ["CRM","C","NYSE:CRM"],["QCOM","Q","NASDAQ:QCOM"],
 ["AVGO","A","NASDAQ:AVGO"],["IBM","I","NYSE:IBM"],
 ["UBER","U","NASDAQ:UBER"],["PYPL","P","NASDAQ:PYPL"],
@@ -549,6 +580,7 @@ const languages=[
 
 const translations={
 ar:{
+googleSignIn:"تسجيل الدخول عبر Google",signOut:"تسجيل الخروج",
 home:"الرئيسية",markets:"الأسواق",analysis:"التحليل الذكي",trades:"الصفقات",about:"حول المنصة",
 favorites:"المفضلة",settings:"الإعدادات",heroTitle:"منصة تحليل مالي ذكية",
 heroDesc:"تحليل الأسواق بواجهة موحدة وأدوات واضحة",heroSub:"تحليل · متابعة · قرارات أذكى",
@@ -580,10 +612,11 @@ badTarget:"الهدف لا يتوافق مع اتجاه الصفقة.",
 badTargetOrder:"يجب أن يكون TP2 أبعد من TP1 باتجاه الصفقة.",
 manualDone:"تم تنظيم المستويات المدخلة فقط؛ هذه ليست توصية استثمارية.",
 needData:"يلزم ربط مصدر بيانات ومحرك تحليل لتفعيل هذا النوع.",
-loadingChart:"جاري تحميل الشارت...",chartError:"تعذر تحميل الشارت. تأكدي من اتصال الإنترنت أو جرّبي رمزاً آخر.",
+loadingChart:"جاري تحميل الشارت...",chartError:"تعذر تحميل الشارت. تأكد من اتصال الإنترنت أو جرّب رمزاً آخر.",
 noMatch:"لا توجد نتائج مطابقة",languageSearch:"ابحث عن لغة..."
 },
 en:{
+googleSignIn:"Sign in with Google",signOut:"Sign out",
 home:"Home",markets:"Markets",analysis:"AI Analysis",trades:"Trades",about:"About",
 favorites:"Favorites",settings:"Settings",heroTitle:"Smart Financial Analysis Platform",
 heroDesc:"Market analysis with a unified interface",heroSub:"Analysis · Monitoring · Smarter Decisions",
@@ -617,11 +650,407 @@ manualDone:"Only entered levels were organized; this is not investment advice.",
 needData:"A market-data source and analysis engine are required.",
 loadingChart:"Loading chart...",chartError:"Chart could not load. Check your connection or try another symbol.",
 noMatch:"No matching results",languageSearch:"Search languages..."
+},
+fr:{
+googleSignIn:"Se connecter avec Google",signOut:"Déconnexion",
+home:"Accueil",markets:"Marchés",analysis:"Analyse IA",trades:"Transactions",about:"À propos",
+favorites:"Favoris",settings:"Paramètres",globalMarkets:"Marchés mondiaux",
+crypto:"Cryptomonnaies",forex:"Forex",metals:"Or et métaux",stocks:"Actions mondiales",
+dashboard:"Tableau des marchés",marketTools:"Outils de marché",search:"Rechercher un actif",
+all:"Tout",coverage:"La disponibilité dépend du fournisseur.",chartStatus:"Graphique TradingView",
+candles:"Chandeliers japonais",technicalTools:"Indicateurs techniques",
+chartNote:"Les données peuvent être différées selon le fournisseur.",
+favoritesTitle:"Favoris ★",emptyFavorites:"Aucun favori ajouté.",
+aiResults:"Résultats de l'analyse IA",waiting:"En attente de données",
+noSignals:"Aucun signal sans données fiables.",selected:"Actif sélectionné",
+timeframe:"Unité de temps",direction:"Direction",undefined:"Non défini",
+strength:"Force du signal",unavailable:"Indisponible",configure:"Configurer l'analyse",
+analysisCenter:"Centre d'analyse NEXFX AI",analysisType:"Type d'analyse",
+technical:"Analyse technique",manual:"Analyse manuelle",automatic:"Analyse automatique",
+tradeDirection:"Direction du trade",entry:"Prix d'entrée",stop:"Stop loss",
+run:"Lancer l'analyse",output:"Résultats",notRun:"Analyse non lancée",
+enterLevels:"Choisissez un type d'analyse et saisissez les niveaux.",asset:"Actif",
+analysisNote:"Les modes technique et automatique nécessitent un flux de données connecté.",
+tradeMonitor:"Suivi des transactions",type:"Type",status:"Statut",
+noTrades:"Aucune transaction connected.",settingsDesc:"Changez la langue dans le menu supérieur.",
+aboutDesc:"Plateforme de suivi crypto, forex, métaux et actions.",
+buy:"Plan manuel — ACHAT",sell:"Plan manuel — VENTE",
+badEntry:"Saisissez des prix valides.",manualDone:"Niveaux organisés uniquement.",
+needData:"Source de données requise.",loadingChart:"Chargement du graphique...",
+noMatch:"Aucun résultat",languageSearch:"Rechercher une langue..."
+},
+tr:{
+googleSignIn:"Google ile Giriş Yap",signOut:"Çıkış Yap",
+home:"Ana Sayfa",markets:"Piyasalar",analysis:"Yapay Zeka Analizi",trades:"İşlemler",about:"Hakkında",
+favorites:"Favoriler",settings:"Ayarlar",globalMarkets:"Küresel Piyasalar",
+crypto:"Kripto Paralar",forex:"Forex",metals:"Altın ve Metaller",stocks:"Küresel Hisseler",
+dashboard:"Piyasalar ve Analiz Paneli",marketTools:"Piyasa Araçları",search:"Varlık veya sembol ara",
+all:"Tümü",coverage:"Sembol kullanılabilirliği sağlayıcıya bağlıdır.",chartStatus:"TradingView grafiği",
+candles:"Japon Mumları",technicalTools:"Teknik göstergeler",
+chartNote:"Grafik verileri sağlayıcıya bağlı olarak gecikmeli olabilir.",
+favoritesTitle:"Favoriler ★",emptyFavorites:"Henüz favori eklenmedi.",
+aiResults:"Yapay Zeka Sonuçları",waiting:"Veri bekleniyor",
+noSignals:"Güvenilir veri olmadan sinyal üretilmez.",selected:"Seçili varlık",
+timeframe:"Zaman dilimi",direction:"Yön",undefined:"Belirsiz",
+strength:"Sinyal gücü",unavailable:"Mevcut değil",configure:"Analizi Ayarla",
+analysisCenter:"NEXFX AI Analiz Merkezi",analysisType:"Analiz türü",
+technical:"Teknik analiz",manual:"Manuel analiz",automatic:"Otomatik analiz",
+tradeDirection:"İşlem yönü",entry:"Giriş fiyatı",stop:"Zarar durdur (SL)",
+run:"Analizi çalıştır",output:"Analiz çıktısı",notRun:"Analiz çalıştırılmadı",
+enterLevels:"Analiz türünü seçin ve seviyeleri girin.",asset:"Varlık",
+analysisNote:"Teknik ve otomatik analiz için canlı veri bağlantısı gerekir.",
+tradeMonitor:"İşlem İzleme",type:"Tür",status:"Durum",
+noTrades:"Şu anda bağlı işlem yok.",settingsDesc:"Dili üst menüden değiştirebilirsiniz.",
+aboutDesc:"Kripto, forex, metal ve hisse senetlerini takip edin.",
+buy:"Manuel plan — ALIŞ",sell:"Manuel plan — SATIŞ",
+badEntry:"Geçerli fiyatlar girin.",manualDone:"Yalnızca girilen seviyeler düzenlendi.",
+needData:"Veri kaynağı ve analiz motoru gerekli.",loadingChart:"Grafik yükleniyor...",
+noMatch:"Eşleşen sonuç yok",languageSearch:"Dil ara..."
+},
+de:{
+googleSignIn:"Mit Google anmelden",signOut:"Abmelden",
+home:"Startseite",markets:"Märkte",analysis:"KI-Analyse",trades:"Trades",about:"Über uns",
+favorites:"Favoriten",settings:"Einstellungen",globalMarkets:"Globale Märkte",
+crypto:"Kryptowährungen",forex:"Forex",metals:"Gold & Metalle",stocks:"Globale Aktien",
+dashboard:"Markt- & Analyse-Dashboard",marketTools:"Markt-Tools",search:"Asset oder Symbol suchen",
+all:"Alle",chartStatus:"TradingView-Chart",candles:"Japanische Kerzen",
+favoritesTitle:"Favoriten ★",emptyFavorites:"Noch keine Favoriten hinzugefügt.",
+aiResults:"KI-Analyseergebnisse",waiting:"Warte auf Daten",selected:"Ausgewähltes Asset",
+timeframe:"Zeitrahmen",direction:"Richtung",undefined:"Undefiniert",
+strength:"Signalstärke",unavailable:"Nicht verfügbar",configure:"Analyse konfigurieren",
+analysisCenter:"NEXFX AI Analysezentrum",analysisType:"Analysetyp",
+technical:"Technische Analyse",manual:"Manuelle Analyse",automatic:"Automatische Analyse",
+tradeDirection:"Handelsrichtung",entry:"Einstiegspreis",stop:"Stop-Loss",
+run:"Analyse starten",output:"Analyseausgabe",notRun:"Analyse nicht gestartet",
+enterLevels:"Analysetyp wählen und Levels eingeben.",asset:"Asset",
+tradeMonitor:"Trade-Monitor",type:"Typ",status:"Status",
+noTrades:"Derzeit keine verbundenen Trades.",settingsDesc:"Sprache oben im Menü ändern.",
+aboutDesc:"Plattform für Krypto, Forex, Metalle und Aktien.",
+buy:"Manueller Plan — KAUF",sell:"Manueller Plan — VERKAUF",
+badEntry:"Gültige Preise eingeben.",manualDone:"Nur eingegebene Levels organisiert.",
+needData:"Datenquelle erforderlich.",loadingChart:"Chart wird geladen...",
+noMatch:"Keine Treffer",languageSearch:"Sprache suchen..."
+},
+es:{
+googleSignIn:"Iniciar sesión con Google",signOut:"Cerrar sesión",
+home:"Inicio",markets:"Mercados",analysis:"Análisis IA",trades:"Operaciones",about:"Acerca de",
+favorites:"Favoritos",settings:"Configuración",globalMarkets:"Mercados globales",
+crypto:"Criptomonedas",forex:"Forex",metals:"Oro y metales",stocks:"Acciones globales",
+dashboard:"Panel de mercados",marketTools:"Herramientas",search:"Buscar activo o símbolo",
+all:"Todos",chartStatus:"Gráfico de TradingView",candles:"Velas japonesas",
+favoritesTitle:"Favoritos ★",emptyFavorites:"Aún no hay favoritos.",
+aiResults:"Resultados de análisis IA",waiting:"Esperando datos",selected:"Activo seleccionado",
+timeframe:"Temporalidad",direction:"Dirección",undefined:"Indefinido",
+strength:"Fuerza de señal",unavailable:"No disponible",configure:"Configurar análisis",
+analysisCenter:"Centro de análisis NEXFX AI",analysisType:"Tipo de análisis",
+technical:"Análisis técnico",manual:"Análisis manual",automatic:"Análisis automático",
+tradeDirection:"Dirección",entry:"Precio de entrada",stop:"Stop loss",
+run:"Ejecutar análisis",output:"Resultados",notRun:"Análisis no ejecutado",
+enterLevels:"Elija un tipo de análisis e ingrese los niveles.",asset:"Activo",
+tradeMonitor:"Monitor de operaciones",type:"Tipo",status:"Estado",
+noTrades:"No hay operaciones conectadas.",settingsDesc:"Cambie el idioma en el menú superior.",
+aboutDesc:"Plataforma para monitorear cripto, forex, metales y acciones.",
+buy:"Plan manual — COMPRA",sell:"Plan manual — VENTA",
+badEntry:"Ingrese precios válidos.",manualDone:"Solo se organizaron los niveles ingresados.",
+needData:"Se requiere fuente de datos.",loadingChart:"Cargando gráfico...",
+noMatch:"Sin resultados",languageSearch:"Buscar idioma..."
+},
+pt:{
+googleSignIn:"Entrar com o Google",signOut:"Sair",
+home:"Início",markets:"Mercados",analysis:"Análise IA",trades:"Operações",about:"Sobre",
+favorites:"Favoritos",settings:"Configurações",globalMarkets:"Mercados globais",
+crypto:"Criptomoedas",forex:"Forex",metals:"Ouro e metais",stocks:"Ações globais",
+dashboard:"Painel de mercados",marketTools:"Ferramentas",search:"Buscar ativo ou símbolo",
+all:"Todos",chartStatus:"Gráfico TradingView",candles:"Velas japonesas",
+favoritesTitle:"Favoritos ★",emptyFavorites:"Nenhum favorito adicionado.",
+aiResults:"Resultados da análise IA",waiting:"Aguardando dados",selected:"Ativo selecionado",
+timeframe:"Tempo gráfico",direction:"Direção",undefined:"Indefinido",
+strength:"Força do sinal",unavailable:"Indisponível",configure:"Configurar análise",
+analysisCenter:"Centro de análise NEXFX AI",analysisType:"Tipo de análise",
+technical:"Análise técnica",manual:"Análise manual",automatic:"Análise automática",
+tradeDirection:"Direção",entry:"Preço de entrada",stop:"Stop loss",
+run:"Executar análise",output:"Saída da análise",notRun:"Análise não executada",
+enterLevels:"Escolha o tipo de análise e insira os níveis.",asset:"Ativo",
+tradeMonitor:"Monitor de operações",type:"Tipo",status:"Status",
+noTrades:"Nenhuma operação conectada.",settingsDesc:"Altere o idioma no menu superior.",
+aboutDesc:"Plataforma para cripto, forex, metais e ações.",
+buy:"Plano manual — COMPRA",sell:"Plano manual — VENDA",
+badEntry:"Insira preços válidos.",manualDone:"Apenas os níveis inseridos foram organizados.",
+needData:"Fonte de dados necessária.",loadingChart:"Carregando gráfico...",
+noMatch:"Nenhum resultado",languageSearch:"Pesquisar idioma..."
+},
+it:{
+googleSignIn:"Accedi con Google",signOut:"Esci",
+home:"Home",markets:"Mercati",analysis:"Analisi IA",trades:"Operazioni",about:"Informazioni",
+favorites:"Preferiti",settings:"Impostazioni",globalMarkets:"Mercati globali",
+crypto:"Criptovalute",forex:"Forex",metals:"Oro e metalli",stocks:"Azioni globali",
+dashboard:"Dashboard mercati",marketTools:"Strumenti",search:"Cerca asset o simbolo",
+all:"Tutti",chartStatus:"Grafico TradingView",candles:"Candele giapponesi",
+favoritesTitle:"Preferiti ★",emptyFavorites:"Nessun preferito aggiunto.",
+aiResults:"Risultati analisi IA",waiting:"In attesa di dati",selected:"Asset selezionato",
+timeframe:"Timeframe",direction:"Direzione",undefined:"Non definito",
+strength:"Forza del segnale",unavailable:"Non disponibile",configure:"Configura analisi",
+analysisCenter:"Centro analisi NEXFX AI",analysisType:"Tipo di analisi",
+technical:"Analisi tecnica",manual:"Analisi manuale",automatic:"Analisi automatica",
+tradeDirection:"Direzione",entry:"Prezzo di entrata",stop:"Stop loss",
+run:"Avvia analisi",output:"Output analisi",notRun:"Analisi non avviata",
+enterLevels:"Scegli il tipo di analisi e inserisci i livelli.",asset:"Asset",
+tradeMonitor:"Monitor operazioni",type:"Tipo",status:"Stato",
+noTrades:"Nessuna operazione connessa.",settingsDesc:"Cambia lingua dal menu in alto.",
+aboutDesc:"Piattaforma per cripto, forex, metalli e azioni.",
+buy:"Piano manuale — ACQUISTO",sell:"Piano manuale — VENDITA",
+badEntry:"Inserisci prezzi validi.",manualDone:"Solo i livelli inseriti sono stati organizzati.",
+needData:"Fonte dati necessaria.",loadingChart:"Caricamento grafico...",
+noMatch:"Nessun risultato",languageSearch:"Cerca lingua..."
+},
+ru:{
+googleSignIn:"Войти через Google",signOut:"Выйти",
+home:"Главная",markets:"Рынки",analysis:"ИИ-анализ",trades:"Сделки",about:"О платформе",
+favorites:"Избранное",settings:"Настройки",globalMarkets:"Мировые рынки",
+crypto:"Криптовалюты",forex:"Форекс",metals:"Золото и металлы",stocks:"Мировые акции",
+dashboard:"Панель рынков и анализа",marketTools:"Инструменты рынка",search:"Поиск актива или символа",
+all:"Все",chartStatus:"График TradingView",candles:"Японские свечи",
+favoritesTitle:"Избранное ★",emptyFavorites:"Избранное пока пусто.",
+aiResults:"Результаты ИИ-анализа",waiting:"Ожидание данных",selected:"Выбранный актив",
+timeframe:"Таймфрейм",direction:"Направление",undefined:"Не определено",
+strength:"Сила сигнала",unavailable:"Недоступно",configure:"Настроить анализ",
+analysisCenter:"Центр анализа NEXFX AI",analysisType:"Тип анализа",
+technical:"Технический анализ",manual:"Ручной анализ",automatic:"Автоматический анализ",
+tradeDirection:"Направление сделки",entry:"Цена входа",stop:"Стоп-лосс",
+run:"Запустить анализ",output:"Результаты анализа",notRun:"Анализ не запущен",
+enterLevels:"Выберите тип анализа и введите уровни.",asset:"Актив",
+tradeMonitor:"Монитор сделок",type:"Тип",status:"Статус",
+noTrades:"Нет подключенных сделок.",settingsDesc:"Смените язык в верхнем меню.",
+aboutDesc:"Платформа для мониторинга криптовалют, форекс, металлов и акций.",
+buy:"Ручной план — ПОКУПКА",sell:"Ручной план — ПРОДАЖА",
+badEntry:"Введите корректные цены.",manualDone:"Организованы только введенные уровни.",
+needData:"Требуется источник данных.",loadingChart:"Загрузка графика...",
+noMatch:"Нет совпадений",languageSearch:"Поиск языка..."
+},
+zh:{
+googleSignIn:"使用 Google 登录",signOut:"退出登录",
+home:"首页",markets:"市场",analysis:"AI 分析",trades:"交易",about:"关于平台",
+favorites:"收藏",settings:"设置",globalMarkets:"全球市场",
+crypto:"加密货币",forex:"外汇",metals:"黄金与贵金属",stocks:"全球股票",
+dashboard:"市场与分析面板",marketTools:"市场工具",search:"搜索资产或代码",
+all:"全部",chartStatus:"TradingView 图表",candles:"日本蜡烛图",
+favoritesTitle:"收藏 ★",emptyFavorites:"暂无收藏资产。",
+aiResults:"AI 分析结果",waiting:"等待数据",selected:"已选资产",
+timeframe:"时间周期",direction:"方向",undefined:"未定义",
+strength:"信号强度",unavailable:"不可用",configure:"配置分析",
+analysisCenter:"NEXFX AI 分析中心",analysisType:"分析类型",
+technical:"技术分析",manual:"手动分析",automatic:"自动分析",
+tradeDirection:"交易方向",entry:"入场价格",stop:"止损 SL",
+run:"运行分析",output:"分析输出",notRun:"尚未运行分析",
+enterLevels:"选择分析类型并输入点位。",asset:"资产",
+tradeMonitor:"交易监控",type:"类型",status:"状态",
+noTrades:"当前没有连接的交易。",settingsDesc:"可在顶部菜单更改语言。",
+aboutDesc:"用于监控加密货币、外汇、金属和股票的分析平台。",
+buy:"手动计划 — 买入",sell:"手动计划 — 卖出",
+badEntry:"请输入有效的价格。",manualDone:"仅整理了输入的点位。",
+needData:"需要连接数据源。",loadingChart:"正在加载图表...",
+noMatch:"无匹配结果",languageSearch:"搜索语言..."
+},
+ja:{
+googleSignIn:"Google でログイン",signOut:"ログアウト",
+home:"ホーム",markets:"市場",analysis:"AI分析",trades:"取引",about:"プラットフォームについて",
+favorites:"お気に入り",settings:"設定",globalMarkets:"世界市場",
+crypto:"暗号資産",forex:"外国為替",metals:"金・貴金属",stocks:"世界株式",
+dashboard:"市場・分析ダッシュボード",marketTools:"市場ツール",search:"資産またはシンボルを検索",
+all:"すべて",chartStatus:"TradingView チャート",candles:"ローソク足",
+favoritesTitle:"お気に入り ★",emptyFavorites:"お気に入りはまだありません。",
+aiResults:"AI分析結果",waiting:"データ待機中",selected:"選択中の資産",
+timeframe:"時間足",direction:"方向",undefined:"未定義",
+strength:"シグナル強度",unavailable:"利用不可",configure:"分析を設定",
+analysisCenter:"NEXFX AI 分析センター",analysisType:"分析タイプ",
+technical:"テクニカル分析",manual:"手動分析",automatic:"自動分析",
+tradeDirection:"取引方向",entry:"エントリー価格",stop:"損切り (SL)",
+run:"分析を実行",output:"分析結果",notRun:"分析未実行",
+enterLevels:"分析タイプを選択しレベルを入力してください。",asset:"資産",
+tradeMonitor:"取引モニター",type:"タイプ",status:"ステータス",
+noTrades:"現在接続されている取引はありません。",settingsDesc:"上部メニューから言語を変更できます。",
+aboutDesc:"暗号資産、FX、貴金属、株式を監視する分析プラットフォーム。",
+buy:"手動プラン — 買い",sell:"手動プラン — 売り",
+badEntry:"有効な価格を入力してください。",manualDone:"入力されたレベルのみ整理しました。",
+needData:"データソースが必要です。",loadingChart:"チャートを読み込み中...",
+noMatch:"一致する結果がありません",languageSearch:"言語を検索..."
+},
+ko:{
+googleSignIn:"Google로 로그인",signOut:"로그아웃",
+home:"홈",markets:"시장",analysis:"AI 분석",trades:"거래",about:"플랫폼 소개",
+favorites:"즐겨찾기",settings:"설정",globalMarkets:"글로벌 시장",
+crypto:"암호화폐",forex:"외환",metals:"금 및 귀금속",stocks:"글로벌 주식",
+dashboard:"시장 및 분석 대시보드",marketTools:"시장 도구",search:"자산 또는 심볼 검색",
+all:"전체",chartStatus:"TradingView 차트",candles:"일본식 캔들",
+favoritesTitle:"즐겨찾기 ★",emptyFavorites:"추가된 즐겨찾기가 없습니다.",
+aiResults:"AI 분석 결과",waiting:"데이터 대기 중",selected:"선택된 자산",
+timeframe:"시간 프레임",direction:"방향",undefined:"미정",
+strength:"신호 강도",unavailable:"사용 불가",configure:"분석 설정",
+analysisCenter:"NEXFX AI 분석 센터",analysisType:"분석 유형",
+technical:"기술적 분석",manual:"수동 분석",automatic:"자동 분석",
+tradeDirection:"거래 방향",entry:"진입 가격",stop:"손절매 (SL)",
+run:"분석 실행",output:"분석 결과",notRun:"분석이 실행되지 않음",
+enterLevels:"분석 유형을 선택하고 가격대를 입력하세요.",asset:"자산",
+tradeMonitor:"거래 모니터",type:"유형",status:"상태",
+noTrades:"현재 연결된 거래가 없습니다.",settingsDesc:"상단 메뉴에서 언어를 변경할 수 있습니다.",
+aboutDesc:"암호화폐, 외환, 귀금속 및 주식을 모니터링하는 분석 플랫폼입니다.",
+buy:"수동 계획 — 매수",sell:"수동 계획 — 매도",
+badEntry:"유효한 가격을 입력하세요.",manualDone:"입력된 가격대만 정리되었습니다.",
+needData:"데이터 소스가 필요합니다.",loadingChart:"차트 로딩 중...",
+noMatch:"일치하는 결과 없음",languageSearch:"언어 검색..."
+},
+hi:{
+googleSignIn:"Google से साइन इन करें",signOut:"साइन आउट",
+home:"होम",markets:"बाज़ार",analysis:"AI विश्लेषण",trades:"ट्रेड्स",about:"प्लेटफ़ॉर्म के बारे में",
+favorites:"पसंदीदा",settings:"सेटिंग्स",globalMarkets:"वैश्विक बाज़ार",
+crypto:"क्रिप्टोकरेंसी",forex:"फ़ॉरेक्स",metals:"सोना और धातुएं",stocks:"वैश्विक शेयर",
+dashboard:"बाज़ार और विश्लेषण डैशबोर्ड",marketTools:"बाज़ार उपकरण",search:"संपत्ति या प्रतीक खोजें",
+all:"सभी",chartStatus:"TradingView चार्ट",candles:"जापानी कैंडल्स",
+favoritesTitle:"पसंदीदा ★",emptyFavorites:"अभी तक कोई पसंदीदा नहीं जोड़ा गया है।",
+aiResults:"AI विश्लेषण परिणाम",waiting:"डेटा की प्रतीक्षा है",selected:"चयनित संपत्ति",
+timeframe:"समय सीमा",direction:"दिशा",undefined:"अनिर्धारित",
+strength:"सिग्नल की ताकत",unavailable:"अनुपलब्ध",configure:"विश्लेषण कॉन्फ़िगर करें",
+analysisCenter:"NEXFX AI विश्लेषण केंद्र",analysisType:"विश्लेषण प्रकार",
+technical:"तकनीकी विश्लेषण",manual:"मैनुअल विश्लेषण",automatic:"स्वचालित विश्लेषण",
+tradeDirection:"ट्रेड दिशा",entry:"एंट्री मूल्य",stop:"स्टॉप लॉस (SL)",
+run:"विश्लेषण चलाएं",output:"विश्लेषण आउटपुट",notRun:"विश्लेषण नहीं चलाया गया",
+enterLevels:"विश्लेषण प्रकार चुनें और स्तर दर्ज करें।",asset:"संपत्ति",
+tradeMonitor:"ट्रेड मॉनिटर",type:"प्रकार",status:"स्थिति",
+noTrades:"वर्तमान में कोई कनेक्टेड ट्रेड नहीं है।",settingsDesc:"शीर्ष मेनू से भाषा बदलें।",
+aboutDesc:"क्रिप्टो, फ़ॉरेक्स, धातुओं और शेयरों की निगरानी के लिए प्लेटफ़ॉर्म।",
+buy:"मैनुअल योजना — खरीदें",sell:"मैनुअल योजना — बेचें",
+badEntry:"मान्य मूल्य दर्ज करें।",manualDone:"केवल दर्ज किए गए स्तर व्यवस्थित किए गए हैं.",
+needData:"डेटा स्रोत आवश्यक है।",loadingChart:"चार्ट लोड हो रहा है...",
+noMatch:"कोई मिलान परिणाम नहीं",languageSearch:"भाषा खोजें..."
+},
+id:{
+googleSignIn:"Masuk dengan Google",signOut:"Keluar",
+home:"Beranda",markets:"Pasar",analysis:"Analisis AI",trades:"Transaksi",about:"Tentang",
+favorites:"Favorit",settings:"Pengaturan",globalMarkets:"Pasar Global",
+crypto:"Kripto",forex:"Forex",metals:"Emas & Logam",stocks:"Saham Global",
+dashboard:"Dasbor Pasar & Analisis",marketTools:"Alat Pasar",search:"Cari aset atau simbol",
+all:"Semua",chartStatus:"Grafik TradingView",candles:"Lilin Jepang",
+favoritesTitle:"Favorit ★",emptyFavorites:"Belum ada favorit ditambahkan.",
+aiResults:"Hasil Analisis AI",waiting:"Menunggu data",selected:"Aset terpilih",
+timeframe:"Kerangka waktu",direction:"Arah",undefined:"Belum ditentukan",
+strength:"Kekuatan sinyal",unavailable:"Tidak tersedia",configure:"Konfigurasi Analisis",
+analysisCenter:"Pusat Analisis NEXFX AI",analysisType:"Jenis analisis",
+technical:"Analisis teknikal",manual:"Analisis manual",automatic:"Analisis otomatis",
+tradeDirection:"Arah transaksi",entry:"Harga masuk",stop:"Stop loss (SL)",
+run:"Jalankan analisis",output:"Hasil analisis",notRun:"Analisis belum dijalankan",
+enterLevels:"Pilih jenis analisis dan masukkan level.",asset:"Aset",
+tradeMonitor:"Monitor Transaksi",type:"Jenis",status:"Status",
+noTrades:"Tidak ada transaksi terhubung saat ini.",settingsDesc:"Ubah bahasa dari menu atas.",
+aboutDesc:"Platform pemantauan kripto, forex, logam, dan saham.",
+buy:"Rencana manual — BELI",sell:"Rencana manual — JUAL",
+badEntry:"Masukkan harga yang valid.",manualDone:"Hanya level yang dimasukkan yang diatur.",
+needData:"Sumber data diperlukan.",loadingChart:"Memuat grafik...",
+noMatch:"Tidak ada hasil cocok",languageSearch:"Cari bahasa..."
+},
+nl:{
+googleSignIn:"Inloggen met Google",signOut:"Uitloggen",
+home:"Home",markets:"Markten",analysis:"AI-analyse",trades:"Transacties",about:"Over ons",
+favorites:"Favorieten",settings:"Instellingen",globalMarkets:"Wereldwijde markten",
+crypto:"Cryptovaluta",forex:"Forex",metals:"Goud & Metalen",stocks:"Wereldwijde aandelen",
+dashboard:"Markt- & Analysedashboard",marketTools:"Markttools",search:"Zoek asset of symbool",
+all:"Alles",chartStatus:"TradingView-grafiek",candles:"Japanse candles",
+favoritesTitle:"Favorieten ★",emptyFavorites:"Nog geen favorieten toegevoegd.",
+aiResults:"AI-analyseresultaten",waiting:"Wachten op gegevens",selected:"Geselecteerd asset",
+timeframe:"Tijdframe",direction:"Richting",undefined:"Ongedefinieerd",
+strength:"Signaalsterkte",unavailable:"Niet beschikbaar",configure:"Analyse configureren",
+analysisCenter:"NEXFX AI Analysecentrum",analysisType:"Analysetype",
+technical:"Technische analyse",manual:"Handmatige analyse",automatic:"Automatische analyse",
+tradeDirection:"Handelsrichting",entry:"Instapprijs",stop:"Stop-loss",
+run:"Analyse starten",output:"Analyse-output",notRun:"Analyse niet uitgevoerd",
+enterLevels:"Kies een analysetype en voer niveaus in.",asset:"Asset",
+tradeMonitor:"Transactiemonitor",type:"Type",status:"Status",
+noTrades:"Momenteel geen verbonden transacties.",settingsDesc:"Wijzig de taal in het bovenste menu.",
+aboutDesc:"Platform voor het volgen van crypto, forex, metalen en aandelen.",
+buy:"Handmatig plan — KOOP",sell:"Handmatig plan — VERKOOP",
+badEntry:"Voer geldige prijzen in.",manualDone:"Alleen ingevoerde niveaus zijn georganiseerd.",
+needData:"Gegevensbron vereist.",loadingChart:"Grafiek laden...",
+noMatch:"Geen overeenkomende resultaten",languageSearch:"Zoek taal..."
 }
 };
 
-const STORAGE_KEY="nexfx_state_v3";
-const LEGACY_FAVORITES_KEY="nexfx_favorites";
+/* =========================================================================
+   USER DATA ISOLATION & AUTH CONTROLLER (UID NAMESPACING)
+   ========================================================================= */
+const AuthController = {
+  SESSION_KEY: "nexfx_active_session_v1",
+  currentUser: null,
+
+  getActiveUID() {
+    return this.currentUser && this.currentUser.uid ? this.currentUser.uid : "guest";
+  },
+
+  getStorageKey() {
+    return `nexfx_state_v3_${this.getActiveUID()}`;
+  },
+
+  getFavoritesKey() {
+    return `nexfx_favorites_${this.getActiveUID()}`;
+  },
+
+  init() {
+    const savedSession = safeRead(this.SESSION_KEY, null);
+    if (savedSession && savedSession.uid) {
+      this.currentUser = savedSession;
+    }
+    this.updateAuthUI();
+  },
+
+  async signInWithGoogle() {
+    const redirectUrl = window.location.origin + window.location.pathname;
+    const simulatedUid = "google_uid_" + btoa("demo.trader@nexfx.ai").replace(/[^a-zA-Z0-9]/g, "").slice(0, 12);
+    this.setSession({
+      uid: simulatedUid,
+      email: "demo.trader@nexfx.ai",
+      provider: "google",
+      redirectReturn: redirectUrl
+    });
+  },
+
+  signOut() {
+    this.currentUser = null;
+    try { localStorage.removeItem(this.SESSION_KEY); } catch (e) {}
+    this.updateAuthUI();
+    loadUserScopedState();
+  },
+
+  setSession(userObj) {
+    this.currentUser = userObj;
+    safeWrite(this.SESSION_KEY, userObj);
+    this.updateAuthUI();
+    loadUserScopedState();
+  },
+
+  updateAuthUI() {
+    const badge = $("userBadge");
+    const emailEl = $("userDisplayEmail");
+    const labelEl = $("googleAuthLabel");
+
+    if (this.currentUser) {
+      badge.classList.add("active");
+      emailEl.textContent = this.currentUser.email || this.currentUser.uid;
+      labelEl.dataset.t = "signOut";
+      labelEl.textContent = t("signOut");
+    } else {
+      badge.classList.remove("active");
+      emailEl.textContent = "";
+      labelEl.dataset.t = "googleSignIn";
+      labelEl.textContent = t("googleSignIn");
+    }
+  }
+};
+
+function handleGoogleAuth() {
+  if (AuthController.currentUser) {
+    AuthController.signOut();
+  } else {
+    AuthController.signInWithGoogle();
+  }
+}
 
 function safeRead(key,fallback=null){
   try{
@@ -640,16 +1069,41 @@ const $=id=>document.getElementById(id);
 const t=key=>(translations[language]&&translations[language][key])||
   (translations.en&&translations.en[key])||key;
 
-const savedState=safeRead(STORAGE_KEY,{})||{};
-let language=languages.some(x=>x.code===savedState.language)?savedState.language:"ar";
-let market=assets[savedState.market]?savedState.market:"crypto";
-let selected=assets[market].find(x=>x[2]===savedState.selectedSymbol)||assets[market][0];
-let onlyFavorites=!!savedState.onlyFavorites;
-let favorites=Array.isArray(savedState.favorites)?savedState.favorites:JSON.parse(localStorage.getItem(LEGACY_FAVORITES_KEY)||"[]");
+let language="ar";
+let market="crypto";
+let selected=assets.crypto[0];
+let onlyFavorites=false;
+let favorites=[];
 let chartGeneration=0;
-let lastAnalysis=savedState.lastAnalysis||null;
+let lastAnalysis=null;
 
-function restoreForm(){
+function loadUserScopedState(){
+  const savedState=safeRead(AuthController.getStorageKey(),{})||{};
+  language=languages.some(x=>x.code===savedState.language)?savedState.language:language;
+  market=assets[savedState.market]?savedState.market:"crypto";
+  selected=assets[market].find(x=>x[2]===savedState.selectedSymbol)||assets[market][0];
+  onlyFavorites=!!savedState.onlyFavorites;
+  favorites=Array.isArray(savedState.favorites)?savedState.favorites:(safeRead(AuthController.getFavoritesKey(),[])||[]);
+  lastAnalysis=savedState.lastAnalysis||null;
+
+  restoreForm(savedState);
+  updateDocumentDirection();
+  translateInterface();
+  document.querySelectorAll(".category").forEach(btn=>{
+    btn.classList.toggle("active",btn.dataset.market===market);
+  });
+  $("marketCaption").textContent=market.toUpperCase();
+  $("showAll").classList.toggle("active",!onlyFavorites);
+  $("showFav").classList.toggle("active",onlyFavorites);
+  renderAssets();
+  renderFavorites();
+  updateSideInformation();
+  updateFavoriteButton();
+  displaySavedAnalysis();
+  renderChart();
+}
+
+function restoreForm(savedState={}){
   const form=savedState.form||{};
   $("timeframe").value=["1","5","15","60","240","D","W"].includes(String(savedState.timeframe))?String(savedState.timeframe):"15";
   $("search").value=typeof savedState.search==="string"?savedState.search:"";
@@ -659,6 +1113,7 @@ function restoreForm(){
     $(id).value=form[id]??"";
   });
 }
+
 function saveState(){
   const form={
     mode:$("analysisMode").value,
@@ -668,7 +1123,8 @@ function saveState(){
     tp1:$("tp1").value,
     tp2:$("tp2").value
   };
-  safeWrite(STORAGE_KEY,{
+  safeWrite(AuthController.getStorageKey(),{
+    uid:AuthController.getActiveUID(),
     language,market,selectedSymbol:selected[2],
     timeframe:$("timeframe").value,
     favorites,search:$("search").value,
@@ -785,7 +1241,7 @@ function toggleFavorite(){
   const symbol=selected[2];
   if(isFavorite(symbol))favorites=favorites.filter(x=>x!==symbol);
   else favorites.push(symbol);
-  safeWrite(LEGACY_FAVORITES_KEY,favorites);
+  safeWrite(AuthController.getFavoritesKey(),favorites);
   updateFavoriteButton();
   renderAssets();
   renderFavorites();
@@ -919,7 +1375,17 @@ function renderChart(){
 }
 
 function displaySavedAnalysis(){
-  if(!lastAnalysis)return;
+  if(!lastAnalysis){
+    $("resultTitle").textContent=t("notRun");
+    $("resultText").textContent=t("enterLevels");
+    $("outMode").textContent="—";
+    $("outPair").textContent="—";
+    $("outEntry").textContent="—";
+    $("outStop").textContent="—";
+    $("outTP1").textContent="—";
+    $("outTP2").textContent="—";
+    return;
+  }
   $("resultTitle").textContent=lastAnalysis.title||t("notRun");
   $("resultText").textContent=lastAnalysis.text||t("enterLevels");
   $("outMode").textContent=lastAnalysis.mode||"—";
@@ -963,21 +1429,6 @@ function runAnalysis(){
   saveState();
 }
 
-/* Social Login Handlers */
-function loginWithGoogle() {
-signInWithPopup(auth, provider)
-  .then((result) => {
-    const user = result.user;
-  }).catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-  });
-
-
-
-  alert('تم النقر على تسجيل الدخول بواسطة Facebook (جاهز للربط مع Firebase أو Supabase)');
-}
-
 $("languageTrigger").addEventListener("click",()=>{
   if($("languageMenu").classList.contains("open"))closeLanguageMenu();
   else openLanguageMenu();
@@ -1007,16 +1458,10 @@ $("favoriteBtn").addEventListener("click",toggleFavorite);
 $("timeframe").addEventListener("change",()=>{ renderChart(); saveState(); });
 $("runAnalysis").addEventListener("click",runAnalysis);
 
-restoreForm();
-updateDocumentDirection();
-translateInterface();
-renderAssets();
-renderFavorites();
-updateSideInformation();
-updateFavoriteButton();
-displaySavedAnalysis();
-renderChart();
+AuthController.init();
+loadUserScopedState();
 saveState();
 </script>
 </body>
 </html>
+
