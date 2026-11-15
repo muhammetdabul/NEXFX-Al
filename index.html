@@ -284,12 +284,12 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
 <header class="topbar">
   <div class="brand">
     <div class="logo">📈</div>
-    <div class="brand-name">NEXFX AI<small>SMART TRADING • SMARTER DECISIONS</small></div>
+    
   </div>
 
   <div class="header-actions">
     <button class="btn-auth" onclick="loginWithGoogle()">تسجيل جوجل</button>
-    <button class="btn-auth" onclick="loginWithFacebook()">تسجيل فيسبوك</button>
+ 
 
     <div class="language-wrap">
       <button class="language-trigger" id="languageTrigger" type="button" aria-expanded="false">
@@ -974,8 +974,7 @@ signInWithPopup(auth, provider)
   });
 
 
-}
-function loginWithFacebook() {
+
   alert('تم النقر على تسجيل الدخول بواسطة Facebook (جاهز للربط مع Firebase أو Supabase)');
 }
 
