@@ -1492,5 +1492,35 @@ AuthController.init();
 loadUserScopedState();
 saveState();
 </script>
+  
+<div id="nexfxAuthModal" class="auth-modal" style="display:none;">
+  <div class="auth-box">
+    <button type="button" onclick="closeAuthModal()" class="auth-close">×</button>
+
+    <h2>NEXFX AI</h2>
+    <p>تسجيل الدخول إلى حسابك</p>
+
+    <button type="button" onclick="loginWithGoogle()" class="auth-google">
+      المتابعة باستخدام Google
+    </button>
+
+    <div class="auth-divider">أو باستخدام البريد الإلكتروني</div>
+
+    <input id="authEmail" type="email" placeholder="البريد الإلكتروني">
+
+    <input id="authPassword" type="password" placeholder="كلمة المرور">
+
+    <button type="button" onclick="loginWithEmail()" class="auth-submit">
+      تسجيل الدخول
+    </button>
+
+    <button type="button" onclick="registerWithEmail()" class="auth-register">
+      إنشاء حساب جديد
+    </button>
+
+    <p id="authMessage"></p>
+  </div>
+</div>
+
 </body>
 </html>
