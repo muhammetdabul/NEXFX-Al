@@ -1047,22 +1047,41 @@ const AuthController = {
   }
 };
 
+
 async function handleGoogleAuth(){
   try {
     if(AuthController.currentUser){
-      const choice=prompt("اكتب 1 لعرض الحساب، أو 2 لتسجيل الخروج:");
-      if(choice==="2") await AuthController.signOut();
-      else if(choice==="1") alert("البريد: "+(AuthController.currentUser.email||"غير متاح")+"\nمعرّف الحساب: "+AuthController.currentUser.uid);
-    } else {
-      const choice=prompt("اختر طريقة الدخول:\n1 - Google\n2 - البريد الإلكتروني");
-      if(choice==="1") await AuthController.signInWithGoogle();
-      else if(choice==="2") await AuthController.signInWithEmail();
+      const choice = confirm(
+        "أنت مسجل الدخول بالفعل.\nاضغط موافق لتسجيل الخروج، أو إلغاء لعرض الحساب."
+      );
+
+      if(choice){
+        await AuthController.signOut();
+      } else {
+        alert(
+          "البريد: " +
+          (AuthController.currentUser.email || "غير متاح") +
+          "\nمعرّف الحساب: " +
+          AuthController.currentUser.uid
+        );
+      }
+      return;
     }
+
+    const choice = prompt(
+      "اختر طريقة الدخول:\n1 - Google\n2 - البريد الإلكتروني"
+    );
+
+    if(choice === "1"){
+      await AuthController.signInWithGoogle();
+    } else if(choice === "2"){
+      await AuthController.signInWithEmail();
+    }
+
   } catch(err) {
-    alert("تعذر إكمال تسجيل الدخول: "+(err.message||err));
+    alert("تعذر إكمال تسجيل الدخول: " + (err.message || err));
   }
 }
-
 function safeRead(key,fallback=null){
   try{
     const raw=localStorage.getItem(key);
