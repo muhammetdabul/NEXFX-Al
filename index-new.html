@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#020817">
+<title>NEXFX AI | Smart Trading (Staging)</title>
+
+<style>
+:root{
+  --bg:#080808;--panel:#0b1b30;--panel2:#102641;
+  --gold:#d4af37;--gold2:#ffe6a0;--white:#f6f2e8;
+  --muted:#aab6c8;--green:#00ff88;--red:#ff5265;
+  --line:rgba(212,175,55,.42);
+  --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:radial-gradient(ellipse at top,#10284b,#080808 75%);
+  color:var(--white);font-family:Tahoma,Arial,sans-serif;line-height:1.6
+}
+body { background-color: #0b132b; color: #ffffff; }
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+.container{width:min(1500px,97%);margin:12px auto 30px}
+
+/* Header & Top Bar Layout - Moved Language Selector to Top */
+.topbar{
+  position:sticky;top:0;z-index:20;background:#080808f5;
+  border-bottom:1px solid var(--gold);padding:12px 25px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  backdrop-filter:blur(12px)
+}
+.brand{display:flex;align-items:center;gap:10px;direction:ltr}
+.logo{
+  width:45px;height:45px;border-radius:10px;display:grid;place-items:center;
+  background:var(--gold-gradient);color:#111;font-size:25px;border:1px solid var(--gold)
+}
+.brand-name{
+  font-size:23px;font-weight:900;
+  background:var(--gold-gradient);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.brand-name small{display:block;font-size:9px;letter-spacing:1px;color:var(--muted);-webkit-text-fill-color:initial}
+
+/* Auth & Language Section in Header */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.btn-auth {
+  background: transparent;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  padding: 7px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 11px;
+  transition: 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-auth:hover {
+  background: var(--gold);
+  color: var(--bg);
+}
+.user-badge {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  background: #10243c;
+  border: 1px solid var(--line);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  color: var(--gold2);
+}
+.user-badge.active {
+  display: inline-flex;
+}
+
+nav,.languages{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+nav a{font-size:12px;color:#ddd;text-decoration:none}
+nav a:hover{color:var(--gold2)}
+.top-btn,.small-btn{
+  background:#10243c;border:1px solid var(--line);color:var(--gold2);
+  padding:7px 10px;border-radius:8px;font-size:11px
+}
+.small-btn.active{background:var(--gold);color:#17120a;font-weight:bold}
+
+/* Language selector */
+.language-wrap{position:relative}
+.language-trigger{
+  display:flex;align-items:center;gap:8px;background:#10243c;
+  border:1px solid var(--gold);color:var(--gold2);
+  padding:7px 12px;border-radius:20px;font-size:12px
+}
+.language-trigger img{width:22px;height:15px;object-fit:cover;border-radius:2px}
+.language-menu{
+  display:none;position:absolute;top:calc(100% + 9px);inset-inline-end:0;
+  width:260px;max-height:390px;overflow:auto;padding:10px;
+  background:#071629;border:1px solid var(--gold);border-radius:12px;
+  box-shadow:0 15px 40px #000a;z-index:30
+}
+.language-menu.open{display:block}
+.language-menu input{margin-bottom:8px}
+.language-option{
+  display:flex;align-items:center;gap:10px;width:100%;padding:9px;
+  color:var(--white);background:transparent;border:0;border-radius:7px;
+  text-align:start;font-size:13px
+}
+.language-option:hover,.language-option.active{background:#193451;color:var(--gold2)}
+.language-option img{width:25px;height:17px;object-fit:cover;border-radius:2px}
+.language-empty{padding:10px;color:var(--muted);font-size:12px}
+
+/* Approved NEXFX AI main banner */
+.site-banner{width:min(1500px,97%);margin:12px auto 0;overflow:hidden;border:1px solid var(--line);border-radius:14px;background:#080808;box-shadow:0 12px 35px #0008}
+.site-banner img{display:block;width:100%;height:auto;object-fit:contain}
+@media(max-width:700px){.site-banner{width:100%;margin:0;border-radius:0;border-inline:0}}
+
+.hero{
+  position:relative;isolation:isolate;min-height:310px;
+  border:1px solid var(--line);border-radius:16px;
+  background:
+    radial-gradient(ellipse at 50% 110%,#123e78aa,transparent 55%),
+    linear-gradient(110deg,#080808,#091c35 55%,#080808);
+  display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;
+  gap:12px;padding:22px;overflow:hidden
+}
+.hero:before{
+  content:"";position:absolute;inset:0;z-index:-1;opacity:.22;
+  background-image:
+    linear-gradient(#78a6d51c 1px,transparent 1px),
+    linear-gradient(90deg,#78a6d51c 1px,transparent 1px);
+  background-size:35px 35px;
+  mask-image:linear-gradient(to bottom,black,transparent)
+}
+.hero:after{
+  content:"";position:absolute;z-index:-1;left:-10%;right:-10%;bottom:18%;
+  height:1px;background:linear-gradient(90deg,transparent,#24a5ff88,#e9b83f77,transparent);
+  transform:rotate(-8deg);box-shadow:0 0 25px #249cff55
+}
+.hero-copy{text-align:center;position:relative;z-index:2}
+.hero h1{
+  color:#f8cf67;font:900 clamp(36px,5vw,64px) Georgia,serif;
+  direction:ltr;margin:0;text-shadow:0 0 12px #f2be4570,0 0 30px #f2be4540;
+  animation:goldGlow 4s ease-in-out infinite alternate
+}
+.hero h2{color:var(--gold2);font-size:22px;margin:5px}
+.hero p{color:#e7d5a6;font-size:13px}
+.primary{
+  display:inline-block;background:var(--gold-gradient);
+  color:#17120a;padding:10px 20px;border:0;border-radius:25px;
+  font-weight:bold;text-decoration:none
+}
+.primary:hover{filter:brightness(1.12);transform:translateY(-1px)}
+.globe{
+  width:min(230px,100%);margin:auto;filter:drop-shadow(0 0 20px #299bff55);
+  animation:globeFloat 6s ease-in-out infinite
+}
+.globe .globe-spin{transform-origin:150px 150px;animation:globeSpin 35s linear infinite}
+.globe .market-lines{opacity:.85}
+.candles{
+  height:190px;display:flex;align-items:center;justify-content:center;
+  gap:10px;direction:ltr
+}
+.candle{width:15px;position:relative;height:150px;animation:candleFloat 3s ease-in-out infinite alternate}
+.candle:nth-child(2n){animation-delay:.4s}
+.candle:nth-child(3n){animation-delay:.8s}
+.candle:before{content:"";position:absolute;left:6px;top:10px;height:125px;width:3px;background:var(--green)}
+.candle:after{
+  content:"";position:absolute;left:0;top:40px;width:15px;height:55px;
+  background:var(--green);border-radius:3px;box-shadow:0 0 10px #18dc9177
+}
+.candle:nth-child(even):before{background:var(--red)}
+.candle:nth-child(even):after{background:var(--red);top:55px;height:40px;box-shadow:0 0 10px #ff526577}
+.candle:nth-child(3n):after{top:25px;height:75px}
+.candle:nth-child(4n):after{top:70px;height:28px}
+@keyframes goldGlow{to{text-shadow:0 0 20px #f2be45aa,0 0 42px #f2be4566}}
+@keyframes globeFloat{50%{transform:translateY(-8px)}}
+@keyframes globeSpin{to{transform:rotate(360deg)}}
+@keyframes candleFloat{to{transform:translateY(-7px)}}
+
+.navlinks{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin:12px 0}
+.navlinks a{
+  text-align:center;padding:10px 4px;background:#0b1b30;
+  border:1px solid var(--line);border-radius:9px;color:var(--gold2);
+  text-decoration:none;font-size:12px
+}
+
+/* Live Ticker with Green Profit Indicators */
+.ticker{
+  display:grid;grid-template-columns:repeat(6,1fr);background:#000;
+  border:1px solid var(--gold);border-radius:10px;overflow:hidden;margin:12px 0
+}
+.tick{padding:10px;border-inline-end:1px solid var(--line);font-size:12px}
+.tick b{display:block;direction:ltr;color:var(--white)}
+.tick .profit-green{color:var(--green);font-weight:bold;margin-inline-start:5px;}
+
+.categories{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.category{
+  padding:15px;background:linear-gradient(145deg,#102541,#061326);
+  border:1px solid var(--line);border-radius:12px;color:white;text-align:start
+}
+.category b{display:block;color:var(--gold2);font-size:15px}
+.category small{color:var(--muted)}
+.category.active{border-color:var(--gold2);box-shadow:0 0 18px #edbb4835}
+.panel{
+  background:linear-gradient(145deg,#10233d,#061326);
+  border:1px solid var(--line);border-radius:12px;padding:15px;margin:13px 0
+}
+.inner{background:#061326;border:1px solid #daa93b66;border-radius:10px;padding:12px;min-width:0}
+h2,h3{color:var(--gold2);margin-top:0}
+h2{font-size:18px}h3{font-size:14px}
+.muted{color:var(--muted);font-size:11px}
+.section-title,.chart-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.layout{display:grid;grid-template-columns:minmax(200px,1fr) minmax(320px,1.8fr) minmax(200px,1fr);gap:12px}
+input,select{
+  width:100%;min-height:40px;background:#061326;color:white;
+  border:1px solid var(--line);border-radius:8px;padding:8px
+}
+.asset-tools{display:flex;gap:6px;margin:10px 0}
+.asset-list{max-height:390px;overflow:auto}
+.asset-row{
+  display:flex;align-items:center;gap:8px;padding:9px;
+  border-bottom:1px solid #ffffff14;cursor:pointer;font-size:12px
+}
+.asset-row:hover,.asset-row.active{background:#193451}
+.asset-row strong{margin-inline-start:auto;color:var(--gold2);direction:ltr}
+.asset-icon{font-size:19px}
+.chart-pair{direction:ltr;color:var(--gold2);font-weight:bold}
+.tradingview-box{
+  position:relative;height:440px;min-height:400px;
+  background:#041020;border:1px solid #daa93b55;border-radius:9px;overflow:hidden
+}
+#tradingviewChart,.tradingview-widget-container__widget{width:100%;height:100%}
+.chart-placeholder{
+  position:absolute;inset:0;display:grid;place-items:center;
+  color:var(--muted);text-align:center;padding:20px;pointer-events:none;
+  z-index:2;background:#041020
+}
+.indicators{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.indicator{border:1px solid var(--line);border-radius:7px;padding:6px;font-size:10px}
+.signal-box{background:#071629;border:1px solid var(--line);border-radius:9px;padding:12px;margin-top:10px}
+.signal-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
+.signal-cell{background:#10243c;border:1px solid #d6a94829;border-radius:8px;padding:8px;min-width:0}
+.signal-cell small{display:block;color:var(--muted);font-size:9px}
+.signal-cell b{display:block;color:var(--gold2);direction:ltr;font-size:12px;overflow-wrap:anywhere}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:9px}
+.disclaimer{
+  border-inline-start:3px solid var(--gold);padding:8px 11px;
+  background:#daa6320f;color:#c6c3b8;font-size:10px
+}
+table{width:100%;border-collapse:collapse;font-size:11px}
+th,td{padding:10px;text-align:start;border-bottom:1px solid #ffffff14}
+th{color:var(--gold2)}
+footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid var(--line);font-size:11px}
+
+@media(max-width:1050px){
+ .layout{grid-template-columns:1fr 1.5fr}
+ .analysis-side{grid-column:1/-1}
+ .navlinks{grid-template-columns:repeat(4,1fr)}
+ .ticker{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:700px){
+ .topbar{position:relative;justify-content:center}
+ .hero{grid-template-columns:1fr 1fr;min-height:260px}
+ .hero-copy{grid-column:1/-1}
+ .globe{width:140px}
+ .candles{transform:scale(.75)}
+ .categories{grid-template-columns:repeat(2,1fr)}
+ .layout,.two-col{grid-template-columns:1fr}
+ .analysis-side{grid-column:auto}
+ .navlinks{grid-template-columns:repeat(2,1fr)}
+ .ticker{grid-template-columns:repeat(2,1fr)}
+ .tradingview-box{height:370px;min-height:370px}
+ .language-menu{inset-inline-end:50%;transform:translateX(50%)}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*:before,*:after{
+  animation-duration:.01ms!important;animation-iteration-count:1!important;
+  scroll-behavior:auto!important;transition-duration:.01ms!important
+ }
+}
+</style>
+</head>
+
+<body>
+<div class="site-banner" role="img" aria-label="NEXFX AI - الأسواق الذكية والتحليل المالي">
+  <img src="nexfx-ai-banner.png" alt="NEXFX AI — الأسواق الذكية والتحليل المالي" fetchpriority="high">
+</div>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="logo" aria-hidden="true">N</div>
+  </div>
+
+  <div class="header-actions">
+    <div class="user-badge" id="userBadge">
+      <span id="userDisplayEmail"></span>
+    </div>
+    <button class="btn-auth" id="googleAuthBtn" type="button" translate="no" onclick="handleGoogleAuth()">
+      <span id="googleAuthLabel" data-t="googleSignIn">تسجيل الدخول عبر Google</span>
+    </button>
+
+    <div class="language-wrap">
+      <button class="language-trigger" id="languageTrigger" type="button" aria-expanded="false">
+        <span>🌐</span>
+        <img id="currentFlag" src="https://flagcdn.com/w40/sa.png" alt="علم اللغة المختارة">
+        <span id="currentLanguageName">العربية</span>
+        <span>⌄</span>
+      </button>
+      <div class="language-menu" id="languageMenu">
+        <input id="languageSearch" type="search" placeholder="ابحث عن لغة..." aria-label="Search languages">
+        <div id="languageOptions"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="container" id="home">
+
+<div class="navlinks">
+  <a href="#home" data-t="home">الرئيسية</a>
+  <a href="#markets" data-t="markets">الأسواق</a>
+  <a href="#analysis" data-t="analysis">التحليل</a>
+  <a href="#trades" data-t="trades">الصفقات</a>
+  <a href="#favoritesPanel" data-t="favorites">المفضلة</a>
+  <a href="#settings" data-t="settings">الإعدادات</a>
+  <a href="#about" data-t="about">حول المنصة</a>
+</div>
+
+<section class="ticker">
+  <div class="tick">🪙 <b>GOLD <span class="profit-green">+1.27%</span></b></div>
+  <div class="tick">🥈 <b>SILVER <span class="profit-green">+0.95%</span></b></div>
+  <div class="tick">₿ <b>BTC <span class="profit-green">+2.41%</span></b></div>
+  <div class="tick">♦ <b>ETH <span class="profit-green">+1.96%</span></b></div>
+  <div class="tick">🇪🇺 <b>EUR/USD <span class="profit-green">+0.23%</span></b></div>
+  <div class="tick">🇬🇧 <b>GBP/USD <span class="profit-green">+0.45%</span></b></div>
+</section>
+
+<section id="markets">
+  <div class="section-title"><h2 data-t="globalMarkets">الأسواق العالمية</h2></div>
+  <div class="categories">
+    <button class="category active" data-market="crypto"><b data-t="crypto">العملات الرقمية</b><small>CRYPTO ₿</small></button>
+    <button class="category" data-market="forex"><b data-t="forex">الفوركس</b><small>FOREX €$</small></button>
+    <button class="category" data-market="metals"><b data-t="metals">الذهب والمعادن</b><small>GOLD 🪙</small></button>
+    <button class="category" data-market="stocks"><b data-t="stocks">الأسهم العالمية</b><small>STOCKS 📈</small></button>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="section-title">
+    <h2 data-t="dashboard">لوحة الأسواق والتحليل</h2>
+    <span class="muted" id="marketCaption">CRYPTO</span>
+  </div>
+
+  <div class="layout">
+    <aside class="inner">
+      <h3 data-t="marketTools">أدوات السوق</h3>
+      <input id="search" type="search" data-placeholder="search" placeholder="ابحث عن أصل أو رمز">
+      <div class="asset-tools">
+        <button class="small-btn active" id="showAll" data-t="all">الكل</button>
+        <button class="small-btn" id="showFav" data-t="favorites">المفضلة</button>
+      </div>
+      <div class="asset-list" id="assetList"></div>
+      <p class="muted" data-t="coverage">توفر الرموز يعتمد على تغطية مزود البيانات.</p>
+    </aside>
+
+    <section class="inner">
+      <div class="chart-head">
+        <div>
+          <div class="chart-pair" id="chartPair">BINANCE:BTCUSDT</div>
+          <small class="muted" data-t="chartStatus">شارت من TradingView</small>
+        </div>
+        <div style="display:flex;gap:6px">
+          <select id="timeframe" aria-label="Timeframe">
+            <option value="1">1m</option><option value="5">5m</option>
+            <option value="15" selected>15m</option><option value="60">1H</option>
+            <option value="240">4H</option><option value="D">1D</option>
+            <option value="W">1W</option>
+          </select>
+          <button class="small-btn" id="favoriteBtn" aria-label="Add to favorites">☆</button>
+        </div>
+      </div>
+      <div class="tradingview-box">
+        <div class="chart-placeholder" id="chartPlaceholder">جاري تحميل الشارت...</div>
+        <div id="tradingviewChart" class="tradingview-widget-container">
+          <div class="tradingview-widget-container__widget"></div>
+        </div>
+      </div>
+      <div class="indicators">
+        <span class="indicator">TradingView</span>
+        <span class="indicator" data-t="candles">شموع يابانية</span>
+        <span class="indicator" data-t="technicalTools">مؤشرات فنية من أدوات الشارت</span>
+      </div>
+      <p class="disclaimer" data-t="chartNote">
+        بيانات الشارت وتغطيتها تعتمد على مزود السوق وقد تكون متأخرة لبعض الرموز.
+      </p>
+    </section>
+
+    <aside class="inner analysis-side" id="favoritesPanel">
+      <h3 data-t="favoritesTitle">المفضلة ★</h3>
+      <div class="asset-list" id="favoriteList"></div>
+      <div class="signal-box">
+        <small class="muted" data-t="aiResults">نتائج التحليل الذكي</small>
+        <h3 data-t="waiting">بانتظار البيانات</h3>
+        <p class="muted" data-t="noSignals">لن نصدر إشارات دون بيانات موثوقة.</p>
+      </div>
+      <div class="signal-grid">
+        <div class="signal-cell"><small data-t="selected">الأصل المحدد</small><b id="sidePair">BTC/USDT</b></div>
+        <div class="signal-cell"><small data-t="timeframe">الإطار الزمني</small><b id="sideTime">15m</b></div>
+        <div class="signal-cell"><small data-t="direction">الاتجاه</small><b data-t="undefined">غير محدد</b></div>
+        <div class="signal-cell"><small data-t="strength">قوة الإشارة</small><b data-t="unavailable">غير متاحة</b></div>
+      </div>
+      <a class="primary" href="#analysis" style="display:block;text-align:center;margin-top:14px" data-t="configure">إعداد التحليل</a>
+    </aside>
+  </div>
+</section>
+
+<section class="panel" id="analysis">
+  <h2 data-t="analysisCenter">مركز التحليل NEXFX AI</h2>
+  <div class="two-col">
+    <div>
+      <div class="field">
+        <label data-t="analysisType" for="analysisMode">نوع التحليل</label>
+        <select id="analysisMode">
+          <option value="technical" data-t="technical">التحليل الفني</option>
+          <option value="manual" data-t="manual">التحليل اليدوي</option>
+          <option value="auto" data-t="automatic">التحليل التلقائي</option>
+        </select>
+      </div>
+      <div class="field">
+        <label data-t="tradeDirection" for="direction">اتجاه الصفقة</label>
+        <select id="direction">
+          <option value="buy">BUY / شراء</option>
+          <option value="sell">SELL / بيع</option>
+        </select>
+      </div>
+      <div class="two-col">
+        <div class="field"><label data-t="entry" for="entry">سعر الدخول</label><input id="entry" type="number" step="any"></div>
+        <div class="field"><label data-t="stop" for="stop">وقف الخسارة SL</label><input id="stop" type="number" step="any"></div>
+        <div class="field"><label for="tp1">TP1</label><input id="tp1" type="number" step="any"></div>
+        <div class="field"><label for="tp2">TP2</label><input id="tp2" type="number" step="any"></div>
+      </div>
+      <button class="primary" id="runAnalysis" style="width:100%" data-t="run">تشغيل التحليل</button>
+    </div>
+    <div>
+      <h3 data-t="output">مخرجات التحليل</h3>
+      <div class="signal-box">
+        <h3 id="resultTitle" data-t="notRun">لم يتم تشغيل تحليل</h3>
+        <p class="muted" id="resultText" data-t="enterLevels">اختر نوع التحليل وأدخل المستويات.</p>
+        <div class="signal-grid">
+          <div class="signal-cell"><small data-t="analysisType">نوع التحليل</small><b id="outMode">—</b></div>
+          <div class="signal-cell"><small data-t="asset">الأصل</small><b id="outPair">—</b></div>
+          <div class="signal-cell"><small data-t="entry">الدخول</small><b id="outEntry">—</b></div>
+          <div class="signal-cell"><small data-t="stop">وقف الخسارة</small><b id="outStop">—</b></div>
+          <div class="signal-cell"><small>TP1</small><b id="outTP1">—</b></div>
+          <div class="signal-cell"><small>TP2</small><b id="outTP2">—</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="disclaimer" data-t="analysisNote">
+    التحليل الفني والتلقائي يحتاجان إلى مصدر بيانات ومحرك تحليل متصل. التحليل اليدوي ينظم المستويات المدخلة فقط.
+  </p>
+</section>
+
+<section class="panel" id="trades">
+  <h2 data-t="tradeMonitor">مراقبة الصفقات</h2>
+  <div style="overflow:auto">
+    <table>
+      <thead><tr>
+        <th data-t="asset">الأصل</th><th data-t="type">النوع</th>
+        <th data-t="entry">الدخول</th><th data-t="stop">وقف الخسارة</th>
+        <th>TP</th><th data-t="status">الحالة</th>
+      </tr></thead>
+      <tbody><tr><td colspan="6" data-t="noTrades">لا توجد صفقات متصلة حالياً.</td></tr></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="panel" id="settings">
+  <h2 data-t="settings">الإعدادات</h2>
+  <p class="muted" data-t="settingsDesc">يمكنك تغيير اللغة من القائمة العلوية.</p>
+</section>
+
+<section class="panel" id="about">
+  <h2 data-t="about">حول المنصة</h2>
+  <p class="muted" data-t="aboutDesc">منصة لمتابعة العملات الرقمية والفوركس والمعادن والأسهم وأدوات التحليل.</p>
+</section>
+
+</main>
+
+<footer><strong style="color:var(--gold2)">NEXFX AI</strong><br>SMART TRADING • SMARTER DECISIONS<br>© 2026</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCF4S4DOWCvSwBNHA5lMFkLvCYZ3A9Z4lQ",
+  authDomain: "nexfx-ai.firebaseapp.com",
+  projectId: "nexfx-ai",
+  storageBucket: "nexfx-ai.firebasestorage.app",
+  messagingSenderId: "1098941039566",
+  appId: "1:1098941039566:web:1cba71e7870fea31e3a19f",
+  measurementId: "G-DHZS8ZXPV1"
+};
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+</script>
+<script>
+"use strict";
+
+const assets={
+crypto:[
+["BTC/USDT","₿","BINANCE:BTCUSDT"],["ETH/USDT","♦","BINANCE:ETHUSDT"],
+["BNB/USDT","🟡","BINANCE:BNBUSDT"],["SOL/USDT","◎","BINANCE:SOLUSDT"],
+["XRP/USDT","✕","BINANCE:XRPUSDT"],["ADA/USDT","🔵","BINANCE:ADAUSDT"],
+["DOGE/USDT","Ð","BINANCE:DOGEUSDT"],["TRX/USDT","🔺","BINANCE:TRXUSDT"],
+["TON/USDT","💎","BINANCE:TONUSDT"],["AVAX/USDT","🔺","BINANCE:AVAXUSDT"],
+["LINK/USDT","🔗","BINANCE:LINKUSDT"],["DOT/USDT","●","BINANCE:DOTUSDT"],
+["LTC/USDT","Ł","BINANCE:LTCUSDT"],["SHIB/USDT","◆","BINANCE:SHIBUSDT"],
+["NEAR/USDT","N","BINANCE:NEARUSDT"],["SUI/USDT","💧","BINANCE:SUIUSDT"],
+["BCH/USDT","₿","BINANCE:BCHUSDT"],["ETC/USDT","Ξ","BINANCE:ETCUSDT"],
+["ATOM/USDT","⚛","BINANCE:ATOMUSDT"],["FIL/USDT","F","BINANCE:FILUSDT"],
+["APT/USDT","A","BINANCE:APTUSDT"],["ARB/USDT","A","BINANCE:ARBUSDT"],
+["OP/USDT","O","BINANCE:OPUSDT"],["UNI/USDT","U","BINANCE:UNIUSDT"],
+["ICP/USDT","∞","BINANCE:ICPUSDT"],["INJ/USDT","I","BINANCE:INJUSDT"],
+["AAVE/USDT","A","BINANCE:AAVEUSDT"],["PEPE/USDT","🐸","BINANCE:PEPEUSDT"],
+["XLM/USDT","✦","BINANCE:XLMUSDT"],["VET/USDT","V","BINANCE:VETUSDT"]
+],
+forex:[
+["EUR/USD","🇪🇺","FX:EURUSD"],["GBP/USD","🇬🇧","FX:GBPUSD"],
+["USD/JPY","🇯🇵","FX:USDJPY"],["USD/CHF","🇨🇭","FX:USDCHF"],
+["AUD/USD","🇦🇺","FX:AUDUSD"],["USD/CAD","🇨🇦","FX:USDCAD"],
+["NZD/USD","🇳🇿","FX:NZDUSD"],["EUR/GBP","€£","FX:EURGBP"],
+["EUR/JPY","€¥","FX:EURJPY"],["GBP/JPY","£¥","FX:GBPJPY"],
+["EUR/CHF","€₣","FX:EURCHF"],["EUR/AUD","€A","FX:EURAUD"],
+["EUR/CAD","€C","FX:EURCAD"],["EUR/NZD","€N","FX:EURNZD"],
+["GBP/CHF","£₣","FX:GBPCHF"],["GBP/AUD","£A","FX:GBPAUD"],
+["GBP/CAD","£C","FX:GBPCAD"],["AUD/JPY","A¥","FX:AUDJPY"],
+["AUD/CAD","AC","FX:AUDCAD"],["AUD/NZD","AN","FX:AUDNZD"],
+["CAD/JPY","C¥","FX:CADJPY"],["CHF/JPY","₣¥","FX:CHFJPY"],
+["NZD/JPY","N¥","FX:NZDJPY"],["USD/TRY","🇹🇷","FX_IDC:USDTRY"],
+["USD/CNH","¥","FX_IDC:USDCNH"],["USD/SGD","S$","FX:USDSGD"],
+["USD/MXN","$","FX:USDMXN"],["USD/ZAR","R","FX:USDZAR"],
+["USD/SEK","kr","FX:USDSEK"],["USD/NOK","kr","FX:USDNOK"]
+],
+metals:[
+["XAU/USD","🪙","OANDA:XAUUSD"],["XAG/USD","🥈","OANDA:XAGUSD"],
+["XPT/USD","⚪","OANDA:XPTUSD"],["XPD/USD","⚫","OANDA:XPDUSD"],
+["COPPER","🟠","COMEX:HG1!"],["GOLD","🪙","TVC:GOLD"],
+["SILVER","🥈","TVC:SILVER"],["PLATINUM","⚪","TVC:PLATINUM"],
+["PALLADIUM","⚫","TVC:PALLADIUM"],["WTI","◉","TVC:USOIL"],
+["BRENT","◉","TVC:UKOIL"]
+],
+stocks:[
+["AAPL","●","NASDAQ:AAPL"],["MSFT","▦","NASDAQ:MSFT"],
+["NVDA","◈","NASDAQ:NVDA"],["AMZN","▣","NASDAQ:AMZN"],
+["GOOGL","G","NASDAQ:GOOGL"],["META","∞","NASDAQ:META"],
+["TSLA","T","NASDAQ:TSLA"],["JPM","▤","NYSE:JPM"],
+["WMT","W","NASDAQ:WMT"],["V","V","NYSE:V"],
+["MA","M","NYSE:MA"],["XOM","X","NYSE:XOM"],
+["NFLX","N","NASDAQ:NFLX"],["AMD","A","NASDAQ:AMD"],
+["ORCL","O","NYSE:ORCL"],["INTC","I","NASDAQ:INTC"],
+["COST","C","NASDAQ:COST"],["DIS","D","NYSE:DIS"],
+["KO","K","NYSE:KO"],["PEP","P","NASDAQ:PEP"],
+["BA","B","NASDAQ:BA"],["ADBE","A","NASDAQ:ADBE"],
+["CRM","C","NYSE:CRM"],["QCOM","Q","NASDAQ:QCOM"],
+["AVGO","A","NASDAQ:AVGO"],["IBM","I","NYSE:IBM"],
+["UBER","U","NASDAQ:UBER"],["PYPL","P","NASDAQ:PYPL"],
+["BABA","B","NASDAQ:BABA"],["NKE","N","NASDAQ:NKE"]
+]
+};
+
+const languages=[
+{code:"ar",name:"العربية",flag:"sa"},{code:"en",name:"English",flag:"us"},
+{code:"fr",name:"Français",flag:"fr"},{code:"tr",name:"Türkçe",flag:"tr"},
+{code:"de",name:"Deutsch",flag:"de"},{code:"es",name:"Español",flag:"es"},
+{code:"pt",name:"Português",flag:"br"},{code:"it",name:"Italiano",flag:"it"},
+{code:"ru",name:"Русский",flag:"ru"},{code:"zh",name:"中文",flag:"cn"},
+{code:"ja",name:"日本語",flag:"jp"},{code:"ko",name:"한국어",flag:"kr"},
+{code:"hi",name:"हिन्दी",flag:"in"},{code:"id",name:"Bahasa Indonesia",flag:"id"},
+{code:"nl",name:"Nederlands",flag:"nl"}
+];
+
+const translations={
+ar:{
+googleSignIn:"تسجيل الدخول عبر Google",signOut:"تسجيل الخروج",
+home:"الرئيسية",markets:"الأسواق",analysis:"التحليل الذكي",trades:"الصفقات",about:"حول المنصة",
+favorites:"المفضلة",settings:"الإعدادات",heroTitle:"منصة تحليل مالي ذكية",
+heroDesc:"تحليل الأسواق بواجهة موحدة وأدوات واضحة",heroSub:"تحليل · متابعة · قرارات أذكى",
+start:"🚀 ابدأ التحليل الآن",chartSource:"شارت TradingView",globalMarkets:"أهم الأسواق العالمية",
+crypto:"العملات الرقمية",forex:"الفوركس",metals:"الذهب والمعادن",stocks:"الأسهم العالمية",
+dashboard:"لوحة الأسواق والتحليل",marketTools:"أدوات السوق",search:"ابحث عن أصل أو رمز",
+all:"الكل",coverage:"توفر الرموز يعتمد على تغطية مزود البيانات.",
+chartStatus:"شارت من TradingView",candles:"شموع يابانية",
+technicalTools:"مؤشرات فنية من أدوات الشارت",
+chartNote:"بيانات الشارت وتغطيتها تعتمد على مزود السوق وقد تكون متأخرة لبعض الرموز.",
+favoritesTitle:"المفضلة ★",emptyFavorites:"لم تتم إضافة أصول للمفضلة بعد.",
+aiResults:"نتائج التحليل الذكي",waiting:"بانتظار البيانات",
+noSignals:"لن نصدر إشارات دون بيانات موثوقة.",selected:"الأصل المحدد",
+timeframe:"الإطار الزمني",direction:"الاتجاه",undefined:"غير محدد",
+strength:"قوة الإشارة",unavailable:"غير متاحة",configure:"إعداد التحليل",
+analysisCenter:"مركز التحليل NEXFX AI",analysisType:"نوع التحليل",
+technical:"التحليل الفني",manual:"التحليل اليدوي",automatic:"التحليل التلقائي",
+tradeDirection:"اتجاه الصفقة",entry:"سعر الدخول",stop:"وقف الخسارة SL",
+run:"تشغيل التحليل",output:"مخرجات التحليل",notRun:"لم يتم تشغيل تحليل",
+enterLevels:"اختر نوع التحليل وأدخل المستويات المطلوبة.",asset:"الأصل",
+analysisNote:"التحليل الفني والتلقائي يحتاجان إلى مصدر بيانات ومحرك تحليل متصل. التحليل اليدوي ينظم المستويات المدخلة فقط.",
+tradeMonitor:"مراقبة الصفقات",type:"النوع",status:"الحالة",
+noTrades:"لا توجد صفقات متصلة حالياً.",settingsDesc:"يمكنك تغيير اللغة من القائمة العلوية.",
+aboutDesc:"منصة لمتابعة العملات الرقمية والفوركس والمعادن والأسهم وأدوات التحليل.",
+buy:"خطة يدوية — شراء",sell:"خطة يدوية — بيع",
+badEntry:"أدخل أسعار دخول ووقف خسارة صحيحة.",
+badStop:"في الشراء يجب أن يكون الوقف أدنى من الدخول، وفي البيع أعلى منه.",
+badTarget:"الهدف لا يتوافق مع اتجاه الصفقة.",
+badTargetOrder:"يجب أن يكون TP2 أبعد من TP1 باتجاه الصفقة.",
+manualDone:"تم تنظيم المستويات المدخلة فقط؛ هذه ليست توصية استثمارية.",
+needData:"يلزم ربط مصدر بيانات ومحرك تحليل لتفعيل هذا النوع.",
+loadingChart:"جاري تحميل الشارت...",chartError:"تعذر تحميل الشارت. تأكد من اتصال الإنترنت أو جرّب رمزاً آخر.",
+noMatch:"لا توجد نتائج مطابقة",languageSearch:"ابحث عن لغة..."
+},
+en:{
+googleSignIn:"Sign in with Google",signOut:"Sign out",
+home:"Home",markets:"Markets",analysis:"AI Analysis",trades:"Trades",about:"About",
+favorites:"Favorites",settings:"Settings",heroTitle:"Smart Financial Analysis Platform",
+heroDesc:"Market analysis with a unified interface",heroSub:"Analysis · Monitoring · Smarter Decisions",
+start:"🚀 Start Analysis",chartSource:"TradingView chart",globalMarkets:"Global Markets",
+crypto:"Cryptocurrencies",forex:"Forex",metals:"Gold & Metals",stocks:"Global Stocks",
+dashboard:"Markets & Analysis Dashboard",marketTools:"Market Tools",search:"Search asset or symbol",
+all:"All",coverage:"Symbol availability depends on provider coverage.",
+chartStatus:"TradingView chart",candles:"Japanese Candles",
+technicalTools:"Technical indicators in chart tools",
+chartNote:"Chart coverage and data depend on the market provider; some symbols may be delayed.",
+favoritesTitle:"Favorites ★",emptyFavorites:"No favorites added yet.",
+aiResults:"AI Analysis Results",waiting:"Waiting for data",
+noSignals:"No signals without reliable data.",selected:"Selected asset",
+timeframe:"Timeframe",direction:"Direction",undefined:"Undefined",
+strength:"Signal strength",unavailable:"Unavailable",configure:"Configure Analysis",
+analysisCenter:"NEXFX AI Analysis Center",analysisType:"Analysis type",
+technical:"Technical analysis",manual:"Manual analysis",automatic:"Automatic analysis",
+tradeDirection:"Trade direction",entry:"Entry price",stop:"Stop loss",
+run:"Run analysis",output:"Analysis output",notRun:"Analysis not run",
+enterLevels:"Choose an analysis type and enter the levels.",asset:"Asset",
+analysisNote:"Technical and automatic analysis require connected market data and an analysis engine. Manual mode only organizes entered levels.",
+tradeMonitor:"Trade Monitor",type:"Type",status:"Status",
+noTrades:"No connected trades currently.",settingsDesc:"Change language from the top menu.",
+aboutDesc:"Monitor crypto, forex, metals and stocks with analysis tools.",
+buy:"Manual plan — BUY",sell:"Manual plan — SELL",
+badEntry:"Enter valid positive entry and stop prices.",
+badStop:"Stop loss must be on the correct side of entry.",
+badTarget:"Target is incompatible with the trade direction.",
+badTargetOrder:"TP2 must be farther than TP1 in the trade direction.",
+manualDone:"Only entered levels were organized; this is not investment advice.",
+needData:"A market-data source and analysis engine are required.",
+loadingChart:"Loading chart...",chartError:"Chart could not load. Check your connection or try another symbol.",
+noMatch:"No matching results",languageSearch:"Search languages..."
+},
+fr:{
+googleSignIn:"Se connecter avec Google",signOut:"Déconnexion",
+home:"Accueil",markets:"Marchés",analysis:"Analyse IA",trades:"Transactions",about:"À propos",
+favorites:"Favoris",settings:"Paramètres",globalMarkets:"Marchés mondiaux",
+crypto:"Cryptomonnaies",forex:"Forex",metals:"Or et métaux",stocks:"Actions mondiales",
+dashboard:"Tableau des marchés",marketTools:"Outils de marché",search:"Rechercher un actif",
+all:"Tout",coverage:"La disponibilité dépend du fournisseur.",chartStatus:"Graphique TradingView",
+candles:"Chandeliers japonais",technicalTools:"Indicateurs techniques",
+chartNote:"Les données peuvent être différées selon le fournisseur.",
+favoritesTitle:"Favoris ★",emptyFavorites:"Aucun favori ajouté.",
+aiResults:"Résultats de l'analyse IA",waiting:"En attente de données",
+noSignals:"Aucun signal sans données fiables.",selected:"Actif sélectionné",
+timeframe:"Unité de temps",direction:"Direction",undefined:"Non défini",
+strength:"Force du signal",unavailable:"Indisponible",configure:"Configurer l'analyse",
+analysisCenter:"Centre d'analyse NEXFX AI",analysisType:"Type d'analyse",
+technical:"Analyse technique",manual:"Analyse manuelle",automatic:"Analyse automatique",
+tradeDirection:"Direction du trade",entry:"Prix d'entrée",stop:"Stop loss",
+run:"Lancer l'analyse",output:"Résultats",notRun:"Analyse non lancée",
+enterLevels:"Choisissez un type d'analyse et saisissez les niveaux.",asset:"Actif",
+analysisNote:"Les modes technique et automatique nécessitent un flux de données connecté.",
+tradeMonitor:"Suivi des transactions",type:"Type",status:"Statut",
+noTrades:"Aucune transaction connected.",settingsDesc:"Changez la langue dans le menu supérieur.",
+aboutDesc:"Plateforme de suivi crypto, forex, métaux et actions.",
+buy:"Plan manuel — ACHAT",sell:"Plan manuel — VENTE",
+badEntry:"Saisissez des prix valides.",manualDone:"Niveaux organisés uniquement.",
+needData:"Source de données requise.",loadingChart:"Chargement du graphique...",
+noMatch:"Aucun résultat",languageSearch:"Rechercher une langue..."
+},
+tr:{
+googleSignIn:"Google ile Giriş Yap",signOut:"Çıkış Yap",
+home:"Ana Sayfa",markets:"Piyasalar",analysis:"Yapay Zeka Analizi",trades:"İşlemler",about:"Hakkında",
+favorites:"Favoriler",settings:"Ayarlar",globalMarkets:"Küresel Piyasalar",
+crypto:"Kripto Paralar",forex:"Forex",metals:"Altın ve Metaller",stocks:"Küresel Hisseler",
+dashboard:"Piyasalar ve Analiz Paneli",marketTools:"Piyasa Araçları",search:"Varlık veya sembol ara",
+all:"Tümü",coverage:"Sembol kullanılabilirliği sağlayıcıya bağlıdır.",chartStatus:"TradingView grafiği",
+candles:"Japon Mumları",technicalTools:"Teknik göstergeler",
+chartNote:"Grafik verileri sağlayıcıya bağlı olarak gecikmeli olabilir.",
+favoritesTitle:"Favoriler ★",emptyFavorites:"Henüz favori eklenmedi.",
+aiResults:"Yapay Zeka Sonuçları",waiting:"Veri bekleniyor",
+noSignals:"Güvenilir veri olmadan sinyal üretilmez.",selected:"Seçili varlık",
+timeframe:"Zaman dilimi",direction:"Yön",undefined:"Belirsiz",
+strength:"Sinyal gücü",unavailable:"Mevcut değil",configure:"Analizi Ayarla",
+analysisCenter:"NEXFX AI Analiz Merkezi",analysisType:"Analiz türü",
+technical:"Teknik analiz",manual:"Manuel analiz",automatic:"Otomatik analiz",
+tradeDirection:"İşlem yönü",entry:"Giriş fiyatı",stop:"Zarar durdur (SL)",
+run:"Analizi çalıştır",output:"Analiz çıktısı",notRun:"Analiz çalıştırılmadı",
+enterLevels:"Analiz türünü seçin ve seviyeleri girin.",asset:"Varlık",
+analysisNote:"Teknik ve otomatik analiz için canlı veri bağlantısı gerekir.",
+tradeMonitor:"İşlem İzleme",type:"Tür",status:"Durum",
+noTrades:"Şu anda bağlı işlem yok.",settingsDesc:"Dili üst menüden değiştirebilirsiniz.",
+aboutDesc:"Kripto, forex, metal ve hisse senetlerini takip edin.",
+buy:"Manuel plan — ALIŞ",sell:"Manuel plan — SATIŞ",
+badEntry:"Geçerli fiyatlar girin.",manualDone:"Yalnızca girilen seviyeler düzenlendi.",
+needData:"Veri kaynağı ve analiz motoru gerekli.",loadingChart:"Grafik yükleniyor...",
+noMatch:"Eşleşen sonuç yok",languageSearch:"Dil ara..."
+},
+de:{
+googleSignIn:"Mit Google anmelden",signOut:"Abmelden",
+home:"Startseite",markets:"Märkte",analysis:"KI-Analyse",trades:"Trades",about:"Über uns",
+favorites:"Favoriten",settings:"Einstellungen",globalMarkets:"Globale Märkte",
+crypto:"Kryptowährungen",forex:"Forex",metals:"Gold & Metalle",stocks:"Globale Aktien",
+dashboard:"Markt- & Analyse-Dashboard",marketTools:"Markt-Tools",search:"Asset oder Symbol suchen",
+all:"Alle",chartStatus:"TradingView-Chart",candles:"Japanische Kerzen",
+favoritesTitle:"Favoriten ★",emptyFavorites:"Noch keine Favoriten hinzugefügt.",
+aiResults:"KI-Analyseergebnisse",waiting:"Warte auf Daten",selected:"Ausgewähltes Asset",
+timeframe:"Zeitrahmen",direction:"Richtung",undefined:"Undefiniert",
+strength:"Signalstärke",unavailable:"Nicht verfügbar",configure:"Analyse konfigurieren",
+analysisCenter:"NEXFX AI Analysezentrum",analysisType:"Analysetyp",
+technical:"Technische Analyse",manual:"Manuelle Analyse",automatic:"Automatische Analyse",
+tradeDirection:"Handelsrichtung",entry:"Einstiegspreis",stop:"Stop-Loss",
+run:"Analyse starten",output:"Analyseausgabe",notRun:"Analyse nicht gestartet",
+enterLevels:"Analysetyp wählen und Levels eingeben.",asset:"Asset",
+tradeMonitor:"Trade-Monitor",type:"Typ",status:"Status",
+noTrades:"Derzeit keine verbundenen Trades.",settingsDesc:"Sprache oben im Menü ändern.",
+aboutDesc:"Plattform für Krypto, Forex, Metalle und Aktien.",
+buy:"Manueller Plan — KAUF",sell:"Manueller Plan — VERKAUF",
+badEntry:"Gültige Preise eingeben.",manualDone:"Nur eingegebene Levels organisiert.",
+needData:"Datenquelle erforderlich.",loadingChart:"Chart wird geladen...",
+noMatch:"Keine Treffer",languageSearch:"Sprache suchen..."
+},
+es:{
+googleSignIn:"Iniciar sesión con Google",signOut:"Cerrar sesión",
+home:"Inicio",markets:"Mercados",analysis:"Análisis IA",trades:"Operaciones",about:"Acerca de",
+favorites:"Favoritos",settings:"Configuración",globalMarkets:"Mercados globales",
+crypto:"Criptomonedas",forex:"Forex",metals:"Oro y metales",stocks:"Acciones globales",
+dashboard:"Panel de mercados",marketTools:"Herramientas",search:"Buscar activo o símbolo",
+all:"Todos",chartStatus:"Gráfico de TradingView",candles:"Velas japonesas",
+favoritesTitle:"Favoritos ★",emptyFavorites:"Aún no hay favoritos.",
+aiResults:"Resultados de análisis IA",waiting:"Esperando datos",selected:"Activo seleccionado",
+timeframe:"Temporalidad",direction:"Dirección",undefined:"Indefinido",
+strength:"Fuerza de señal",unavailable:"No disponible",configure:"Configurar análisis",
+analysisCenter:"Centro de análisis NEXFX AI",analysisType:"Tipo de análisis",
+technical:"Análisis técnico",manual:"Análisis manual",automatic:"Análisis automático",
+tradeDirection:"Dirección",entry:"Precio de entrada",stop:"Stop loss",
+run:"Ejecutar análisis",output:"Resultados",notRun:"Análisis no ejecutado",
+enterLevels:"Elija un tipo de análisis e ingrese los niveles.",asset:"Activo",
+tradeMonitor:"Monitor de operaciones",type:"Tipo",status:"Estado",
+noTrades:"No hay operaciones conectadas.",settingsDesc:"Cambie el idioma en el menú superior.",
+aboutDesc:"Plataforma para monitorear cripto, forex, metales y acciones.",
+buy:"Plan manual — COMPRA",sell:"Plan manual — VENTA",
+badEntry:"Ingrese precios válidos.",manualDone:"Solo se organizaron los niveles ingresados.",
+needData:"Se requiere fuente de datos.",loadingChart:"Cargando gráfico...",
+noMatch:"Sin resultados",languageSearch:"Buscar idioma..."
+},
+pt:{
+googleSignIn:"Entrar com o Google",signOut:"Sair",
+home:"Início",markets:"Mercados",analysis:"Análise IA",trades:"Operações",about:"Sobre",
+favorites:"Favoritos",settings:"Configurações",globalMarkets:"Mercados globais",
+crypto:"Criptomoedas",forex:"Forex",metals:"Ouro e metais",stocks:"Ações globais",
+dashboard:"Painel de mercados",marketTools:"Ferramentas",search:"Buscar ativo ou símbolo",
+all:"Todos",chartStatus:"Gráfico TradingView",candles:"Velas japonesas",
+favoritesTitle:"Favoritos ★",emptyFavorites:"Nenhum favorito adicionado.",
+aiResults:"Resultados da análise IA",waiting:"Aguardando dados",selected:"Ativo selecionado",
+timeframe:"Tempo gráfico",direction:"Direção",undefined:"Indefinido",
+strength:"Força do sinal",unavailable:"Indisponível",configure:"Configurar análise",
+analysisCenter:"Centro de análise NEXFX AI",analysisType:"Tipo de análise",
+technical:"Análise técnica",manual:"Análise manual",automatic:"Análise automática",
+tradeDirection:"Direção",entry:"Preço de entrada",stop:"Stop loss",
+run:"Executar análise",output:"Saída da análise",notRun:"Análise não executada",
+enterLevels:"Escolha o tipo de análise e insira os níveis.",asset:"Ativo",
+tradeMonitor:"Monitor de operações",type:"Tipo",status:"Status",
+noTrades:"Nenhuma operação conectada.",settingsDesc:"Altere o idioma no menu superior.",
+aboutDesc:"Plataforma para cripto, forex, metais e ações.",
+buy:"Plano manual — COMPRA",sell:"Plano manual — VENDA",
+badEntry:"Insira preços válidos.",manualDone:"Apenas os níveis inseridos foram organizados.",
+needData:"Fonte de dados necessária.",loadingChart:"Carregando gráfico...",
+noMatch:"Nenhum resultado",languageSearch:"Pesquisar idioma..."
+},
+it:{
+googleSignIn:"Accedi con Google",signOut:"Esci",
+home:"Home",markets:"Mercati",analysis:"Analisi IA",trades:"Operazioni",about:"Informazioni",
+favorites:"Preferiti",settings:"Impostazioni",globalMarkets:"Mercati globali",
+crypto:"Criptovalute",forex:"Forex",metals:"Oro e metalli",stocks:"Azioni globali",
+dashboard:"Dashboard mercati",marketTools:"Strumenti",search:"Cerca asset o simbolo",
+all:"Tutti",chartStatus:"Grafico TradingView",candles:"Candele giapponesi",
+favoritesTitle:"Preferiti ★",emptyFavorites:"Nessun preferito aggiunto.",
+aiResults:"Risultati analisi IA",waiting:"In attesa di dati",selected:"Asset selezionato",
+timeframe:"Timeframe",direction:"Direzione",undefined:"Non definito",
+strength:"Forza del segnale",unavailable:"Non disponibile",configure:"Configura analisi",
+analysisCenter:"Centro analisi NEXFX AI",analysisType:"Tipo di analisi",
+technical:"Analisi tecnica",manual:"Analisi manuale",automatic:"Analisi automatica",
+tradeDirection:"Direzione",entry:"Prezzo di entrata",stop:"Stop loss",
+run:"Avvia analisi",output:"Output analisi",notRun:"Analisi non avviata",
+enterLevels:"Scegli il tipo di analisi e inserisci i livelli.",asset:"Asset",
+tradeMonitor:"Monitor operazioni",type:"Tipo",status:"Stato",
+noTrades:"Nessuna operazione connessa.",settingsDesc:"Cambia lingua dal menu in alto.",
+aboutDesc:"Piattaforma per cripto, forex, metalli e azioni.",
+buy:"Piano manuale — ACQUISTO",sell:"Piano manuale — VENDITA",
+badEntry:"Inserisci prezzi validi.",manualDone:"Solo i livelli inseriti sono stati organizzati.",
+needData:"Fonte dati necessaria.",loadingChart:"Caricamento grafico...",
+noMatch:"Nessun risultato",languageSearch:"Cerca lingua..."
+},
+ru:{
+googleSignIn:"Войти через Google",signOut:"Выйти",
+home:"Главная",markets:"Рынки",analysis:"ИИ-анализ",trades:"Сделки",about:"О платформе",
+favorites:"Избранное",settings:"Настройки",globalMarkets:"Мировые рынки",
+crypto:"Криптовалюты",forex:"Форекс",metals:"Золото и металлы",stocks:"Мировые акции",
+dashboard:"Панель рынков и анализа",marketTools:"Инструменты рынка",search:"Поиск актива или символа",
+all:"Все",chartStatus:"График TradingView",candles:"Японские свечи",
+favoritesTitle:"Избранное ★",emptyFavorites:"Избранное пока пусто.",
+aiResults:"Результаты ИИ-анализа",waiting:"Ожидание данных",selected:"Выбранный актив",
+timeframe:"Таймфрейм",direction:"Направление",undefined:"Не определено",
+strength:"Сила сигнала",unavailable:"Недоступно",configure:"Настроить анализ",
+analysisCenter:"Центр анализа NEXFX AI",analysisType:"Тип анализа",
+technical:"Технический анализ",manual:"Ручной анализ",automatic:"Автоматический анализ",
+tradeDirection:"Направление сделки",entry:"Цена входа",stop:"Стоп-лосс",
+run:"Запустить анализ",output:"Результаты анализа",notRun:"Анализ не запущен",
+enterLevels:"Выберите тип анализа и введите уровни.",asset:"Актив",
+tradeMonitor:"Монитор сделок",type:"Тип",status:"Статус",
+noTrades:"Нет подключенных сделок.",settingsDesc:"Смените язык в верхнем меню.",
+aboutDesc:"Платформа для мониторинга криптовалют, форекс, металлов и акций.",
+buy:"Ручной план — ПОКУПКА",sell:"Ручной план — ПРОДАЖА",
+badEntry:"Введите корректные цены.",manualDone:"Организованы только введенные уровни.",
+needData:"Требуется источник данных.",loadingChart:"Загрузка графика...",
+noMatch:"Нет совпадений",languageSearch:"Поиск языка..."
+},
+zh:{
+googleSignIn:"使用 Google 登录",signOut:"退出登录",
+home:"首页",markets:"市场",analysis:"AI 分析",trades:"交易",about:"关于平台",
+favorites:"收藏",settings:"设置",globalMarkets:"全球市场",
+crypto:"加密货币",forex:"外汇",metals:"黄金与贵金属",stocks:"全球股票",
+dashboard:"市场与分析面板",marketTools:"市场工具",search:"搜索资产或代码",
+all:"全部",chartStatus:"TradingView 图表",candles:"日本蜡烛图",
+favoritesTitle:"收藏 ★",emptyFavorites:"暂无收藏资产。",
+aiResults:"AI 分析结果",waiting:"等待数据",selected:"已选资产",
+timeframe:"时间周期",direction:"方向",undefined:"未定义",
+strength:"信号强度",unavailable:"不可用",configure:"配置分析",
+analysisCenter:"NEXFX AI 分析中心",analysisType:"分析类型",
+technical:"技术分析",manual:"手动分析",automatic:"自动分析",
+tradeDirection:"交易方向",entry:"入场价格",stop:"止损 SL",
+run:"运行分析",output:"分析输出",notRun:"尚未运行分析",
+enterLevels:"选择分析类型并输入点位。",asset:"资产",
+tradeMonitor:"交易监控",type:"类型",status:"状态",
+noTrades:"当前没有连接的交易。",settingsDesc:"可在顶部菜单更改语言。",
+aboutDesc:"用于监控加密货币、外汇、金属和股票的分析平台。",
+buy:"手动计划 — 买入",sell:"手动计划 — 卖出",
+badEntry:"请输入有效的价格。",manualDone:"仅整理了输入的点位。",
+needData:"需要连接数据源。",loadingChart:"正在加载图表...",
+noMatch:"无匹配结果",languageSearch:"搜索语言..."
+},
+ja:{
+googleSignIn:"Google でログイン",signOut:"ログアウト",
+home:"ホーム",markets:"市場",analysis:"AI分析",trades:"取引",about:"プラットフォームについて",
+favorites:"お気に入り",settings:"設定",globalMarkets:"世界市場",
+crypto:"暗号資産",forex:"外国為替",metals:"金・貴金属",stocks:"世界株式",
+dashboard:"市場・分析ダッシュボード",marketTools:"市場ツール",search:"資産またはシンボルを検索",
+all:"すべて",chartStatus:"TradingView チャート",candles:"ローソク足",
+favoritesTitle:"お気に入り ★",emptyFavorites:"お気に入りはまだありません。",
+aiResults:"AI分析結果",waiting:"データ待機中",selected:"選択中の資産",
+timeframe:"時間足",direction:"方向",undefined:"未定義",
+strength:"シグナル強度",unavailable:"利用不可",configure:"分析を設定",
+analysisCenter:"NEXFX AI 分析センター",analysisType:"分析タイプ",
+technical:"テクニカル分析",manual:"手動分析",automatic:"自動分析",
+tradeDirection:"取引方向",entry:"エントリー価格",stop:"損切り (SL)",
+run:"分析を実行",output:"分析結果",notRun:"分析未実行",
+enterLevels:"分析タイプを選択しレベルを入力してください。",asset:"資産",
+tradeMonitor:"取引モニター",type:"タイプ",status:"ステータス",
+noTrades:"現在接続されている取引はありません。",settingsDesc:"上部メニューから言語を変更できます。",
+aboutDesc:"暗号資産、FX、貴金属、株式を監視する分析プラットフォーム。",
+buy:"手動プラン — 買い",sell:"手動プラン — 売り",
+badEntry:"有効な価格を入力してください。",manualDone:"入力されたレベルのみ整理しました。",
+needData:"データソースが必要です。",loadingChart:"チャートを読み込み中...",
+noMatch:"一致する結果がありません",languageSearch:"言語を検索..."
+},
+ko:{
+googleSignIn:"Google로 로그인",signOut:"로그아웃",
+home:"홈",markets:"시장",analysis:"AI 분석",trades:"거래",about:"플랫폼 소개",
+favorites:"즐겨찾기",settings:"설정",globalMarkets:"글로벌 시장",
+crypto:"암호화폐",forex:"외환",metals:"금 및 귀금속",stocks:"글로벌 주식",
+dashboard:"시장 및 분석 대시보드",marketTools:"시장 도구",search:"자산 또는 심볼 검색",
+all:"전체",chartStatus:"TradingView 차트",candles:"일본식 캔들",
+favoritesTitle:"즐겨찾기 ★",emptyFavorites:"추가된 즐겨찾기가 없습니다.",
+aiResults:"AI 분석 결과",waiting:"데이터 대기 중",selected:"선택된 자산",
+timeframe:"시간 프레임",direction:"방향",undefined:"미정",
+strength:"신호 강도",unavailable:"사용 불가",configure:"분석 설정",
+analysisCenter:"NEXFX AI 분석 센터",analysisType:"분석 유형",
+technical:"기술적 분석",manual:"수동 분석",automatic:"자동 분석",
+tradeDirection:"거래 방향",entry:"진입 가격",stop:"손절매 (SL)",
+run:"분석 실행",output:"분석 결과",notRun:"분석이 실행되지 않음",
+enterLevels:"분석 유형을 선택하고 가격대를 입력하세요.",asset:"자산",
+tradeMonitor:"거래 모니터",type:"유형",status:"상태",
+noTrades:"현재 연결된 거래가 없습니다.",settingsDesc:"상단 메뉴에서 언어를 변경할 수 있습니다.",
+aboutDesc:"암호화폐, 외환, 귀금속 및 주식을 모니터링하는 분석 플랫폼입니다.",
+buy:"수동 계획 — 매수",sell:"수동 계획 — 매도",
+badEntry:"유효한 가격을 입력하세요.",manualDone:"입력된 가격대만 정리되었습니다.",
+needData:"데이터 소스가 필요합니다.",loadingChart:"차트 로딩 중...",
+noMatch:"일치하는 결과 없음",languageSearch:"언어 검색..."
+},
+hi:{
+googleSignIn:"Google से साइन इन करें",signOut:"साइन आउट",
+home:"होम",markets:"बाज़ार",analysis:"AI विश्लेषण",trades:"ट्रेड्स",about:"प्लेटफ़ॉर्म के बारे में",
+favorites:"पसंदीदा",settings:"सेटिंग्स",globalMarkets:"वैश्विक बाज़ार",
+crypto:"क्रिप्टोकरेंसी",forex:"फ़ॉरेक्स",metals:"सोना और धातुएं",stocks:"वैश्विक शेयर",
+dashboard:"बाज़ार और विश्लेषण डैशबोर्ड",marketTools:"बाज़ार उपकरण",search:"संपत्ति या प्रतीक खोजें",
+all:"सभी",chartStatus:"TradingView चार्ट",candles:"जापानी कैंडल्स",
+favoritesTitle:"पसंदीदा ★",emptyFavorites:"अभी तक कोई पसंदीदा नहीं जोड़ा गया है।",
+aiResults:"AI विश्लेषण परिणाम",waiting:"डेटा की प्रतीक्षा है",selected:"चयनित संपत्ति",
+timeframe:"समय सीमा",direction:"दिशा",undefined:"अनिर्धारित",
+strength:"सिग्नल की ताकत",unavailable:"अनुपलब्ध",configure:"विश्लेषण कॉन्फ़िगर करें",
+analysisCenter:"NEXFX AI विश्लेषण केंद्र",analysisType:"विश्लेषण प्रकार",
+technical:"तकनीकी विश्लेषण",manual:"मैनुअल विश्लेषण",automatic:"स्वचालित विश्लेषण",
+tradeDirection:"ट्रेड दिशा",entry:"एंट्री मूल्य",stop:"स्टॉप लॉस (SL)",
+run:"विश्लेषण चलाएं",output:"विश्लेषण आउटपुट",notRun:"विश्लेषण नहीं चलाया गया",
+enterLevels:"विश्लेषण प्रकार चुनें और स्तर दर्ज करें।",asset:"संपत्ति",
+tradeMonitor:"ट्रेड मॉनिटर",type:"प्रकार",status:"स्थिति",
+noTrades:"वर्तमान में कोई कनेक्टेड ट्रेड नहीं है।",settingsDesc:"शीर्ष मेनू से भाषा बदलें।",
+aboutDesc:"क्रिप्टो, फ़ॉरेक्स, धातुओं और शेयरों की निगरानी के लिए प्लेटफ़ॉर्म।",
+buy:"मैनुअल योजना — खरीदें",sell:"मैनुअल योजना — बेचें",
+badEntry:"मान्य मूल्य दर्ज करें।",manualDone:"केवल दर्ज किए गए स्तर व्यवस्थित किए गए हैं.",
+needData:"डेटा स्रोत आवश्यक है।",loadingChart:"चार्ट लोड हो रहा है...",
+noMatch:"कोई मिलान परिणाम नहीं",languageSearch:"भाषा खोजें..."
+},
+id:{
+googleSignIn:"Masuk dengan Google",signOut:"Keluar",
+home:"Beranda",markets:"Pasar",analysis:"Analisis AI",trades:"Transaksi",about:"Tentang",
+favorites:"Favorit",settings:"Pengaturan",globalMarkets:"Pasar Global",
+crypto:"Kripto",forex:"Forex",metals:"Emas & Logam",stocks:"Saham Global",
+dashboard:"Dasbor Pasar & Analisis",marketTools:"Alat Pasar",search:"Cari aset atau simbol",
+all:"Semua",chartStatus:"Grafik TradingView",candles:"Lilin Jepang",
+favoritesTitle:"Favorit ★",emptyFavorites:"Belum ada favorit ditambahkan.",
+aiResults:"Hasil Analisis AI",waiting:"Menunggu data",selected:"Aset terpilih",
+timeframe:"Kerangka waktu",direction:"Arah",undefined:"Belum ditentukan",
+strength:"Kekuatan sinyal",unavailable:"Tidak tersedia",configure:"Konfigurasi Analisis",
+analysisCenter:"Pusat Analisis NEXFX AI",analysisType:"Jenis analisis",
+technical:"Analisis teknikal",manual:"Analisis manual",automatic:"Analisis otomatis",
+tradeDirection:"Arah transaksi",entry:"Harga masuk",stop:"Stop loss (SL)",
+run:"Jalankan analisis",output:"Hasil analisis",notRun:"Analisis belum dijalankan",
+enterLevels:"Pilih jenis analisis dan masukkan level.",asset:"Aset",
+tradeMonitor:"Monitor Transaksi",type:"Jenis",status:"Status",
+noTrades:"Tidak ada transaksi terhubung saat ini.",settingsDesc:"Ubah bahasa dari menu atas.",
+aboutDesc:"Platform pemantauan kripto, forex, logam, dan saham.",
+buy:"Rencana manual — BELI",sell:"Rencana manual — JUAL",
+badEntry:"Masukkan harga yang valid.",manualDone:"Hanya level yang dimasukkan yang diatur.",
+needData:"Sumber data diperlukan.",loadingChart:"Memuat grafik...",
+noMatch:"Tidak ada hasil cocok",languageSearch:"Cari bahasa..."
+},
+nl:{
+googleSignIn:"Inloggen met Google",signOut:"Uitloggen",
+home:"Home",markets:"Markten",analysis:"AI-analyse",trades:"Transacties",about:"Over ons",
+favorites:"Favorieten",settings:"Instellingen",globalMarkets:"Wereldwijde markten",
+crypto:"Cryptovaluta",forex:"Forex",metals:"Goud & Metalen",stocks:"Wereldwijde aandelen",
+dashboard:"Markt- & Analysedashboard",marketTools:"Markttools",search:"Zoek asset of symbool",
+all:"Alles",chartStatus:"TradingView-grafiek",candles:"Japanse candles",
+favoritesTitle:"Favorieten ★",emptyFavorites:"Nog geen favorieten toegevoegd.",
+aiResults:"AI-analyseresultaten",waiting:"Wachten op gegevens",selected:"Geselecteerd asset",
+timeframe:"Tijdframe",direction:"Richting",undefined:"Ongedefinieerd",
+strength:"Signaalsterkte",unavailable:"Niet beschikbaar",configure:"Analyse configureren",
+analysisCenter:"NEXFX AI Analysecentrum",analysisType:"Analysetype",
+technical:"Technische analyse",manual:"Handmatige analyse",automatic:"Automatische analyse",
+tradeDirection:"Handelsrichting",entry:"Instapprijs",stop:"Stop-loss",
+run:"Analyse starten",output:"Analyse-output",notRun:"Analyse niet uitgevoerd",
+enterLevels:"Kies een analysetype en voer niveaus in.",asset:"Asset",
+tradeMonitor:"Transactiemonitor",type:"Type",status:"Status",
+noTrades:"Momenteel geen verbonden transacties.",settingsDesc:"Wijzig de taal in het bovenste menu.",
+aboutDesc:"Platform voor het volgen van crypto, forex, metalen en aandelen.",
+buy:"Handmatig plan — KOOP",sell:"Handmatig plan — VERKOOP",
+badEntry:"Voer geldige prijzen in.",manualDone:"Alleen ingevoerde niveaus zijn georganiseerd.",
+needData:"Gegevensbron vereist.",loadingChart:"Grafiek laden...",
+noMatch:"Geen overeenkomende resultaten",languageSearch:"Zoek taal..."
+}
+};
+
+/* =========================================================================
+   USER DATA ISOLATION & AUTH CONTROLLER (UID NAMESPACING)
+   ========================================================================= */
+const AuthController = {
+  SESSION_KEY: "nexfx_active_session_v1",
+  currentUser: null,
+  getActiveUID(){ return this.currentUser?.uid || "guest"; },
+  getStorageKey(){ return `nexfx_state_v3_${this.getActiveUID()}`; },
+  getFavoritesKey(){ return `nexfx_favorites_${this.getActiveUID()}`; },
+  init(){
+    const auth = firebase.auth();
+    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(console.error);
+    auth.onAuthStateChanged(user=>{
+      this.currentUser = user ? {uid:user.uid,email:user.email,provider:user.providerData?.[0]?.providerId || "password"} : null;
+      this.updateAuthUI();
+      loadUserScopedState();
+      saveState();
+    });
+  },
+  async signInWithGoogle(){
+    const provider = new firebase.auth.GoogleAuthProvider();
+    await firebase.auth().signInWithPopup(provider);
+  },
+  async signInWithEmail(){
+    const email = prompt("أدخل بريدك الإلكتروني:");
+    if(!email) return;
+    const password = prompt("أدخل كلمة المرور:");
+    if(!password) return;
+    try {
+      await firebase.auth().signInWithEmailAndPassword(email.trim(), password);
+    } catch(err) {
+      if(err.code === "auth/user-not-found" || err.code === "auth/invalid-credential"){
+        const create = confirm("لم يتم تسجيل الدخول. هل تريد إنشاء حساب جديد بهذا البريد؟");
+        if(create) await firebase.auth().createUserWithEmailAndPassword(email.trim(), password);
+        else alert("تعذر تسجيل الدخول: " + err.message);
+      } else alert("تعذر تسجيل الدخول: " + err.message);
+    }
+  },
+  async signOut(){
+    await firebase.auth().signOut();
+    this.currentUser=null;
+    this.updateAuthUI();
+    loadUserScopedState();
+  },
+  updateAuthUI(){
+    const badge=$("userBadge"), emailEl=$("userDisplayEmail"), labelEl=$("googleAuthLabel");
+    if(this.currentUser){
+      badge.classList.add("active");
+      emailEl.textContent=this.currentUser.email || "حسابي";
+      labelEl.dataset.t="account";
+      labelEl.textContent="حسابي";
+    }else{
+      badge.classList.remove("active");
+      emailEl.textContent="";
+      labelEl.dataset.t="googleSignIn";
+      labelEl.textContent="تسجيل الدخول";
+    }
+  }
+};
+
+async function handleGoogleAuth(){
+  try {
+    if(AuthController.currentUser){
+      const choice=prompt("اكتب 1 لعرض الحساب، أو 2 لتسجيل الخروج:");
+      if(choice==="2") await AuthController.signOut();
+      else if(choice==="1") alert("البريد: "+(AuthController.currentUser.email||"غير متاح")+"\nمعرّف الحساب: "+AuthController.currentUser.uid);
+    } else {
+      const choice=prompt("اختر طريقة الدخول:\n1 - Google\n2 - البريد الإلكتروني");
+      if(choice==="1") await AuthController.signInWithGoogle();
+      else if(choice==="2") await AuthController.signInWithEmail();
+    }
+  } catch(err) {
+    alert("تعذر إكمال تسجيل الدخول: "+(err.message||err));
+  }
+}
+
+function safeRead(key,fallback=null){
+  try{
+    const raw=localStorage.getItem(key);
+    return raw===null?fallback:JSON.parse(raw);
+  }catch(error){return fallback;}
+}
+function safeWrite(key,value){
+  try{
+    localStorage.setItem(key,JSON.stringify(value));
+    return true;
+  }catch(error){return false;}
+}
+
+const $=id=>document.getElementById(id);
+const t=key=>(translations[language]&&translations[language][key])||
+  (translations.en&&translations.en[key])||key;
+
+let language="ar";
+let market="crypto";
+let selected=assets.crypto[0];
+let onlyFavorites=false;
+let favorites=[];
+let chartGeneration=0;
+let lastAnalysis=null;
+
+function loadUserScopedState(){
+  const savedState=safeRead(AuthController.getStorageKey(),{})||{};
+  language=languages.some(x=>x.code===savedState.language)?savedState.language:language;
+  market=assets[savedState.market]?savedState.market:"crypto";
+  selected=assets[market].find(x=>x[2]===savedState.selectedSymbol)||assets[market][0];
+  onlyFavorites=!!savedState.onlyFavorites;
+  favorites=Array.isArray(savedState.favorites)?savedState.favorites:(safeRead(AuthController.getFavoritesKey(),[])||[]);
+  lastAnalysis=savedState.lastAnalysis||null;
+
+  restoreForm(savedState);
+  updateDocumentDirection();
+  translateInterface();
+  document.querySelectorAll(".category").forEach(btn=>{
+    btn.classList.toggle("active",btn.dataset.market===market);
+  });
+  $("marketCaption").textContent=market.toUpperCase();
+  $("showAll").classList.toggle("active",!onlyFavorites);
+  $("showFav").classList.toggle("active",onlyFavorites);
+  renderAssets();
+  renderFavorites();
+  updateSideInformation();
+  updateFavoriteButton();
+  displaySavedAnalysis();
+  renderChart();
+}
+
+function restoreForm(savedState={}){
+  const form=savedState.form||{};
+  $("timeframe").value=["1","5","15","60","240","D","W"].includes(String(savedState.timeframe))?String(savedState.timeframe):"15";
+  $("search").value=typeof savedState.search==="string"?savedState.search:"";
+  $("analysisMode").value=["technical","manual","auto"].includes(form.mode)?form.mode:"technical";
+  $("direction").value=form.direction==="sell"?"sell":"buy";
+  ["entry","stop","tp1","tp2"].forEach(id=>{
+    $(id).value=form[id]??"";
+  });
+}
+
+function saveState(){
+  const form={
+    mode:$("analysisMode").value,
+    direction:$("direction").value,
+    entry:$("entry").value,
+    stop:$("stop").value,
+    tp1:$("tp1").value,
+    tp2:$("tp2").value
+  };
+  safeWrite(AuthController.getStorageKey(),{
+    uid:AuthController.getActiveUID(),
+    language,market,selectedSymbol:selected[2],
+    timeframe:$("timeframe").value,
+    favorites,search:$("search").value,
+    onlyFavorites,form,lastAnalysis
+  });
+}
+
+function updateDocumentDirection(){
+  document.documentElement.lang=language;
+  document.documentElement.dir=language==="ar"?"rtl":"ltr";
+}
+
+function renderLanguageOptions(){
+  const query=$("languageSearch").value.trim().toLowerCase();
+  const holder=$("languageOptions");
+  holder.innerHTML="";
+  const filtered=languages.filter(lang=>
+    lang.name.toLowerCase().includes(query)||
+    lang.code.toLowerCase().includes(query)
+  );
+  if(!filtered.length){
+    holder.textContent=t("noMatch");
+    holder.className="language-empty";
+    return;
+  }
+  holder.className="";
+  filtered.forEach(lang=>{
+    const button=document.createElement("button");
+    button.type="button";
+    button.className="language-option"+(language===lang.code?" active":"");
+    const flag=document.createElement("img");
+    flag.src="https://flagcdn.com/w40/"+lang.flag+".png";
+    flag.alt=lang.name+" flag";
+    const name=document.createElement("span");
+    name.textContent=lang.name;
+    button.append(flag,name);
+    button.addEventListener("click",()=>{
+      setLanguage(lang.code);
+      closeLanguageMenu();
+    });
+    holder.appendChild(button);
+  });
+}
+
+function updateLanguageButton(){
+  const item=languages.find(x=>x.code===language)||languages[0];
+  $("currentLanguageName").textContent=item.name;
+  $("currentFlag").src="https://flagcdn.com/w40/"+item.flag+".png";
+}
+
+function openLanguageMenu(){
+  $("languageMenu").classList.add("open");
+  $("languageTrigger").setAttribute("aria-expanded","true");
+  $("languageSearch").value="";
+  renderLanguageOptions();
+  $("languageSearch").focus();
+}
+
+function closeLanguageMenu(){
+  $("languageMenu").classList.remove("open");
+  $("languageTrigger").setAttribute("aria-expanded","false");
+}
+
+function translateInterface(){
+  document.querySelectorAll("[data-t]").forEach(el=>{
+    const key=el.dataset.t;
+    if(t(key)!==key)el.textContent=t(key);
+  });
+  document.querySelectorAll("[data-placeholder]").forEach(el=>{
+    el.placeholder=t(el.dataset.placeholder);
+  });
+  $("languageSearch").placeholder=t("languageSearch");
+  updateLanguageButton();
+  renderLanguageOptions();
+}
+
+function setLanguage(lang){
+  if(!translations[lang])lang="en";
+  language=lang;
+  updateDocumentDirection();
+  translateInterface();
+  renderAssets();
+  renderFavorites();
+  updateFavoriteButton();
+  updateSideInformation();
+  saveState();
+  renderChart();
+}
+
+function isFavorite(symbol){return favorites.includes(symbol)}
+
+function setMarket(name){
+  if(!assets[name])return;
+  market=name;
+  onlyFavorites=false;
+  document.querySelectorAll(".category").forEach(btn=>{
+    btn.classList.toggle("active",btn.dataset.market===name);
+  });
+  $("marketCaption").textContent=name.toUpperCase();
+  $("showAll").classList.add("active");
+  $("showFav").classList.remove("active");
+
+  if(!assets[market].some(x=>x[2]===selected[2])){
+    selected=assets[market][0];
+  }
+  renderAssets();
+  updateFavoriteButton();
+  updateSideInformation();
+  renderChart();
+  saveState();
+}
+
+function toggleFavorite(){
+  const symbol=selected[2];
+  if(isFavorite(symbol))favorites=favorites.filter(x=>x!==symbol);
+  else favorites.push(symbol);
+  safeWrite(AuthController.getFavoritesKey(),favorites);
+  updateFavoriteButton();
+  renderAssets();
+  renderFavorites();
+  saveState();
+}
+
+function updateFavoriteButton(){
+  $("favoriteBtn").textContent=isFavorite(selected[2])?"★":"☆";
+}
+
+function updateSideInformation(){
+  $("chartPair").textContent=selected[2];
+  $("sidePair").textContent=selected[0];
+  $("sideTime").textContent=$("timeframe").selectedOptions[0].textContent;
+}
+
+function selectAsset(item){
+  selected=item;
+  updateSideInformation();
+  updateFavoriteButton();
+  renderAssets();
+  renderChart();
+  saveState();
+}
+
+function renderAssets(){
+  const query=$("search").value.trim().toLowerCase();
+  const list=assets[market].filter(item=>{
+    const matches=(item[0]+" "+item[2]).toLowerCase().includes(query);
+    const favOk=!onlyFavorites||isFavorite(item[2]);
+    return matches&&favOk;
+  });
+  const holder=$("assetList");
+  holder.innerHTML="";
+  if(!list.length){
+    holder.textContent=onlyFavorites?t("emptyFavorites"):t("noMatch");
+    return;
+  }
+  list.forEach(item=>{
+    const row=document.createElement("div");
+    row.className="asset-row"+(selected[2]===item[2]?" active":"");
+    const icon=document.createElement("span");
+    icon.className="asset-icon";icon.textContent=item[1];
+    const name=document.createElement("span");name.textContent=item[0];
+    const symbol=document.createElement("strong");symbol.textContent=isFavorite(item[2])?"★":"";
+    row.append(icon,name,symbol);
+    row.addEventListener("click",()=>selectAsset(item));
+    holder.appendChild(row);
+  });
+}
+
+function renderFavorites(){
+  const box=$("favoriteList");
+  box.innerHTML="";
+  const allItems=Object.values(assets).flat();
+  const list=allItems.filter(item=>isFavorite(item[2]));
+  if(!list.length){
+    box.textContent=t("emptyFavorites");
+    return;
+  }
+  list.forEach(item=>{
+    const row=document.createElement("div");
+    row.className="asset-row";
+    row.textContent=item[1]+" "+item[0];
+    row.addEventListener("click",()=>{
+      const group=Object.keys(assets).find(k=>assets[k].some(a=>a[2]===item[2]));
+      market=group;
+      selected=item;
+      onlyFavorites=false;
+      document.querySelectorAll(".category").forEach(btn=>{
+        btn.classList.toggle("active",btn.dataset.market===group);
+      });
+      $("marketCaption").textContent=group.toUpperCase();
+      $("showAll").classList.add("active");
+      $("showFav").classList.remove("active");
+      renderAssets();
+      updateSideInformation();
+      updateFavoriteButton();
+      renderChart();
+      saveState();
+    });
+    box.appendChild(row);
+  });
+}
+
+function renderChart(){
+  const generation=++chartGeneration;
+  const container=$("tradingviewChart");
+  const placeholder=$("chartPlaceholder");
+  const symbol=selected[2];
+  const interval=$("timeframe").value;
+
+  updateSideInformation();
+  placeholder.style.display="grid";
+  placeholder.textContent=t("loadingChart");
+  container.innerHTML='<div class="tradingview-widget-container__widget"></div>';
+
+  const script=document.createElement("script");
+  script.src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
+  script.async=true;
+  script.innerHTML=JSON.stringify({
+    autosize:true,
+    symbol:symbol,
+    interval:interval,
+    timezone:"Etc/UTC",
+    theme:"dark",
+    style:"1",
+    locale:language,
+    allow_symbol_change:true,
+    calendar:false,
+    hide_side_toolbar:false,
+    details:true,
+    hotlist:false,
+    withdateranges:true,
+    save_image:false,
+    support_host:"https://www.tradingview.com"
+  });
+
+  let finished=false;
+  function hidePlaceholder(){
+    if(generation!==chartGeneration||finished)return;
+    finished=true;
+    placeholder.style.display="none";
+  }
+
+  script.onload=()=>{
+    if(generation!==chartGeneration)return;
+    setTimeout(hidePlaceholder,1500);
+  };
+  container.appendChild(script);
+}
+
+function displaySavedAnalysis(){
+  if(!lastAnalysis){
+    $("resultTitle").textContent=t("notRun");
+    $("resultText").textContent=t("enterLevels");
+    $("outMode").textContent="—";
+    $("outPair").textContent="—";
+    $("outEntry").textContent="—";
+    $("outStop").textContent="—";
+    $("outTP1").textContent="—";
+    $("outTP2").textContent="—";
+    return;
+  }
+  $("resultTitle").textContent=lastAnalysis.title||t("notRun");
+  $("resultText").textContent=lastAnalysis.text||t("enterLevels");
+  $("outMode").textContent=lastAnalysis.mode||"—";
+  $("outPair").textContent=lastAnalysis.pair||"—";
+  $("outEntry").textContent=lastAnalysis.entry??"—";
+  $("outStop").textContent=lastAnalysis.stop??"—";
+  $("outTP1").textContent=lastAnalysis.tp1??"—";
+  $("outTP2").textContent=lastAnalysis.tp2??"—";
+}
+
+function runAnalysis(){
+  const mode=$("analysisMode").value;
+  const direction=$("direction").value;
+  const entry=Number($("entry").value);
+  const stop=Number($("stop").value);
+  const tp1=Number($("tp1").value);
+  const tp2=Number($("tp2").value);
+
+  if(mode!=="manual"){
+    $("resultTitle").textContent=t("needData");
+    $("resultText").textContent=t("analysisNote");
+    return;
+  }
+
+  if(![entry,stop,tp1,tp2].every(n=>Number.isFinite(n)&&n>0)){
+    alert(t("badEntry"));return;
+  }
+
+  const title=direction==="buy"?t("buy"):t("sell");
+  const text=t("manualDone");
+  $("resultTitle").textContent=title;
+  $("resultText").textContent=text;
+  $("outMode").textContent=t("manual");
+  $("outPair").textContent=selected[0];
+  $("outEntry").textContent=entry;
+  $("outStop").textContent=stop;
+  $("outTP1").textContent=tp1;
+  $("outTP2").textContent=tp2;
+
+  lastAnalysis={title,text,mode:t("manual"),pair:selected[0],entry,stop,tp1,tp2,direction};
+  saveState();
+}
+
+$("languageTrigger").addEventListener("click",()=>{
+  if($("languageMenu").classList.contains("open"))closeLanguageMenu();
+  else openLanguageMenu();
+});
+$("languageSearch").addEventListener("input",renderLanguageOptions);
+document.addEventListener("click",event=>{
+  if(!event.target.closest(".language-wrap"))closeLanguageMenu();
+});
+
+document.querySelectorAll(".category").forEach(btn=>{
+  btn.addEventListener("click",()=>setMarket(btn.dataset.market));
+});
+$("search").addEventListener("input",()=>{ renderAssets(); saveState(); });
+$("showAll").addEventListener("click",()=>{
+  onlyFavorites=false;
+  $("showAll").classList.add("active");
+  $("showFav").classList.remove("active");
+  renderAssets(); saveState();
+});
+$("showFav").addEventListener("click",()=>{
+  onlyFavorites=true;
+  $("showFav").classList.add("active");
+  $("showAll").classList.remove("active");
+  renderAssets(); saveState();
+});
+$("favoriteBtn").addEventListener("click",toggleFavorite);
+$("timeframe").addEventListener("change",()=>{ renderChart(); saveState(); });
+$("runAnalysis").addEventListener("click",runAnalysis);
+
+AuthController.init();
+loadUserScopedState();
+saveState();
+</script>
+</body>
+</html>
