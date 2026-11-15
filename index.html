@@ -1683,6 +1683,101 @@ $("runAnalysis").addEventListener("click",runAnalysis);
 AuthController.init();
 loadUserScopedState();
 saveState();
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { 
+    getAuth, 
+    GoogleAuthProvider, 
+    signInWithPopup, 
+    signInWithEmailAndPassword, 
+    createUserWithEmailAndPassword, 
+    onAuthStateChanged, 
+    signOut 
+  } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+  // ⚠️ استبدل هذه القيم ببيانات مشروعك من Firebase Console
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  // تهيئة Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const googleProvider = new GoogleAuthProvider();
+
+  // عناصر الواجهة
+  const modalOverlay = document.getElementById('authModalOverlay');
+  const openModalBtn = document.getElementById('openAuthModalBtn');
+  const closeModalBtn = document.getElementById('closeAuthModalBtn');
+  const googleLoginBtn = document.getElementById('googleLoginBtn');
+  const emailAuthForm = document.getElementById('emailAuthForm');
+  const userBadge = document.getElementById('userBadge');
+  const userDisplayEmail = document.getElementById('userDisplayEmail');
+  const statusDot = document.getElementById('statusDot');
+  const logoutBtn = document.getElementById('logoutBtn');
+
+  // فتح وإغلاق النافذة
+  openModalBtn.addEventListener('click', () => modalOverlay.style.display = 'flex');
+  closeModalBtn.addEventListener('click', () => modalOverlay.style.display = 'none');
+
+  // 1. تسجيل الدخول عبر Google
+  googleLoginBtn.addEventListener('click', async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+      modalOverlay.style.display = 'none';
+    } catch (error) {
+      alert("خطأ في تسجيل الدخول عبر جوجل: " + error.message);
+    }
+  });
+
+  // 2. تسجيل الدخول أو إنشاء حساب بالبريد الإلكتروني
+  emailAuthForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('emailInput').value;
+    const password = document.getElementById('passwordInput').value;
+
+    try {
+      // محاولة تسجيل الدخول أولاً
+      await signInWithEmailAndPassword(auth, email, password);
+      modalOverlay.style.display = 'none';
+    } catch (error) {
+      // إذا لم يكن الحساب موجوداً، يتم إنشاؤه تلقائياً
+      if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+        try {
+          await createUserWithEmailAndPassword(auth, email, password);
+          modalOverlay.style.display = 'none';
+        } catch (createErr) {
+          alert("تعذر إنشاء الحساب: " + createErr.message);
+        }
+      } else {
+        alert("خطأ: " + error.message);
+      }
+    }
+  });
+
+  // 3. مراقبة حالة المستخدم وإظهار المؤشر داخل الموقع
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // المستخدم مسجل دخول: إظهار النقطة الخضراء وشارة الحساب
+      statusDot.style.display = 'block';
+      userBadge.style.display = 'flex';
+      userDisplayEmail.textContent = user.displayName || user.email.split('@')[0];
+    } else {
+      // غير مسجل: إخفاء المؤشرات
+      statusDot.style.display = 'none';
+      userBadge.style.display = 'none';
+    }
+  });
+
+  // تسجيل الخروج
+  logoutBtn.addEventListener('click', () => signOut(auth));
+</script>
+
 </script>
 </body>
 </html>
