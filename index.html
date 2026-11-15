@@ -1520,6 +1520,87 @@ saveState();
 
     <p id="authMessage"></p>
   </div>
+  
+<style>
+.auth-modal {
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  background:rgba(0,0,0,.85);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+}
+.auth-box {
+  position:relative;
+  width:100%;
+  max-width:390px;
+  padding:30px 22px;
+  border-radius:20px;
+  background:#111827;
+  border:1px solid #334155;
+  color:white;
+  text-align:center;
+  box-shadow:0 15px 50px #000;
+}
+.auth-box h2 {
+  color:#38bdf8;
+  margin:10px;
+  font-size:28px;
+}
+.auth-box p {
+  color:#cbd5e1;
+}
+.auth-box input {
+  box-sizing:border-box;
+  width:100%;
+  padding:14px;
+  margin:8px 0;
+  border-radius:10px;
+  border:1px solid #475569;
+  background:#1e293b;
+  color:white;
+  font-size:16px;
+}
+.auth-box button {
+  width:100%;
+  padding:14px;
+  margin:7px 0;
+  border:0;
+  border-radius:10px;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+}
+.auth-google {
+  background:#fff;
+  color:#222;
+}
+.auth-submit {
+  background:#0284c7;
+  color:white;
+}
+.auth-register {
+  background:#334155;
+  color:white;
+}
+.auth-close {
+  position:absolute;
+  top:8px;
+  right:12px;
+  width:38px!important;
+  padding:5px!important;
+  background:transparent;
+  color:white;
+  font-size:25px!important;
+}
+.auth-divider {
+  margin:16px 0;
+  color:#94a3b8;
+}
+</style>
+
 </div>
 
 </body>
