@@ -1688,6 +1688,16 @@ window.registerWithEmail = async function(){
       "تعذر إنشاء الحساب: " + error.message;
   }
 };
+  
+window.handleLogout = async function(){
+  try {
+    await AuthController.signOut();
+    alert("تم تسجيل الخروج بنجاح.");
+  } catch(error) {
+    alert("تعذر تسجيل الخروج: " + error.message);
+  }
+};
+
 </script>
 
 </body>
