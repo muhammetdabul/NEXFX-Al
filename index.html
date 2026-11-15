@@ -1032,6 +1032,16 @@ const AuthController = {
       } else alert("تعذر تسجيل الدخول: " + err.message);
     }
   },
+  
+window.handleLogout = async function(){
+  try {
+    await AuthController.signOut();
+    alert("تم تسجيل الخروج بنجاح.");
+  } catch(error) {
+    alert("تعذر تسجيل الخروج: " + error.message);
+  }
+};
+
   async signOut(){
     await firebase.auth().signOut();
     this.currentUser=null;
