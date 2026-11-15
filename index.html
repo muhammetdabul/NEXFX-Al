@@ -1697,6 +1697,15 @@ window.handleLogout = async function(){
     alert("تعذر تسجيل الخروج: " + error.message);
   }
 };
+  
+firebase.auth().onAuthStateChanged(function(user){
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  if(logoutBtn){
+    logoutBtn.style.display = user ? "inline-block" : "none";
+  }
+});
+
 
 </script>
 
