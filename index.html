@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+here<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -290,6 +290,21 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
   scroll-behavior:auto!important;transition-duration:.01ms!important
  }
 }
+
+/* NEXFX AI authentication modal */
+.auth-modal{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.86);display:none;align-items:center;justify-content:center;padding:18px;box-sizing:border-box}
+.auth-box{position:relative;width:100%;max-width:390px;padding:30px 22px;border-radius:20px;background:#111827;border:1px solid #334155;color:#fff;text-align:center;box-shadow:0 15px 50px #000;box-sizing:border-box}
+.auth-box h2{color:#38bdf8;margin:10px;font-size:28px}
+.auth-box p{color:#cbd5e1}
+.auth-box input{box-sizing:border-box;width:100%;padding:14px;margin:8px 0;border-radius:10px;border:1px solid #475569;background:#1e293b;color:#fff;font-size:16px}
+.auth-box button{width:100%;padding:14px;margin:7px 0;border:0;border-radius:10px;font-size:15px;font-weight:bold;cursor:pointer}
+.auth-google{background:#fff;color:#222}
+.auth-submit{background:#0284c7;color:#fff}
+.auth-register{background:#334155;color:#fff}
+.auth-close{position:absolute;top:8px;right:12px;width:38px!important;padding:5px!important;background:transparent;color:#fff;font-size:25px!important}
+.auth-divider{margin:16px 0;color:#94a3b8}
+#logoutBtn{margin-inline-start:6px}
+
 </style>
 </head>
 
@@ -310,13 +325,9 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
     <button class="btn-auth" id="googleAuthBtn" type="button" translate="no" onclick="handleGoogleAuth()">
       <span id="googleAuthLabel" data-t="googleSignIn">تسجيل الدخول عبر Google</span>
     </button>
-
-<button class="btn-auth" id="logoutBtn"
-  type="button"
-  onclick="handleLogout()"
-  style="display:none;">
-  تسجيل الخروج
-</button>
+    <button class="btn-auth" id="logoutBtn" type="button" onclick="handleLogout()" style="display:none;">
+      تسجيل الخروج
+    </button>
 
     <div class="language-wrap">
       <button class="language-trigger" id="languageTrigger" type="button" aria-expanded="false">
@@ -1032,16 +1043,6 @@ const AuthController = {
       } else alert("تعذر تسجيل الدخول: " + err.message);
     }
   },
-  
-window.handleLogout = async function(){
-  try {
-    await AuthController.signOut();
-    alert("تم تسجيل الخروج بنجاح.");
-  } catch(error) {
-    alert("تعذر تسجيل الخروج: " + error.message);
-  }
-};
-
   async signOut(){
     await firebase.auth().signOut();
     this.currentUser=null;
@@ -1050,55 +1051,93 @@ window.handleLogout = async function(){
   },
   updateAuthUI(){
     const badge=$("userBadge"), emailEl=$("userDisplayEmail"), labelEl=$("googleAuthLabel");
+    const logoutBtn=$("logoutBtn");
     if(this.currentUser){
       badge.classList.add("active");
       emailEl.textContent=this.currentUser.email || "حسابي";
       labelEl.dataset.t="account";
       labelEl.textContent="حسابي";
+      if(logoutBtn) logoutBtn.style.display="inline-block";
     }else{
       badge.classList.remove("active");
       emailEl.textContent="";
       labelEl.dataset.t="googleSignIn";
       labelEl.textContent="تسجيل الدخول";
+      if(logoutBtn) logoutBtn.style.display="none";
     }
   }
 };
 
-
 async function handleGoogleAuth(){
-  try {
-    if(AuthController.currentUser){
-      const choice = confirm(
-        "أنت مسجل الدخول بالفعل.\nاضغط موافق لتسجيل الخروج، أو إلغاء لعرض الحساب."
-      );
+  if(AuthController.currentUser){
+    alert("أنت مسجل الدخول بالفعل: " + (AuthController.currentUser.email || "حسابك"));
+    return;
+  }
+  const modal = document.getElementById("nexfxAuthModal");
+  if(modal) modal.style.display = "flex";
+}
 
-      if(choice){
-        await AuthController.signOut();
-      } else {
-        alert(
-          "البريد: " +
-          (AuthController.currentUser.email || "غير متاح") +
-          "\nمعرّف الحساب: " +
-          AuthController.currentUser.uid
-        );
-      }
-      return;
-    }
+function closeAuthModal(){
+  const modal = document.getElementById("nexfxAuthModal");
+  if(modal) modal.style.display = "none";
+}
 
-    const choice = prompt(
-      "اختر طريقة الدخول:\n1 - Google\n2 - البريد الإلكتروني"
-    );
-
-    if(choice === "1"){
-      await AuthController.signInWithGoogle();
-    } else if(choice === "2"){
-      await AuthController.signInWithEmail();
-    }
-
-  } catch(err) {
-    alert("تعذر إكمال تسجيل الدخول: " + (err.message || err));
+async function loginWithGoogle(){
+  const message = document.getElementById("authMessage");
+  try{
+    await AuthController.signInWithGoogle();
+    closeAuthModal();
+  }catch(error){
+    if(message) message.textContent = "تعذر تسجيل الدخول: " + (error.message || error);
   }
 }
+
+async function loginWithEmail(){
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value;
+  const message = document.getElementById("authMessage");
+  if(!email || !password){
+    message.textContent = "أدخل البريد الإلكتروني وكلمة المرور.";
+    return;
+  }
+  try{
+    await firebase.auth().signInWithEmailAndPassword(email,password);
+    closeAuthModal();
+  }catch(error){
+    message.textContent = "تعذر تسجيل الدخول: " + (error.message || error);
+  }
+}
+
+async function registerWithEmail(){
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value;
+  const message = document.getElementById("authMessage");
+  if(!email || !password){
+    message.textContent = "أدخل البريد الإلكتروني وكلمة المرور.";
+    return;
+  }
+  if(password.length < 6){
+    message.textContent = "كلمة المرور يجب أن تكون 6 أحرف على الأقل.";
+    return;
+  }
+  try{
+    await firebase.auth().createUserWithEmailAndPassword(email,password);
+    closeAuthModal();
+  }catch(error){
+    message.textContent = "تعذر إنشاء الحساب: " + (error.message || error);
+  }
+}
+
+async function handleLogout(){
+  try{
+    await AuthController.signOut();
+    closeAuthModal();
+    alert("تم تسجيل الخروج بنجاح.");
+  }catch(error){
+    alert("تعذر تسجيل الخروج: " + (error.message || error));
+  }
+}
+
 function safeRead(key,fallback=null){
   try{
     const raw=localStorage.getItem(key);
@@ -1509,205 +1548,21 @@ AuthController.init();
 loadUserScopedState();
 saveState();
 </script>
-  
+
 <div id="nexfxAuthModal" class="auth-modal" style="display:none;">
-  <div class="auth-box">
-    <button type="button" onclick="closeAuthModal()" class="auth-close">×</button>
-
-    <h2>NEXFX AI</h2>
+  <div class="auth-box" role="dialog" aria-modal="true" aria-labelledby="nexfxAuthTitle">
+    <button type="button" onclick="closeAuthModal()" class="auth-close" aria-label="إغلاق">×</button>
+    <h2 id="nexfxAuthTitle">NEXFX AI</h2>
     <p>تسجيل الدخول إلى حسابك</p>
-
-    <button type="button" onclick="loginWithGoogle()" class="auth-google">
-      المتابعة باستخدام Google
-    </button>
-
+    <button type="button" onclick="loginWithGoogle()" class="auth-google">المتابعة باستخدام Google</button>
     <div class="auth-divider">أو باستخدام البريد الإلكتروني</div>
-
-    <input id="authEmail" type="email" placeholder="البريد الإلكتروني">
-
-    <input id="authPassword" type="password" placeholder="كلمة المرور">
-
-    <button type="button" onclick="loginWithEmail()" class="auth-submit">
-      تسجيل الدخول
-    </button>
-
-    <button type="button" onclick="registerWithEmail()" class="auth-register">
-      إنشاء حساب جديد
-    </button>
-
-    <p id="authMessage"></p>
+    <input id="authEmail" type="email" autocomplete="email" placeholder="البريد الإلكتروني">
+    <input id="authPassword" type="password" autocomplete="current-password" placeholder="كلمة المرور">
+    <button type="button" onclick="loginWithEmail()" class="auth-submit">تسجيل الدخول</button>
+    <button type="button" onclick="registerWithEmail()" class="auth-register">إنشاء حساب جديد</button>
+    <p id="authMessage" role="status" aria-live="polite"></p>
   </div>
-  
-<style>
-.auth-modal {
-  position:fixed;
-  inset:0;
-  z-index:99999;
-  background:rgba(0,0,0,.85);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-}
-.auth-box {
-  position:relative;
-  width:100%;
-  max-width:390px;
-  padding:30px 22px;
-  border-radius:20px;
-  background:#111827;
-  border:1px solid #334155;
-  color:white;
-  text-align:center;
-  box-shadow:0 15px 50px #000;
-}
-.auth-box h2 {
-  color:#38bdf8;
-  margin:10px;
-  font-size:28px;
-}
-.auth-box p {
-  color:#cbd5e1;
-}
-.auth-box input {
-  box-sizing:border-box;
-  width:100%;
-  padding:14px;
-  margin:8px 0;
-  border-radius:10px;
-  border:1px solid #475569;
-  background:#1e293b;
-  color:white;
-  font-size:16px;
-}
-.auth-box button {
-  width:100%;
-  padding:14px;
-  margin:7px 0;
-  border:0;
-  border-radius:10px;
-  font-size:15px;
-  font-weight:bold;
-  cursor:pointer;
-}
-.auth-google {
-  background:#fff;
-  color:#222;
-}
-.auth-submit {
-  background:#0284c7;
-  color:white;
-}
-.auth-register {
-  background:#334155;
-  color:white;
-}
-.auth-close {
-  position:absolute;
-  top:8px;
-  right:12px;
-  width:38px!important;
-  padding:5px!important;
-  background:transparent;
-  color:white;
-  font-size:25px!important;
-}
-.auth-divider {
-  margin:16px 0;
-  color:#94a3b8;
-}
-</style>
-
 </div>
-
-<script>
-window.handleGoogleAuth = function(){
-  if(AuthController.currentUser){
-    const choice = confirm("هل تريد تسجيل الخروج؟");
-    if(choice) AuthController.signOut();
-    else alert("أنت مسجل الدخول بالفعل.");
-    return;
-  }
-  document.getElementById("nexfxAuthModal").style.display = "flex";
-};
-
-window.closeAuthModal = function(){
-  document.getElementById("nexfxAuthModal").style.display = "none";
-};
-
-window.loginWithGoogle = async function(){
-  try {
-    await AuthController.signInWithGoogle();
-    closeAuthModal();
-  } catch(error) {
-    document.getElementById("authMessage").textContent =
-      "تعذر تسجيل الدخول: " + error.message;
-  }
-};
-
-window.loginWithEmail = async function(){
-  const email = document.getElementById("authEmail").value.trim();
-  const password = document.getElementById("authPassword").value;
-
-  if(!email || !password){
-    document.getElementById("authMessage").textContent =
-      "أدخل البريد الإلكتروني وكلمة المرور.";
-    return;
-  }
-
-  try {
-    await firebase.auth().signInWithEmailAndPassword(email,password);
-    closeAuthModal();
-  } catch(error) {
-    document.getElementById("authMessage").textContent =
-      "تعذر تسجيل الدخول: " + error.message;
-  }
-};
-
-window.registerWithEmail = async function(){
-  const email = document.getElementById("authEmail").value.trim();
-  const password = document.getElementById("authPassword").value;
-
-  if(!email || !password){
-    document.getElementById("authMessage").textContent =
-      "أدخل البريد الإلكتروني وكلمة المرور أولاً.";
-    return;
-  }
-
-  if(password.length < 6){
-    document.getElementById("authMessage").textContent =
-      "كلمة المرور يجب أن تكون 6 أحرف على الأقل.";
-    return;
-  }
-
-  try {
-    await firebase.auth().createUserWithEmailAndPassword(email,password);
-    closeAuthModal();
-  } catch(error) {
-    document.getElementById("authMessage").textContent =
-      "تعذر إنشاء الحساب: " + error.message;
-  }
-};
-  
-window.handleLogout = async function(){
-  try {
-    await AuthController.signOut();
-    alert("تم تسجيل الخروج بنجاح.");
-  } catch(error) {
-    alert("تعذر تسجيل الخروج: " + error.message);
-  }
-};
-  
-firebase.auth().onAuthStateChanged(function(user){
-  const logoutBtn = document.getElementById("logoutBtn");
-
-  if(logoutBtn){
-    logoutBtn.style.display = user ? "inline-block" : "none";
-  }
-});
-
-
-</script>
 
 </body>
 </html>
