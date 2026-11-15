@@ -298,33 +298,255 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
   <img src="nexfx-ai-banner.png" alt="NEXFX AI — الأسواق الذكية والتحليل المالي" fetchpriority="high">
 </div>
 
-<header class="topbar">
-  <div class="brand">
-    <div class="logo" aria-hidden="true">N</div>
-  </div>
 
-  <div class="header-actions">
-    <div class="user-badge" id="userBadge">
-      <span id="userDisplayEmail"></span>
-    </div>
-    <button class="btn-auth" id="googleAuthBtn" type="button" translate="no" onclick="handleGoogleAuth()">
-      <span id="googleAuthLabel" data-t="googleSignIn">تسجيل الدخول عبر Google</span>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+  :root {
+    --bg-dark: #070b14;
+    --card-bg: #0f172a;
+    --gold-primary: #d4af37;
+    --gold-hover: #f3ce5e;
+    --text-light: #f8fafc;
+  }
+
+  /* تنسيق شريط الترويسة العلوي */
+  .nexfx-header {
+    display: flex;
+    justify-content: flex-end; /* دفع العناصر لأقصى اليمين */
+    align-items: center;
+    padding: 15px 25px;
+    background-color: var(--bg-dark);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    direction: rtl;
+  }
+
+  .header-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  /* زر اللغة في أقصى اليمين */
+  .lang-btn {
+    background: rgba(212, 175, 55, 0.1);
+    color: var(--gold-primary);
+    border: 1px solid var(--gold-primary);
+    padding: 8px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: 0.3s;
+  }
+
+  .lang-btn:hover {
+    background: var(--gold-primary);
+    color: var(--bg-dark);
+  }
+
+  /* زر أيقونة الحساب المميزة (الدائرة الذهبية) */
+  .auth-orb-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #f3ce5e, #b8860b);
+    border: 2px solid #fff3cd;
+    color: #070b14;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.5);
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+  }
+
+  .auth-orb-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 18px rgba(212, 175, 55, 0.8);
+  }
+
+  /* مؤشر حالة تسجيل الدخول (نقطة خضراء عند الدخول) */
+  .status-dot {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 11px;
+    height: 11px;
+    background-color: #22c55e;
+    border: 2px solid var(--bg-dark);
+    border-radius: 50%;
+    display: none; /* يظهر فقط بعد تسجيل الدخول */
+  }
+
+  /* شارة عرض اسم المستخدم بعد الدخول */
+  .user-badge {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid var(--gold-primary);
+    padding: 5px 12px;
+    border-radius: 25px;
+    color: var(--text-light);
+    font-size: 13px;
+  }
+
+  .logout-icon {
+    color: #ef4444;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+
+  /* النافذة المنبثقة لتسجيل الدخول */
+  .auth-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(5px);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    direction: rtl;
+  }
+
+  .auth-modal {
+    background: var(--card-bg);
+    border: 1px solid var(--gold-primary);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 380px;
+    padding: 25px;
+    color: var(--text-light);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    position: relative;
+    text-align: center;
+  }
+
+  .close-modal {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 20px;
+  }
+
+  .auth-modal h3 {
+    color: var(--gold-primary);
+    margin-bottom: 20px;
+    font-size: 20px;
+  }
+
+  .google-btn {
+    width: 100%;
+    padding: 12px;
+    background: #ffffff;
+    color: #1f2937;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    transition: 0.2s;
+  }
+
+  .google-btn:hover {
+    background: #f1f5f9;
+  }
+
+  .divider {
+    margin: 15px 0;
+    color: #64748b;
+    font-size: 13px;
+  }
+
+  .auth-input {
+    width: 100%;
+    padding: 11px;
+    margin-bottom: 12px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    color: white;
+    box-sizing: border-box;
+  }
+
+  .auth-input:focus {
+    outline: none;
+    border-color: var(--gold-primary);
+  }
+
+  .submit-email-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(45deg, #b8860b, #d4af37);
+    color: #070b14;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+  }
+</style>
+
+<!-- الترويسة النظيفة -->
+<header class="nexfx-header">
+  <div class="header-controls">
+    <!-- 1. زر اللغة في أقصى اليمين -->
+    <button class="lang-btn" id="langToggleBtn">
+      <i class="fa-solid fa-globe"></i>
+      <span>العربية</span>
     </button>
 
-    <div class="language-wrap">
-      <button class="language-trigger" id="languageTrigger" type="button" aria-expanded="false">
-        <span>🌐</span>
-        <img id="currentFlag" src="https://flagcdn.com/w40/sa.png" alt="علم اللغة المختارة">
-        <span id="currentLanguageName">العربية</span>
-        <span>⌄</span>
-      </button>
-      <div class="language-menu" id="languageMenu">
-        <input id="languageSearch" type="search" placeholder="ابحث عن لغة..." aria-label="Search languages">
-        <div id="languageOptions"></div>
-      </div>
+    <!-- 2. زر أيقونة الحساب المميز بجانب اللغة -->
+    <button class="auth-orb-btn" id="openAuthModalBtn" title="تسجيل الدخول / الحساب">
+      <i class="fa-solid fa-user-astronaut" id="orbIcon"></i>
+      <span class="status-dot" id="statusDot"></span>
+    </button>
+
+    <!-- 3. شارة المستخدم (تظهر تلقائياً بعد تسجيل الدخول) -->
+    <div class="user-badge" id="userBadge">
+      <span id="userDisplayEmail">user@nexfx.ai</span>
+      <i class="fa-solid fa-right-from-bracket logout-icon" id="logoutBtn" title="تسجيل الخروج"></i>
     </div>
   </div>
 </header>
+
+<!-- نافذة تسجيل الدخول (Google + Email فقط) -->
+<div class="auth-modal-overlay" id="authModalOverlay">
+  <div class="auth-modal">
+    <span class="close-modal" id="closeAuthModalBtn">&times;</span>
+    <h3>تسجيل الدخول إلى حسابك</h3>
+    
+    <!-- زر الدخول عبر جوجل -->
+    <button class="google-btn" id="googleLoginBtn">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="Google">
+      <span>المتابعة باستخدام Google</span>
+    </button>
+
+    <div class="divider">أو عبر البريد الإلكتروني</div>
+
+    <!-- نموذج البريد الإلكتروني -->
+    <form id="emailAuthForm">
+      <input type="email" id="emailInput" class="auth-input" placeholder="البريد الإلكتروني" required>
+      <input type="password" id="passwordInput" class="auth-input" placeholder="كلمة المرور" required>
+      <button type="submit" class="submit-email-btn">دخول / إنشاء حساب</button>
+    </form>
+  </div>
+</div>
+
 
 <main class="container" id="home">
 
