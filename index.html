@@ -1603,5 +1603,75 @@ saveState();
 
 </div>
 
+<script>
+window.handleGoogleAuth = function(){
+  if(AuthController.currentUser){
+    const choice = confirm("هل تريد تسجيل الخروج؟");
+    if(choice) AuthController.signOut();
+    else alert("أنت مسجل الدخول بالفعل.");
+    return;
+  }
+  document.getElementById("nexfxAuthModal").style.display = "flex";
+};
+
+window.closeAuthModal = function(){
+  document.getElementById("nexfxAuthModal").style.display = "none";
+};
+
+window.loginWithGoogle = async function(){
+  try {
+    await AuthController.signInWithGoogle();
+    closeAuthModal();
+  } catch(error) {
+    document.getElementById("authMessage").textContent =
+      "تعذر تسجيل الدخول: " + error.message;
+  }
+};
+
+window.loginWithEmail = async function(){
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value;
+
+  if(!email || !password){
+    document.getElementById("authMessage").textContent =
+      "أدخل البريد الإلكتروني وكلمة المرور.";
+    return;
+  }
+
+  try {
+    await firebase.auth().signInWithEmailAndPassword(email,password);
+    closeAuthModal();
+  } catch(error) {
+    document.getElementById("authMessage").textContent =
+      "تعذر تسجيل الدخول: " + error.message;
+  }
+};
+
+window.registerWithEmail = async function(){
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value;
+
+  if(!email || !password){
+    document.getElementById("authMessage").textContent =
+      "أدخل البريد الإلكتروني وكلمة المرور أولاً.";
+    return;
+  }
+
+  if(password.length < 6){
+    document.getElementById("authMessage").textContent =
+      "كلمة المرور يجب أن تكون 6 أحرف على الأقل.";
+    return;
+  }
+
+  try {
+    await firebase.auth().createUserWithEmailAndPassword(email,password);
+    closeAuthModal();
+  } catch(error) {
+    document.getElementById("authMessage").textContent =
+      "تعذر إنشاء الحساب: " + error.message;
+  }
+};
+</script>
+
 </body>
 </html>
