@@ -377,9 +377,35 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
   text-align:right;
   direction:rtl;
 }
+/* Compact language menu: opens upward and stays close to its trigger */
+.language-wrap{position:relative}
+.language-menu{
+  top:auto !important;
+  bottom:calc(100% + 4px) !important;
+  margin-top:0 !important;
+  margin-bottom:0 !important;
+  width:min(176px,calc(100vw - 20px)) !important;
+  max-height:min(170px,calc(100dvh - 150px)) !important;
+  padding:6px !important;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+}
+.language-menu input{
+  min-height:30px;
+  padding:5px 7px;
+  margin-bottom:4px;
+  font-size:11px;
+}
+.language-option{
+  min-height:29px;
+  padding:4px 6px;
+  gap:7px;
+  font-size:11px;
+}
+.language-option img{width:19px;height:13px}
 @media(max-width:700px){
   .language-menu{
-    max-height:min(205px,calc(100dvh - 150px));
+    max-height:min(160px,calc(100dvh - 150px)) !important;
     overflow-y:auto;
     overscroll-behavior:contain;
   }
@@ -419,7 +445,7 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
     </div>
     <button class="btn-auth" id="googleAuthBtn" type="button" translate="no" onclick="handleGoogleAuth()">
       <span class="google-mark" aria-hidden="true">G</span>
-      <span id="googleAuthLabel" data-t="googleSignIn">تسجيل الدخول</span>
+      <span id="googleAuthLabel">Sign in</span>
     </button>
 
     <div class="language-wrap">
