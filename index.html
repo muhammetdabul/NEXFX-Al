@@ -377,35 +377,9 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
   text-align:right;
   direction:rtl;
 }
-/* Compact language menu: opens upward and stays close to its trigger */
-.language-wrap{position:relative}
-.language-menu{
-  top:auto !important;
-  bottom:calc(100% + 4px) !important;
-  margin-top:0 !important;
-  margin-bottom:0 !important;
-  width:min(176px,calc(100vw - 20px)) !important;
-  max-height:min(170px,calc(100dvh - 150px)) !important;
-  padding:6px !important;
-  overflow-y:auto;
-  overscroll-behavior:contain;
-}
-.language-menu input{
-  min-height:30px;
-  padding:5px 7px;
-  margin-bottom:4px;
-  font-size:11px;
-}
-.language-option{
-  min-height:29px;
-  padding:4px 6px;
-  gap:7px;
-  font-size:11px;
-}
-.language-option img{width:19px;height:13px}
 @media(max-width:700px){
   .language-menu{
-    max-height:min(160px,calc(100dvh - 150px)) !important;
+    max-height:min(205px,calc(100dvh - 150px));
     overflow-y:auto;
     overscroll-behavior:contain;
   }
@@ -420,6 +394,50 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
     white-space:nowrap;
   }
   .btn-auth .google-mark{font-size:17px}
+}
+
+
+/* FINAL FIX: keep the logout control in the account's normal layout flow.
+   This makes the header grow when the menu opens instead of covering navigation. */
+.user-badge.active{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  overflow:visible;
+}
+.account-menu{
+  position:static !important;
+  inset:auto !important;
+  top:auto !important;
+  right:auto !important;
+  left:auto !important;
+  transform:none !important;
+  width:max-content;
+  min-width:0;
+  max-width:min(170px,calc(100vw - 24px));
+  margin:0;
+  padding:3px;
+  z-index:auto;
+  box-shadow:0 5px 14px #0008;
+}
+.account-menu button{
+  width:auto;
+  min-width:112px;
+  padding:5px 9px;
+  font-size:10px;
+  line-height:1.35;
+  white-space:nowrap;
+}
+@media(max-width:700px){
+  .header-actions{align-items:center;justify-content:center;gap:7px}
+  .user-badge.active{max-width:calc(100vw - 24px)}
+  .account-menu{max-width:calc(100vw - 24px)}
+  .account-menu button{min-width:104px;padding:5px 7px;font-size:10px}
+}
+@media(min-width:701px) and (max-width:1050px){
+  .header-actions{align-items:center;gap:8px}
 }
 
 </style>
@@ -445,7 +463,7 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
     </div>
     <button class="btn-auth" id="googleAuthBtn" type="button" translate="no" onclick="handleGoogleAuth()">
       <span class="google-mark" aria-hidden="true">G</span>
-      <span id="googleAuthLabel">Sign in</span>
+      <span id="googleAuthLabel" data-t="googleSignIn">تسجيل الدخول</span>
     </button>
 
     <div class="language-wrap">
