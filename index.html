@@ -341,10 +341,10 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
 .language-menu{top:100%;margin-top:5px;width:220px;max-height:320px;padding:8px}
 .user-badge{position:relative;display:none;padding:0;border:0;background:transparent;overflow:visible}
 .user-badge.active{display:inline-flex}
-.account-trigger{display:inline-flex;align-items:center;gap:7px;max-width:220px;padding:7px 11px;border:1px solid var(--line);border-radius:22px;background:#10243c;color:var(--gold2);font-size:11px}
+.account-trigger{display:inline-flex;align-items:center;gap:7px;max-width:150px;padding:7px 10px;border:1px solid var(--line);border-radius:22px;background:#10243c;color:var(--gold2);font-size:11px;white-space:nowrap}
 .account-trigger .account-avatar{font-size:17px;line-height:1}
 .account-trigger .account-dot{width:8px;height:8px;border-radius:50%;background:#00d47b;box-shadow:0 0 8px #00d47b}
-.account-email{max-width:145px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.account-email{display:block;max-width:100%;padding:9px 10px;margin:2px 0 5px;border-bottom:1px solid #29415c;color:var(--gold2);font-size:11px;direction:ltr;text-align:left;overflow-wrap:anywhere}
 .account-menu{display:none;position:absolute;top:calc(100% + 6px);inset-inline-end:0;z-index:40;width:190px;padding:7px;background:#071629;border:1px solid var(--gold);border-radius:11px;box-shadow:0 12px 30px #000b}
 .account-menu.open{display:block}
 .account-menu button{display:block;width:100%;padding:9px 10px;text-align:start;border:0;border-radius:7px;background:transparent;color:var(--white);font-size:12px}
@@ -355,7 +355,7 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
 .auth-remember input{width:auto;margin:0;accent-color:#0284c7}
 .auth-link{display:block;width:auto!important;padding:5px!important;margin:3px auto!important;background:transparent!important;color:#7dd3fc!important;font-size:12px!important}
 .auth-box #authMessage{min-height:20px;font-size:12px;overflow-wrap:anywhere}
-@media(max-width:700px){.account-email{max-width:110px}.account-menu{inset-inline-end:0}.language-menu{width:210px}}
+@media(max-width:700px){.account-trigger{padding:7px 9px;font-size:11px}.account-menu{inset-inline-end:0}.language-trigger{gap:5px;padding:6px 9px;font-size:11px}.language-trigger img{width:18px;height:12px}.language-menu{width:210px}}
 
 </style>
 </head>
@@ -371,11 +371,11 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
       <button class="account-trigger" id="accountTrigger" type="button" aria-expanded="false" onclick="toggleAccountMenu()">
         <span class="account-avatar" aria-hidden="true">👤</span>
         <span class="account-dot" aria-hidden="true"></span>
-        <span class="account-email" id="userDisplayEmail"></span>
+        <span class="account-label">حسابي</span>
         <span aria-hidden="true">⌄</span>
       </button>
       <div class="account-menu" id="accountMenu">
-        <button type="button" onclick="openAccountDetails()">حسابي</button>
+        <div class="account-email" id="userDisplayEmail" dir="ltr"> </div>
         <button type="button" onclick="handleLogout()">تسجيل الخروج</button>
       </div>
     </div>
@@ -1108,7 +1108,7 @@ const AuthController = {
     const loginBtn=$("googleAuthBtn");
     if(this.currentUser){
       badge.classList.add("active");
-      emailEl.textContent=this.currentUser.email || "حسابي";
+      emailEl.textContent=this.currentUser.email || "البريد غير متاح";
       if(loginBtn) loginBtn.style.display="none";
     }else{
       badge.classList.remove("active");
