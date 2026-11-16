@@ -397,6 +397,36 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
   .btn-auth .google-mark{font-size:17px}
 }
 
+
+/* Focused header refinements: compact language menu and clear Google mark */
+.language-menu{
+  width:min(176px,calc(100vw - 20px));
+  max-height:min(155px,calc(100dvh - 150px));
+  padding:6px;
+  overflow-y:auto;
+}
+.language-menu input{
+  min-height:32px;
+  padding:5px 8px;
+  margin-bottom:5px;
+  font-size:11px;
+}
+.language-option{
+  gap:7px;
+  padding:5px 7px;
+  font-size:11px;
+  min-height:30px;
+}
+.language-option img{
+  width:20px;
+  height:14px;
+}
+.google-mark{
+  display:inline-block;
+  flex:0 0 auto;
+  font-size:19px;
+}
+
 </style>
 </head>
 
