@@ -305,6 +305,21 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
 .auth-divider{margin:16px 0;color:#94a3b8}
 #logoutBtn{margin-inline-start:6px}
 
+
+/* NEXFX compact header account controls */
+.header-spacer{flex:1;min-width:4px}
+.header-actions{display:flex;align-items:center;gap:10px;flex-wrap:nowrap;margin-inline-start:auto}
+.account-wrap{position:relative}
+.account-icon{width:40px;height:40px;display:grid;place-items:center;border-radius:50%;border:1px solid var(--gold);background:#10243c;color:var(--gold2);padding:8px;transition:.2s}
+.account-icon:hover{background:#183451;box-shadow:0 0 14px #d4af3744}
+.account-icon svg{width:22px;height:22px;fill:currentColor}
+.account-menu{display:none;position:absolute;top:calc(100% + 9px);inset-inline-end:0;width:230px;padding:12px;background:#071629;border:1px solid var(--gold);border-radius:12px;box-shadow:0 15px 40px #000a;z-index:100}
+.account-menu.open{display:block}
+.account-email{padding:7px 8px 11px;color:var(--gold2);font-size:12px;direction:ltr;overflow-wrap:anywhere;text-align:center;border-bottom:1px solid #d4af3733;margin-bottom:8px}
+.account-menu button{display:block;width:100%;padding:10px;margin:5px 0;border:1px solid var(--line);border-radius:8px;background:#10243c;color:var(--gold2);font-size:12px}
+.account-menu button:hover{background:#193451}
+@media(max-width:520px){.topbar{padding:9px 12px}.header-actions{gap:7px}.account-icon{width:38px;height:38px}.language-trigger{padding:7px 9px;gap:5px}}
+
 </style>
 </head>
 
@@ -314,23 +329,9 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
 </div>
 
 <header class="topbar">
-  <div class="brand">
-    <div class="logo" aria-hidden="true">N</div>
-  </div>
-
   <div class="header-actions">
-    <div class="user-badge" id="userBadge">
-      <span id="userDisplayEmail"></span>
-    </div>
-    <button class="btn-auth" id="googleAuthBtn" type="button" translate="no" onclick="handleGoogleAuth()">
-      <span id="googleAuthLabel" data-t="googleSignIn">تسجيل الدخول عبر Google</span>
-    </button>
-    <button class="btn-auth" id="logoutBtn" type="button" onclick="handleLogout()" style="display:none;">
-      تسجيل الخروج
-    </button>
-
     <div class="language-wrap">
-      <button class="language-trigger" id="languageTrigger" type="button" aria-expanded="false">
+      <button class="language-trigger" id="languageTrigger" type="button" aria-expanded="false" aria-label="اختيار اللغة">
         <span>🌐</span>
         <img id="currentFlag" src="https://flagcdn.com/w40/sa.png" alt="علم اللغة المختارة">
         <span id="currentLanguageName">العربية</span>
@@ -341,7 +342,19 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
         <div id="languageOptions"></div>
       </div>
     </div>
+
+    <div class="account-wrap">
+      <button class="account-icon" id="accountIcon" type="button" onclick="toggleAccountMenu(event)" aria-label="الحساب" aria-expanded="false" title="الحساب">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4.2 4.2 0 1 0 0-8.4A4.2 4.2 0 0 0 12 12Zm0 2c-4.2 0-7.5 2.15-7.5 4.8V21h15v-2.2c0-2.65-3.3-4.8-7.5-4.8Z"/></svg>
+      </button>
+      <div class="account-menu" id="accountMenu">
+        <div class="account-email" id="accountMenuEmail">زائر</div>
+        <button type="button" id="accountLoginBtn" onclick="handleGoogleAuth()">تسجيل الدخول / إنشاء حساب</button>
+        <button type="button" id="accountLogoutBtn" onclick="handleLogout()" style="display:none;">تسجيل الخروج</button>
+      </div>
+    </div>
   </div>
+  <div class="header-spacer" aria-hidden="true"></div>
 </header>
 
 <main class="container" id="home">
@@ -1051,19 +1064,24 @@ const AuthController = {
   },
   updateAuthUI(){
     const badge=$("userBadge"), emailEl=$("userDisplayEmail"), labelEl=$("googleAuthLabel");
-    const logoutBtn=$("logoutBtn");
+    const legacyLogout=$("logoutBtn");
+    const menuEmail=$("accountMenuEmail"), loginBtn=$("accountLoginBtn"), logoutMenuBtn=$("accountLogoutBtn");
     if(this.currentUser){
-      badge.classList.add("active");
-      emailEl.textContent=this.currentUser.email || "حسابي";
-      labelEl.dataset.t="account";
-      labelEl.textContent="حسابي";
-      if(logoutBtn) logoutBtn.style.display="inline-block";
+      if(badge) badge.classList.add("active");
+      if(emailEl) emailEl.textContent="";
+      if(labelEl) labelEl.textContent="";
+      if(menuEmail) menuEmail.textContent=this.currentUser.email || "حسابي";
+      if(loginBtn) loginBtn.style.display="none";
+      if(logoutMenuBtn) logoutMenuBtn.style.display="block";
+      if(legacyLogout) legacyLogout.style.display="none";
     }else{
-      badge.classList.remove("active");
-      emailEl.textContent="";
-      labelEl.dataset.t="googleSignIn";
-      labelEl.textContent="تسجيل الدخول";
-      if(logoutBtn) logoutBtn.style.display="none";
+      if(badge) badge.classList.remove("active");
+      if(emailEl) emailEl.textContent="";
+      if(labelEl) labelEl.textContent="";
+      if(menuEmail) menuEmail.textContent="مرحباً بك في NEXFX AI";
+      if(loginBtn) loginBtn.style.display="block";
+      if(logoutMenuBtn) logoutMenuBtn.style.display="none";
+      if(legacyLogout) legacyLogout.style.display="none";
     }
   }
 };
@@ -1563,6 +1581,28 @@ saveState();
     <p id="authMessage" role="status" aria-live="polite"></p>
   </div>
 </div>
+
+
+<script>
+function toggleAccountMenu(event){
+  if(event) event.stopPropagation();
+  const menu=document.getElementById("accountMenu");
+  const button=document.getElementById("accountIcon");
+  if(!menu) return;
+  const open=!menu.classList.contains("open");
+  menu.classList.toggle("open",open);
+  if(button) button.setAttribute("aria-expanded",String(open));
+}
+document.addEventListener("click",function(event){
+  const wrap=document.querySelector(".account-wrap");
+  const menu=document.getElementById("accountMenu");
+  const button=document.getElementById("accountIcon");
+  if(wrap && !wrap.contains(event.target) && menu){
+    menu.classList.remove("open");
+    if(button) button.setAttribute("aria-expanded","false");
+  }
+});
+</script>
 
 </body>
 </html>
