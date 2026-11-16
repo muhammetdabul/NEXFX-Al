@@ -104,20 +104,20 @@ nav a:hover{color:var(--gold2)}
 }
 .language-trigger img{width:22px;height:15px;object-fit:cover;border-radius:2px}
 .language-menu{
-  display:none;position:absolute;top:calc(100% + 5px);inset-inline-end:0;
-  width:220px;max-height:300px;overflow:auto;padding:7px;
+  display:none;position:absolute;top:calc(100% + 9px);inset-inline-end:0;
+  width:260px;max-height:390px;overflow:auto;padding:10px;
   background:#071629;border:1px solid var(--gold);border-radius:12px;
   box-shadow:0 15px 40px #000a;z-index:30
 }
 .language-menu.open{display:block}
-.language-menu input{margin-bottom:6px;min-height:34px;padding:6px 9px;font-size:11px}
+.language-menu input{margin-bottom:8px}
 .language-option{
-  display:flex;align-items:center;gap:8px;width:100%;padding:6px 8px;
+  display:flex;align-items:center;gap:10px;width:100%;padding:9px;
   color:var(--white);background:transparent;border:0;border-radius:7px;
-  text-align:start;font-size:11px;min-height:32px
+  text-align:start;font-size:13px
 }
 .language-option:hover,.language-option.active{background:#193451;color:var(--gold2)}
-.language-option img{width:20px;height:14px;object-fit:cover;border-radius:2px}
+.language-option img{width:25px;height:17px;object-fit:cover;border-radius:2px}
 .language-empty{padding:10px;color:var(--muted);font-size:12px}
 
 /* Approved NEXFX AI main banner */
@@ -282,7 +282,7 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
  .navlinks{grid-template-columns:repeat(2,1fr)}
  .ticker{grid-template-columns:repeat(2,1fr)}
  .tradingview-box{height:370px;min-height:370px}
- .language-menu{inset-inline-end:0;transform:none;width:min(220px,calc(100vw - 24px));max-height:min(300px,calc(100vh - 110px))}
+ .language-menu{inset-inline-end:0;transform:none;width:min(260px,calc(100vw - 24px));max-height:min(390px,calc(100vh - 120px))}
 }
 /* Responsive refinements for phone, tablet and desktop */
 @media(max-width:700px){
@@ -292,8 +292,8 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
   .user-badge{max-width:100%;overflow-wrap:anywhere}
   .language-menu{
     inset-inline-end:0;transform:none;
-    width:min(220px,calc(100vw - 24px));
-    max-height:min(300px,calc(100vh - 110px));
+    width:min(260px,calc(100vw - 24px));
+    max-height:min(390px,calc(100vh - 120px));
   }
   .container{width:calc(100% - 20px)}
   .hero{padding:16px;gap:8px}
@@ -335,6 +335,28 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
 .auth-divider{margin:16px 0;color:#94a3b8}
 #logoutBtn{margin-inline-start:6px}
 
+
+/* NEXFX account menu and compact language selector */
+.header-actions{gap:8px}
+.language-menu{top:100%;margin-top:5px;width:220px;max-height:320px;padding:8px}
+.user-badge{position:relative;display:none;padding:0;border:0;background:transparent;overflow:visible}
+.user-badge.active{display:inline-flex}
+.account-trigger{display:inline-flex;align-items:center;gap:7px;max-width:220px;padding:7px 11px;border:1px solid var(--line);border-radius:22px;background:#10243c;color:var(--gold2);font-size:11px}
+.account-trigger .account-avatar{font-size:17px;line-height:1}
+.account-trigger .account-dot{width:8px;height:8px;border-radius:50%;background:#00d47b;box-shadow:0 0 8px #00d47b}
+.account-email{max-width:145px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.account-menu{display:none;position:absolute;top:calc(100% + 6px);inset-inline-end:0;z-index:40;width:190px;padding:7px;background:#071629;border:1px solid var(--gold);border-radius:11px;box-shadow:0 12px 30px #000b}
+.account-menu.open{display:block}
+.account-menu button{display:block;width:100%;padding:9px 10px;text-align:start;border:0;border-radius:7px;background:transparent;color:var(--white);font-size:12px}
+.account-menu button:hover{background:#193451;color:var(--gold2)}
+.auth-google{display:flex!important;align-items:center;justify-content:center;gap:10px;background:#fff!important;color:#222!important}
+.google-mark{font-family:Arial,sans-serif;font-weight:900;font-size:21px;line-height:1;background:conic-gradient(from -45deg,#4285f4 0 25%,#34a853 25% 50%,#fbbc05 50% 75%,#ea4335 75%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.auth-remember{display:flex;align-items:center;gap:8px;margin:8px 0;color:#cbd5e1;font-size:12px;text-align:start}
+.auth-remember input{width:auto;margin:0;accent-color:#0284c7}
+.auth-link{display:block;width:auto!important;padding:5px!important;margin:3px auto!important;background:transparent!important;color:#7dd3fc!important;font-size:12px!important}
+.auth-box #authMessage{min-height:20px;font-size:12px;overflow-wrap:anywhere}
+@media(max-width:700px){.account-email{max-width:110px}.account-menu{inset-inline-end:0}.language-menu{width:210px}}
+
 </style>
 </head>
 
@@ -345,23 +367,21 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
 
 <header class="topbar">
   <div class="header-actions">
+    <div class="user-badge" id="userBadge">
+      <button class="account-trigger" id="accountTrigger" type="button" aria-expanded="false" onclick="toggleAccountMenu()">
+        <span class="account-avatar" aria-hidden="true">👤</span>
+        <span class="account-dot" aria-hidden="true"></span>
+        <span class="account-email" id="userDisplayEmail"></span>
+        <span aria-hidden="true">⌄</span>
+      </button>
+      <div class="account-menu" id="accountMenu">
+        <button type="button" onclick="openAccountDetails()">حسابي</button>
+        <button type="button" onclick="handleLogout()">تسجيل الخروج</button>
+      </div>
+    </div>
     <button class="btn-auth" id="googleAuthBtn" type="button" translate="no" onclick="handleGoogleAuth()">
       <span id="googleAuthLabel" data-t="googleSignIn">تسجيل الدخول</span>
     </button>
-    <div class="account-wrap">
-      <button class="account-trigger" id="accountTrigger" type="button" aria-label="الحساب الشخصي" aria-expanded="false" onclick="toggleAccountMenu()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="8" r="4"></circle><path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path>
-        </svg>
-        <span class="account-status-dot" id="accountStatusDot"></span>
-      </button>
-      <div class="account-menu" id="accountMenu">
-        <span class="account-email" id="accountEmail">زائر</span>
-        <button type="button" onclick="openMyAccount()">حسابي</button>
-        <button type="button" class="account-logout" id="accountLogout" onclick="handleLogout()" style="display:none">تسجيل الخروج</button>
-        <button type="button" id="accountLogin" onclick="handleGoogleAuth()">تسجيل الدخول</button>
-      </div>
-    </div>
 
     <div class="language-wrap">
       <button class="language-trigger" id="languageTrigger" type="button" aria-expanded="false">
@@ -537,28 +557,6 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
       </tr></thead>
       <tbody><tr><td colspan="6" data-t="noTrades">لا توجد صفقات متصلة حالياً.</td></tr></tbody>
     </table>
-  </div>
-</section>
-
-<section class="panel" id="statistics">
-  <h2>إحصاءات المنصة</h2>
-  <div class="stats-grid">
-    <div class="stat-card"><small>الزوار حالياً</small><strong id="statVisitors">—</strong><div class="stat-note">بانتظار ربط Firebase</div></div>
-    <div class="stat-card"><small>المتصلون حالياً</small><strong id="statOnline">—</strong><div class="stat-note">بانتظار ربط Firebase</div></div>
-    <div class="stat-card"><small>إجمالي الحسابات</small><strong id="statAccounts">—</strong><div class="stat-note">بانتظار ربط Firebase</div></div>
-    <div class="stat-card"><small>إحصاءات اليوم</small><strong id="statDaily">—</strong><div class="stat-note">بانتظار مصدر بيانات موثوق</div></div>
-    <div class="stat-card"><small>إحصاءات الشهر</small><strong id="statMonthly">—</strong><div class="stat-note">بانتظار مصدر بيانات موثوق</div></div>
-  </div>
-</section>
-
-<section class="panel admin-panel" id="ownerAdminPanel" aria-hidden="true">
-  <h2>لوحة إدارة المالك</h2>
-  <div class="admin-placeholder" id="adminPanelStatus">لوحة الإدارة جاهزة للربط. لن تظهر بيانات أو صلاحيات إدارية قبل تحديد بريد المالك وربط قواعد الأمان في Firebase.</div>
-  <div class="stats-grid" style="margin-top:10px">
-    <div class="stat-card"><small>الزوار</small><strong>—</strong></div>
-    <div class="stat-card"><small>الحسابات</small><strong>—</strong></div>
-    <div class="stat-card"><small>النشاط اليومي</small><strong>—</strong></div>
-    <div class="stat-card"><small>النشاط الشهري</small><strong>—</strong></div>
   </div>
 </section>
 
@@ -1064,9 +1062,6 @@ noMatch:"Geen overeenkomende resultaten",languageSearch:"Zoek taal..."
 /* =========================================================================
    USER DATA ISOLATION & AUTH CONTROLLER (UID NAMESPACING)
    ========================================================================= */
-// Set this to the owner's verified Firebase email only after configuring Firebase security rules.
-window.NEXFX_OWNER_EMAIL = window.NEXFX_OWNER_EMAIL || "";
-
 const AuthController = {
   SESSION_KEY: "nexfx_active_session_v1",
   currentUser: null,
@@ -1083,17 +1078,24 @@ const AuthController = {
       saveState();
     });
   },
-  async applyPersistence(){
-    const remember = $("rememberMe") ? $("rememberMe").checked : true;
-    await firebase.auth().setPersistence(
-      remember ? firebase.auth.Auth.Persistence.LOCAL : firebase.auth.Auth.Persistence.SESSION
-    );
-  },
   async signInWithGoogle(){
-    await this.applyPersistence();
     const provider = new firebase.auth.GoogleAuthProvider();
-    provider.setCustomParameters({prompt:"select_account"});
     await firebase.auth().signInWithPopup(provider);
+  },
+  async signInWithEmail(){
+    const email = prompt("أدخل بريدك الإلكتروني:");
+    if(!email) return;
+    const password = prompt("أدخل كلمة المرور:");
+    if(!password) return;
+    try {
+      await firebase.auth().signInWithEmailAndPassword(email.trim(), password);
+    } catch(err) {
+      if(err.code === "auth/user-not-found" || err.code === "auth/invalid-credential"){
+        const create = confirm("لم يتم تسجيل الدخول. هل تريد إنشاء حساب جديد بهذا البريد؟");
+        if(create) await firebase.auth().createUserWithEmailAndPassword(email.trim(), password);
+        else alert("تعذر تسجيل الدخول: " + err.message);
+      } else alert("تعذر تسجيل الدخول: " + err.message);
+    }
   },
   async signOut(){
     await firebase.auth().signOut();
@@ -1102,102 +1104,130 @@ const AuthController = {
     loadUserScopedState();
   },
   updateAuthUI(){
-    const trigger=$("accountTrigger"), emailEl=$("accountEmail");
-    const logout=$("accountLogout"), login=$("accountLogin");
-    const googleLabel=$("googleAuthLabel");
+    const badge=$("userBadge"), emailEl=$("userDisplayEmail");
+    const loginBtn=$("googleAuthBtn");
     if(this.currentUser){
-      trigger.classList.add("signed-in");
+      badge.classList.add("active");
       emailEl.textContent=this.currentUser.email || "حسابي";
-      logout.style.display="block";
-      login.style.display="none";
-      googleLabel.textContent="حسابي";
-      googleLabel.dataset.t="account";
-      const ownerPanel=$("ownerAdminPanel");
-      const ownerEmail=(window.NEXFX_OWNER_EMAIL||"").trim().toLowerCase();
-      const isOwner=!!ownerEmail && (this.currentUser.email||"").toLowerCase()===ownerEmail;
-      if(ownerPanel){
-        ownerPanel.classList.toggle("owner-visible",isOwner);
-        ownerPanel.setAttribute("aria-hidden",String(!isOwner));
-      }
+      if(loginBtn) loginBtn.style.display="none";
     }else{
-      trigger.classList.remove("signed-in");
-      emailEl.textContent="زائر";
-      logout.style.display="none";
-      login.style.display="block";
-      googleLabel.textContent="تسجيل الدخول";
-      googleLabel.dataset.t="googleSignIn";
-      const ownerPanel=$("ownerAdminPanel");
-      if(ownerPanel){ownerPanel.classList.remove("owner-visible");ownerPanel.setAttribute("aria-hidden","true");}
+      badge.classList.remove("active");
+      emailEl.textContent="";
+      if(loginBtn) loginBtn.style.display="inline-flex";
+      const menu=$("accountMenu"), trigger=$("accountTrigger");
+      if(menu) menu.classList.remove("open");
+      if(trigger) trigger.setAttribute("aria-expanded","false");
     }
-  }
-};
+  }};
 
-async function handleGoogleAuth(){
-  if(AuthController.currentUser){toggleAccountMenu();return;}
-  const modal=$("nexfxAuthModal");
-  if(modal) modal.style.display="flex";
-}
-function closeAuthModal(){
-  const modal=$("nexfxAuthModal");
-  if(modal) modal.style.display="none";
-  const message=$("authMessage"); if(message)message.textContent="";
-}
 function toggleAccountMenu(){
   const menu=$("accountMenu"), trigger=$("accountTrigger");
-  const open=!menu.classList.contains("open");
-  menu.classList.toggle("open",open);
-  trigger.setAttribute("aria-expanded",String(open));
+  if(!menu || !AuthController.currentUser) return;
+  menu.classList.toggle("open");
+  trigger.setAttribute("aria-expanded",menu.classList.contains("open")?"true":"false");
 }
-function closeAccountMenu(){
-  $("accountMenu").classList.remove("open");
-  $("accountTrigger").setAttribute("aria-expanded","false");
+function openAccountDetails(){
+  const menu=$("accountMenu");
+  if(menu) menu.classList.remove("open");
+  const email=AuthController.currentUser?.email || "غير متاح";
+  alert("الحساب الحالي: " + email);
 }
-function openMyAccount(){
-  closeAccountMenu();
-  if(!AuthController.currentUser){handleGoogleAuth();return;}
-  alert("الحساب الحالي: "+(AuthController.currentUser.email||""));
+document.addEventListener("click",function(event){
+  const badge=$("userBadge");
+  if(badge && !badge.contains(event.target)){
+    const menu=$("accountMenu"), trigger=$("accountTrigger");
+    if(menu) menu.classList.remove("open");
+    if(trigger) trigger.setAttribute("aria-expanded","false");
+  }
+});
+
+async function handleGoogleAuth(){
+  if(AuthController.currentUser){
+    alert("أنت مسجل الدخول بالفعل: " + (AuthController.currentUser.email || "حسابك"));
+    return;
+  }
+  const modal = document.getElementById("nexfxAuthModal");
+  if(modal) modal.style.display = "flex";
 }
+
+function closeAuthModal(){
+  const modal = document.getElementById("nexfxAuthModal");
+  if(modal) modal.style.display = "none";
+}
+
 async function loginWithGoogle(){
-  const message=$("authMessage");
-  try{await AuthController.signInWithGoogle();closeAuthModal();}
-  catch(error){if(message)message.textContent="تعذر تسجيل الدخول: "+(error.message||error);}
-}
-async function loginWithEmail(){
-  const email=$("authEmail").value.trim(), password=$("authPassword").value;
-  const message=$("authMessage");
-  if(!email||!password){message.textContent="أدخل البريد الإلكتروني وكلمة المرور.";return;}
+  const message = document.getElementById("authMessage");
   try{
-    await AuthController.applyPersistence();
-    await firebase.auth().signInWithEmailAndPassword(email,password);
+    await applyAuthPersistence();
+    await AuthController.signInWithGoogle();
     closeAuthModal();
-  }catch(error){message.textContent="تعذر تسجيل الدخول: "+(error.message||error);}
-}
-async function registerWithEmail(){
-  const email=$("authEmail").value.trim(), password=$("authPassword").value;
-  const message=$("authMessage");
-  if(!email||!password){message.textContent="أدخل البريد الإلكتروني وكلمة المرور.";return;}
-  if(password.length<6){message.textContent="كلمة المرور يجب أن تكون 6 أحرف على الأقل.";return;}
-  try{
-    await AuthController.applyPersistence();
-    await firebase.auth().createUserWithEmailAndPassword(email,password);
-    closeAuthModal();
-  }catch(error){message.textContent="تعذر إنشاء الحساب: "+(error.message||error);}
-}
-async function resetPassword(){
-  const email=$("authEmail").value.trim(), message=$("authMessage");
-  if(!email){message.textContent="أدخل بريدك الإلكتروني أولاً لاستعادة كلمة المرور."; $("authEmail").focus();return;}
-  try{
-    await firebase.auth().sendPasswordResetEmail(email);
-    message.textContent="إذا كان البريد مسجلاً، ستصلك رسالة لاستعادة كلمة المرور.";
   }catch(error){
-    if(error.code==="auth/user-not-found"){
-      message.textContent="إذا كان البريد مسجلاً، ستصلك رسالة لاستعادة كلمة المرور.";
-    }else message.textContent="تعذر إرسال رسالة الاستعادة: "+(error.message||error);
+    if(message) message.textContent = "تعذر تسجيل الدخول: " + (error.message || error);
   }
 }
+
+async function applyAuthPersistence(){
+  const remember = document.getElementById("authRemember")?.checked !== false;
+  const mode = remember ? firebase.auth.Auth.Persistence.LOCAL : firebase.auth.Auth.Persistence.SESSION;
+  await firebase.auth().setPersistence(mode);
+}
+async function resetPassword(){
+  const email = document.getElementById("authEmail").value.trim();
+  const message = document.getElementById("authMessage");
+  if(!email){ message.textContent="أدخل بريدك الإلكتروني أولاً لإرسال رابط إعادة تعيين كلمة المرور."; return; }
+  try{
+    await firebase.auth().sendPasswordResetEmail(email);
+    message.textContent="تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني إذا كان مسجلاً.";
+  }catch(error){
+    message.textContent="تعذر إرسال رابط إعادة التعيين: " + (error.message || error);
+  }
+}
+async function loginWithEmail(){
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value;
+  const message = document.getElementById("authMessage");
+  if(!email || !password){
+    message.textContent = "أدخل البريد الإلكتروني وكلمة المرور.";
+    return;
+  }
+  try{
+    await applyAuthPersistence();
+    await firebase.auth().signInWithEmailAndPassword(email,password);
+    closeAuthModal();
+  }catch(error){
+    message.textContent = "تعذر تسجيل الدخول: " + (error.message || error);
+  }
+}
+
+async function registerWithEmail(){
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value;
+  const message = document.getElementById("authMessage");
+  if(!email || !password){
+    message.textContent = "أدخل البريد الإلكتروني وكلمة المرور.";
+    return;
+  }
+  if(password.length < 6){
+    message.textContent = "كلمة المرور يجب أن تكون 6 أحرف على الأقل.";
+    return;
+  }
+  try{
+    await applyAuthPersistence();
+    await firebase.auth().createUserWithEmailAndPassword(email,password);
+    closeAuthModal();
+  }catch(error){
+    message.textContent = "تعذر إنشاء الحساب: " + (error.message || error);
+  }
+}
+
 async function handleLogout(){
-  try{await AuthController.signOut();closeAccountMenu();closeAuthModal();}
-  catch(error){alert("تعذر تسجيل الخروج: "+(error.message||error));}
+  try{
+    await AuthController.signOut();
+    closeAuthModal();
+    alert("تم تسجيل الخروج بنجاح.");
+  }catch(error){
+    alert("تعذر تسجيل الخروج: " + (error.message || error));
+  }
 }
 
 function safeRead(key,fallback=null){
@@ -1584,7 +1614,6 @@ $("languageTrigger").addEventListener("click",()=>{
 $("languageSearch").addEventListener("input",renderLanguageOptions);
 document.addEventListener("click",event=>{
   if(!event.target.closest(".language-wrap"))closeLanguageMenu();
-  if(!event.target.closest(".account-wrap"))closeAccountMenu();
 });
 
 document.querySelectorAll(".category").forEach(btn=>{
@@ -1612,20 +1641,31 @@ loadUserScopedState();
 saveState();
 </script>
 
+<!-- Admin statistics scaffold: intentionally no fabricated counts; connect to protected Firebase data before enabling. -->
+<section id="nexfxAdminStats" class="container" hidden aria-label="لوحة إدارة NEXFX AI">
+  <h2>لوحة الإدارة</h2>
+  <div class="two-col">
+    <div class="panel">الزوار المتصلون الآن: <span data-stat="online">بانتظار ربط البيانات</span></div>
+    <div class="panel">إجمالي الحسابات: <span data-stat="accounts">بانتظار ربط البيانات</span></div>
+    <div class="panel">إحصائيات اليوم: <span data-stat="daily">بانتظار ربط البيانات</span></div>
+    <div class="panel">إحصائيات الشهر: <span data-stat="monthly">بانتظار ربط البيانات</span></div>
+  </div>
+</section>
+
 <div id="nexfxAuthModal" class="auth-modal" style="display:none;">
   <div class="auth-box" role="dialog" aria-modal="true" aria-labelledby="nexfxAuthTitle">
     <button type="button" onclick="closeAuthModal()" class="auth-close" aria-label="إغلاق">×</button>
     <h2 id="nexfxAuthTitle">NEXFX AI</h2>
     <p>تسجيل الدخول إلى حسابك</p>
-    <button type="button" onclick="loginWithGoogle()" class="auth-google"><span class="google-mark" aria-hidden="true">G</span>المتابعة باستخدام Google</button>
+    <button type="button" onclick="loginWithGoogle()" class="auth-google"><span class="google-mark" aria-hidden="true">G</span> المتابعة باستخدام Google</button>
     <div class="auth-divider">أو باستخدام البريد الإلكتروني</div>
     <input id="authEmail" type="email" autocomplete="email" placeholder="البريد الإلكتروني">
     <input id="authPassword" type="password" autocomplete="current-password" placeholder="كلمة المرور">
-    <label class="remember-row"><input id="rememberMe" type="checkbox" checked> <span>تذكرني على هذا الجهاز</span></label>
-    <button type="button" class="auth-link" onclick="resetPassword()">نسيت كلمة المرور؟</button>
+    <label class="auth-remember"><input id="authRemember" type="checkbox" checked> تذكرني على هذا الجهاز</label>
     <button type="button" onclick="loginWithEmail()" class="auth-submit">تسجيل الدخول</button>
     <button type="button" onclick="registerWithEmail()" class="auth-register">إنشاء حساب جديد</button>
-    <p id="authMessage" class="auth-message" role="status" aria-live="polite"></p>
+    <button type="button" onclick="resetPassword()" class="auth-link">نسيت كلمة المرور؟</button>
+    <p id="authMessage" role="status" aria-live="polite"></p>
   </div>
 </div>
 
