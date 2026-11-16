@@ -358,45 +358,29 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
 @media(max-width:700px){.account-trigger{padding:7px 9px;font-size:11px}.account-menu{inset-inline-end:0}.language-trigger{gap:5px;padding:6px 9px;font-size:11px}.language-trigger img{width:18px;height:12px}.language-menu{width:210px}}
 
 
-
-/* Final header dropdown alignment and compact Google sign-in */
-.language-menu{
-  right:0;
-  left:auto;
-  inset-inline-end:auto;
-  width:min(220px,calc(100vw - 20px));
-}
-.account-menu{
-  right:0;
-  left:auto;
-  inset-inline-end:auto;
-  width:min(220px,calc(100vw - 20px));
-  direction:rtl;
-  text-align:right;
-}
-.account-menu button{
-  text-align:right;
-  direction:rtl;
-}
-@media(max-width:700px){
+/* Mobile language menu: keep search visible and scroll only the language list */
+@media (max-width:700px){
   .language-menu{
-    max-height:min(205px,calc(100dvh - 150px));
+    max-height:160px !important;
+    height:160px;
+    overflow:hidden !important;
+    display:none;
+    flex-direction:column;
+    box-sizing:border-box;
+  }
+  .language-menu.open{display:flex !important;}
+  .language-menu input{
+    flex:0 0 auto;
+    position:relative;
+  }
+  #languageOptions{
+    flex:1 1 auto;
+    min-height:0;
     overflow-y:auto;
     overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
   }
-  .account-menu{
-    max-height:calc(100dvh - 120px);
-    overflow-y:auto;
-  }
-  .btn-auth{
-    gap:5px;
-    padding:6px 9px;
-    font-size:10px;
-    white-space:nowrap;
-  }
-  .btn-auth .google-mark{font-size:17px}
 }
-
 </style>
 </head>
 
@@ -420,7 +404,6 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
       </div>
     </div>
     <button class="btn-auth" id="googleAuthBtn" type="button" translate="no" onclick="handleGoogleAuth()">
-      <span class="google-mark" aria-hidden="true">G</span>
       <span id="googleAuthLabel" data-t="googleSignIn">تسجيل الدخول</span>
     </button>
 
