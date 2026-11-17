@@ -466,6 +466,73 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
   .language-menu{max-height:38vh}
 }
 
+
+
+/* NEXFX AI final responsive header and compact market cards */
+.header-actions{
+  display:flex; flex-direction:row; direction:ltr; align-items:center;
+  justify-content:space-between; flex-wrap:nowrap; gap:10px; width:100%;
+}
+.user-badge{order:1; flex:0 1 auto; min-width:0}
+.btn-auth{order:1; flex:0 1 auto; min-width:112px; min-height:40px; justify-content:center}
+.language-wrap{order:2; position:relative; flex:0 0 auto}
+.account-trigger,.language-trigger{
+  min-width:116px; min-height:40px; height:40px; box-sizing:border-box;
+  display:inline-flex; align-items:center; justify-content:center; gap:7px;
+  padding:7px 11px; border:1px solid var(--line); border-radius:22px;
+  background:#10243c; color:var(--gold2); font-size:12px; font-weight:600;
+  white-space:nowrap;
+}
+.account-trigger{max-width:none}
+.language-trigger img{width:18px;height:12px;object-fit:cover;border-radius:2px}
+.language-menu{
+  position:absolute !important; top:calc(100% + 6px) !important;
+  right:0 !important; left:auto !important; inset-inline-end:0 !important;
+  width:min(230px,calc(100vw - 24px)) !important;
+  max-height:min(340px,calc(100dvh - 130px)) !important;
+  overflow-y:auto; margin:0 !important; z-index:1000;
+  background:#071629; border:1px solid var(--gold); border-radius:10px;
+  box-shadow:0 10px 28px #000b;
+}
+.account-menu{z-index:1001}
+.categories{grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.category{
+  min-width:0; min-height:64px; display:flex; flex-direction:row;
+  align-items:center; justify-content:space-between; gap:8px;
+  padding:11px 12px; text-align:start;
+}
+.category b{display:block; min-width:0; font-size:14px; line-height:1.35}
+.category-icon{
+  flex:0 0 auto; display:inline-grid; place-items:center;
+  width:30px; height:30px; border-radius:50%;
+  color:var(--gold2); background:#071629; border:1px solid var(--line);
+  font-size:19px; line-height:1;
+}
+.category small{display:none !important}
+@media(max-width:760px){
+  .topbar{padding:9px 12px;justify-content:stretch}
+  .header-actions{gap:8px}
+  .account-trigger,.language-trigger{min-width:108px;min-height:39px;height:39px;font-size:11px;padding:6px 8px}
+  .btn-auth{min-width:108px;min-height:39px;font-size:11px}
+  .categories{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .category{min-height:58px;padding:9px 10px}
+  .category b{font-size:13px}
+  .category-icon{width:27px;height:27px;font-size:17px}
+  .language-menu{max-height:min(42vh,340px) !important}
+}
+@media(max-width:360px){
+  .header-actions{gap:5px}
+  .account-trigger,.language-trigger{min-width:100px;padding:5px 6px;font-size:10px}
+  .btn-auth{min-width:100px;padding:5px 7px}
+  .category{gap:5px;padding:8px}
+  .category b{font-size:12px}
+}
+@media(min-width:761px) and (max-width:1050px){
+  .categories{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .category{padding:10px 8px}
+  .category b{font-size:13px}
+}
+
 </style>
 </head>
 
@@ -515,7 +582,6 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
   <a href="#analysis" data-t="analysis">التحليل</a>
   <a href="#trades" data-t="trades">الصفقات</a>
   <a href="#favoritesPanel" data-t="favorites">المفضلة</a>
-  <a href="#settings" data-t="settings">الإعدادات</a>
   <a href="#about" data-t="about">حول المنصة</a>
 </div>
 
@@ -531,10 +597,10 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
 <section id="markets">
   <div class="section-title"><h2 data-t="globalMarkets">الأسواق العالمية</h2></div>
   <div class="categories">
-    <button class="category active" data-market="crypto"><b data-t="crypto">العملات الرقمية</b><small>CRYPTO ₿</small></button>
-    <button class="category" data-market="forex"><b data-t="forex">الفوركس</b><small>FOREX €$</small></button>
-    <button class="category" data-market="metals"><b data-t="metals">الذهب والمعادن</b><small>GOLD 🪙</small></button>
-    <button class="category" data-market="stocks"><b data-t="stocks">الأسهم العالمية</b><small>STOCKS 📈</small></button>
+    <button class="category active" data-market="crypto"><b data-t="crypto">العملات الرقمية</b><span class="category-icon" aria-hidden="true">₿</span></button>
+    <button class="category" data-market="forex"><b data-t="forex">الفوركس</b><span class="category-icon" aria-hidden="true">💱</span></button>
+    <button class="category" data-market="metals"><b data-t="metals">الذهب والمعادن</b><span class="category-icon" aria-hidden="true">🪙</span></button>
+    <button class="category" data-market="stocks"><b data-t="stocks">الأسهم العالمية</b><span class="category-icon" aria-hidden="true">📈</span></button>
   </div>
 </section>
 
@@ -669,10 +735,6 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
   </div>
 </section>
 
-<section class="panel" id="settings">
-  <h2 data-t="settings">الإعدادات</h2>
-  <p class="muted" data-t="settingsDesc">يمكنك تغيير اللغة من القائمة العلوية.</p>
-</section>
 
 <section class="panel" id="about">
   <h2 data-t="about">حول المنصة</h2>
@@ -1483,7 +1545,28 @@ function translateInterface(){
   });
   $("languageSearch").placeholder=t("languageSearch");
   updateLanguageButton();
+  updateTradeDirectionLabels();
   renderLanguageOptions();
+}
+
+
+function updateTradeDirectionLabels(){
+  const labels={
+    ar:{buy:"شراء",sell:"بيع"}, en:{buy:"BUY",sell:"SELL"},
+    fr:{buy:"ACHAT",sell:"VENTE"}, tr:{buy:"ALIŞ",sell:"SATIŞ"},
+    de:{buy:"KAUF",sell:"VERKAUF"}, es:{buy:"COMPRA",sell:"VENTA"},
+    pt:{buy:"COMPRA",sell:"VENDA"}, it:{buy:"ACQUISTO",sell:"VENDITA"},
+    ru:{buy:"ПОКУПКА",sell:"ПРОДАЖА"}, zh:{buy:"买入",sell:"卖出"},
+    ja:{buy:"買い",sell:"売り"}, ko:{buy:"매수",sell:"매도"},
+    hi:{buy:"खरीदें",sell:"बेचें"}, id:{buy:"BELI",sell:"JUAL"},
+    nl:{buy:"KOOP",sell:"VERKOOP"}
+  };
+  const words=labels[language]||labels.en;
+  const directionSelect=$("direction");
+  if(directionSelect){
+    directionSelect.querySelector('option[value="buy"]').textContent=words.buy;
+    directionSelect.querySelector('option[value="sell"]').textContent=words.sell;
+  }
 }
 
 function setLanguage(lang){
