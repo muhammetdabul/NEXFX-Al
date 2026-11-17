@@ -234,6 +234,13 @@ input,select{
 }
 .asset-row:hover,.asset-row.active{background:#193451}
 .asset-row strong{margin-inline-start:auto;color:var(--gold2);direction:ltr}
+.asset-favorite{
+  margin-inline-start:auto;flex:0 0 auto;background:transparent;border:0;
+  color:var(--gold2);font-size:21px;line-height:1;cursor:pointer;padding:2px 5px;
+}
+.asset-favorite:hover{color:#fff0a6;transform:scale(1.08)}
+.asset-favorite:focus-visible{outline:2px solid var(--gold2);outline-offset:2px;border-radius:4px}
+.asset-row .asset-favorite{direction:ltr}
 .asset-icon{font-size:19px}
 .chart-pair{direction:ltr;color:var(--gold2);font-weight:bold}
 .tradingview-box{
@@ -282,7 +289,37 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
  .navlinks{grid-template-columns:repeat(2,1fr)}
  .ticker{grid-template-columns:repeat(2,1fr)}
  .tradingview-box{height:370px;min-height:370px}
- .language-menu{inset-inline-end:50%;transform:translateX(50%)}
+ .language-menu{inset-inline-end:0;transform:none;width:min(260px,calc(100vw - 24px));max-height:min(390px,calc(100vh - 120px))}
+}
+/* Responsive refinements for phone, tablet and desktop */
+@media(max-width:700px){
+  .topbar{padding:10px 12px}
+  .header-actions{width:100%;justify-content:center;gap:8px}
+  .btn-auth,.language-trigger{min-height:40px}
+  .user-badge{max-width:100%;overflow-wrap:anywhere}
+  .language-menu{
+    inset-inline-end:0;transform:none;
+    width:min(260px,calc(100vw - 24px));
+    max-height:min(390px,calc(100vh - 120px));
+  }
+  .container{width:calc(100% - 20px)}
+  .hero{padding:16px;gap:8px}
+  .navlinks a{min-height:40px;display:flex;align-items:center;justify-content:center}
+  .tick{min-width:0;overflow-wrap:anywhere}
+  table{display:block;max-width:100%;overflow-x:auto}
+}
+@media(max-width:380px){
+  .header-actions{gap:6px}
+  .btn-auth{padding:7px 9px;font-size:10px}
+  .language-trigger{gap:5px;padding:7px 9px;font-size:11px}
+  .navlinks{gap:6px}
+  .hero{grid-template-columns:1fr}
+  .hero-copy{grid-column:auto}
+}
+@media(min-width:701px) and (max-width:1050px){
+  .topbar{padding:12px 18px}
+  .header-actions{gap:8px}
+  .language-menu{width:min(260px,calc(100vw - 32px))}
 }
 @media(prefers-reduced-motion:reduce){
  *,*:before,*:after{
@@ -290,27 +327,337 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
   scroll-behavior:auto!important;transition-duration:.01ms!important
  }
 }
+
+/* NEXFX AI authentication modal */
+.auth-modal{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.86);display:none;align-items:center;justify-content:center;padding:18px;box-sizing:border-box}
+.auth-box{position:relative;width:100%;max-width:390px;padding:30px 22px;border-radius:20px;background:#111827;border:1px solid #334155;color:#fff;text-align:center;box-shadow:0 15px 50px #000;box-sizing:border-box}
+.auth-box h2{color:#38bdf8;margin:10px;font-size:28px}
+.auth-box p{color:#cbd5e1}
+.auth-box input{box-sizing:border-box;width:100%;padding:14px;margin:8px 0;border-radius:10px;border:1px solid #475569;background:#1e293b;color:#fff;font-size:16px}
+.auth-box button{width:100%;padding:14px;margin:7px 0;border:0;border-radius:10px;font-size:15px;font-weight:bold;cursor:pointer}
+.auth-google{background:#fff;color:#222}
+.auth-submit{background:#0284c7;color:#fff}
+.auth-register{background:#334155;color:#fff}
+.auth-close{position:absolute;top:8px;right:12px;width:38px!important;padding:5px!important;background:transparent;color:#fff;font-size:25px!important}
+.auth-divider{margin:16px 0;color:#94a3b8}
+#logoutBtn{margin-inline-start:6px}
+
+
+/* NEXFX account menu and compact language selector */
+.header-actions{gap:8px}
+.language-menu{top:100%;margin-top:5px;width:220px;max-height:320px;padding:8px}
+.user-badge{position:relative;display:none;padding:0;border:0;background:transparent;overflow:visible}
+.user-badge.active{display:inline-flex}
+.account-trigger{display:inline-flex;align-items:center;gap:7px;max-width:150px;padding:7px 10px;border:1px solid var(--line);border-radius:22px;background:#10243c;color:var(--gold2);font-size:11px;white-space:nowrap}
+.account-trigger .account-avatar{font-size:17px;line-height:1}
+.account-trigger .account-dot{width:8px;height:8px;border-radius:50%;background:#00d47b;box-shadow:0 0 8px #00d47b}
+.account-menu{display:none;position:absolute;top:calc(100% + 5px);inset-inline-end:0;z-index:40;width:max-content;min-width:112px;max-width:150px;padding:4px;background:#071629;border:1px solid var(--gold);border-radius:9px;box-shadow:0 8px 20px #0009}
+.account-menu.open{display:block}
+.account-menu button{display:block;width:100%;box-sizing:border-box;padding:7px 10px;text-align:center;border:1px solid var(--gold);border-radius:7px;background:#10243c;color:var(--gold2);font-size:11px;white-space:nowrap}
+.account-menu button:hover{background:#193451;color:#ffe39a}
+.auth-google{display:flex!important;align-items:center;justify-content:center;gap:10px;background:#fff!important;color:#222!important}
+.google-mark{font-family:Arial,sans-serif;font-weight:900;font-size:21px;line-height:1;background:conic-gradient(from -45deg,#4285f4 0 25%,#34a853 25% 50%,#fbbc05 50% 75%,#ea4335 75%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.auth-remember{display:flex;align-items:center;gap:8px;margin:8px 0;color:#cbd5e1;font-size:12px;text-align:start}
+.auth-remember input{width:auto;margin:0;accent-color:#0284c7}
+.auth-link{display:block;width:auto!important;padding:5px!important;margin:3px auto!important;background:transparent!important;color:#7dd3fc!important;font-size:12px!important}
+.auth-box #authMessage{min-height:20px;font-size:12px;overflow-wrap:anywhere}
+@media(max-width:700px){.account-trigger{padding:7px 9px;font-size:11px}.account-menu{inset-inline-end:0}.language-trigger{gap:5px;padding:6px 9px;font-size:11px}.language-trigger img{width:18px;height:12px}.language-menu{width:210px}}
+
+
+
+/* Final header dropdown alignment and compact Google sign-in */
+.language-menu{
+  right:0;
+  left:auto;
+  inset-inline-end:auto;
+  width:min(220px,calc(100vw - 20px));
+}
+.account-menu{
+  right:0;
+  left:auto;
+  inset-inline-end:auto;
+  width:min(220px,calc(100vw - 20px));
+  direction:rtl;
+  text-align:right;
+}
+.account-menu button{
+  text-align:right;
+  direction:rtl;
+}
+/* Compact language menu: selector sits beside Account; options open a short distance below */
+.language-wrap{position:relative;flex:0 0 auto}
+.language-menu{
+  top:calc(100% + 3px) !important;
+  bottom:auto !important;
+  margin-top:0 !important;
+  margin-bottom:0 !important;
+  width:min(148px,calc(100vw - 24px)) !important;
+  max-height:min(108px,calc(100dvh - 190px)) !important;
+  padding:4px !important;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  z-index:60;
+}
+.language-menu input{
+  min-height:30px;
+  padding:5px 7px;
+  margin-bottom:4px;
+  font-size:11px;
+}
+.language-option{
+  min-height:29px;
+  padding:4px 6px;
+  gap:7px;
+  font-size:11px;
+}
+.language-option img{width:19px;height:13px}
+@media(max-width:700px){
+  .language-menu{
+    max-height:min(100px,calc(100dvh - 190px)) !important;
+    overflow-y:auto;
+    overscroll-behavior:contain;
+  }
+  .account-menu{
+    max-height:calc(100dvh - 120px);
+    overflow-y:auto;
+  }
+  .btn-auth{
+    gap:5px;
+    padding:6px 9px;
+    font-size:10px;
+    white-space:nowrap;
+  }
+  .btn-auth .google-mark{font-size:17px}
+}
+
+
+/* NEXFX AI: ترتيب محسّن لأزرار الحساب واللغة وتسجيل الدخول */
+.header-actions{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  justify-content:flex-start;
+  gap:7px;
+}
+.user-badge{order:1}
+.btn-auth{order:2;justify-content:center;min-width:104px;padding:6px 12px}
+.language-wrap{order:3}
+.language-trigger{
+  gap:5px;
+  padding:5px 9px;
+  font-size:11px;
+  min-height:30px;
+}
+.language-trigger img{width:18px;height:12px}
+.language-menu{
+  position:static;
+  width:min(260px,calc(100vw - 32px));
+  max-height:42vh;
+  box-sizing:border-box;
+  margin-top:5px;
+  padding:8px;
+}
+.account-menu{
+  position:absolute;
+  top:calc(100% + 5px);
+  inset-inline-end:0;
+  z-index:50;
+}
+.account-menu button{
+  border-color:var(--gold);
+  color:var(--gold2);
+}
+@media(max-width:600px){
+  .header-actions{gap:6px}
+  .btn-auth{font-size:11px;min-width:96px}
+  .language-menu{max-height:38vh}
+}
+
+
+
+/* NEXFX AI final responsive header and compact market cards */
+.header-actions{
+  display:flex; flex-direction:row; direction:ltr; align-items:center;
+  justify-content:space-between; flex-wrap:nowrap; gap:10px; width:100%;
+}
+.user-badge{order:1; flex:0 1 auto; min-width:0}
+.btn-auth{order:1; flex:0 1 auto; min-width:112px; min-height:40px; justify-content:center}
+.language-wrap{order:2; position:relative; flex:0 0 auto}
+.account-trigger,.language-trigger{
+  min-width:116px; min-height:40px; height:40px; box-sizing:border-box;
+  display:inline-flex; align-items:center; justify-content:center; gap:7px;
+  padding:7px 11px; border:1px solid var(--line); border-radius:22px;
+  background:#10243c; color:var(--gold2); font-size:12px; font-weight:600;
+  white-space:nowrap;
+}
+.account-trigger{max-width:none}
+.language-trigger img{width:18px;height:12px;object-fit:cover;border-radius:2px}
+.language-menu{
+  position:absolute !important; top:calc(100% + 6px) !important;
+  right:0 !important; left:auto !important; inset-inline-end:0 !important;
+  width:min(230px,calc(100vw - 24px)) !important;
+  max-height:min(340px,calc(100dvh - 130px)) !important;
+  overflow-y:auto; margin:0 !important; z-index:1000;
+  background:#071629; border:1px solid var(--gold); border-radius:10px;
+  box-shadow:0 10px 28px #000b;
+}
+.account-menu{z-index:1001}
+.categories{grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.category{
+  min-width:0; min-height:64px; display:flex; flex-direction:row;
+  align-items:center; justify-content:space-between; gap:8px;
+  padding:11px 12px; text-align:start;
+}
+.category b{display:block; min-width:0; font-size:14px; line-height:1.35}
+.category-icon{
+  flex:0 0 auto; display:inline-grid; place-items:center;
+  width:30px; height:30px; border-radius:50%;
+  color:var(--gold2); background:#071629; border:1px solid var(--line);
+  font-size:19px; line-height:1;
+}
+.category small{display:none !important}
+@media(max-width:760px){
+  .topbar{padding:9px 12px;justify-content:stretch}
+  .header-actions{gap:8px}
+  .account-trigger,.language-trigger{min-width:108px;min-height:39px;height:39px;font-size:11px;padding:6px 8px}
+  .btn-auth{min-width:108px;min-height:39px;font-size:11px}
+  .categories{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .category{min-height:58px;padding:9px 10px}
+  .category b{font-size:13px}
+  .category-icon{width:27px;height:27px;font-size:17px}
+  .language-menu{max-height:min(42vh,340px) !important}
+}
+@media(max-width:360px){
+  .header-actions{gap:5px}
+  .account-trigger,.language-trigger{min-width:100px;padding:5px 6px;font-size:10px}
+  .btn-auth{min-width:100px;padding:5px 7px}
+  .category{gap:5px;padding:8px}
+  .category b{font-size:12px}
+}
+@media(min-width:761px) and (max-width:1050px){
+  .categories{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .category{padding:10px 8px}
+  .category b{font-size:13px}
+}
+
+
+
+/* NEXFX AI: compact account/language controls overlaid inside the banner */
+.site-banner{
+  position:relative;
+  overflow:visible;
+  min-height:150px;
+  background:#080808;
+}
+.site-banner > img{
+  display:block;
+  width:100%;
+  height:auto;
+  border-radius:13px;
+}
+.site-banner > .header-actions{
+  position:absolute;
+  top:10px;
+  right:10px;
+  z-index:100;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  justify-content:flex-start;
+  gap:6px;
+  width:auto;
+  padding:0;
+  margin:0;
+  overflow:visible;
+}
+.site-banner .user-badge{order:1;position:relative;display:none;overflow:visible}
+.site-banner .user-badge.active{display:inline-flex}
+.site-banner .btn-auth{order:1;display:inline-flex;align-items:center;justify-content:center}
+.site-banner .language-wrap{order:2;position:relative;flex:0 0 auto}
+.site-banner .account-trigger,
+.site-banner .language-trigger,
+.site-banner .btn-auth{
+  width:136px;
+  min-width:136px;
+  max-width:136px;
+  min-height:34px;
+  height:34px;
+  box-sizing:border-box;
+  justify-content:center;
+  padding:5px 8px;
+  border-radius:8px;
+  font-size:11px;
+  white-space:nowrap;
+  background:#071629ed;
+  border:1px solid var(--gold);
+  color:var(--gold2);
+}
+.site-banner .language-menu{
+  position:absolute !important;
+  top:calc(100% + 3px) !important;
+  right:0 !important;
+  left:auto !important;
+  width:136px !important;
+  max-height:88px !important;
+  padding:4px !important;
+  margin:0 !important;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  background:#050d19f5;
+  z-index:120;
+}
+.site-banner .language-menu input{min-height:27px;padding:4px 6px;font-size:10px;margin-bottom:3px}
+.site-banner .language-option{min-height:27px;padding:4px 5px;font-size:10px;gap:5px}
+.site-banner .language-option img{width:17px;height:12px}
+.site-banner .account-menu{
+  position:absolute;
+  top:calc(100% + 3px);
+  right:0;
+  left:auto;
+  z-index:120;
+  min-width:136px;
+  max-width:136px;
+  background:#050d19f5;
+}
+.site-banner .account-menu button{min-height:30px;padding:5px 7px;font-size:10px}
+@media(max-width:700px){
+  .site-banner{min-height:145px;width:100%;margin:0;border-radius:0;border-inline:0}
+  .site-banner > img{border-radius:0}
+  .site-banner > .header-actions{top:7px;right:7px;gap:5px}
+  .site-banner .account-trigger,
+  .site-banner .language-trigger,
+  .site-banner .btn-auth{width:124px;min-width:124px;max-width:124px;min-height:31px;height:31px;padding:4px 6px;font-size:10px}
+  .site-banner .language-menu{width:124px !important;max-height:76px !important}
+  .site-banner .account-menu{min-width:124px;max-width:124px}
+}
+@media(max-width:380px){
+  .site-banner{min-height:138px}
+  .site-banner > .header-actions{top:6px;right:6px}
+  .site-banner .account-trigger,
+  .site-banner .language-trigger,
+  .site-banner .btn-auth{width:116px;min-width:116px;max-width:116px}
+  .site-banner .language-menu{width:116px !important}
+  .site-banner .account-menu{min-width:116px;max-width:116px}
+}
 </style>
 </head>
 
 <body>
 <div class="site-banner" role="img" aria-label="NEXFX AI - الأسواق الذكية والتحليل المالي">
   <img src="nexfx-ai-banner.png" alt="NEXFX AI — الأسواق الذكية والتحليل المالي" fetchpriority="high">
-</div>
 
-<header class="topbar">
-  <div class="brand">
-    <div class="logo" aria-hidden="true">N</div>
-  </div>
-
-  <div class="header-actions">
+<div class="header-actions">
     <div class="user-badge" id="userBadge">
-      <span id="userDisplayEmail"></span>
+      <button class="account-trigger" id="accountTrigger" type="button" aria-expanded="false" onclick="toggleAccountMenu()">
+        <span class="account-avatar" aria-hidden="true">👤</span>
+        <span class="account-dot" aria-hidden="true"></span>
+        <span class="account-label">حسابي</span>
+        <span aria-hidden="true">⌄</span>
+      </button>
+      <div class="account-menu" id="accountMenu">
+        <button type="button" onclick="handleLogout()">تسجيل الخروج</button>
+      </div>
     </div>
-    <button class="btn-auth" id="googleAuthBtn" type="button" translate="no" onclick="handleGoogleAuth()">
-      <span id="googleAuthLabel" data-t="googleSignIn">تسجيل الدخول عبر Google</span>
-    </button>
-
     <div class="language-wrap">
       <button class="language-trigger" id="languageTrigger" type="button" aria-expanded="false">
         <span>🌐</span>
@@ -323,8 +670,14 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
         <div id="languageOptions"></div>
       </div>
     </div>
+    <button class="btn-auth" id="googleAuthBtn" type="button" translate="no" onclick="handleGoogleAuth()">
+      <span class="google-mark" aria-hidden="true">G</span>
+      <span id="googleAuthLabel">Sign in</span>
+    </button>
+
   </div>
-</header>
+
+</div>
 
 <main class="container" id="home">
 
@@ -334,7 +687,6 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
   <a href="#analysis" data-t="analysis">التحليل</a>
   <a href="#trades" data-t="trades">الصفقات</a>
   <a href="#favoritesPanel" data-t="favorites">المفضلة</a>
-  <a href="#settings" data-t="settings">الإعدادات</a>
   <a href="#about" data-t="about">حول المنصة</a>
 </div>
 
@@ -350,10 +702,10 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
 <section id="markets">
   <div class="section-title"><h2 data-t="globalMarkets">الأسواق العالمية</h2></div>
   <div class="categories">
-    <button class="category active" data-market="crypto"><b data-t="crypto">العملات الرقمية</b><small>CRYPTO ₿</small></button>
-    <button class="category" data-market="forex"><b data-t="forex">الفوركس</b><small>FOREX €$</small></button>
-    <button class="category" data-market="metals"><b data-t="metals">الذهب والمعادن</b><small>GOLD 🪙</small></button>
-    <button class="category" data-market="stocks"><b data-t="stocks">الأسهم العالمية</b><small>STOCKS 📈</small></button>
+    <button class="category active" data-market="crypto"><b data-t="crypto">العملات الرقمية</b><span class="category-icon" aria-hidden="true">₿</span></button>
+    <button class="category" data-market="forex"><b data-t="forex">الفوركس</b><span class="category-icon" aria-hidden="true">💱</span></button>
+    <button class="category" data-market="metals"><b data-t="metals">الذهب والمعادن</b><span class="category-icon" aria-hidden="true">🪙</span></button>
+    <button class="category" data-market="stocks"><b data-t="stocks">الأسهم العالمية</b><span class="category-icon" aria-hidden="true">📈</span></button>
   </div>
 </section>
 
@@ -388,7 +740,6 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
             <option value="240">4H</option><option value="D">1D</option>
             <option value="W">1W</option>
           </select>
-          <button class="small-btn" id="favoriteBtn" aria-label="Add to favorites">☆</button>
         </div>
       </div>
       <div class="tradingview-box">
@@ -488,10 +839,6 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
   </div>
 </section>
 
-<section class="panel" id="settings">
-  <h2 data-t="settings">الإعدادات</h2>
-  <p class="muted" data-t="settingsDesc">يمكنك تغيير اللغة من القائمة العلوية.</p>
-</section>
 
 <section class="panel" id="about">
   <h2 data-t="about">حول المنصة</h2>
@@ -502,6 +849,20 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
 
 <footer><strong style="color:var(--gold2)">NEXFX AI</strong><br>SMART TRADING • SMARTER DECISIONS<br>© 2026</footer>
 
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCF4S4DOWCvSwBNHA5lMFkLvCYZ3A9Z4lQ",
+  authDomain: "nexfx-ai.firebaseapp.com",
+  projectId: "nexfx-ai",
+  storageBucket: "nexfx-ai.firebasestorage.app",
+  messagingSenderId: "1098941039566",
+  appId: "1:1098941039566:web:1cba71e7870fea31e3a19f",
+  measurementId: "G-DHZS8ZXPV1"
+};
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+</script>
 <script>
 "use strict";
 
@@ -580,7 +941,7 @@ const languages=[
 
 const translations={
 ar:{
-googleSignIn:"تسجيل الدخول عبر Google",signOut:"تسجيل الخروج",
+googleSignIn:"Sign in with Google",signOut:"تسجيل الخروج",
 home:"الرئيسية",markets:"الأسواق",analysis:"التحليل الذكي",trades:"الصفقات",about:"حول المنصة",
 favorites:"المفضلة",settings:"الإعدادات",heroTitle:"منصة تحليل مالي ذكية",
 heroDesc:"تحليل الأسواق بواجهة موحدة وأدوات واضحة",heroSub:"تحليل · متابعة · قرارات أذكى",
@@ -979,76 +1340,166 @@ noMatch:"Geen overeenkomende resultaten",languageSearch:"Zoek taal..."
 const AuthController = {
   SESSION_KEY: "nexfx_active_session_v1",
   currentUser: null,
-
-  getActiveUID() {
-    return this.currentUser && this.currentUser.uid ? this.currentUser.uid : "guest";
-  },
-
-  getStorageKey() {
-    return `nexfx_state_v3_${this.getActiveUID()}`;
-  },
-
-  getFavoritesKey() {
-    return `nexfx_favorites_${this.getActiveUID()}`;
-  },
-
-  init() {
-    const savedSession = safeRead(this.SESSION_KEY, null);
-    if (savedSession && savedSession.uid) {
-      this.currentUser = savedSession;
-    }
-    this.updateAuthUI();
-  },
-
-  async signInWithGoogle() {
-    const redirectUrl = window.location.origin + window.location.pathname;
-    const simulatedUid = "google_uid_" + btoa("demo.trader@nexfx.ai").replace(/[^a-zA-Z0-9]/g, "").slice(0, 12);
-    this.setSession({
-      uid: simulatedUid,
-      email: "demo.trader@nexfx.ai",
-      provider: "google",
-      redirectReturn: redirectUrl
+  getActiveUID(){ return this.currentUser?.uid || "guest"; },
+  getStorageKey(){ return `nexfx_state_v3_${this.getActiveUID()}`; },
+  getFavoritesKey(){ return `nexfx_favorites_${this.getActiveUID()}`; },
+  init(){
+    const auth = firebase.auth();
+    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(console.error);
+    auth.onAuthStateChanged(user=>{
+      this.currentUser = user ? {uid:user.uid,email:user.email,provider:user.providerData?.[0]?.providerId || "password"} : null;
+      this.updateAuthUI();
+      loadUserScopedState();
+      saveState();
     });
   },
-
-  signOut() {
-    this.currentUser = null;
-    try { localStorage.removeItem(this.SESSION_KEY); } catch (e) {}
-    this.updateAuthUI();
-    loadUserScopedState();
+  async signInWithGoogle(){
+    const provider = new firebase.auth.GoogleAuthProvider();
+    await firebase.auth().signInWithPopup(provider);
   },
-
-  setSession(userObj) {
-    this.currentUser = userObj;
-    safeWrite(this.SESSION_KEY, userObj);
-    this.updateAuthUI();
-    loadUserScopedState();
-  },
-
-  updateAuthUI() {
-    const badge = $("userBadge");
-    const emailEl = $("userDisplayEmail");
-    const labelEl = $("googleAuthLabel");
-
-    if (this.currentUser) {
-      badge.classList.add("active");
-      emailEl.textContent = this.currentUser.email || this.currentUser.uid;
-      labelEl.dataset.t = "signOut";
-      labelEl.textContent = t("signOut");
-    } else {
-      badge.classList.remove("active");
-      emailEl.textContent = "";
-      labelEl.dataset.t = "googleSignIn";
-      labelEl.textContent = t("googleSignIn");
+  async signInWithEmail(){
+    const email = prompt("أدخل بريدك الإلكتروني:");
+    if(!email) return;
+    const password = prompt("أدخل كلمة المرور:");
+    if(!password) return;
+    try {
+      await firebase.auth().signInWithEmailAndPassword(email.trim(), password);
+    } catch(err) {
+      if(err.code === "auth/user-not-found" || err.code === "auth/invalid-credential"){
+        const create = confirm("لم يتم تسجيل الدخول. هل تريد إنشاء حساب جديد بهذا البريد؟");
+        if(create) await firebase.auth().createUserWithEmailAndPassword(email.trim(), password);
+        else alert("تعذر تسجيل الدخول: " + err.message);
+      } else alert("تعذر تسجيل الدخول: " + err.message);
     }
-  }
-};
+  },
+  async signOut(){
+    await firebase.auth().signOut();
+    this.currentUser=null;
+    this.updateAuthUI();
+    loadUserScopedState();
+  },
+  updateAuthUI(){
+    const badge=$("userBadge");
+    const loginBtn=$("googleAuthBtn");
+    if(this.currentUser){
+      badge.classList.add("active");
+      if(loginBtn) loginBtn.style.display="none";
+    }else{
+      badge.classList.remove("active");
+      if(loginBtn) loginBtn.style.display="inline-flex";
+      const menu=$("accountMenu"), trigger=$("accountTrigger");
+      if(menu) menu.classList.remove("open");
+      if(trigger) trigger.setAttribute("aria-expanded","false");
+    }
+  }};
 
-function handleGoogleAuth() {
-  if (AuthController.currentUser) {
-    AuthController.signOut();
-  } else {
-    AuthController.signInWithGoogle();
+function toggleAccountMenu(){
+  const menu=$("accountMenu"), trigger=$("accountTrigger");
+  if(!menu || !AuthController.currentUser) return;
+  menu.classList.toggle("open");
+  trigger.setAttribute("aria-expanded",menu.classList.contains("open")?"true":"false");
+}
+function openAccountDetails(){
+  const menu=$("accountMenu");
+  if(menu) menu.classList.remove("open");
+  const email=AuthController.currentUser?.email || "غير متاح";
+  alert("الحساب الحالي: " + email);
+}
+document.addEventListener("click",function(event){
+  const badge=$("userBadge");
+  if(badge && !badge.contains(event.target)){
+    const menu=$("accountMenu"), trigger=$("accountTrigger");
+    if(menu) menu.classList.remove("open");
+    if(trigger) trigger.setAttribute("aria-expanded","false");
+  }
+});
+
+async function handleGoogleAuth(){
+  if(AuthController.currentUser){
+    alert("أنت مسجل الدخول بالفعل: " + (AuthController.currentUser.email || "حسابك"));
+    return;
+  }
+  const modal = document.getElementById("nexfxAuthModal");
+  if(modal) modal.style.display = "flex";
+}
+
+function closeAuthModal(){
+  const modal = document.getElementById("nexfxAuthModal");
+  if(modal) modal.style.display = "none";
+}
+
+async function loginWithGoogle(){
+  const message = document.getElementById("authMessage");
+  try{
+    await applyAuthPersistence();
+    await AuthController.signInWithGoogle();
+    closeAuthModal();
+  }catch(error){
+    if(message) message.textContent = "تعذر تسجيل الدخول: " + (error.message || error);
+  }
+}
+
+async function applyAuthPersistence(){
+  const remember = document.getElementById("authRemember")?.checked !== false;
+  const mode = remember ? firebase.auth.Auth.Persistence.LOCAL : firebase.auth.Auth.Persistence.SESSION;
+  await firebase.auth().setPersistence(mode);
+}
+async function resetPassword(){
+  const email = document.getElementById("authEmail").value.trim();
+  const message = document.getElementById("authMessage");
+  if(!email){ message.textContent="أدخل بريدك الإلكتروني أولاً لإرسال رابط إعادة تعيين كلمة المرور."; return; }
+  try{
+    await firebase.auth().sendPasswordResetEmail(email);
+    message.textContent="تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني إذا كان مسجلاً.";
+  }catch(error){
+    message.textContent="تعذر إرسال رابط إعادة التعيين: " + (error.message || error);
+  }
+}
+async function loginWithEmail(){
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value;
+  const message = document.getElementById("authMessage");
+  if(!email || !password){
+    message.textContent = "أدخل البريد الإلكتروني وكلمة المرور.";
+    return;
+  }
+  try{
+    await applyAuthPersistence();
+    await firebase.auth().signInWithEmailAndPassword(email,password);
+    closeAuthModal();
+  }catch(error){
+    message.textContent = "تعذر تسجيل الدخول: " + (error.message || error);
+  }
+}
+
+async function registerWithEmail(){
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value;
+  const message = document.getElementById("authMessage");
+  if(!email || !password){
+    message.textContent = "أدخل البريد الإلكتروني وكلمة المرور.";
+    return;
+  }
+  if(password.length < 6){
+    message.textContent = "كلمة المرور يجب أن تكون 6 أحرف على الأقل.";
+    return;
+  }
+  try{
+    await applyAuthPersistence();
+    await firebase.auth().createUserWithEmailAndPassword(email,password);
+    closeAuthModal();
+  }catch(error){
+    message.textContent = "تعذر إنشاء الحساب: " + (error.message || error);
+  }
+}
+
+async function handleLogout(){
+  try{
+    await AuthController.signOut();
+    closeAuthModal();
+    alert("تم تسجيل الخروج بنجاح.");
+  }catch(error){
+    alert("تعذر تسجيل الخروج: " + (error.message || error));
   }
 }
 
@@ -1098,7 +1549,6 @@ function loadUserScopedState(){
   renderAssets();
   renderFavorites();
   updateSideInformation();
-  updateFavoriteButton();
   displaySavedAnalysis();
   renderChart();
 }
@@ -1198,7 +1648,28 @@ function translateInterface(){
   });
   $("languageSearch").placeholder=t("languageSearch");
   updateLanguageButton();
+  updateTradeDirectionLabels();
   renderLanguageOptions();
+}
+
+
+function updateTradeDirectionLabels(){
+  const labels={
+    ar:{buy:"شراء",sell:"بيع"}, en:{buy:"BUY",sell:"SELL"},
+    fr:{buy:"ACHAT",sell:"VENTE"}, tr:{buy:"ALIŞ",sell:"SATIŞ"},
+    de:{buy:"KAUF",sell:"VERKAUF"}, es:{buy:"COMPRA",sell:"VENTA"},
+    pt:{buy:"COMPRA",sell:"VENDA"}, it:{buy:"ACQUISTO",sell:"VENDITA"},
+    ru:{buy:"ПОКУПКА",sell:"ПРОДАЖА"}, zh:{buy:"买入",sell:"卖出"},
+    ja:{buy:"買い",sell:"売り"}, ko:{buy:"매수",sell:"매도"},
+    hi:{buy:"खरीदें",sell:"बेचें"}, id:{buy:"BELI",sell:"JUAL"},
+    nl:{buy:"KOOP",sell:"VERKOOP"}
+  };
+  const words=labels[language]||labels.en;
+  const directionSelect=$("direction");
+  if(directionSelect){
+    directionSelect.querySelector('option[value="buy"]').textContent=words.buy;
+    directionSelect.querySelector('option[value="sell"]').textContent=words.sell;
+  }
 }
 
 function setLanguage(lang){
@@ -1208,7 +1679,6 @@ function setLanguage(lang){
   translateInterface();
   renderAssets();
   renderFavorites();
-  updateFavoriteButton();
   updateSideInformation();
   saveState();
   renderChart();
@@ -1231,25 +1701,18 @@ function setMarket(name){
     selected=assets[market][0];
   }
   renderAssets();
-  updateFavoriteButton();
   updateSideInformation();
   renderChart();
   saveState();
 }
 
-function toggleFavorite(){
-  const symbol=selected[2];
-  if(isFavorite(symbol))favorites=favorites.filter(x=>x!==symbol);
+function toggleFavoriteSymbol(symbol){
+  if(isFavorite(symbol)) favorites=favorites.filter(x=>x!==symbol);
   else favorites.push(symbol);
   safeWrite(AuthController.getFavoritesKey(),favorites);
-  updateFavoriteButton();
   renderAssets();
   renderFavorites();
   saveState();
-}
-
-function updateFavoriteButton(){
-  $("favoriteBtn").textContent=isFavorite(selected[2])?"★":"☆";
 }
 
 function updateSideInformation(){
@@ -1261,7 +1724,6 @@ function updateSideInformation(){
 function selectAsset(item){
   selected=item;
   updateSideInformation();
-  updateFavoriteButton();
   renderAssets();
   renderChart();
   saveState();
@@ -1286,8 +1748,17 @@ function renderAssets(){
     const icon=document.createElement("span");
     icon.className="asset-icon";icon.textContent=item[1];
     const name=document.createElement("span");name.textContent=item[0];
-    const symbol=document.createElement("strong");symbol.textContent=isFavorite(item[2])?"★":"";
-    row.append(icon,name,symbol);
+    const star=document.createElement("button");
+    star.type="button";
+    star.className="asset-favorite";
+    star.textContent=isFavorite(item[2])?"★":"☆";
+    star.setAttribute("aria-label",isFavorite(item[2])?"Remove from favorites":"Add to favorites");
+    star.setAttribute("aria-pressed",isFavorite(item[2])?"true":"false");
+    star.addEventListener("click",event=>{
+      event.stopPropagation();
+      toggleFavoriteSymbol(item[2]);
+    });
+    row.append(icon,name,star);
     row.addEventListener("click",()=>selectAsset(item));
     holder.appendChild(row);
   });
@@ -1305,7 +1776,13 @@ function renderFavorites(){
   list.forEach(item=>{
     const row=document.createElement("div");
     row.className="asset-row";
-    row.textContent=item[1]+" "+item[0];
+    const icon=document.createElement("span");icon.className="asset-icon";icon.textContent=item[1];
+    const name=document.createElement("span");name.textContent=item[0];
+    const star=document.createElement("button");
+    star.type="button";star.className="asset-favorite";star.textContent="★";
+    star.setAttribute("aria-label","Remove from favorites");star.setAttribute("aria-pressed","true");
+    star.addEventListener("click",event=>{event.stopPropagation();toggleFavoriteSymbol(item[2]);});
+    row.append(icon,name,star);
     row.addEventListener("click",()=>{
       const group=Object.keys(assets).find(k=>assets[k].some(a=>a[2]===item[2]));
       market=group;
@@ -1319,8 +1796,7 @@ function renderFavorites(){
       $("showFav").classList.remove("active");
       renderAssets();
       updateSideInformation();
-      updateFavoriteButton();
-      renderChart();
+          renderChart();
       saveState();
     });
     box.appendChild(row);
@@ -1355,6 +1831,7 @@ function renderChart(){
     hide_side_toolbar:false,
     details:true,
     hotlist:false,
+    hide_volume:true,
     withdateranges:true,
     save_image:false,
     support_host:"https://www.tradingview.com"
@@ -1454,7 +1931,6 @@ $("showFav").addEventListener("click",()=>{
   $("showAll").classList.remove("active");
   renderAssets(); saveState();
 });
-$("favoriteBtn").addEventListener("click",toggleFavorite);
 $("timeframe").addEventListener("change",()=>{ renderChart(); saveState(); });
 $("runAnalysis").addEventListener("click",runAnalysis);
 
@@ -1462,5 +1938,34 @@ AuthController.init();
 loadUserScopedState();
 saveState();
 </script>
+
+<!-- Admin statistics scaffold: intentionally no fabricated counts; connect to protected Firebase data before enabling. -->
+<section id="nexfxAdminStats" class="container" hidden aria-label="لوحة إدارة NEXFX AI">
+  <h2>لوحة الإدارة</h2>
+  <div class="two-col">
+    <div class="panel">الزوار المتصلون الآن: <span data-stat="online">بانتظار ربط البيانات</span></div>
+    <div class="panel">إجمالي الحسابات: <span data-stat="accounts">بانتظار ربط البيانات</span></div>
+    <div class="panel">إحصائيات اليوم: <span data-stat="daily">بانتظار ربط البيانات</span></div>
+    <div class="panel">إحصائيات الشهر: <span data-stat="monthly">بانتظار ربط البيانات</span></div>
+  </div>
+</section>
+
+<div id="nexfxAuthModal" class="auth-modal" style="display:none;">
+  <div class="auth-box" role="dialog" aria-modal="true" aria-labelledby="nexfxAuthTitle">
+    <button type="button" onclick="closeAuthModal()" class="auth-close" aria-label="إغلاق">×</button>
+    <h2 id="nexfxAuthTitle">NEXFX AI</h2>
+    <p>تسجيل الدخول إلى حسابك</p>
+    <button type="button" onclick="loginWithGoogle()" class="auth-google"><span class="google-mark" aria-hidden="true">G</span> المتابعة باستخدام Google</button>
+    <div class="auth-divider">أو باستخدام البريد الإلكتروني</div>
+    <input id="authEmail" type="email" autocomplete="email" placeholder="البريد الإلكتروني">
+    <input id="authPassword" type="password" autocomplete="current-password" placeholder="كلمة المرور">
+    <label class="auth-remember"><input id="authRemember" type="checkbox" checked> تذكرني على هذا الجهاز</label>
+    <button type="button" onclick="loginWithEmail()" class="auth-submit">تسجيل الدخول</button>
+    <button type="button" onclick="registerWithEmail()" class="auth-register">إنشاء حساب جديد</button>
+    <button type="button" onclick="resetPassword()" class="auth-link">نسيت كلمة المرور؟</button>
+    <p id="authMessage" role="status" aria-live="polite"></p>
+  </div>
+</div>
+
 </body>
 </html>
