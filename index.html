@@ -423,6 +423,49 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
   .btn-auth .google-mark{font-size:17px}
 }
 
+
+/* NEXFX AI: ترتيب محسّن لأزرار الحساب واللغة وتسجيل الدخول */
+.header-actions{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  justify-content:flex-start;
+  gap:7px;
+}
+.user-badge{order:1}
+.btn-auth{order:2;justify-content:center;min-width:104px;padding:6px 12px}
+.language-wrap{order:3}
+.language-trigger{
+  gap:5px;
+  padding:5px 9px;
+  font-size:11px;
+  min-height:30px;
+}
+.language-trigger img{width:18px;height:12px}
+.language-menu{
+  position:static;
+  width:min(260px,calc(100vw - 32px));
+  max-height:42vh;
+  box-sizing:border-box;
+  margin-top:5px;
+  padding:8px;
+}
+.account-menu{
+  position:absolute;
+  top:calc(100% + 5px);
+  inset-inline-end:0;
+  z-index:50;
+}
+.account-menu button{
+  border-color:var(--gold);
+  color:var(--gold2);
+}
+@media(max-width:600px){
+  .header-actions{gap:6px}
+  .btn-auth{font-size:11px;min-width:96px}
+  .language-menu{max-height:38vh}
+}
+
 </style>
 </head>
 
@@ -458,7 +501,7 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
     </div>
     <button class="btn-auth" id="googleAuthBtn" type="button" translate="no" onclick="handleGoogleAuth()">
       <span class="google-mark" aria-hidden="true">G</span>
-      <span id="googleAuthLabel">Sign in with Google</span>
+      <span id="googleAuthLabel">Sign in</span>
     </button>
 
   </div>
@@ -1597,6 +1640,7 @@ function renderChart(){
     hide_side_toolbar:false,
     details:true,
     hotlist:false,
+    hide_volume:true,
     withdateranges:true,
     save_image:false,
     support_host:"https://www.tradingview.com"
