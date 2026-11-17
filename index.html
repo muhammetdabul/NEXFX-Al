@@ -234,6 +234,13 @@ input,select{
 }
 .asset-row:hover,.asset-row.active{background:#193451}
 .asset-row strong{margin-inline-start:auto;color:var(--gold2);direction:ltr}
+.asset-favorite{
+  margin-inline-start:auto;flex:0 0 auto;background:transparent;border:0;
+  color:var(--gold2);font-size:21px;line-height:1;cursor:pointer;padding:2px 5px;
+}
+.asset-favorite:hover{color:#fff0a6;transform:scale(1.08)}
+.asset-favorite:focus-visible{outline:2px solid var(--gold2);outline-offset:2px;border-radius:4px}
+.asset-row .asset-favorite{direction:ltr}
 .asset-icon{font-size:19px}
 .chart-pair{direction:ltr;color:var(--gold2);font-weight:bold}
 .tradingview-box{
@@ -533,16 +540,113 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
   .category b{font-size:13px}
 }
 
+
+
+/* NEXFX AI: compact account/language controls overlaid inside the banner */
+.site-banner{
+  position:relative;
+  overflow:visible;
+  min-height:150px;
+  background:#080808;
+}
+.site-banner > img{
+  display:block;
+  width:100%;
+  height:auto;
+  border-radius:13px;
+}
+.site-banner > .header-actions{
+  position:absolute;
+  top:10px;
+  right:10px;
+  z-index:100;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  justify-content:flex-start;
+  gap:6px;
+  width:auto;
+  padding:0;
+  margin:0;
+  overflow:visible;
+}
+.site-banner .user-badge{order:1;position:relative;display:none;overflow:visible}
+.site-banner .user-badge.active{display:inline-flex}
+.site-banner .btn-auth{order:1;display:inline-flex;align-items:center;justify-content:center}
+.site-banner .language-wrap{order:2;position:relative;flex:0 0 auto}
+.site-banner .account-trigger,
+.site-banner .language-trigger,
+.site-banner .btn-auth{
+  width:136px;
+  min-width:136px;
+  max-width:136px;
+  min-height:34px;
+  height:34px;
+  box-sizing:border-box;
+  justify-content:center;
+  padding:5px 8px;
+  border-radius:8px;
+  font-size:11px;
+  white-space:nowrap;
+  background:#071629ed;
+  border:1px solid var(--gold);
+  color:var(--gold2);
+}
+.site-banner .language-menu{
+  position:absolute !important;
+  top:calc(100% + 3px) !important;
+  right:0 !important;
+  left:auto !important;
+  width:136px !important;
+  max-height:88px !important;
+  padding:4px !important;
+  margin:0 !important;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  background:#050d19f5;
+  z-index:120;
+}
+.site-banner .language-menu input{min-height:27px;padding:4px 6px;font-size:10px;margin-bottom:3px}
+.site-banner .language-option{min-height:27px;padding:4px 5px;font-size:10px;gap:5px}
+.site-banner .language-option img{width:17px;height:12px}
+.site-banner .account-menu{
+  position:absolute;
+  top:calc(100% + 3px);
+  right:0;
+  left:auto;
+  z-index:120;
+  min-width:136px;
+  max-width:136px;
+  background:#050d19f5;
+}
+.site-banner .account-menu button{min-height:30px;padding:5px 7px;font-size:10px}
+@media(max-width:700px){
+  .site-banner{min-height:145px;width:100%;margin:0;border-radius:0;border-inline:0}
+  .site-banner > img{border-radius:0}
+  .site-banner > .header-actions{top:7px;right:7px;gap:5px}
+  .site-banner .account-trigger,
+  .site-banner .language-trigger,
+  .site-banner .btn-auth{width:124px;min-width:124px;max-width:124px;min-height:31px;height:31px;padding:4px 6px;font-size:10px}
+  .site-banner .language-menu{width:124px !important;max-height:76px !important}
+  .site-banner .account-menu{min-width:124px;max-width:124px}
+}
+@media(max-width:380px){
+  .site-banner{min-height:138px}
+  .site-banner > .header-actions{top:6px;right:6px}
+  .site-banner .account-trigger,
+  .site-banner .language-trigger,
+  .site-banner .btn-auth{width:116px;min-width:116px;max-width:116px}
+  .site-banner .language-menu{width:116px !important}
+  .site-banner .account-menu{min-width:116px;max-width:116px}
+}
 </style>
 </head>
 
 <body>
 <div class="site-banner" role="img" aria-label="NEXFX AI - الأسواق الذكية والتحليل المالي">
   <img src="nexfx-ai-banner.png" alt="NEXFX AI — الأسواق الذكية والتحليل المالي" fetchpriority="high">
-</div>
 
-<header class="topbar">
-  <div class="header-actions">
+<div class="header-actions">
     <div class="user-badge" id="userBadge">
       <button class="account-trigger" id="accountTrigger" type="button" aria-expanded="false" onclick="toggleAccountMenu()">
         <span class="account-avatar" aria-hidden="true">👤</span>
@@ -572,7 +676,8 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
     </button>
 
   </div>
-</header>
+
+</div>
 
 <main class="container" id="home">
 
@@ -635,7 +740,6 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
             <option value="240">4H</option><option value="D">1D</option>
             <option value="W">1W</option>
           </select>
-          <button class="small-btn" id="favoriteBtn" aria-label="Add to favorites">☆</button>
         </div>
       </div>
       <div class="tradingview-box">
@@ -1445,7 +1549,6 @@ function loadUserScopedState(){
   renderAssets();
   renderFavorites();
   updateSideInformation();
-  updateFavoriteButton();
   displaySavedAnalysis();
   renderChart();
 }
@@ -1576,7 +1679,6 @@ function setLanguage(lang){
   translateInterface();
   renderAssets();
   renderFavorites();
-  updateFavoriteButton();
   updateSideInformation();
   saveState();
   renderChart();
@@ -1599,25 +1701,18 @@ function setMarket(name){
     selected=assets[market][0];
   }
   renderAssets();
-  updateFavoriteButton();
   updateSideInformation();
   renderChart();
   saveState();
 }
 
-function toggleFavorite(){
-  const symbol=selected[2];
-  if(isFavorite(symbol))favorites=favorites.filter(x=>x!==symbol);
+function toggleFavoriteSymbol(symbol){
+  if(isFavorite(symbol)) favorites=favorites.filter(x=>x!==symbol);
   else favorites.push(symbol);
   safeWrite(AuthController.getFavoritesKey(),favorites);
-  updateFavoriteButton();
   renderAssets();
   renderFavorites();
   saveState();
-}
-
-function updateFavoriteButton(){
-  $("favoriteBtn").textContent=isFavorite(selected[2])?"★":"☆";
 }
 
 function updateSideInformation(){
@@ -1629,7 +1724,6 @@ function updateSideInformation(){
 function selectAsset(item){
   selected=item;
   updateSideInformation();
-  updateFavoriteButton();
   renderAssets();
   renderChart();
   saveState();
@@ -1654,8 +1748,17 @@ function renderAssets(){
     const icon=document.createElement("span");
     icon.className="asset-icon";icon.textContent=item[1];
     const name=document.createElement("span");name.textContent=item[0];
-    const symbol=document.createElement("strong");symbol.textContent=isFavorite(item[2])?"★":"";
-    row.append(icon,name,symbol);
+    const star=document.createElement("button");
+    star.type="button";
+    star.className="asset-favorite";
+    star.textContent=isFavorite(item[2])?"★":"☆";
+    star.setAttribute("aria-label",isFavorite(item[2])?"Remove from favorites":"Add to favorites");
+    star.setAttribute("aria-pressed",isFavorite(item[2])?"true":"false");
+    star.addEventListener("click",event=>{
+      event.stopPropagation();
+      toggleFavoriteSymbol(item[2]);
+    });
+    row.append(icon,name,star);
     row.addEventListener("click",()=>selectAsset(item));
     holder.appendChild(row);
   });
@@ -1673,7 +1776,13 @@ function renderFavorites(){
   list.forEach(item=>{
     const row=document.createElement("div");
     row.className="asset-row";
-    row.textContent=item[1]+" "+item[0];
+    const icon=document.createElement("span");icon.className="asset-icon";icon.textContent=item[1];
+    const name=document.createElement("span");name.textContent=item[0];
+    const star=document.createElement("button");
+    star.type="button";star.className="asset-favorite";star.textContent="★";
+    star.setAttribute("aria-label","Remove from favorites");star.setAttribute("aria-pressed","true");
+    star.addEventListener("click",event=>{event.stopPropagation();toggleFavoriteSymbol(item[2]);});
+    row.append(icon,name,star);
     row.addEventListener("click",()=>{
       const group=Object.keys(assets).find(k=>assets[k].some(a=>a[2]===item[2]));
       market=group;
@@ -1687,8 +1796,7 @@ function renderFavorites(){
       $("showFav").classList.remove("active");
       renderAssets();
       updateSideInformation();
-      updateFavoriteButton();
-      renderChart();
+          renderChart();
       saveState();
     });
     box.appendChild(row);
@@ -1823,7 +1931,6 @@ $("showFav").addEventListener("click",()=>{
   $("showAll").classList.remove("active");
   renderAssets(); saveState();
 });
-$("favoriteBtn").addEventListener("click",toggleFavorite);
 $("timeframe").addEventListener("change",()=>{ renderChart(); saveState(); });
 $("runAnalysis").addEventListener("click",runAnalysis);
 
