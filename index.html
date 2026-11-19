@@ -243,6 +243,7 @@ input,select{
 .asset-row .asset-favorite{direction:ltr}
 .asset-icon{font-size:19px}
 .chart-pair{direction:ltr;color:var(--gold2);font-weight:bold}
+
 .tradingview-box{
   position:relative;height:500px;min-height:460px;
   background:#041020;border:1px solid #daa93b55;border-radius:9px;overflow:hidden
@@ -1034,21 +1035,9 @@ button,input,select,textarea{
 .favorites-strip .asset-row{flex:0 0 auto;min-width:112px;border:1px solid #ffffff18;border-radius:7px;padding:4px 7px;font-size:10px}
 .favorites-strip .asset-icon{font-size:13px}
 .favorites-strip .asset-favorite{font-size:15px}
-.market-pulse{min-width:0}
-.pulse-heading{display:flex;align-items:center;justify-content:space-between;gap:6px}
-.pulse-heading h3{margin:0;font-size:13px}
-.pulse-dot{width:8px;height:8px;border-radius:50%;background:#e0b84f;box-shadow:0 0 8px #e0b84f66;flex:0 0 auto}
-.pulse-status{font-size:10px;color:var(--muted);padding:7px;border:1px solid #ffffff18;border-radius:7px;margin:7px 0}
-.pulse-list{display:grid;gap:6px}
-.pulse-item{display:grid;grid-template-columns:1fr auto;gap:2px 6px;padding:7px;border-bottom:1px solid #ffffff16;font-size:10px}
-.pulse-item b{direction:ltr;text-align:end;color:var(--gold2);font-variant-numeric:tabular-nums}
-.pulse-item small{color:var(--muted)}
-.pulse-footnote{line-height:1.4}
 #timeframe{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
 .layout{grid-template-columns:minmax(165px,.72fr) minmax(360px,2.25fr) minmax(175px,.78fr)}
 @media(min-width:1100px){.layout{grid-template-columns:minmax(165px,.68fr) minmax(480px,2.45fr) minmax(180px,.72fr)}}
-@media(max-width:1099px){.layout{grid-template-columns:minmax(150px,.75fr) minmax(0,2fr)}.market-pulse{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:7px;align-items:start}.market-pulse .pulse-heading,.market-pulse>p{grid-column:1/-1}.pulse-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:700px){.layout{grid-template-columns:minmax(0,1fr)}.market-pulse{grid-column:auto;display:block}.pulse-list{grid-template-columns:1fr}.favorites-strip .asset-row{min-width:100px}}
 
 
 /* Compact information popovers for key platform sections */
@@ -1080,61 +1069,28 @@ button,input,select,textarea{
 
 
 
-/* NEXFX AI V5.1.2 — correct Market Pulse placement */
+/* NEXFX AI — aligned chart and assets columns; no Market Pulse module */
 .layout{
   display:grid;
-  grid-template-columns:minmax(220px,290px) minmax(0,1fr);
+  grid-template-columns:minmax(220px,260px) minmax(0,1fr);
   gap:12px;
-  align-items:start;
+  align-items:stretch;
 }
-.layout > .assets-column{grid-column:1;grid-row:1;min-width:0}
+.layout > .assets-column{grid-column:1;grid-row:1;min-width:0;display:flex;flex-direction:column;min-height:0}
 .layout > .chart-column{grid-column:2;grid-row:1;min-width:0}
-.assets-column .asset-list{max-height:330px}
-#marketPulsePanel{
-  display:block;
-  margin-top:14px;
-  padding:12px;
-  min-width:0;
-  border:1px solid rgba(212,175,55,.28);
-  border-radius:10px;
-  background:rgba(4,16,32,.58);
-}
-#marketPulsePanel .pulse-heading{display:flex;align-items:center;justify-content:space-between;gap:7px}
-#marketPulsePanel .pulse-heading h3{margin:0;font-size:13px;color:var(--gold2)}
-#marketPulsePanel .pulse-status{margin:8px 0;font-size:10px}
-#marketPulsePanel .pulse-subheading{
-  display:block;margin:10px 0 7px;font-size:12px;color:var(--gold2)
-}
-#marketPulsePanel .pulse-list{display:grid;grid-template-columns:minmax(0,1fr);gap:6px}
-#marketPulsePanel .pulse-item{
-  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 7px;
-  padding:8px;border:1px solid #ffffff16;border-radius:7px;
-  font-size:10px;min-width:0;overflow-wrap:anywhere
-}
-#marketPulsePanel .pulse-item b{direction:ltr;text-align:end}
-#marketPulsePanel .pulse-item small{color:var(--muted)}
-#marketPulsePanel .pulse-list>.muted{margin:0}
+.assets-column .asset-list{flex:1 1 auto;min-height:0;max-height:none;overflow:auto}
 .chart-column .tradingview-box{width:100%;min-width:0}
 @media(min-width:1100px){
-  .layout{grid-template-columns:minmax(235px,290px) minmax(0,1fr);gap:14px}
-  .assets-column .asset-list{max-height:350px}
+  .layout{grid-template-columns:minmax(220px,260px) minmax(0,1fr);gap:12px;align-items:stretch}
 }
 @media(min-width:701px) and (max-width:1099px){
-  .layout{grid-template-columns:minmax(195px,245px) minmax(0,1fr);gap:9px}
-  .assets-column .asset-list{max-height:300px}
-  #marketPulsePanel{padding:9px}
+  .layout{grid-template-columns:minmax(190px,230px) minmax(0,1fr);gap:9px;align-items:stretch}
 }
 @media(max-width:700px){
-  .layout{grid-template-columns:minmax(0,1fr);gap:9px}
+  .layout{grid-template-columns:minmax(0,1fr);gap:7px}
   .layout>.chart-column{grid-column:1;grid-row:1}
-  .layout>.assets-column{grid-column:1;grid-row:2}
-  .assets-column .asset-list{max-height:260px}
-  #marketPulsePanel{margin-top:10px;padding:10px}
-  #marketPulsePanel .pulse-list{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .tradingview-box{height:clamp(320px,92vw,440px);min-height:300px}
-}
-@media(max-width:380px){
-  #marketPulsePanel .pulse-list{grid-template-columns:minmax(0,1fr)}
+  .layout>.assets-column{grid-column:1;grid-row:2;display:block}
+  .assets-column .asset-list{max-height:210px;min-height:0;overflow:auto}
 }
 
 
@@ -1154,7 +1110,202 @@ button,input,select,textarea{
 @media(max-width:900px){.execution-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.execution-grid{grid-template-columns:minmax(0,1fr)}.execution-footer{align-items:stretch;flex-direction:column}.execution-scan-results{grid-template-columns:minmax(0,1fr)}}
 
+
+
+/* NEXFX AI approved compact-layout adjustments — additive overrides */
+.navlinks-top{
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  gap:6px; margin:6px 0;
+}
+.navlinks-top a{padding:8px 5px;font-size:11px;min-width:0}
+#markets .section-title{margin-bottom:3px}
+#markets .categories{margin:4px 0 8px;gap:7px}
+.category{padding:11px}
+.panel{padding:11px;margin:7px 0}
+.layout{gap:8px}
+.layout>.chart-column{display:flex;flex-direction:column;gap:5px}
+.chart-column .tradingview-box{margin:0}
+.chart-column .indicators{margin-top:3px}
+.chart-column .disclaimer{margin:3px 0 0;padding:6px 8px}
+#analysis.panel,#trades.panel,.execution-panel{margin-top:7px}
+#analysis.panel>h2,#trades h2{margin-bottom:7px}
+.field{margin-bottom:6px}
+@media(max-width:700px){
+  .navlinks-top{display:flex;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;
+    gap:5px;margin:5px 0;padding:2px 0;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .navlinks-top::-webkit-scrollbar{display:none}
+  .navlinks-top a{flex:0 0 auto;min-width:max-content;padding:7px 9px;font-size:10px}
+  .layout{display:flex;flex-direction:column;gap:7px}
+  .layout>.chart-column{order:1;width:100%}
+  .layout>.assets-column{order:2;width:100%}
+  .tradingview-box{height:clamp(320px,92vw,440px);min-height:300px}
+  .panel{padding:9px;margin:6px 0}
+  #markets .categories{margin:3px 0 6px;gap:5px}
+  .category{padding:9px}
+}
+@media(min-width:701px){
+}
+@media(max-width:380px){
+}
+
 </style>
+<style>
+
+
+/* NEXFX AI — responsive spacing refinement based on the supplied screenshots */
+#markets .section-title { margin: 0 0 2px !important; }
+#markets .categories {
+  margin: 2px 0 6px !important;
+  gap: 6px !important;
+}
+.category {
+  min-width: 0;
+  min-height: 54px;
+  padding: 8px 10px !important;
+  gap: 6px !important;
+}
+.category b { font-size: 12px !important; line-height: 1.25 !important; }
+.category-icon {
+  width: 25px !important;
+  height: 25px !important;
+  font-size: 15px !important;
+}
+.ticker { margin: 5px 0 7px !important; }
+.tick { min-width: 0; padding: 5px 6px !important; font-size: 9px !important; line-height: 1.2; }
+.tick b { font-size: 9px !important; line-height: 1.25; overflow-wrap: anywhere; }
+.tick .profit-green { margin-inline-start: 3px !important; }
+.assets-column { min-width: 0; }
+.assets-column .asset-list { max-height: 300px; }
+.chart-column { min-width: 0; }
+.chart-column .tradingview-box {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+@media (min-width: 1100px) {
+  .layout {
+    grid-template-columns: minmax(260px, 31%) minmax(0, 1fr) !important;
+    gap: 12px !important;
+    align-items: start;
+  }
+  .assets-column { grid-column: 1 !important; grid-row: 1 !important; }
+  .chart-column { grid-column: 2 !important; grid-row: 1 !important; }
+  .assets-column .asset-list { max-height: 260px; }
+    margin: 9px 0 0 !important;
+    padding: 10px !important;
+  }
+}
+@media (min-width: 701px) and (max-width: 1099px) {
+  .layout { grid-template-columns: minmax(190px, 31%) minmax(0, 1fr) !important; }
+  .category { min-height: 50px; }
+}
+@media (max-width: 700px) {
+  .container { width: calc(100% - 10px) !important; margin: 4px auto 10px !important; }
+  #markets .section-title { margin: 0 !important; }
+  #markets .section-title h2 { margin: 0 !important; }
+  #markets .categories {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 5px !important;
+    margin: 2px 0 5px !important;
+  }
+  .category {
+    min-height: 45px !important;
+    padding: 6px 8px !important;
+    border-radius: 8px !important;
+    gap: 5px !important;
+  }
+  .category b { font-size: 10px !important; }
+  .category-icon {
+    width: 21px !important;
+    height: 21px !important;
+    font-size: 13px !important;
+  }
+  .ticker {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    margin: 4px 0 6px !important;
+  }
+  .tick { padding: 4px 5px !important; font-size: 8px !important; }
+  .tick b { font-size: 8px !important; }
+  .tick .profit-green { margin-inline-start: 2px !important; }
+  .panel { padding: 7px !important; margin: 5px 0 !important; }
+  .panel h2 { font-size: 13px !important; margin-bottom: 4px !important; }
+  .layout { grid-template-columns: minmax(0, 1fr) !important; gap: 6px !important; }
+  .layout > .chart-column { grid-column: 1 !important; grid-row: 1 !important; }
+  .layout > .assets-column { grid-column: 1 !important; grid-row: 2 !important; }
+  .chart-column .tradingview-box {
+    width: 100% !important;
+    height: clamp(340px, 105vw, 470px) !important;
+    min-height: 320px !important;
+  }
+  .assets-column { padding: 7px !important; }
+  .assets-column .asset-list { max-height: 210px !important; }
+}
+@media (max-width: 380px) {
+  .category { min-height: 42px !important; padding: 5px 6px !important; }
+  .category b { font-size: 9px !important; }
+  .category-icon { width: 19px !important; height: 19px !important; font-size: 12px !important; }
+  .tick, .tick b { font-size: 7.5px !important; }
+  .chart-column .tradingview-box { height: 350px !important; }
+}
+
+</style>
+
+<style>
+/* Final responsive alignment and restrained gold highlights */
+@media (min-width:701px){
+  .layout{align-items:stretch !important}
+  .layout>.assets-column{display:flex !important;flex-direction:column !important;min-height:0 !important}
+  .assets-column .asset-list{flex:1 1 auto !important;min-height:0 !important;max-height:none !important;overflow:auto !important}
+}
+@media (min-width:1100px){
+  .layout{grid-template-columns:minmax(220px,260px) minmax(0,1fr) !important;gap:12px !important}
+}
+@media (min-width:701px) and (max-width:1099px){
+  .layout{grid-template-columns:minmax(190px,230px) minmax(0,1fr) !important;gap:9px !important}
+}
+@media (max-width:700px){
+  .layout{display:flex !important;flex-direction:column !important;gap:7px !important}
+  .layout>.chart-column{order:1 !important;width:100% !important}
+  .layout>.assets-column{order:2 !important;width:100% !important;display:block !important}
+  .assets-column .asset-list{max-height:210px !important;min-height:0 !important}
+}
+/* Softer gold fill, border and glow on the requested controls only */
+#showAll.small-btn.active{background:#c5a34a !important;color:#17120a !important;border-color:#d4b65d !important;box-shadow:0 0 3px rgba(212,175,55,.14) !important;text-shadow:none !important;filter:none !important}
+#runAnalysis.primary,#executionScanBtn.primary{background:linear-gradient(135deg,#b9953f,#e2c36d,#b9953f) !important;box-shadow:0 1px 4px rgba(212,175,55,.16) !important;text-shadow:none !important;filter:none !important}
+#runAnalysis.primary:hover,#executionScanBtn.primary:hover{filter:brightness(1.04) !important;box-shadow:0 2px 6px rgba(212,175,55,.2) !important}
+</style>
+
+
+
+<style>
+/* NEXFX AI — match the asset-list column to the chart frame bottom on desktop/tablet */
+@media (min-width: 701px) {
+  .layout { align-items: stretch !important; }
+  .layout > .chart-column { align-self: stretch !important; min-height: 0; }
+  .layout > .assets-column {
+    align-self: stretch !important; height: auto !important; min-height: 0 !important;
+    box-sizing: border-box !important; display: flex !important; flex-direction: column !important;
+  }
+  .layout > .assets-column .asset-list {
+    flex: 1 1 0 !important; min-height: 0 !important; max-height: none !important;
+    overflow-y: auto !important; box-sizing: border-box !important;
+  }
+}
+@media (max-width: 700px) {
+  .layout > .assets-column .asset-list {
+    flex: initial !important; max-height: 210px !important; min-height: 0 !important;
+    overflow-y: auto !important;
+  }
+}
+/* Reduce only the brown/gold glow; keep button size, text, color and behavior */
+#showAll.small-btn.active { box-shadow: none !important; text-shadow: none !important; filter: none !important; }
+#runAnalysis.primary, #executionScanBtn.primary { box-shadow: none !important; text-shadow: none !important; filter: none !important; }
+#runAnalysis.primary:hover, #executionScanBtn.primary:hover,
+#runAnalysis.primary:focus-visible, #executionScanBtn.primary:focus-visible {
+  box-shadow: none !important; filter: brightness(1.02) !important;
+}
+</style>
+
 </head>
 
 <body>
@@ -1169,8 +1320,6 @@ button,input,select,textarea{
     <a href="#analysis" data-t="analysis">التحليل الذكي</a>
     <a href="#trades" data-t="trades">الصفقات</a>
     <a href="#smartTradeExecution" data-t="smartExecutionNav">التنفيذ الذكي</a>
-    <a href="#favoritesPanel" data-t="favorites">المفضلة</a>
-    <a href="#about" data-t="about">حول المنصة</a>
     <a href="#subscriptions" data-t="subscriptions">الاشتراكات</a>
   </nav>
   <div class="header-actions">
@@ -1190,11 +1339,11 @@ button,input,select,textarea{
       <button class="account-trigger" id="accountTrigger" type="button" aria-expanded="false" onclick="toggleAccountMenu()">
         <span class="account-avatar" aria-hidden="true">👤</span>
         <span class="account-dot" aria-hidden="true"></span>
-        <span class="account-label">حسابي</span>
+        <span class="account-label" data-account-label>حسابي</span>
         <span aria-hidden="true">⌄</span>
       </button>
       <div class="account-menu" id="accountMenu">
-        <button type="button" onclick="handleLogout()">تسجيل الخروج</button>
+        <button type="button" data-account-logout onclick="handleLogout()">تسجيل الخروج</button>
       </div>
     </div>
     <button class="btn-auth" id="googleAuthBtn" type="button" translate="no" onclick="handleGoogleAuth()">
@@ -1250,17 +1399,6 @@ button,input,select,textarea{
       </div>
       <div class="asset-list" id="assetList"></div>
 
-      <section class="market-pulse" id="marketPulsePanel" aria-label="Market Pulse">
-        <div class="pulse-heading">
-          <h3 data-t="marketPulse">نبض السوق</h3>
-          <span class="pulse-dot" aria-hidden="true"></span>
-        </div>
-        <div class="pulse-status" id="marketPulseStatus" aria-live="polite">بانتظار بيانات السوق...</div>
-        <h4 class="pulse-subheading" data-t="pulseMostActive">الأكثر تداولاً خلال 24 ساعة</h4>
-        <div class="pulse-list" id="marketPulseList">
-          <p class="muted" data-t="pulseUnavailable">بيانات غير متاحة حالياً لهذا السوق.</p>
-        </div>
-      </section>
     </aside>
 
     <section class="inner chart-column">
@@ -1287,7 +1425,7 @@ button,input,select,textarea{
       <p class="disclaimer" data-t="chartNote">
         بيانات الشارت وتغطيتها تعتمد على مزود السوق وقد تكون متأخرة لبعض الرموز.
       </p>
-    </section>
+</section>
 
 
   </div>
@@ -1538,7 +1676,7 @@ const languages=[
 const translations={
 ar:{
 subscriptions:'الاشتراكات',subscriptionsDesc:'قريباً ستتوفر هنا باقات NEXFX AI وتفاصيل المزايا والأسعار. لن يتم تفعيل أي اشتراك أو دفع قبل اعتماد تفاصيل الباقات.',
-marketPulse:'نبض السوق',pulseLive:'بيانات سوق مباشرة',pulseMostActive:'الأكثر تداولاً خلال 24 ساعة',pulseChange:'التغير 24س',pulseVolume:'حجم التداول',pulseUnavailable:'بيانات غير متاحة حالياً لهذا السوق.',
+
 googleSignIn:"Sign in with Google",signOut:"تسجيل الخروج",
 home:"الرئيسية",markets:"الأسواق",analysis:"التحليل الذكي",trades:"الصفقات",about:"حول المنصة",
 favorites:"المفضلة",settings:"الإعدادات",heroTitle:"منصة تحليل مالي ذكية",
@@ -1596,7 +1734,7 @@ noMatch:"لا توجد نتائج مطابقة",languageSearch:"ابحث عن ل
 },
 en:{
 subscriptions:'Subscriptions',subscriptionsDesc:'NEXFX AI plans and their features and prices will appear here soon. No subscription or payment will be activated until the plans are approved.',
-marketPulse:'Market Pulse',pulseLive:'Live market data',pulseMostActive:'Most active in the last 24 hours',pulseChange:'24h change',pulseVolume:'Trading volume',pulseUnavailable:'Verified data is not currently available for this market.',
+
 googleSignIn:"Sign in with Google",signOut:"Sign out",
 home:"Home",markets:"Markets",analysis:"AI Analysis",trades:"Trades",about:"About",
 favorites:"Favorites",settings:"Settings",heroTitle:"Smart Financial Analysis Platform",
@@ -1654,7 +1792,7 @@ noMatch:"No matching results",languageSearch:"Search languages..."
 },
 fr:{
 subscriptions:'Abonnements',subscriptionsDesc:'Les offres NEXFX AI, leurs avantages et leurs tarifs seront bientôt présentés ici. Aucun abonnement ni paiement ne sera activé avant validation des offres.',
-marketPulse:'Pulse du marché',pulseLive:'Données de marché en direct',pulseMostActive:'Les plus actifs sur 24 heures',pulseChange:'Variation 24 h',pulseVolume:'Volume échangé',pulseUnavailable:'Aucune donnée vérifiée disponible actuellement pour ce marché.',
+
 googleSignIn:"Se connecter avec Google",signOut:"Déconnexion",
 home:"Accueil",markets:"Marchés",analysis:"Analyse IA",trades:"Transactions",about:"À propos",
 favorites:"Favoris",settings:"Paramètres",globalMarkets:"Marchés mondiaux",
@@ -1684,7 +1822,7 @@ noMatch:"Aucun résultat",languageSearch:"Rechercher une langue..."
 },
 tr:{
 subscriptions:'Abonelikler',subscriptionsDesc:'NEXFX AI paketleri, özellikleri ve fiyatları yakında burada yer alacak. Paketler onaylanmadan abonelik veya ödeme etkinleştirilmeyecektir.',
-marketPulse:'Piyasa Nabzı',pulseLive:'Canlı piyasa verileri',pulseMostActive:'Son 24 saatte en aktif',pulseChange:'24 saatlik değişim',pulseVolume:'İşlem hacmi',pulseUnavailable:'Bu piyasa için şu anda doğrulanmış veri yok.',
+
 googleSignIn:"Google ile Giriş Yap",signOut:"Çıkış Yap",
 home:"Ana Sayfa",markets:"Piyasalar",analysis:"Yapay Zeka Analizi",trades:"İşlemler",about:"Hakkında",
 favorites:"Favoriler",settings:"Ayarlar",globalMarkets:"Küresel Piyasalar",
@@ -1714,7 +1852,7 @@ noMatch:"Eşleşen sonuç yok",languageSearch:"Dil ara..."
 },
 de:{
 subscriptions:'Abonnements',subscriptionsDesc:'NEXFX-AI-Pakete, Funktionen und Preise werden hier in Kürze angezeigt. Vor der Freigabe der Pakete werden keine Abonnements oder Zahlungen aktiviert.',
-marketPulse:'Marktimpuls',pulseLive:'Live-Marktdaten',pulseMostActive:'Am aktivsten in 24 Stunden',pulseChange:'Änderung 24 Std.',pulseVolume:'Handelsvolumen',pulseUnavailable:'Für diesen Markt sind derzeit keine verifizierten Daten verfügbar.',
+
 googleSignIn:"Mit Google anmelden",signOut:"Abmelden",
 home:"Startseite",markets:"Märkte",analysis:"KI-Analyse",trades:"Trades",about:"Über uns",
 favorites:"Favoriten",settings:"Einstellungen",globalMarkets:"Globale Märkte",
@@ -1740,7 +1878,7 @@ noMatch:"Keine Treffer",languageSearch:"Sprache suchen..."
 },
 es:{
 subscriptions:'Suscripciones',subscriptionsDesc:'Los planes de NEXFX AI, sus ventajas y precios aparecerán aquí próximamente. No se activará ninguna suscripción ni pago hasta aprobar los planes.',
-marketPulse:'Pulso del mercado',pulseLive:'Datos de mercado en directo',pulseMostActive:'Más activos en las últimas 24 horas',pulseChange:'Cambio 24 h',pulseVolume:'Volumen negociado',pulseUnavailable:'No hay datos verificados disponibles para este mercado.',
+
 googleSignIn:"Iniciar sesión con Google",signOut:"Cerrar sesión",
 home:"Inicio",markets:"Mercados",analysis:"Análisis IA",trades:"Operaciones",about:"Acerca de",
 favorites:"Favoritos",settings:"Configuración",globalMarkets:"Mercados globales",
@@ -1766,7 +1904,7 @@ noMatch:"Sin resultados",languageSearch:"Buscar idioma..."
 },
 pt:{
 subscriptions:'Assinaturas',subscriptionsDesc:'Os planos NEXFX AI, seus benefícios e preços estarão disponíveis aqui em breve. Nenhuma assinatura ou pagamento será ativado antes da aprovação dos planos.',
-marketPulse:'Pulso do mercado',pulseLive:'Dados de mercado ao vivo',pulseMostActive:'Mais ativos nas últimas 24 horas',pulseChange:'Variação 24 h',pulseVolume:'Volume negociado',pulseUnavailable:'Não há dados verificados disponíveis para este mercado.',
+
 googleSignIn:"Entrar com o Google",signOut:"Sair",
 home:"Início",markets:"Mercados",analysis:"Análise IA",trades:"Operações",about:"Sobre",
 favorites:"Favoritos",settings:"Configurações",globalMarkets:"Mercados globais",
@@ -1792,7 +1930,7 @@ noMatch:"Nenhum resultado",languageSearch:"Pesquisar idioma..."
 },
 it:{
 subscriptions:'Abbonamenti',subscriptionsDesc:'I piani NEXFX AI, i vantaggi e i prezzi saranno disponibili qui a breve. Nessun abbonamento o pagamento sarà attivato prima dell’approvazione dei piani.',
-marketPulse:'Market Pulse',pulseLive:'Dati di mercato in tempo reale',pulseMostActive:'Più attivi nelle ultime 24 ore',pulseChange:'Variazione 24h',pulseVolume:'Volume scambiato',pulseUnavailable:'Nessun dato verificato è attualmente disponibile per questo mercato.',
+
 googleSignIn:"Accedi con Google",signOut:"Esci",
 home:"Home",markets:"Mercati",analysis:"Analisi IA",trades:"Operazioni",about:"Informazioni",
 favorites:"Preferiti",settings:"Impostazioni",globalMarkets:"Mercati globali",
@@ -1818,7 +1956,7 @@ noMatch:"Nessun risultato",languageSearch:"Cerca lingua..."
 },
 ru:{
 subscriptions:'Подписки',subscriptionsDesc:'Тарифы NEXFX AI, их преимущества и цены скоро появятся здесь. Подписка и оплата не будут включены до утверждения тарифов.',
-marketPulse:'Пульс рынка',pulseLive:'Данные рынка в реальном времени',pulseMostActive:'Самые активные за 24 часа',pulseChange:'Изменение за 24 ч',pulseVolume:'Объём торгов',pulseUnavailable:'Для этого рынка сейчас нет проверенных данных.',
+
 googleSignIn:"Войти через Google",signOut:"Выйти",
 home:"Главная",markets:"Рынки",analysis:"ИИ-анализ",trades:"Сделки",about:"О платформе",
 favorites:"Избранное",settings:"Настройки",globalMarkets:"Мировые рынки",
@@ -1844,7 +1982,7 @@ noMatch:"Нет совпадений",languageSearch:"Поиск языка..."
 },
 zh:{
 subscriptions:'订阅',subscriptionsDesc:'NEXFX AI 套餐、功能和价格即将发布。在套餐获批前，不会启用任何订阅或付款。',
-marketPulse:'市场脉搏',pulseLive:'实时市场数据',pulseMostActive:'过去24小时最活跃',pulseChange:'24小时变化',pulseVolume:'交易量',pulseUnavailable:'此市场目前没有可验证的数据。',
+
 googleSignIn:"使用 Google 登录",signOut:"退出登录",
 home:"首页",markets:"市场",analysis:"AI 分析",trades:"交易",about:"关于平台",
 favorites:"收藏",settings:"设置",globalMarkets:"全球市场",
@@ -1870,7 +2008,7 @@ noMatch:"无匹配结果",languageSearch:"搜索语言..."
 },
 ja:{
 subscriptions:'サブスクリプション',subscriptionsDesc:'NEXFX AIのプラン、特典、料金は近日公開予定です。プランの承認前に購読や支払いが有効になることはありません。',
-marketPulse:'マーケットパルス',pulseLive:'リアルタイム市場データ',pulseMostActive:'過去24時間で最も活発',pulseChange:'24時間変動',pulseVolume:'取引量',pulseUnavailable:'この市場では現在、検証済みデータを利用できません。',
+
 googleSignIn:"Google でログイン",signOut:"ログアウト",
 home:"ホーム",markets:"市場",analysis:"AI分析",trades:"取引",about:"プラットフォームについて",
 favorites:"お気に入り",settings:"設定",globalMarkets:"世界市場",
@@ -1896,7 +2034,7 @@ noMatch:"一致する結果がありません",languageSearch:"言語を検索..
 },
 ko:{
 subscriptions:'구독',subscriptionsDesc:'NEXFX AI 요금제, 혜택 및 가격이 곧 여기에 표시됩니다. 요금제가 승인되기 전에는 구독이나 결제가 활성화되지 않습니다.',
-marketPulse:'마켓 펄스',pulseLive:'실시간 시장 데이터',pulseMostActive:'최근 24시간 가장 활발한 자산',pulseChange:'24시간 변동',pulseVolume:'거래량',pulseUnavailable:'현재 이 시장에 대해 검증된 데이터를 사용할 수 없습니다.',
+
 googleSignIn:"Google로 로그인",signOut:"로그아웃",
 home:"홈",markets:"시장",analysis:"AI 분석",trades:"거래",about:"플랫폼 소개",
 favorites:"즐겨찾기",settings:"설정",globalMarkets:"글로벌 시장",
@@ -1922,7 +2060,7 @@ noMatch:"일치하는 결과 없음",languageSearch:"언어 검색..."
 },
 hi:{
 subscriptions:'सदस्यताएँ',subscriptionsDesc:'NEXFX AI योजनाएँ, सुविधाएँ और कीमतें जल्द यहाँ दिखाई जाएँगी। योजनाओं की मंज़ूरी से पहले कोई सदस्यता या भुगतान सक्रिय नहीं होगा।',
-marketPulse:'मार्केट पल्स',pulseLive:'लाइव बाज़ार डेटा',pulseMostActive:'पिछले 24 घंटों में सबसे सक्रिय',pulseChange:'24 घंटे का बदलाव',pulseVolume:'ट्रेडिंग वॉल्यूम',pulseUnavailable:'इस बाज़ार के लिए अभी सत्यापित डेटा उपलब्ध नहीं है।',
+
 googleSignIn:"Google से साइन इन करें",signOut:"साइन आउट",
 home:"होम",markets:"बाज़ार",analysis:"AI विश्लेषण",trades:"ट्रेड्स",about:"प्लेटफ़ॉर्म के बारे में",
 favorites:"पसंदीदा",settings:"सेटिंग्स",globalMarkets:"वैश्विक बाज़ार",
@@ -1948,7 +2086,7 @@ noMatch:"कोई मिलान परिणाम नहीं",languageSear
 },
 id:{
 subscriptions:'Langganan',subscriptionsDesc:'Paket NEXFX AI, fitur, dan harganya akan segera ditampilkan di sini. Langganan atau pembayaran tidak akan diaktifkan sebelum paket disetujui.',
-marketPulse:'Market Pulse',pulseLive:'Data pasar langsung',pulseMostActive:'Paling aktif dalam 24 jam terakhir',pulseChange:'Perubahan 24 jam',pulseVolume:'Volume perdagangan',pulseUnavailable:'Data terverifikasi belum tersedia untuk pasar ini.',
+
 googleSignIn:"Masuk dengan Google",signOut:"Keluar",
 home:"Beranda",markets:"Pasar",analysis:"Analisis AI",trades:"Transaksi",about:"Tentang",
 favorites:"Favorit",settings:"Pengaturan",globalMarkets:"Pasar Global",
@@ -1974,7 +2112,7 @@ noMatch:"Tidak ada hasil cocok",languageSearch:"Cari bahasa..."
 },
 nl:{
 subscriptions:'Abonnementen',subscriptionsDesc:'NEXFX AI-pakketten, functies en prijzen verschijnen binnenkort. Er wordt geen abonnement of betaling geactiveerd voordat de pakketten zijn goedgekeurd.',
-marketPulse:'Marktpuls',pulseLive:'Live marktgegevens',pulseMostActive:'Meest actief in de afgelopen 24 uur',pulseChange:'Verandering 24 uur',pulseVolume:'Handelsvolume',pulseUnavailable:'Er zijn momenteel geen geverifieerde gegevens voor deze markt.',
+
 googleSignIn:"Inloggen met Google",signOut:"Uitloggen",
 home:"Home",markets:"Markten",analysis:"AI-analyse",trades:"Transacties",about:"Over ons",
 favorites:"Favorieten",settings:"Instellingen",globalMarkets:"Wereldwijde markten",
@@ -2169,6 +2307,24 @@ async function handleLogout(){
   }
 }
 
+const accountAndChartLabels={
+  ar:{account:"حسابي",logout:"تسجيل الخروج",measure:"قياس النقاط (+)",draw:"أدوات الرسم",measureHint:"اختر أداة المسطرة أو القياس من شريط أدوات TradingView داخل الشارت، ثم حدد نقطتي البداية والنهاية.",drawHint:"استخدم شريط أدوات TradingView داخل الشارت لاختيار الأسهم وخطوط الاتجاه والمستويات والكتابة."},
+  en:{account:"My Account",logout:"Sign out",measure:"Measure points (+)",draw:"Drawing tools",measureHint:"Choose the ruler/measure tool in the TradingView chart toolbar, then mark the start and end points.",drawHint:"Use the TradingView chart toolbar to choose arrows, trend lines, price levels, and text."},
+  fr:{account:"Mon compte",logout:"Déconnexion",measure:"Mesurer les points (+)",draw:"Outils de dessin",measureHint:"Choisissez l’outil de mesure dans la barre TradingView, puis marquez le début et la fin.",drawHint:"Utilisez la barre TradingView pour les flèches, lignes de tendance, niveaux et textes."},
+  tr:{account:"Hesabım",logout:"Çıkış Yap",measure:"Puanları ölç (+)",draw:"Çizim araçları",measureHint:"TradingView araç çubuğundan cetvel/ölçüm aracını seçip başlangıç ve bitiş noktalarını belirleyin.",drawHint:"TradingView araç çubuğundan okları, trend çizgilerini, fiyat seviyelerini ve metni seçin."},
+  de:{account:"Mein Konto",logout:"Abmelden",measure:"Punkte messen (+)",draw:"Zeichenwerkzeuge",measureHint:"Wählen Sie das Messwerkzeug in der TradingView-Leiste und markieren Sie Start- und Endpunkt.",drawHint:"Nutzen Sie die TradingView-Leiste für Pfeile, Trendlinien, Preisniveaus und Text."},
+  es:{account:"Mi cuenta",logout:"Cerrar sesión",measure:"Medir puntos (+)",draw:"Herramientas de dibujo",measureHint:"Elija la herramienta de medición en la barra de TradingView y marque el inicio y el final.",drawHint:"Use la barra de TradingView para flechas, líneas de tendencia, niveles de precio y texto."},
+  pt:{account:"Minha conta",logout:"Sair",measure:"Medir pontos (+)",draw:"Ferramentas de desenho",measureHint:"Escolha a ferramenta de medição na barra do TradingView e marque o início e o fim.",drawHint:"Use a barra do TradingView para setas, linhas de tendência, níveis de preço e texto."},
+  it:{account:"Il mio account",logout:"Esci",measure:"Misura punti (+)",draw:"Strumenti di disegno",measureHint:"Scegli lo strumento di misurazione nella barra TradingView e indica inizio e fine.",drawHint:"Usa la barra TradingView per frecce, linee di tendenza, livelli di prezzo e testo."},
+  ru:{account:"Мой аккаунт",logout:"Выйти",measure:"Измерить пункты (+)",draw:"Инструменты рисования",measureHint:"Выберите инструмент измерения на панели TradingView и отметьте начальную и конечную точки.",drawHint:"Используйте панель TradingView для стрелок, линий тренда, уровней цены и текста."},
+  zh:{account:"我的账户",logout:"退出登录",measure:"测量点数 (+)",draw:"绘图工具",measureHint:"在 TradingView 工具栏中选择测量工具，然后标记起点和终点。",drawHint:"使用 TradingView 工具栏选择箭头、趋势线、价格水平和文本。"},
+  ja:{account:"マイアカウント",logout:"ログアウト",measure:"ポイントを測定 (+)",draw:"描画ツール",measureHint:"TradingView のツールバーで測定ツールを選び、始点と終点を指定してください。",drawHint:"TradingView のツールバーで矢印、トレンドライン、価格レベル、テキストを選択します。"},
+  ko:{account:"내 계정",logout:"로그아웃",measure:"포인트 측정 (+)",draw:"그리기 도구",measureHint:"TradingView 도구 모음에서 측정 도구를 선택한 다음 시작점과 끝점을 지정하세요.",drawHint:"TradingView 도구 모음에서 화살표, 추세선, 가격 수준 및 텍스트를 선택하세요."},
+  hi:{account:"मेरा खाता",logout:"साइन आउट",measure:"पॉइंट मापें (+)",draw:"ड्रॉइंग टूल",measureHint:"TradingView टूलबार में माप टूल चुनें और शुरुआती तथा अंतिम बिंदु तय करें।",drawHint:"TradingView टूलबार से तीर, ट्रेंड लाइन, मूल्य स्तर और टेक्स्ट चुनें।"},
+  id:{account:"Akun Saya",logout:"Keluar",measure:"Ukur poin (+)",draw:"Alat gambar",measureHint:"Pilih alat pengukur di toolbar TradingView, lalu tentukan titik awal dan akhir.",drawHint:"Gunakan toolbar TradingView untuk memilih panah, garis tren, level harga, dan teks."},
+  nl:{account:"Mijn account",logout:"Uitloggen",measure:"Punten meten (+)",draw:"Tekentools",measureHint:"Kies het meetinstrument in de TradingView-werkbalk en markeer begin- en eindpunt.",drawHint:"Gebruik de TradingView-werkbalk voor pijlen, trendlijnen, prijsniveaus en tekst."}
+};
+
 function safeRead(key,fallback=null){
   try{
     const raw=localStorage.getItem(key);
@@ -2214,7 +2370,6 @@ function loadUserScopedState(){
   $("showFav").classList.toggle("active",onlyFavorites);
   renderAssets();
   renderFavorites();
-  renderMarketPulse();
   updateSideInformation();
   displaySavedAnalysis();
   renderChart();
@@ -2316,7 +2471,16 @@ function translateInterface(){
   $("languageSearch").placeholder=t("languageSearch");
   updateLanguageButton();
   updateTradeDirectionLabels();
+  updateAccountAndChartLabels();
   renderLanguageOptions();
+}
+
+function updateAccountAndChartLabels(){
+  const words=accountAndChartLabels[language]||accountAndChartLabels.en;
+  const accountLabel=document.querySelector("[data-account-label]");
+  const logoutButton=document.querySelector("[data-account-logout]");
+  if(accountLabel)accountLabel.textContent=words.account;
+  if(logoutButton)logoutButton.textContent=words.logout;
 }
 
 
@@ -2354,7 +2518,6 @@ function setLanguage(lang){
   translateInterface();
   renderAssets();
   renderFavorites();
-  renderMarketPulse();
   updateSideInformation();
   saveState();
   renderChart();
@@ -2377,7 +2540,6 @@ function setMarket(name){
     selected=assets[market][0];
   }
   renderAssets();
-  renderMarketPulse();
   updateSideInformation();
   renderChart();
   saveState();
@@ -2401,7 +2563,6 @@ function updateSideInformation(){
 function selectAsset(item){
   selected=item;
   updateSideInformation();
-  renderMarketPulse();
   renderAssets();
   renderChart();
   saveState();
@@ -2470,7 +2631,6 @@ function renderFavorites(){
         btn.classList.toggle("active",btn.dataset.market===group);
       });
       $("marketCaption").textContent=group.toUpperCase();
-      renderMarketPulse();
       $("showAll").classList.add("active");
       $("showFav").classList.remove("active");
       renderAssets();
@@ -2482,41 +2642,6 @@ function renderFavorites(){
   });
 }
 
-
-let marketPulseRequest=0;
-async function renderMarketPulse(){
-  const request=++marketPulseRequest;
-  const status=$("marketPulseStatus"), list=$("marketPulseList");
-  if(!status||!list)return;
-  list.innerHTML="";
-  if(market!=="crypto"){
-    status.textContent=t("pulseUnavailable");
-    return;
-  }
-  status.textContent=t("pulseLive")+" · Binance";
-  try{
-    const response=await fetch("https://api.binance.com/api/v3/ticker/24hr",{cache:"no-store"});
-    if(!response.ok)throw new Error("Market data request failed");
-    const rows=await response.json();
-    if(request!==marketPulseRequest)return;
-    const active=rows.filter(x=>x.symbol.endsWith("USDT")&&Number(x.quoteVolume)>0)
-      .sort((a,b)=>Number(b.quoteVolume)-Number(a.quoteVolume)).slice(0,5);
-    if(!active.length)throw new Error("No market rows");
-    active.forEach(item=>{
-      const row=document.createElement("div");row.className="pulse-item";
-      const name=document.createElement("span");name.textContent=item.symbol.replace("USDT","/USDT");
-      const change=document.createElement("b");const pct=Number(item.priceChangePercent);change.textContent=(pct>=0?"+":"")+pct.toFixed(2)+"%";change.style.color=pct>=0?"var(--green)":"var(--red)";
-      const volume=document.createElement("small");volume.textContent=t("pulseVolume")+": "+(Number(item.quoteVolume)/1e6).toFixed(1)+"M USDT";
-      const label=document.createElement("small");label.textContent=t("pulseChange");
-      row.append(name,change,volume,label);list.appendChild(row);
-    });
-    status.textContent=t("pulseLive")+" · Binance · 24h";
-  }catch(error){
-    if(request!==marketPulseRequest)return;
-    status.textContent=t("pulseUnavailable");
-    list.textContent=t("pulseUnavailable");
-  }
-}
 
 function renderChart(){
   const generation=++chartGeneration;
@@ -2569,8 +2694,8 @@ function renderChart(){
     locale:language,
     allow_symbol_change:true,
     calendar:false,
-    hide_side_toolbar:true,
-    details:true,
+    hide_side_toolbar:false,
+    details:false,
     hotlist:false,
     hide_volume:true,
     withdateranges:true,
@@ -2675,6 +2800,7 @@ $("showFav").addEventListener("click",()=>{
   $("showAll").classList.remove("active");
   renderAssets(); saveState();
 });
+
 $("timeframe").addEventListener("change",()=>{ renderChart(); saveState(); });
 
 $("executionConnectBtn").addEventListener("click",()=>{
@@ -2747,6 +2873,7 @@ saveState();
     <p id="authMessage" role="status" aria-live="polite"></p>
   </div>
 </div>
+
 
 </body>
 </html>
