@@ -195,6 +195,13 @@ nav a:hover{color:var(--gold2)}
   text-decoration:none;font-size:12px
 }
 
+
+/* TradingView live quotes: only EUR/USD and GBP/USD; preserve ticker grid and palette */
+.tick-live{min-width:0}
+.tv-live-quote{width:100%;height:42px;overflow:hidden;position:relative;margin-top:2px}
+.tv-live-quote .tradingview-widget-container__widget{width:100%;height:42px;overflow:hidden}
+.tv-live-quote iframe{max-width:100%!important}
+
 /* Live Ticker with Green Profit Indicators */
 .ticker{
   display:grid;grid-template-columns:repeat(6,1fr);background:#000;
@@ -1214,8 +1221,14 @@ button,input,select,textarea{
   <div class="tick">🥈 <b>SILVER <span class="profit-green">+0.95%</span></b></div>
   <div class="tick">₿ <b>BTC <span class="profit-green">+2.41%</span></b></div>
   <div class="tick">♦ <b>ETH <span class="profit-green">+1.96%</span></b></div>
-  <div class="tick">🇪🇺 <b>EUR/USD <span class="profit-green">+0.23%</span></b></div>
-  <div class="tick">🇬🇧 <b>GBP/USD <span class="profit-green">+0.45%</span></b></div>
+  <div class="tick tick-live" aria-label="EUR/USD live TradingView quote">
+    🇪🇺 <b>EUR/USD</b>
+    <div class="tv-live-quote" id="tvTickerEURUSD"><div class="tradingview-widget-container__widget"></div></div>
+  </div>
+  <div class="tick tick-live" aria-label="GBP/USD live TradingView quote">
+    🇬🇧 <b>GBP/USD</b>
+    <div class="tv-live-quote" id="tvTickerGBPUSD"><div class="tradingview-widget-container__widget"></div></div>
+  </div>
 </section>
 
 <section id="markets">
@@ -2542,6 +2555,36 @@ async function renderMarketPulse(){
     status.textContent=t("pulseUnavailable");
     list.textContent=t("pulseUnavailable");
   }
+}
+
+
+// TradingView live quote widgets for the two forex pairs under test.
+// The chart uses the same TradingView symbols (FX:EURUSD / FX:GBPUSD).
+function mountNexfxLiveQuote(containerId, symbol){
+  const host=document.getElementById(containerId);
+  if(!host || host.dataset.tvMounted==="1") return;
+  host.dataset.tvMounted="1";
+  const script=document.createElement("script");
+  script.type="text/javascript";
+  script.async=true;
+  script.src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js";
+  script.text=JSON.stringify({
+    symbol:symbol,
+    width:"100%",
+    locale:"en",
+    colorTheme:"dark",
+    isTransparent:true
+  });
+  host.appendChild(script);
+}
+function initNexfxLiveQuotes(){
+  mountNexfxLiveQuote("tvTickerEURUSD","FX:EURUSD");
+  mountNexfxLiveQuote("tvTickerGBPUSD","FX:GBPUSD");
+}
+if(document.readyState==="loading"){
+  document.addEventListener("DOMContentLoaded",initNexfxLiveQuotes,{once:true});
+}else{
+  initNexfxLiveQuotes();
 }
 
 function renderChart(){
