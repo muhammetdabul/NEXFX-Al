@@ -49,6 +49,7 @@ MAX_UPSTREAM_BYTES = 1_000_000
 
 CACHE_TTL_CRYPTO = 20    # ثانية
 CACHE_TTL_FOREX = 900    # ثانية (أسعار البنك المركزي الأوروبي يومية)
+CACHE_TTL_METALS = 60    # ثانية (مصادر الذهب والفضة تُحدّث عادة كل 30-60 ثانية)
 
 
 # ---------------------------------------------------------------- أدوات
@@ -130,6 +131,72 @@ def crypto_prices():
     return out
 
 
+def _parse_provider_time(value):
+    """Parse an ISO-8601 provider timestamp and return an aware UTC datetime."""
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError("missing provider timestamp")
+    stamp = value.strip().replace("Z", "+00:00")
+    parsed = datetime.fromisoformat(stamp)
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def _validated_metal(price_value, timestamp, source, stale=False):
+    """Accept only positive, finite, recently observed real market prices."""
+    price = float(price_value)
+    if not (price > 0 and price < 10_000_000):
+        raise ValueError("invalid metal price")
+    as_of = _parse_provider_time(timestamp)
+    age = (datetime.now(timezone.utc) - as_of).total_seconds()
+    if age < -60 or age > 300:
+        raise ValueError("metal price timestamp outside freshness window")
+    return {
+        "price": price,
+        "source": source,
+        "as_of": as_of.isoformat(timespec="seconds"),
+        **({"stale": True} if stale else {}),
+    }
+
+
+def metals_prices():
+    """Primary Gold-API.com per symbol; XAUS is queried only for missing symbols."""
+    out = {}
+    for name, symbol in (("GOLD", "XAU"), ("SILVER", "XAG")):
+        try:
+            data = fetch_json(f"https://api.gold-api.com/price/{symbol}")
+            out[name] = _validated_metal(
+                data["price"], data.get("updatedAt"), "gold-api.com"
+            )
+        except Exception as exc:  # noqa: BLE001 - fallback independently per symbol
+            sys.stderr.write(f"[warn] gold-api {symbol}: {type(exc).__name__}: {exc}\n")
+
+    missing = [name for name in ("GOLD", "SILVER") if name not in out]
+    if missing:
+        try:
+            backup = fetch_json("https://xaus.com/api/v1/spot?compact=1")
+            state = backup.get("data_state") or {}
+            status = state.get("status", "fresh")
+            backup_stale = bool(backup.get("stale")) or status == "stale"
+            backup_time = backup.get("price_as_of") or backup.get("updated_at") or state.get("as_of")
+            if status not in ("fresh", "stale"):
+                raise ValueError("XAUS reports unavailable data")
+            for name, field in (("GOLD", "spot_usd_oz"), ("SILVER", "silver_usd_oz")):
+                if name in missing:
+                    try:
+                        out[name] = _validated_metal(
+                            backup[field], backup_time, "xaus.com", stale=backup_stale
+                        )
+                    except Exception as exc:  # noqa: BLE001 - one missing metal must not hide the other
+                        sys.stderr.write(f"[warn] xaus {name}: {type(exc).__name__}: {exc}\n")
+        except Exception as exc:  # noqa: BLE001
+            sys.stderr.write(f"[warn] xaus backup: {type(exc).__name__}: {exc}\n")
+
+    if not out:
+        raise RuntimeError("no fresh gold or silver source reachable")
+    return out
+
+
 def forex_prices():
     end = date.today()
     start = end - timedelta(days=10)
@@ -159,12 +226,13 @@ def build_ticker():
     items = {name: None for name in TICKER_ORDER}
     items.update(cached("crypto", CACHE_TTL_CRYPTO, crypto_prices))
     items.update(cached("forex", CACHE_TTL_FOREX, forex_prices))
+    items.update(cached("metals", CACHE_TTL_METALS, metals_prices))
     return {
         "updated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "items": items,
         "notes": {
-            "GOLD": "لا يوجد مصدر مجاني موثوق بدون مفتاح؛ سيأتي من حساب Demo لاحقاً",
-            "SILVER": "لا يوجد مصدر مجاني موثوق بدون مفتاح؛ سيأتي من حساب Demo لاحقاً",
+            "GOLD": "سعر فوري مرجعي بالدولار لكل أونصة تروي؛ المصدر الأساسي Gold-API.com والاحتياطي XAUS",
+            "SILVER": "سعر فوري مرجعي بالدولار لكل أونصة تروي؛ المصدر الأساسي Gold-API.com والاحتياطي XAUS",
             "EUR/USD": "سعر مرجعي يومي، ليس لحظياً",
             "GBP/USD": "سعر مرجعي يومي، ليس لحظياً",
         },
