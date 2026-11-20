@@ -195,6 +195,14 @@ nav a:hover{color:var(--gold2)}
   text-decoration:none;font-size:12px
 }
 
+/* Live price values from the NEXFX Render API */
+.ticker .tick{display:flex;flex-direction:column;gap:4px;min-width:0}
+.ticker .tick>b{display:block;direction:ltr;color:var(--white)}
+.ticker-price{display:block;direction:ltr;text-align:start;color:var(--gold2);font-weight:700;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.ticker-change{display:block;direction:ltr;text-align:start;color:var(--muted);font-size:10px;font-variant-numeric:tabular-nums}
+.ticker-change.positive{color:var(--green)}
+.ticker-change.negative{color:var(--red)}
+
 /* Live Ticker with Green Profit Indicators */
 .ticker{
   display:grid;grid-template-columns:repeat(6,1fr);background:#000;
@@ -1359,14 +1367,15 @@ button,input,select,textarea{
 
 <main class="container" id="home">
 
-<section class="ticker">
-  <div class="tick">🪙 <b>GOLD <span class="profit-green">+1.27%</span></b></div>
-  <div class="tick">🥈 <b>SILVER <span class="profit-green">+0.95%</span></b></div>
-  <div class="tick">₿ <b>BTC <span class="profit-green">+2.41%</span></b></div>
-  <div class="tick">♦ <b>ETH <span class="profit-green">+1.96%</span></b></div>
-  <div class="tick">🇪🇺 <b>EUR/USD <span class="profit-green">+0.23%</span></b></div>
-  <div class="tick">🇬🇧 <b>GBP/USD <span class="profit-green">+0.45%</span></b></div>
+<section class="ticker" id="liveTicker" aria-label="أسعار الأسواق">
+  <div class="tick" data-price-symbol="GOLD">🪙 <b>GOLD</b><span class="ticker-price" data-price>غير متاح حالياً</span><span class="ticker-change" data-change>لا يوجد مصدر أسعار</span></div>
+  <div class="tick" data-price-symbol="SILVER">🥈 <b>SILVER</b><span class="ticker-price" data-price>غير متاح حالياً</span><span class="ticker-change" data-change>لا يوجد مصدر أسعار</span></div>
+  <div class="tick" data-price-symbol="BTC">₿ <b>BTC</b><span class="ticker-price" data-price>جارٍ جلب السعر…</span><span class="ticker-change" data-change>—</span></div>
+  <div class="tick" data-price-symbol="ETH">♦ <b>ETH</b><span class="ticker-price" data-price>جارٍ جلب السعر…</span><span class="ticker-change" data-change>—</span></div>
+  <div class="tick" data-price-symbol="EUR/USD">🇪🇺 <b>EUR/USD</b><span class="ticker-price" data-price>جارٍ جلب السعر…</span><span class="ticker-change" data-change>—</span></div>
+  <div class="tick" data-price-symbol="GBP/USD">🇬🇧 <b>GBP/USD</b><span class="ticker-price" data-price>جارٍ جلب السعر…</span><span class="ticker-change" data-change>—</span></div>
 </section>
+<p id="tickerStatus" class="muted" role="status" aria-live="polite" style="margin:-5px 2px 10px">يتم الاتصال بمصدر الأسعار…</p>
 
 <section id="markets">
   <div class="section-title"><h2 data-t="globalMarkets">الأسواق العالمية</h2></div>
@@ -2844,6 +2853,72 @@ $("runAnalysis").addEventListener("click",runAnalysis);
 AuthController.init();
 loadUserScopedState();
 saveState();
+</script>
+
+<script>
+/* NEXFX AI live ticker: prices are displayed only when returned by Render. */
+(()=>{
+  "use strict";
+  const API_URL = "https://nexfx-al.onrender.com/api/ticker";
+  const statusEl = document.getElementById("tickerStatus");
+  const cards = [...document.querySelectorAll("#liveTicker [data-price-symbol]")];
+  const formatPrice = (symbol, value) => {
+    const digits = symbol.includes("/") ? 5 : 2;
+    return new Intl.NumberFormat(undefined,{minimumFractionDigits:digits,maximumFractionDigits:digits}).format(value);
+  };
+  const setCard = (symbol, item) => {
+    const card = cards.find(el => el.dataset.priceSymbol === symbol);
+    if (!card) return;
+    const priceEl = card.querySelector("[data-price]");
+    const changeEl = card.querySelector("[data-change]");
+    if (!item || typeof item.price !== "number" || !Number.isFinite(item.price)) {
+      priceEl.textContent = "غير متاح حالياً";
+      changeEl.textContent = "لم يوفّر الخادم سعراً لهذا الأصل";
+      changeEl.className = "ticker-change";
+      return;
+    }
+    priceEl.textContent = (symbol.includes("/") ? "" : "$ ") + formatPrice(symbol,item.price);
+    if (typeof item.change_pct === "number" && Number.isFinite(item.change_pct)) {
+      const sign = item.change_pct > 0 ? "+" : "";
+      changeEl.textContent = sign + item.change_pct.toFixed(2) + "%" + (item.stale ? " · بيانات مخزنة" : "");
+      changeEl.className = "ticker-change " + (item.change_pct > 0 ? "positive" : item.change_pct < 0 ? "negative" : "");
+    } else {
+      changeEl.textContent = item.stale ? "بيانات مخزنة" : "التغير غير متاح";
+      changeEl.className = "ticker-change";
+    }
+    if ((symbol === "EUR/USD" || symbol === "GBP/USD") && item.as_of) {
+      changeEl.title = "السعر المرجعي بتاريخ " + item.as_of + " (ليس لحظياً)";
+    }
+  };
+  async function refreshTicker(){
+    if (!statusEl) return;
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(()=>controller.abort(),15000);
+      let response;
+      try { response = await fetch(API_URL,{method:"GET",cache:"no-store",headers:{"Accept":"application/json"},signal:controller.signal}); }
+      finally { clearTimeout(timeout); }
+      if (!response.ok) throw new Error("HTTP " + response.status);
+      const payload = await response.json();
+      if (!payload || typeof payload.items !== "object" || !payload.items) throw new Error("Invalid ticker response");
+      ["GOLD","SILVER","BTC","ETH","EUR/USD","GBP/USD"].forEach(symbol=>setCard(symbol,payload.items[symbol]));
+      const stamp = payload.updated ? new Date(payload.updated) : null;
+      statusEl.textContent = "متصل بمصدر الأسعار · آخر تحديث: " + (stamp && !Number.isNaN(stamp.getTime()) ? stamp.toLocaleTimeString() : "الآن") + " · أسعار الفوركس مرجعية يومية";
+    } catch(error) {
+      statusEl.textContent = "تعذر الاتصال بمصدر الأسعار حالياً؛ لن نعرض أرقاماً تقديرية. ستتم إعادة المحاولة تلقائياً.";
+      console.warn("NEXFX ticker connection failed:",error);
+      cards.forEach(card=>{
+        const symbol=card.dataset.priceSymbol;
+        if(symbol==="GOLD"||symbol==="SILVER") return;
+        card.querySelector("[data-price]").textContent="غير متاح حالياً";
+        card.querySelector("[data-change]").textContent="تعذر جلب البيانات";
+        card.querySelector("[data-change]").className="ticker-change";
+      });
+    }
+  }
+  refreshTicker();
+  window.setInterval(refreshTicker,60000);
+})();
 </script>
 
 <!-- Admin statistics scaffold: intentionally no fabricated counts; connect to protected Firebase data before enabling. -->
