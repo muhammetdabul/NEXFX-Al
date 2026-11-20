@@ -1312,6 +1312,47 @@ button,input,select,textarea{
 #runAnalysis.primary:focus-visible, #executionScanBtn.primary:focus-visible {
   box-shadow: none !important; filter: brightness(1.02) !important;
 }
+
+/* NEXFX AI: TradingView Forex ticker integration */
+.tv-pairs-widget{
+  grid-column:span 2;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:3px;
+  padding:5px 7px;
+  background:#050b16;
+  border-inline-start:1px solid var(--gold);
+  overflow:hidden;
+}
+.tv-pairs-heading{
+  color:var(--gold2);
+  font-size:9px;
+  font-weight:700;
+  line-height:1.2;
+  text-align:start;
+}
+.tv-pairs-widget .tradingview-widget-container,
+.tv-pairs-widget .tradingview-widget-container__widget{
+  width:100%;
+  min-width:0;
+}
+.tv-pairs-widget .tradingview-widget-copyright{
+  font-size:8px;
+  line-height:1;
+  text-align:end;
+  opacity:.65;
+}
+.tv-pairs-widget .tradingview-widget-copyright a{
+  color:var(--muted);
+  text-decoration:none;
+}
+@media(max-width:700px){
+  #liveTicker{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}
+  .tv-pairs-widget{grid-column:1 / -1; min-height:70px; padding:5px 7px;}
+}
+
 </style>
 
 </head>
@@ -1372,8 +1413,30 @@ button,input,select,textarea{
   <div class="tick" data-price-symbol="SILVER">🥈 <b>SILVER</b><span class="ticker-price" data-price>غير متاح حالياً</span><span class="ticker-change" data-change>لا يوجد مصدر أسعار</span></div>
   <div class="tick" data-price-symbol="BTC">₿ <b>BTC</b><span class="ticker-price" data-price>جارٍ جلب السعر…</span><span class="ticker-change" data-change>—</span></div>
   <div class="tick" data-price-symbol="ETH">♦ <b>ETH</b><span class="ticker-price" data-price>جارٍ جلب السعر…</span><span class="ticker-change" data-change>—</span></div>
-  <div class="tick" data-price-symbol="EUR/USD">🇪🇺 <b>EUR/USD</b><span class="ticker-price" data-price>جارٍ جلب السعر…</span><span class="ticker-change" data-change>—</span></div>
-  <div class="tick" data-price-symbol="GBP/USD">🇬🇧 <b>GBP/USD</b><span class="ticker-price" data-price>جارٍ جلب السعر…</span><span class="ticker-change" data-change>—</span></div>
+
+  <!-- TradingView live quotes: same symbols used by the NEXFX chart -->
+  <div class="tv-pairs-widget" aria-label="أسعار الفوركس من TradingView">
+    <div class="tv-pairs-heading">الفوركس · TradingView</div>
+    <div class="tradingview-widget-container">
+      <div class="tradingview-widget-container__widget"></div>
+      <div class="tradingview-widget-copyright">
+        <a href="https://www.tradingview.com/markets/" rel="noopener nofollow" target="_blank">TradingView</a>
+      </div>
+      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+      {
+        "symbols": [
+          { "proName": "FX:EURUSD", "title": "EUR/USD" },
+          { "proName": "FX:GBPUSD", "title": "GBP/USD" }
+        ],
+        "showSymbolLogo": false,
+        "colorTheme": "dark",
+        "isTransparent": true,
+        "displayMode": "compact",
+        "locale": "en"
+      }
+      </script>
+    </div>
+  </div>
 </section>
 <p id="tickerStatus" class="muted" role="status" aria-live="polite" style="margin:-5px 2px 10px">يتم الاتصال بمصدر الأسعار…</p>
 
@@ -2886,9 +2949,6 @@ saveState();
       changeEl.textContent = item.stale ? "بيانات مخزنة" : "التغير غير متاح";
       changeEl.className = "ticker-change";
     }
-    if ((symbol === "EUR/USD" || symbol === "GBP/USD") && item.as_of) {
-      changeEl.title = "السعر المرجعي بتاريخ " + item.as_of + " (ليس لحظياً)";
-    }
   };
   async function refreshTicker(){
     if (!statusEl) return;
@@ -2901,11 +2961,11 @@ saveState();
       if (!response.ok) throw new Error("HTTP " + response.status);
       const payload = await response.json();
       if (!payload || typeof payload.items !== "object" || !payload.items) throw new Error("Invalid ticker response");
-      ["GOLD","SILVER","BTC","ETH","EUR/USD","GBP/USD"].forEach(symbol=>setCard(symbol,payload.items[symbol]));
+      ["GOLD","SILVER","BTC","ETH"].forEach(symbol=>setCard(symbol,payload.items[symbol]));
       const stamp = payload.updated ? new Date(payload.updated) : null;
-      statusEl.textContent = "متصل بمصدر الأسعار · آخر تحديث: " + (stamp && !Number.isNaN(stamp.getTime()) ? stamp.toLocaleTimeString() : "الآن") + " · أسعار الفوركس مرجعية يومية";
+      statusEl.textContent = "بيانات الذهب والفضة والعملات الرقمية من خادم NEXFX · أسعار EUR/USD وGBP/USD معروضة عبر TradingView";
     } catch(error) {
-      statusEl.textContent = "تعذر الاتصال بمصدر الأسعار حالياً؛ لن نعرض أرقاماً تقديرية. ستتم إعادة المحاولة تلقائياً.";
+      statusEl.textContent = "تعذر الاتصال بخادم أسعار NEXFX؛ شريط الفوركس من TradingView يعمل بشكل مستقل عند توفر الاتصال.";
       console.warn("NEXFX ticker connection failed:",error);
       cards.forEach(card=>{
         const symbol=card.dataset.priceSymbol;
