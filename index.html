@@ -1352,11 +1352,6 @@ body{background:radial-gradient(ellipse at 50% 0%,#15365b 0%,#0b1b30 58%,#071326
 
 <style id="nexfx-live-market-data">
 .asset-row{position:relative}
-.asset-quote{margin-inline-start:auto;display:flex;flex-direction:column;align-items:flex-end;gap:1px;min-width:76px;font-size:10px;line-height:1.25;direction:ltr;font-variant-numeric:tabular-nums}
-.asset-quote b{font-size:10px;color:var(--white);font-weight:700}
-.asset-quote small{font-size:9px}
-.asset-quote .up{color:#18dc91}.asset-quote .down{color:#ff5265}.asset-quote .muted{color:var(--muted)}
-@media(max-width:700px){.asset-quote{min-width:68px}.asset-quote b{font-size:9px}}
 </style>
 
 </head>
@@ -1479,18 +1474,18 @@ body{background:radial-gradient(ellipse at 50% 0%,#15365b 0%,#0b1b30 58%,#071326
   <div class="analysis-mode-cards" role="group" aria-label="اختيار نوع التحليل">
     <button class="analysis-mode-card" type="button" data-analysis-card="technical" aria-pressed="true">
       <span class="analysis-mode-icon" aria-hidden="true">📊</span>
-      <strong>التحليل الفني</strong>
-      <small>تحليل يعتمد على بيانات السوق والمؤشرات الفنية عند ربط المصدر</small>
+      <strong data-analysis-i18n="technicalTitle">التحليل الفني</strong>
+      <small data-analysis-i18n="technicalDesc">تحليل يعتمد على بيانات السوق والمؤشرات الفنية عند ربط المصدر</small>
     </button>
     <button class="analysis-mode-card" type="button" data-analysis-card="manual" aria-pressed="false">
       <span class="analysis-mode-icon" aria-hidden="true">✍️</span>
-      <strong>التحليل اليدوي</strong>
-      <small>إدخال مستويات الدخول ووقف الخسارة والأهداف يدوياً</small>
+      <strong data-analysis-i18n="manualTitle">التحليل اليدوي</strong>
+      <small data-analysis-i18n="manualDesc">إدخال مستويات الدخول ووقف الخسارة والأهداف يدوياً</small>
     </button>
     <button class="analysis-mode-card" type="button" data-analysis-card="auto" aria-pressed="false">
       <span class="analysis-mode-icon" aria-hidden="true">🤖</span>
-      <strong>التحليل التلقائي</strong>
-      <small>تجهيز التحليل الآلي بعد ربط البيانات ومحرك الذكاء الاصطناعي</small>
+      <strong data-analysis-i18n="autoTitle">التحليل التلقائي</strong>
+      <small data-analysis-i18n="autoDesc">تجهيز التحليل الآلي بعد ربط البيانات ومحرك الذكاء الاصطناعي</small>
     </button>
   </div>
 
@@ -2466,51 +2461,14 @@ const NEXFX_API_BASE=""; // بعد نشر server.py ضع هنا رابط الخ�
 
 // Public Binance spot market data. No API key is required for public quotes/klines.
 const NEXFX_BINANCE_BASE="https://data-api.binance.vision/api/v3";
-const NEXFX_QUOTE_REFRESH_MS=15000;
-const liveCryptoQuotes=new Map();
-let quoteRefreshBusy=false;
-const binanceIntervals={"1":"1m","5":"5m","15":"15m","60":"1h","240":"4h","D":"1d","W":"1w"};
 function cryptoPairFromTradingView(tvSymbol){
   const match=/^BINANCE:([A-Z0-9]+)$/.exec(String(tvSymbol||""));
   return match?match[1]:null;
 }
 function formatMarketPrice(value){
   const n=Number(value); if(!Number.isFinite(n))return "—";
-  return n>=1000?n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}):n>=1?n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:4}):n.toLocaleString(undefined,{minimumFractionDigits:4,maximumFractionDigits:8});
-}
-async function refreshCryptoQuotes(){
-  if(quoteRefreshBusy)return; quoteRefreshBusy=true;
-  try{
-    const symbols=[...new Set(assets.crypto.map(x=>cryptoPairFromTradingView(x[2])).filter(Boolean))];
-    const url=NEXFX_BINANCE_BASE+"/ticker/24hr?symbols="+encodeURIComponent(JSON.stringify(symbols));
-    const response=await fetch(url,{cache:"no-store",headers:{Accept:"application/json"}});
-    if(!response.ok)throw new Error("Binance HTTP "+response.status);
-    const rows=await response.json();
-    if(!Array.isArray(rows))throw new Error("Unexpected Binance response");
-    const now=Date.now();
-    rows.forEach(row=>{
-      const price=Number(row.lastPrice),change=Number(row.priceChangePercent),volume=Number(row.quoteVolume);
-      if(row.symbol&&Number.isFinite(price)&&price>0)liveCryptoQuotes.set(row.symbol,{price,change,volume,updated:now,source:"Binance Spot"});
-    });
-    updateVisibleAssetQuotes();
-    const pulse=document.getElementById("marketPulseStatus");
-    if(pulse){pulse.textContent=(language==="ar"?"بيانات Binance المباشرة · تم التحديث ":"Live Binance data · Updated ")+new Date(now).toLocaleTimeString();}
-  }catch(error){
-    console.warn("NEXFX live quotes unavailable:",error);
-    const pulse=document.getElementById("marketPulseStatus");
-    if(pulse)pulse.textContent=language==="ar"?"تعذر جلب بيانات Binance حالياً؛ أعد المحاولة لاحقاً.":"Binance data is temporarily unavailable; retry later.";
-  }finally{quoteRefreshBusy=false;}
-}
-function updateVisibleAssetQuotes(){
-  document.querySelectorAll("[data-live-quote]").forEach(node=>{
-    const q=liveCryptoQuotes.get(node.dataset.liveQuote);
-    const price=node.querySelector("b"),change=node.querySelector("small");
-    if(!q||!price||!change)return;
-    price.textContent=formatMarketPrice(q.price);
-    change.textContent=(q.change>=0?"+":"")+q.change.toFixed(2)+"%";
-    change.className=q.change>=0?"up":"down";
-    node.title="Binance Spot · "+new Date(q.updated).toLocaleTimeString();
-  });
+  const opts=n>=1000?{minimumFractionDigits:2,maximumFractionDigits:2}:n>=1?{minimumFractionDigits:2,maximumFractionDigits:4}:{minimumFractionDigits:4,maximumFractionDigits:8};
+  return new Intl.NumberFormat("en-US-u-nu-latn",opts).format(n);
 }
 function ema(values,period){
   if(values.length<period)return null;
@@ -2532,36 +2490,36 @@ function calculateAtr(candles,period=14){
 }
 function intervalForSelectedTimeframe(){
   const interval=binanceIntervals[$("timeframe").value];
-  if(!interval)throw new Error(language==="ar"?"الإطار الزمني غير مدعوم.":"Unsupported timeframe.");
+  if(!interval)throw new Error(at("unsupported"));
   return interval;
 }
 async function fetchSelectedMarketCandles(asset, marketName, interval){
   const tvSymbol=asset[2];
   if(marketName==="crypto"){
     const symbol=cryptoPairFromTradingView(tvSymbol);
-    if(!symbol)throw new Error(language==="ar"?"رمز العملة الرقمية غير صالح.":"Invalid crypto symbol.");
+    if(!symbol)throw new Error(at("invalidSymbol"));
     const url=NEXFX_BINANCE_BASE+"/klines?symbol="+encodeURIComponent(symbol)+"&interval="+interval+"&limit=250";
     const response=await fetch(url,{cache:"no-store",headers:{Accept:"application/json"}});
     if(!response.ok)throw new Error("Binance HTTP "+response.status);
     const raw=await response.json();
     const candles=raw.filter(k=>Number(k[6])<Date.now()).map(k=>({time:Number(k[0]),open:Number(k[1]),high:Number(k[2]),low:Number(k[3]),close:Number(k[4]),volume:Number(k[5])}));
-    if(candles.length<60)throw new Error(language==="ar"?"بيانات الشموع غير كافية لهذا الأصل والإطار الزمني.":"Not enough candles for this asset and timeframe.");
+    if(candles.length<60)throw new Error(at("insufficient"));
     return {symbol,interval,candles,source:"Binance Spot API"};
   }
-  if(!NEXFX_API_BASE)throw new Error(language==="ar"?"يلزم نشر server.py أولاً ثم ضبط رابط الخادم لتفعيل تحليل الفوركس والمعادن والأسهم.":"Deploy server.py and configure its URL to enable forex, metals and stock analysis.");
+  if(!NEXFX_API_BASE)throw new Error(at("serverNeeded"));
   const url=NEXFX_API_BASE+"/api/market/klines?market="+encodeURIComponent(marketName)+"&symbol="+encodeURIComponent(tvSymbol)+"&interval="+encodeURIComponent(interval)+"&limit=250";
   const response=await fetch(url,{cache:"no-store",headers:{Accept:"application/json"}});
   if(!response.ok){let message="Market data HTTP "+response.status;try{const body=await response.json();if(body.error)message=body.error;}catch(_){}throw new Error(message);}
   const data=await response.json();
   const candles=(data.candles||[]).filter(c=>Number(c.time)<Date.now()).map(c=>({time:Number(c.time),open:Number(c.open),high:Number(c.high),low:Number(c.low),close:Number(c.close),volume:Number(c.volume||0)}));
-  if(candles.length<60)throw new Error(language==="ar"?"بيانات الشموع غير كافية لهذا الأصل والإطار الزمني.":"Not enough candles for this asset and timeframe.");
+  if(candles.length<60)throw new Error(at("insufficient"));
   return {symbol:data.provider_symbol||tvSymbol,interval,candles,source:data.source||"Market data provider"};
 }
 function clearAnalysisOutput(message=""){
   analysisRunToken++;
   lastAnalysis=null;
   const title=$("resultTitle"),text=$("resultText");
-  title.textContent=language==="ar"?"لم يتم تشغيل تحليل":"Analysis not run";
+  title.textContent=at("notRun");
   title.classList.remove("signal-up","signal-down","signal-neutral");
   text.textContent=message;
   $("outMode").textContent="—"; $("outPair").textContent="—";
@@ -2577,10 +2535,10 @@ function paintAnalysisDirection(direction){
 async function runMarketAnalysis(mode){
   const runToken=++analysisRunToken;
   const asset=[...selected], marketName=market, interval=intervalForSelectedTimeframe();
-  const status=$("resultText"); status.textContent=language==="ar"?"جارٍ جلب بيانات السوق وحساب المؤشرات…":"Loading market data and calculating indicators…";
-  $("resultTitle").textContent=language==="ar"?"جارٍ تحليل الأصل المحدد":"Analyzing selected asset";
+  const status=$("resultText"); status.textContent=at("loading");
+  $("resultTitle").textContent=at("analyzing");
   $("resultTitle").classList.remove("signal-up","signal-down","signal-neutral");
-  $("outMode").textContent=mode==="auto"?(language==="ar"?"تلقائي":"Automatic"):(language==="ar"?"فني":"Technical");
+  $("outMode").textContent=mode==="auto"?(at("automatic")):(at("technical"));
   $("outPair").textContent=asset[0];
   $("outEntry").textContent="—"; $("outStop").textContent="—"; $("outTP1").textContent="—"; $("outTP2").textContent="—";
   try{
@@ -2600,9 +2558,9 @@ async function runMarketAnalysis(mode){
     const tp1=direction==="buy"?entry+distance:direction==="sell"?entry-distance:null;
     const tp2=direction==="buy"?entry+distance*2:direction==="sell"?entry-distance*2:null;
     const fmt=n=>formatMarketPrice(n);
-    const title=direction==="buy"?(language==="ar"?"ميل فني صاعد":"Bullish technical bias"):direction==="sell"?(language==="ar"?"ميل فني هابط":"Bearish technical bias"):(language==="ar"?"لا توجد إشارة مكتملة":"No confirmed signal");
+    const title=direction==="buy"?(at("bull")):direction==="sell"?(at("bear")):(at("neutral"));
     $("resultTitle").textContent=title; $("resultText").textContent=""; paintAnalysisDirection(direction);
-    $("outMode").textContent=mode==="auto"?(language==="ar"?"تلقائي":"Automatic"):(language==="ar"?"فني":"Technical");
+    $("outMode").textContent=mode==="auto"?(at("automatic")):(at("technical"));
     $("outPair").textContent=asset[0];
     $("outEntry").textContent=direction==="neutral"?"—":fmt(entry);
     $("outStop").textContent=stop===null?"—":fmt(stop);
@@ -2613,9 +2571,9 @@ async function runMarketAnalysis(mode){
   }catch(error){
     if(runToken!==analysisRunToken)return;
     console.error("NEXFX analysis:",error);
-    $("resultTitle").textContent=language==="ar"?"تعذر إكمال التحليل":"Analysis unavailable";
+    $("resultTitle").textContent=at("failed");
     $("resultTitle").classList.remove("signal-up","signal-down","signal-neutral");
-    $("resultText").textContent=error.message|| (language==="ar"?"تعذر جلب بيانات موثوقة.":"Could not retrieve verified market data.");
+    $("resultText").textContent=error.message|| (at("noData"));
     $("outEntry").textContent="—"; $("outStop").textContent="—"; $("outTP1").textContent="—"; $("outTP2").textContent="—";
     lastAnalysis=null; saveState();
   }
@@ -2732,7 +2690,30 @@ function closeLanguageMenu(){
   $("languageTrigger").setAttribute("aria-expanded","false");
 }
 
+
+// Dedicated translations for analysis cards and live analysis feedback (all 15 UI languages).
+const analysisI18n={
+ ar:{technicalTitle:"التحليل الفني",technicalDesc:"تحليل يعتمد على بيانات السوق والمؤشرات الفنية عند ربط المصدر",manualTitle:"التحليل اليدوي",manualDesc:"إدخال مستويات الدخول ووقف الخسارة والأهداف يدوياً",autoTitle:"التحليل التلقائي",autoDesc:"تجهيز التحليل الآلي بعد ربط البيانات ومحرك الذكاء الاصطناعي",loading:"جارٍ جلب بيانات السوق وحساب المؤشرات…",analyzing:"جارٍ تحليل الأصل المحدد",technical:"فني",automatic:"تلقائي",bull:"ميل فني صاعد",bear:"ميل فني هابط",neutral:"لا توجد إشارة مكتملة",failed:"تعذر إكمال التحليل",noData:"تعذر جلب بيانات موثوقة.",levels:"تحقق من ترتيب المستويات: في الشراء يجب أن يكون SL أقل من الدخول وTP1 ثم TP2 أعلى منه؛ وفي البيع العكس.",notRun:"لم يتم تشغيل تحليل",binanceLive:"بيانات Binance المباشرة · تم التحديث ",binanceError:"تعذر جلب بيانات Binance حالياً؛ أعد المحاولة لاحقاً.",unsupported:"الإطار الزمني غير مدعوم.",invalidSymbol:"رمز العملة الرقمية غير صالح.",insufficient:"بيانات الشموع غير كافية لهذا الأصل والإطار الزمني.",serverNeeded:"يلزم نشر server.py أولاً ثم ضبط رابط الخادم لتفعيل تحليل الفوركس والمعادن والأسهم.",loadingPrice:"بانتظار السعر",saveError:"تعذر الحفظ على هذا الجهاز."},
+ en:{technicalTitle:"Technical analysis",technicalDesc:"Analysis based on market data and technical indicators when a data source is connected",manualTitle:"Manual analysis",manualDesc:"Enter entry, stop-loss and target levels manually",autoTitle:"Automatic analysis",autoDesc:"Prepare automated analysis after connecting market data and the AI engine",loading:"Fetching market data and calculating indicators…",analyzing:"Analyzing selected asset",technical:"Technical",automatic:"Automatic",bull:"Bullish technical bias",bear:"Bearish technical bias",neutral:"No confirmed signal",failed:"Analysis unavailable",noData:"Could not retrieve verified market data.",levels:"Check level order: for BUY, SL < entry < TP1 < TP2; for SELL, SL > entry > TP1 > TP2.",notRun:"Analysis not run",binanceLive:"Live Binance data · Updated ",binanceError:"Binance data is temporarily unavailable; retry later.",unsupported:"Unsupported timeframe.",invalidSymbol:"Invalid crypto symbol.",insufficient:"Not enough candles for this asset and timeframe.",serverNeeded:"Deploy server.py and configure its URL to enable forex, metals and stock analysis.",loadingPrice:"Loading",saveError:"Could not save settings on this device."},
+ fr:{technicalTitle:"Analyse technique",technicalDesc:"Analyse fondée sur les données du marché et les indicateurs techniques lorsqu'une source est connectée",manualTitle:"Analyse manuelle",manualDesc:"Saisissez manuellement l'entrée, le stop-loss et les objectifs",autoTitle:"Analyse automatique",autoDesc:"Préparez l'analyse automatique après connexion des données et du moteur IA",loading:"Récupération des données et calcul des indicateurs…",analyzing:"Analyse de l'actif sélectionné",technical:"Technique",automatic:"Automatique",bull:"Biais technique haussier",bear:"Biais technique baissier",neutral:"Aucun signal confirmé",failed:"Analyse indisponible",noData:"Impossible de récupérer des données fiables.",levels:"Vérifiez l'ordre des niveaux : ACHAT, SL < entrée < TP1 < TP2 ; VENTE, SL > entrée > TP1 > TP2.",notRun:"Analyse non lancée",binanceLive:"Données Binance en direct · Mise à jour ",binanceError:"Données Binance temporairement indisponibles.",unsupported:"Unité de temps non prise en charge.",invalidSymbol:"Symbole crypto invalide.",insufficient:"Données de chandeliers insuffisantes.",serverNeeded:"Déployez server.py et configurez son URL pour activer l'analyse forex, métaux et actions.",loadingPrice:"Chargement",saveError:"Impossible d'enregistrer sur cet appareil."},
+ tr:{technicalTitle:"Teknik analiz",technicalDesc:"Veri kaynağı bağlandığında piyasa verileri ve teknik göstergelere dayalı analiz",manualTitle:"Manuel analiz",manualDesc:"Giriş, zarar durdurma ve hedef seviyelerini elle girin",autoTitle:"Otomatik analiz",autoDesc:"Piyasa verileri ve yapay zekâ motoru bağlandıktan sonra otomatik analizi hazırlayın",loading:"Piyasa verileri alınıyor ve göstergeler hesaplanıyor…",analyzing:"Seçilen varlık analiz ediliyor",technical:"Teknik",automatic:"Otomatik",bull:"Yükseliş yönlü teknik görünüm",bear:"Düşüş yönlü teknik görünüm",neutral:"Doğrulanmış sinyal yok",failed:"Analiz kullanılamıyor",noData:"Doğrulanmış piyasa verileri alınamadı.",levels:"Seviye sırasını kontrol edin: ALIŞ için SL < giriş < TP1 < TP2; SATIŞ için SL > giriş > TP1 > TP2.",notRun:"Analiz çalıştırılmadı",binanceLive:"Canlı Binance verileri · Güncelleme ",binanceError:"Binance verileri geçici olarak kullanılamıyor.",unsupported:"Desteklenmeyen zaman aralığı.",invalidSymbol:"Geçersiz kripto sembolü.",insufficient:"Bu varlık ve zaman aralığı için yeterli mum verisi yok.",serverNeeded:"Forex, metal ve hisse analizini etkinleştirmek için server.py dosyasını dağıtın ve sunucu URL'sini ayarlayın.",loadingPrice:"Yükleniyor",saveError:"Bu cihaza kaydedilemedi."},
+ de:{technicalTitle:"Technische Analyse",technicalDesc:"Analyse anhand von Marktdaten und technischen Indikatoren bei verbundener Datenquelle",manualTitle:"Manuelle Analyse",manualDesc:"Einstiegs-, Stop-Loss- und Kurszielwerte manuell eingeben",autoTitle:"Automatische Analyse",autoDesc:"Automatische Analyse nach Verbindung von Marktdaten und KI-Modul vorbereiten",loading:"Marktdaten werden geladen und Indikatoren berechnet…",analyzing:"Ausgewählter Vermögenswert wird analysiert",technical:"Technisch",automatic:"Automatisch",bull:"Technisch bullische Tendenz",bear:"Technisch bärische Tendenz",neutral:"Kein bestätigtes Signal",failed:"Analyse nicht verfügbar",noData:"Keine verlässlichen Marktdaten verfügbar.",levels:"Reihenfolge prüfen: KAUF, SL < Einstieg < TP1 < TP2; VERKAUF, SL > Einstieg > TP1 > TP2.",notRun:"Analyse nicht ausgeführt",binanceLive:"Live-Binance-Daten · Aktualisiert ",binanceError:"Binance-Daten sind vorübergehend nicht verfügbar.",unsupported:"Nicht unterstützter Zeitraum.",invalidSymbol:"Ungültiges Krypto-Symbol.",insufficient:"Nicht genügend Kerzendaten.",serverNeeded:"server.py bereitstellen und Server-URL konfigurieren, um Forex-, Metall- und Aktienanalysen zu aktivieren.",loadingPrice:"Laden",saveError:"Speichern auf diesem Gerät nicht möglich."},
+ es:{technicalTitle:"Análisis técnico",technicalDesc:"Análisis basado en datos del mercado e indicadores técnicos al conectar una fuente",manualTitle:"Análisis manual",manualDesc:"Introduce manualmente la entrada, el stop-loss y los objetivos",autoTitle:"Análisis automático",autoDesc:"Prepara el análisis automático al conectar los datos y el motor de IA",loading:"Obteniendo datos y calculando indicadores…",analyzing:"Analizando el activo seleccionado",technical:"Técnico",automatic:"Automático",bull:"Sesgo técnico alcista",bear:"Sesgo técnico bajista",neutral:"No hay señal confirmada",failed:"Análisis no disponible",noData:"No se pudieron obtener datos fiables.",levels:"Comprueba el orden: COMPRA, SL < entrada < TP1 < TP2; VENTA, SL > entrada > TP1 > TP2.",notRun:"Análisis no ejecutado",binanceLive:"Datos de Binance en directo · Actualizado ",binanceError:"Los datos de Binance no están disponibles temporalmente.",unsupported:"Intervalo no compatible.",invalidSymbol:"Símbolo cripto no válido.",insufficient:"Datos de velas insuficientes.",serverNeeded:"Despliega server.py y configura su URL para activar el análisis de forex, metales y acciones.",loadingPrice:"Cargando",saveError:"No se pudo guardar en este dispositivo."},
+ pt:{technicalTitle:"Análise técnica",technicalDesc:"Análise baseada em dados de mercado e indicadores técnicos quando uma fonte está conectada",manualTitle:"Análise manual",manualDesc:"Insira manualmente entrada, stop-loss e metas",autoTitle:"Análise automática",autoDesc:"Prepare a análise automática após conectar os dados e o mecanismo de IA",loading:"Buscando dados de mercado e calculando indicadores…",analyzing:"Analisando o ativo selecionado",technical:"Técnica",automatic:"Automática",bull:"Tendência técnica de alta",bear:"Tendência técnica de baixa",neutral:"Nenhum sinal confirmado",failed:"Análise indisponível",noData:"Não foi possível obter dados confiáveis.",levels:"Verifique a ordem: COMPRA, SL < entrada < TP1 < TP2; VENDA, SL > entrada > TP1 > TP2.",notRun:"Análise não executada",binanceLive:"Dados Binance ao vivo · Atualizado ",binanceError:"Dados da Binance temporariamente indisponíveis.",unsupported:"Período não suportado.",invalidSymbol:"Símbolo cripto inválido.",insufficient:"Dados de candles insuficientes.",serverNeeded:"Implante server.py e configure a URL para ativar análises de forex, metais e ações.",loadingPrice:"Carregando",saveError:"Não foi possível salvar neste dispositivo."},
+ it:{technicalTitle:"Analisi tecnica",technicalDesc:"Analisi basata sui dati di mercato e sugli indicatori tecnici quando una fonte è collegata",manualTitle:"Analisi manuale",manualDesc:"Inserisci manualmente ingresso, stop loss e obiettivi",autoTitle:"Analisi automatica",autoDesc:"Prepara l'analisi automatica dopo aver collegato dati e motore IA",loading:"Recupero dei dati e calcolo degli indicatori…",analyzing:"Analisi dell'asset selezionato",technical:"Tecnica",automatic:"Automatica",bull:"Scenario tecnico rialzista",bear:"Scenario tecnico ribassista",neutral:"Nessun segnale confermato",failed:"Analisi non disponibile",noData:"Impossibile recuperare dati affidabili.",levels:"Controlla l'ordine: ACQUISTO, SL < ingresso < TP1 < TP2; VENDITA, SL > ingresso > TP1 > TP2.",notRun:"Analisi non avviata",binanceLive:"Dati Binance in tempo reale · Aggiornato ",binanceError:"Dati Binance temporaneamente non disponibili.",unsupported:"Intervallo non supportato.",invalidSymbol:"Simbolo crypto non valido.",insufficient:"Dati candlestick insufficienti.",serverNeeded:"Distribuisci server.py e configura l'URL per abilitare l'analisi di forex, metalli e azioni.",loadingPrice:"Caricamento",saveError:"Impossibile salvare su questo dispositivo."},
+ ru:{technicalTitle:"Технический анализ",technicalDesc:"Анализ на основе рыночных данных и технических индикаторов при подключении источника",manualTitle:"Ручной анализ",manualDesc:"Введите уровни входа, стоп-лосса и целей вручную",autoTitle:"Автоматический анализ",autoDesc:"Подготовка автоанализа после подключения данных и ИИ-модуля",loading:"Получение рыночных данных и расчёт индикаторов…",analyzing:"Анализ выбранного актива",technical:"Технический",automatic:"Автоматический",bull:"Технический восходящий уклон",bear:"Технический нисходящий уклон",neutral:"Нет подтверждённого сигнала",failed:"Анализ недоступен",noData:"Не удалось получить достоверные данные.",levels:"Проверьте порядок: ПОКУПКА, SL < вход < TP1 < TP2; ПРОДАЖА, SL > вход > TP1 > TP2.",notRun:"Анализ не запускался",binanceLive:"Данные Binance · Обновлено ",binanceError:"Данные Binance временно недоступны.",unsupported:"Неподдерживаемый интервал.",invalidSymbol:"Недопустимый криптосимвол.",insufficient:"Недостаточно свечных данных.",serverNeeded:"Разверните server.py и настройте URL сервера для анализа Forex, металлов и акций.",loadingPrice:"Загрузка",saveError:"Не удалось сохранить настройки на устройстве."},
+ zh:{technicalTitle:"技术分析",technicalDesc:"连接数据源后，依据市场数据和技术指标进行分析",manualTitle:"手动分析",manualDesc:"手动输入入场价、止损位和目标位",autoTitle:"自动分析",autoDesc:"连接市场数据和 AI 引擎后准备自动分析",loading:"正在获取市场数据并计算指标…",analyzing:"正在分析所选资产",technical:"技术",automatic:"自动",bull:"技术面看涨",bear:"技术面看跌",neutral:"没有已确认的信号",failed:"分析暂不可用",noData:"无法获取可靠的市场数据。",levels:"检查价位顺序：买入时 SL < 入场价 < TP1 < TP2；卖出时 SL > 入场价 > TP1 > TP2。",notRun:"尚未运行分析",binanceLive:"Binance 实时数据 · 更新时间 ",binanceError:"Binance 数据暂时不可用。",unsupported:"不支持的时间周期。",invalidSymbol:"加密货币代码无效。",insufficient:"该资产和周期的 K 线数据不足。",serverNeeded:"部署 server.py 并配置服务器地址，以启用外汇、贵金属和股票分析。",loadingPrice:"加载中",saveError:"无法保存到此设备。"},
+ ja:{technicalTitle:"テクニカル分析",technicalDesc:"データソース接続時に市場データとテクニカル指標に基づいて分析",manualTitle:"手動分析",manualDesc:"エントリー、損切り、目標価格を手動で入力",autoTitle:"自動分析",autoDesc:"市場データとAIエンジンの接続後に自動分析を準備",loading:"市場データを取得し、指標を計算中…",analyzing:"選択した資産を分析中",technical:"テクニカル",automatic:"自動",bull:"テクニカル上昇傾向",bear:"テクニカル下降傾向",neutral:"確定したシグナルはありません",failed:"分析を利用できません",noData:"信頼できる市場データを取得できませんでした。",levels:"順序を確認してください：買いは SL < エントリー < TP1 < TP2、売りは SL > エントリー > TP1 > TP2。",notRun:"分析は未実行です",binanceLive:"Binance ライブデータ · 更新 ",binanceError:"Binance データは一時的に利用できません。",unsupported:"未対応の時間足です。",invalidSymbol:"無効な暗号資産シンボルです。",insufficient:"ローソク足データが不足しています。",serverNeeded:"Forex、貴金属、株式の分析を有効にするには server.py をデプロイし、サーバーURLを設定してください。",loadingPrice:"読み込み中",saveError:"この端末に保存できませんでした。"},
+ ko:{technicalTitle:"기술적 분석",technicalDesc:"데이터 소스 연결 시 시장 데이터와 기술 지표를 기반으로 분석",manualTitle:"수동 분석",manualDesc:"진입가, 손절가 및 목표가를 직접 입력",autoTitle:"자동 분석",autoDesc:"시장 데이터와 AI 엔진 연결 후 자동 분석 준비",loading:"시장 데이터를 가져오고 지표를 계산하는 중…",analyzing:"선택한 자산 분석 중",technical:"기술",automatic:"자동",bull:"기술적 상승 전망",bear:"기술적 하락 전망",neutral:"확인된 신호 없음",failed:"분석을 사용할 수 없음",noData:"신뢰할 수 있는 시장 데이터를 가져오지 못했습니다.",levels:"순서를 확인하세요: 매수는 SL < 진입 < TP1 < TP2, 매도는 SL > 진입 > TP1 > TP2입니다.",notRun:"분석이 실행되지 않음",binanceLive:"Binance 실시간 데이터 · 업데이트 ",binanceError:"Binance 데이터를 일시적으로 사용할 수 없습니다.",unsupported:"지원하지 않는 시간 간격입니다.",invalidSymbol:"잘못된 암호화폐 심볼입니다.",insufficient:"캔들 데이터가 부족합니다.",serverNeeded:"Forex, 금속 및 주식 분석을 활성화하려면 server.py를 배포하고 서버 URL을 설정하세요.",loadingPrice:"불러오는 중",saveError:"이 기기에 저장하지 못했습니다."},
+ hi:{technicalTitle:"तकनीकी विश्लेषण",technicalDesc:"डेटा स्रोत जुड़ने पर बाज़ार डेटा और तकनीकी संकेतकों पर आधारित विश्लेषण",manualTitle:"मैन्युअल विश्लेषण",manualDesc:"एंट्री, स्टॉप-लॉस और लक्ष्य स्तर स्वयं दर्ज करें",autoTitle:"स्वचालित विश्लेषण",autoDesc:"बाज़ार डेटा और AI इंजन जुड़ने के बाद स्वचालित विश्लेषण तैयार करें",loading:"बाज़ार डेटा प्राप्त हो रहा है और संकेतक गणना हो रही है…",analyzing:"चुनी गई संपत्ति का विश्लेषण हो रहा है",technical:"तकनीकी",automatic:"स्वचालित",bull:"तेज़ी का तकनीकी रुझान",bear:"मंदी का तकनीकी रुझान",neutral:"कोई पुष्ट संकेत नहीं",failed:"विश्लेषण उपलब्ध नहीं",noData:"विश्वसनीय बाज़ार डेटा प्राप्त नहीं हुआ।",levels:"क्रम जाँचें: BUY में SL < प्रवेश < TP1 < TP2; SELL में SL > प्रवेश > TP1 > TP2।",notRun:"विश्लेषण नहीं चलाया गया",binanceLive:"लाइव Binance डेटा · अपडेट ",binanceError:"Binance डेटा अस्थायी रूप से उपलब्ध नहीं है।",unsupported:"समर्थित समयावधि नहीं है।",invalidSymbol:"अमान्य क्रिप्टो प्रतीक।",insufficient:"पर्याप्त कैंडल डेटा नहीं है।",serverNeeded:"Forex, धातु और शेयर विश्लेषण सक्षम करने के लिए server.py तैनात करें और सर्वर URL सेट करें।",loadingPrice:"लोड हो रहा है",saveError:"इस डिवाइस पर सेटिंग सहेजी नहीं जा सकीं।"},
+ id:{technicalTitle:"Analisis teknikal",technicalDesc:"Analisis berdasarkan data pasar dan indikator teknikal saat sumber data terhubung",manualTitle:"Analisis manual",manualDesc:"Masukkan level masuk, stop-loss, dan target secara manual",autoTitle:"Analisis otomatis",autoDesc:"Siapkan analisis otomatis setelah data pasar dan mesin AI terhubung",loading:"Mengambil data pasar dan menghitung indikator…",analyzing:"Menganalisis aset yang dipilih",technical:"Teknis",automatic:"Otomatis",bull:"Bias teknikal bullish",bear:"Bias teknikal bearish",neutral:"Tidak ada sinyal terkonfirmasi",failed:"Analisis tidak tersedia",noData:"Tidak dapat mengambil data pasar yang tepercaya.",levels:"Periksa urutan: BELI, SL < masuk < TP1 < TP2; JUAL, SL > masuk > TP1 > TP2.",notRun:"Analisis belum dijalankan",binanceLive:"Data Binance langsung · Diperbarui ",binanceError:"Data Binance sementara tidak tersedia.",unsupported:"Kerangka waktu tidak didukung.",invalidSymbol:"Simbol kripto tidak valid.",insufficient:"Data candle tidak mencukupi.",serverNeeded:"Deploy server.py dan atur URL server untuk mengaktifkan analisis forex, logam, dan saham.",loadingPrice:"Memuat",saveError:"Tidak dapat menyimpan di perangkat ini."},
+ nl:{technicalTitle:"Technische analyse",technicalDesc:"Analyse op basis van marktgegevens en technische indicatoren zodra een gegevensbron is gekoppeld",manualTitle:"Handmatige analyse",manualDesc:"Voer instap-, stop-loss- en koersdoelniveaus handmatig in",autoTitle:"Automatische analyse",autoDesc:"Bereid automatische analyse voor nadat marktgegevens en de AI-engine zijn gekoppeld",loading:"Marktgegevens ophalen en indicatoren berekenen…",analyzing:"Geselecteerd activum analyseren",technical:"Technisch",automatic:"Automatisch",bull:"Technisch bullish beeld",bear:"Technisch bearish beeld",neutral:"Geen bevestigd signaal",failed:"Analyse niet beschikbaar",noData:"Betrouwbare marktgegevens konden niet worden opgehaald.",levels:"Controleer de volgorde: KOOP, SL < instap < TP1 < TP2; VERKOOP, SL > instap > TP1 > TP2.",notRun:"Analyse niet uitgevoerd",binanceLive:"Live Binance-gegevens · Bijgewerkt ",binanceError:"Binance-gegevens zijn tijdelijk niet beschikbaar.",unsupported:"Niet-ondersteund tijdsbestek.",invalidSymbol:"Ongeldig cryptosymbool.",insufficient:"Onvoldoende candlegegevens.",serverNeeded:"Implementeer server.py en stel de server-URL in om forex-, metaal- en aandelenanalyse in te schakelen.",loadingPrice:"Laden",saveError:"Opslaan op dit apparaat is mislukt."}
+};
+function at(key){const words=analysisI18n[language]||analysisI18n.en;return words[key]||analysisI18n.en[key]||key;}
+function translateAnalysisCards(){document.querySelectorAll("[data-analysis-i18n]").forEach(el=>{el.textContent=at(el.dataset.analysisI18n);});}
+
 function translateInterface(){
+  translateAnalysisCards();
   document.querySelectorAll("[data-t]").forEach(el=>{
     const key=el.dataset.t;
     if(t(key)!==key)el.textContent=t(key);
@@ -2861,15 +2842,7 @@ function renderAssets(){
     const icon=document.createElement("span");
     icon.className="asset-icon";icon.textContent=item[1];
     const name=document.createElement("span");name.textContent=item[0];
-    const pair=market==="crypto"?cryptoPairFromTradingView(item[2]):null;
-    if(pair){
-      const quote=document.createElement("span");quote.className="asset-quote";quote.dataset.liveQuote=pair;
-      const q=liveCryptoQuotes.get(pair);
-      const price=document.createElement("b");price.textContent=q?formatMarketPrice(q.price):"—";
-      const change=document.createElement("small");change.textContent=q?((q.change>=0?"+":"")+q.change.toFixed(2)+"%"):(language==="ar"?"بانتظار السعر":"Loading");
-      change.className=q?(q.change>=0?"up":"down"):"muted";
-      quote.append(price,change); row.append(icon,name,quote);
-    }else{row.append(icon,name);}
+    row.append(icon,name);
     const star=document.createElement("button");
     star.type="button";
     star.className="asset-favorite";
@@ -3020,7 +2993,7 @@ function displaySavedAnalysis(){
   $("resultTitle").textContent=lastAnalysis.title||t("notRun");
   $("resultText").textContent=lastAnalysis.text||"";
   paintAnalysisDirection(lastAnalysis.direction||"neutral");
-  $("outMode").textContent=lastAnalysis.mode||"—";
+  $("outMode").textContent=lastAnalysis.mode==="manual"?t("manual"):lastAnalysis.mode==="auto"?at("automatic"):lastAnalysis.mode==="technical"?at("technical"):lastAnalysis.mode||"—";
   $("outPair").textContent=lastAnalysis.pair||"—";
   $("outEntry").textContent=lastAnalysis.entry??"—";
   $("outStop").textContent=lastAnalysis.stop??"—";
@@ -3046,7 +3019,7 @@ async function runAnalysis(){
   }
   const valid=direction==="buy"?(stop<entry&&tp1>entry&&tp2>tp1):(stop>entry&&tp1<entry&&tp2<tp1);
   if(!valid){
-    alert(language==="ar"?"تحقق من ترتيب المستويات: في الشراء يجب أن يكون SL أقل من الدخول وTP1 ثم TP2 أعلى منه؛ وفي البيع العكس.":"Check level order: for BUY, SL < entry < TP1 < TP2; for SELL, SL > entry > TP1 > TP2.");return;
+    alert(at("levels"));return;
   }
   const risk=Math.abs(entry-stop),reward1=Math.abs(tp1-entry),reward2=Math.abs(tp2-entry);
   const rr1=(reward1/risk).toFixed(2),rr2=(reward2/risk).toFixed(2);
@@ -3055,7 +3028,7 @@ async function runAnalysis(){
   $("resultTitle").textContent=title; $("resultText").textContent=text; paintAnalysisDirection(direction);
   $("outMode").textContent=t("manual"); $("outPair").textContent=selected[0];
   $("outEntry").textContent=entry; $("outStop").textContent=stop; $("outTP1").textContent=tp1; $("outTP2").textContent=tp2;
-  lastAnalysis={title,text,mode:t("manual"),pair:selected[0],entry,stop,tp1,tp2,direction,rewardRiskTP1:rr1,rewardRiskTP2:rr2};
+  lastAnalysis={title,text,mode:"manual",pair:selected[0],entry,stop,tp1,tp2,direction,rewardRiskTP1:rr1,rewardRiskTP2:rr2};
   saveState();
 }
 
@@ -3135,7 +3108,7 @@ $("runAnalysis").addEventListener("click",runAnalysis);
     const balance=readNumber(fields.balance),risk=readNumber(riskInput);
     if(!Number.isFinite(balance)||balance<=0||!Number.isFinite(risk)||risk<=0){budget.textContent="—";return;}
     const amount=balance*risk/100;
-    budget.textContent=new Intl.NumberFormat(language==="ar"?"ar-EG":"en-US",{minimumFractionDigits:2,maximumFractionDigits:2}).format(amount);
+    budget.textContent=new Intl.NumberFormat("en-US-u-nu-latn",{minimumFractionDigits:2,maximumFractionDigits:2}).format(amount);
   }
   try{
     for(const [key,el] of Object.entries(fields)){
@@ -3152,7 +3125,7 @@ $("runAnalysis").addEventListener("click",runAnalysis);
       localStorage.setItem(keys.balance,String(balance));localStorage.setItem(keys.daily,String(daily));
       localStorage.setItem(keys.maxTrades,String(maxTrades));localStorage.setItem(keys.spread,String(spread));
       status.textContent=t("autopilotSettingsSaved");
-    }catch(_){status.textContent=language==="ar"?"تعذر الحفظ على هذا الجهاز.":"Could not save settings on this device.";}
+    }catch(_){status.textContent=at("saveError");}
     updateBudget();
   });
   updateBudget();
@@ -3161,8 +3134,8 @@ $("runAnalysis").addEventListener("click",runAnalysis);
 AuthController.init();
 loadUserScopedState();
 saveState();
-refreshCryptoQuotes();
-setInterval(refreshCryptoQuotes,NEXFX_QUOTE_REFRESH_MS);
+// Sidebar quote polling disabled: asset rows show symbols, icons and favorites only.
+
 </script>
 
 <!-- Admin statistics scaffold: intentionally no fabricated counts; connect to protected Firebase data before enabling. -->
@@ -3224,6 +3197,46 @@ setInterval(refreshCryptoQuotes,NEXFX_QUOTE_REFRESH_MS);
     });
   });
   setAnalysisCard(modeSelect.value || "technical", false);
+})();
+</script>
+
+
+<script id="nexfx-global-latin-numerals">
+(function(){
+  "use strict";
+  const digitMap={"٠":"0","١":"1","٢":"2","٣":"3","٤":"4","٥":"5","٦":"6","٧":"7","٨":"8","٩":"9","۰":"0","۱":"1","۲":"2","۳":"3","۴":"4","۵":"5","۶":"6","۷":"7","۸":"8","۹":"9","०":"0","१":"1","२":"2","३":"3","४":"4","५":"5","६":"6","७":"7","८":"8","९":"9"};
+  const latinize=value=>String(value??"").replace(/[٠-٩۰-۹०-९]/g,ch=>digitMap[ch]||ch);
+  function prepare(el){
+    if(!(el instanceof HTMLInputElement)||el.type!=="number")return;
+    const value=latinize(el.value);
+    el.type="text";
+    el.inputMode="decimal";
+    el.dir="ltr";
+    el.style.direction="ltr";
+    el.style.textAlign="left";
+    el.setAttribute("autocomplete","off");
+    el.value=value;
+    el.dataset.nexfxLatinDigits="1";
+  }
+  function scan(root){
+    if(root.matches&&root.matches('input[type="number"]'))prepare(root);
+    if(root.querySelectorAll)root.querySelectorAll('input[type="number"]').forEach(prepare);
+  }
+  scan(document);
+  document.addEventListener("input",function(event){
+    const el=event.target;
+    if(el instanceof HTMLInputElement && el.dataset.nexfxLatinDigits==="1"){
+      const start=el.selectionStart,end=el.selectionEnd;
+      const next=latinize(el.value);
+      if(next!==el.value){el.value=next;try{el.setSelectionRange(start,end);}catch(_){}}
+    }
+  },true);
+  new MutationObserver(records=>records.forEach(record=>record.addedNodes.forEach(node=>{if(node.nodeType===1)scan(node);}))).observe(document.documentElement,{childList:true,subtree:true});
+  window.NEXFX_FORMAT_NUMBER=function(value,options){
+    const n=Number(latinize(value));
+    if(!Number.isFinite(n))return "—";
+    return new Intl.NumberFormat("en-US-u-nu-latn",options||{}).format(n);
+  };
 })();
 </script>
 
