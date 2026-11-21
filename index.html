@@ -1354,6 +1354,100 @@ body{background:radial-gradient(ellipse at 50% 0%,#15365b 0%,#0b1b30 58%,#071326
 .asset-row{position:relative}
 </style>
 
+
+<style id="nexfx-global-market-colors">
+/* NEXFX AI — Official market-state color system
+   Green = positive / BUY / profit / rising
+   Red = negative / SELL / loss / falling
+   Gray = neutral / WAIT / unchanged
+   Gold remains reserved for brand decoration, not market outcomes. */
+:root{
+  --market-positive:#16A34A;
+  --market-negative:#DC2626;
+  --market-neutral:#808080;
+
+  --market-buy:var(--market-positive);
+  --market-sell:var(--market-negative);
+  --market-wait:var(--market-neutral);
+  --market-profit:var(--market-positive);
+  --market-loss:var(--market-negative);
+  --market-rise:var(--market-positive);
+  --market-fall:var(--market-negative);
+
+  /* Backward-compatible aliases used by existing NEXFX components */
+  --green:var(--market-positive);
+  --red:var(--market-negative);
+  --neutral:var(--market-neutral);
+}
+
+/* Existing market indicators */
+.tick .profit-green,
+#outTP1,#outTP2,
+#resultTitle.signal-up{
+  color:var(--market-positive)!important;
+}
+#outStop,
+#resultTitle.signal-down{
+  color:var(--market-negative)!important;
+}
+#resultTitle.signal-neutral{
+  color:var(--market-neutral)!important;
+}
+
+/* Existing chart-candle illustration */
+.candle:before,.candle:after{
+  background:var(--market-positive);
+}
+.candle:nth-child(even):before,
+.candle:nth-child(even):after{
+  background:var(--market-negative);
+}
+
+/* Reusable state classes for current and future features */
+.market-positive,.market-buy,.market-profit,.market-rise,
+.state-positive,.state-buy,[data-market-state="positive"],
+[data-market-state="buy"],[data-market-state="profit"],
+[data-market-state="rise"]{
+  color:var(--market-positive)!important;
+}
+.market-negative,.market-sell,.market-loss,.market-fall,
+.state-negative,.state-sell,[data-market-state="negative"],
+[data-market-state="sell"],[data-market-state="loss"],
+[data-market-state="fall"]{
+  color:var(--market-negative)!important;
+}
+.market-neutral,.market-wait,.state-neutral,.state-wait,
+[data-market-state="neutral"],[data-market-state="wait"],
+[data-market-state="unchanged"]{
+  color:var(--market-neutral)!important;
+}
+
+/* Optional filled badges for signal/status labels */
+.market-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  padding:4px 9px;
+  border-radius:7px;
+  font-weight:700;
+}
+.market-badge.market-positive,.market-badge.market-buy,
+.market-badge.market-profit{
+  color:#fff!important;
+  background:var(--market-positive);
+}
+.market-badge.market-negative,.market-badge.market-sell,
+.market-badge.market-loss{
+  color:#fff!important;
+  background:var(--market-negative);
+}
+.market-badge.market-neutral,.market-badge.market-wait{
+  color:#fff!important;
+  background:var(--market-neutral);
+}
+</style>
+
 </head>
 
 <body>
