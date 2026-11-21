@@ -261,6 +261,16 @@ input,select{
 .signal-cell{background:#10243c;border:1px solid #d6a94829;border-radius:8px;padding:8px;min-width:0}
 .signal-cell small{display:block;color:var(--muted);font-size:9px}
 .signal-cell b{display:block;color:var(--gold2);direction:ltr;font-size:12px;overflow-wrap:anywhere}
+.signal-box p:empty{display:none}
+#resultTitle{margin:0 0 5px}
+#resultTitle.signal-up{color:#18dc91}
+#resultTitle.signal-down{color:#ff5265}
+#resultTitle.signal-neutral{color:#d7dce5}
+#outEntry{color:#f4f6fb}
+#outStop{color:#ff5265}
+#outTP1,#outTP2{color:#18dc91}
+#outPair,#outMode{color:#f4d98a}
+
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .field{display:flex;flex-direction:column;gap:5px;margin-bottom:9px}
 .disclaimer{
@@ -1155,6 +1165,23 @@ button,input,select,textarea{
 @media(max-width:900px){.execution-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.execution-grid{grid-template-columns:minmax(0,1fr)}.execution-footer{align-items:stretch;flex-direction:column}.execution-scan-results{grid-template-columns:minmax(0,1fr)}}
 
+/* NEXFX AI AUTOPILOT preparation dashboard — demo-safe UI only */
+.autopilot-extra{margin-top:14px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.autopilot-extra .execution-card{min-width:0}
+.autopilot-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.autopilot-metric{margin-top:10px;padding:11px;border:1px solid rgba(212,175,55,.25);border-radius:10px;background:rgba(212,175,55,.06)}
+.autopilot-metric strong{display:block;color:var(--gold2);font-size:1.15rem;margin-top:4px}
+.autopilot-platform-list{display:grid;gap:8px;margin-top:10px}
+.autopilot-platform-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 11px;border:1px solid #ffffff18;border-radius:9px;background:#07172a}
+.autopilot-platform-row span:last-child{color:var(--muted);font-size:.82rem}
+.autopilot-locked{color:#ffcf72!important}
+.autopilot-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
+.autopilot-actions button{min-height:40px}
+.autopilot-safety{margin-top:12px;padding:12px;border:1px solid rgba(255,82,101,.35);border-radius:10px;background:rgba(255,82,101,.055);color:var(--muted);line-height:1.65;font-size:.86rem}
+.autopilot-status{margin-top:10px;color:var(--muted);font-size:.86rem;line-height:1.55}
+@media(max-width:600px){.autopilot-extra{grid-template-columns:minmax(0,1fr)}.autopilot-fields{grid-template-columns:minmax(0,1fr)}}
+
+
 </style>
 <style id="nexfx-live-fx-quotes-and-layout">
 
@@ -1497,7 +1524,7 @@ body{background:radial-gradient(ellipse at 50% 0%,#15365b 0%,#0b1b30 58%,#071326
       <h3 data-t="output">مخرجات التحليل</h3>
       <div class="signal-box">
         <h3 id="resultTitle" data-t="notRun">لم يتم تشغيل تحليل</h3>
-        <p class="muted" id="resultText" data-t="enterLevels">اختر نوع التحليل وأدخل المستويات.</p>
+        <p class="muted" id="resultText"></p>
         <div class="signal-grid">
           <div class="signal-cell"><small data-t="analysisType">نوع التحليل</small><b id="outMode">—</b></div>
           <div class="signal-cell"><small data-t="asset">الأصل</small><b id="outPair">—</b></div>
@@ -1593,6 +1620,51 @@ body{background:radial-gradient(ellipse at 50% 0%,#15365b 0%,#0b1b30 58%,#071326
       <label for="executionRisk" data-t="executionRisk">المخاطرة القصوى لكل صفقة (%)</label>
       <input id="executionRisk" type="number" min="0.1" max="2" step="0.1" value="1">
       <p class="execution-note" data-t="executionRiskHint">القيم هنا إعدادات واجهة فقط ولا تحسب حجم مركز فعلياً قبل ربط بيانات الحساب والعقد.</p>
+    </div>
+  </div>
+
+  <div class="autopilot-extra">
+    <div class="execution-card">
+      <h3 data-t="autopilotRiskTitle">ميزانية الحساب التجريبي وحدود المخاطرة</h3>
+      <div class="autopilot-fields">
+        <div>
+          <label for="autopilotBalance" data-t="autopilotBalance">رصيد تجريبي افتراضي</label>
+          <input id="autopilotBalance" type="number" min="1" step="any" value="10000" inputmode="decimal">
+        </div>
+        <div>
+          <label for="autopilotDailyLoss" data-t="autopilotDailyLoss">أقصى خسارة يومية (%)</label>
+          <input id="autopilotDailyLoss" type="number" min="0.1" max="10" step="0.1" value="3" inputmode="decimal">
+        </div>
+        <div>
+          <label for="autopilotMaxTrades" data-t="autopilotMaxTrades">أقصى صفقات مفتوحة</label>
+          <input id="autopilotMaxTrades" type="number" min="1" max="20" step="1" value="3" inputmode="numeric">
+        </div>
+        <div>
+          <label for="autopilotMaxSpread" data-t="autopilotMaxSpread">حد السبريد (للمراجعة)</label>
+          <input id="autopilotMaxSpread" type="number" min="0" step="any" value="0" inputmode="decimal">
+        </div>
+      </div>
+      <div class="autopilot-metric">
+        <span data-t="autopilotRiskBudgetLabel">مبلغ المخاطرة المسموح لكل صفقة حسب الإعداد الحالي</span>
+        <strong id="autopilotRiskBudget">100.00</strong>
+        <p class="execution-note" data-t="autopilotRiskBudgetNote">حساب توضيحي فقط = الرصيد × نسبة المخاطرة. لا يحسب حجم اللوت أو قيمة النقطة قبل معرفة مواصفات العقد من المنصة.</p>
+      </div>
+      <div class="autopilot-actions">
+        <button class="secondary" id="autopilotSaveSettings" type="button" data-t="autopilotSaveSettings">حفظ إعدادات الديمو على هذا الجهاز</button>
+      </div>
+      <p class="autopilot-status" id="autopilotSettingsStatus" role="status" aria-live="polite" data-t="autopilotSettingsIdle">الإعدادات لم تُحفظ بعد.</p>
+    </div>
+
+    <div class="execution-card">
+      <h3 data-t="autopilotConnectorsTitle">حالة تجهيز موصلات المنصات</h3>
+      <p class="execution-note" data-t="autopilotConnectorsDesc">هذه حالة تجهيز فقط؛ لا توجد اتصالات تداول فعلية في هذه النسخة.</p>
+      <div class="autopilot-platform-list">
+        <div class="autopilot-platform-row"><strong>Binance Testnet</strong><span class="autopilot-locked" data-t="autopilotNotLinked">غير مربوط</span></div>
+        <div class="autopilot-platform-row"><strong>MetaTrader 4</strong><span class="autopilot-locked" data-t="autopilotNeedsEA">يتطلب Expert Advisor</span></div>
+        <div class="autopilot-platform-row"><strong>MetaTrader 5</strong><span class="autopilot-locked" data-t="autopilotNeedsEA">يتطلب Expert Advisor</span></div>
+        <div class="autopilot-platform-row"><strong>cTrader</strong><span class="autopilot-locked" data-t="autopilotNeedsAPI">يتطلب تطبيق Open API</span></div>
+      </div>
+      <div class="autopilot-safety" data-t="autopilotSafety">زر الطوارئ وقفل الأوامر لن يتحكما بمنصة خارجية قبل بناء الموصل وربطه واختباره. لا توجد أوامر تداول مفعّلة حالياً.</div>
     </div>
   </div>
 
@@ -1734,7 +1806,7 @@ technical:"التحليل الفني",manual:"التحليل اليدوي",autom
 tradeDirection:"اتجاه الصفقة",entry:"سعر الدخول",stop:"وقف الخسارة SL",
 run:"تشغيل التحليل",output:"مخرجات التحليل",notRun:"لم يتم تشغيل تحليل",
 enterLevels:"اختر نوع التحليل وأدخل المستويات المطلوبة.",asset:"الأصل",
-analysisNote:"التحليل الفني والتلقائي يستخدمان بيانات شموع Binance للأزواج الرقمية المدعومة. المؤشرات والمستويات حسابات فنية آلية وليست توصية أو ضماناً للنتيجة.",
+analysisNote:"التحليل الفني والتلقائي يستخدمان بيانات شموع من مصدر السوق المناسب لكل أصل. المؤشرات والمستويات حسابات فنية آلية وليست توصية أو ضماناً للنتيجة.",
 tradeMonitor:"مراقبة الصفقات",tradeMonitorInfo:"تابع صفقاتك المفتوحة والمغلقة، واطّلع على حالة كل صفقة ومستويات الدخول ووقف الخسارة والأهداف ونتائجها عندما تكون بيانات التداول متصلة.",
 smartExecutionNav:"التنفيذ الذكي",
 smartExecutionTitle:"NEXFX AI — التنفيذ الذكي للصفقات",
@@ -1751,6 +1823,7 @@ executionConfirmDisabled:"التنفيذ غير متاح حالياً",execution
 executionLiveBlocked:"التداول الحقيقي غير مفعّل. استخدم بيئة تجريبية بعد تجهيز التكامل الآمن.",
 executionScanSummary:"تم عرض {count} أصلاً من القوائم الحالية. هذه قائمة رموز فقط وليست إشارات تداول؛ يلزم مصدر بيانات ومحرك تحليل متصل لإنتاج فرص موثوقة.",
 executionRiskValidation:"أدخل حجم صفقة موجباً ومخاطرة بين 0.1% و2%.",
+autopilotRiskTitle:"ميزانية الحساب التجريبي وحدود المخاطرة",autopilotBalance:"رصيد تجريبي افتراضي",autopilotDailyLoss:"أقصى خسارة يومية (%)",autopilotMaxTrades:"أقصى صفقات مفتوحة",autopilotMaxSpread:"حد السبريد (للمراجعة)",autopilotRiskBudgetLabel:"مبلغ المخاطرة المسموح لكل صفقة حسب الإعداد الحالي",autopilotRiskBudgetNote:"حساب توضيحي فقط = الرصيد × نسبة المخاطرة. لا يحسب حجم اللوت أو قيمة النقطة قبل معرفة مواصفات العقد من المنصة.",autopilotSaveSettings:"حفظ إعدادات الديمو على هذا الجهاز",autopilotSettingsIdle:"الإعدادات لم تُحفظ بعد.",autopilotSettingsSaved:"تم حفظ إعدادات الديمو على هذا الجهاز فقط.",autopilotSettingsInvalid:"راجع الرصيد ونسب المخاطرة وحدود الصفقات المدخلة.",autopilotConnectorsTitle:"حالة تجهيز موصلات المنصات",autopilotConnectorsDesc:"هذه حالة تجهيز فقط؛ لا توجد اتصالات تداول فعلية في هذه النسخة.",autopilotNotLinked:"غير مربوط",autopilotNeedsEA:"يتطلب Expert Advisor",autopilotNeedsAPI:"يتطلب تطبيق Open API",autopilotSafety:"زر الطوارئ وقفل الأوامر لن يتحكما بمنصة خارجية قبل بناء الموصل وربطه واختباره. لا توجد أوامر تداول مفعّلة حالياً.",
 
 smartExecutionInfo:"اربط حساب التداول الخاص بك بالمنصات المدعومة، وراجع اقتراح التحليل وحدد حجم الصفقة ووقف الخسارة والأهداف، ثم أكّد بنفسك قبل إرسال أمر التداول. ويمكنك متابعة الصفقة من قسم مراقبة الصفقات.",
 executionComingSoon:"الميزة قيد التطوير",
@@ -1792,7 +1865,7 @@ technical:"Technical analysis",manual:"Manual analysis",automatic:"Automatic ana
 tradeDirection:"Trade direction",entry:"Entry price",stop:"Stop loss",
 run:"Run analysis",output:"Analysis output",notRun:"Analysis not run",
 enterLevels:"Choose an analysis type and enter the levels.",asset:"Asset",
-analysisNote:"Technical and automatic analysis require connected market data and an analysis engine. Manual mode only organizes entered levels.",
+analysisNote:"Technical and automatic analysis use market candles from the configured provider for each asset class. Manual mode validates entered levels.",
 tradeMonitor:"Trade Monitoring",tradeMonitorInfo:"Track your open and closed trades, including each trade’s status, entry, stop-loss, targets, and results when trading data is connected.",
 smartExecutionNav:"Smart Execution",
 smartExecutionTitle:"NEXFX AI — Smart Trade Execution",
@@ -1809,6 +1882,7 @@ executionConfirmDisabled:"Execution is currently unavailable",executionConnectEx
 executionLiveBlocked:"Live trading is disabled. Use a demo environment after secure integration is ready.",
 executionScanSummary:"Displayed {count} assets from the current lists. This is a symbol list, not trading signals; a connected data source and analysis engine are required for reliable opportunities.",
 executionRiskValidation:"Enter a positive trade size and risk between 0.1% and 2%.",
+autopilotRiskTitle:"Demo account budget and risk limits",autopilotBalance:"Virtual demo balance",autopilotDailyLoss:"Maximum daily loss (%)",autopilotMaxTrades:"Maximum open trades",autopilotMaxSpread:"Spread limit (review only)",autopilotRiskBudgetLabel:"Allowed risk amount per trade at the current setting",autopilotRiskBudgetNote:"Illustrative calculation only = balance × risk percentage. It does not calculate lot size or pip value until contract specifications are read from the platform.",autopilotSaveSettings:"Save demo settings on this device",autopilotSettingsIdle:"Settings have not been saved yet.",autopilotSettingsSaved:"Demo settings saved on this device only.",autopilotSettingsInvalid:"Check the balance, risk percentages and trade limits.",autopilotConnectorsTitle:"Platform connector readiness",autopilotConnectorsDesc:"Preparation status only; this version has no live trading connections.",autopilotNotLinked:"Not linked",autopilotNeedsEA:"Requires Expert Advisor",autopilotNeedsAPI:"Requires Open API app",autopilotSafety:"The emergency stop and order lock cannot control an external platform until its connector is built, linked and tested. No trading orders are enabled now.",
 
 smartExecutionInfo:"Connect your trading account to supported platforms, review the analysis proposal, set trade size, stop-loss and targets, then confirm before an order is sent. Follow the trade in the Trade Monitoring section.",
 executionComingSoon:"In development",
@@ -2385,6 +2459,10 @@ let onlyFavorites=false;
 let favorites=[];
 let chartGeneration=0;
 let lastAnalysis=null;
+let analysisRunToken=0;
+// Set this to the deployed server.py service URL (no trailing slash).
+// Example: window.NEXFX_API_BASE = "https://your-service.example.com";
+const NEXFX_API_BASE=""; // بعد نشر server.py ضع هنا رابط الخادم بدون / في النهاية
 
 // Public Binance spot market data. No API key is required for public quotes/klines.
 const NEXFX_BINANCE_BASE="https://data-api.binance.vision/api/v3";
@@ -2452,53 +2530,94 @@ function calculateAtr(candles,period=14){
   for(let i=1;i<candles.length;i++){const c=candles[i],p=candles[i-1];tr.push(Math.max(c.high-c.low,Math.abs(c.high-p.close),Math.abs(c.low-p.close)));}
   return tr.slice(-period).reduce((a,b)=>a+b,0)/period;
 }
-async function fetchSelectedBinanceCandles(){
-  const symbol=cryptoPairFromTradingView(selected[2]);
-  if(!symbol)throw new Error(language==="ar"?"التحليل الآلي متاح حالياً لأزواج Binance الرقمية فقط.":"Automated analysis currently supports Binance crypto pairs only.");
+function intervalForSelectedTimeframe(){
   const interval=binanceIntervals[$("timeframe").value];
-  if(!interval)throw new Error("Unsupported timeframe");
-  const url=NEXFX_BINANCE_BASE+"/klines?symbol="+encodeURIComponent(symbol)+"&interval="+interval+"&limit=250";
+  if(!interval)throw new Error(language==="ar"?"الإطار الزمني غير مدعوم.":"Unsupported timeframe.");
+  return interval;
+}
+async function fetchSelectedMarketCandles(asset, marketName, interval){
+  const tvSymbol=asset[2];
+  if(marketName==="crypto"){
+    const symbol=cryptoPairFromTradingView(tvSymbol);
+    if(!symbol)throw new Error(language==="ar"?"رمز العملة الرقمية غير صالح.":"Invalid crypto symbol.");
+    const url=NEXFX_BINANCE_BASE+"/klines?symbol="+encodeURIComponent(symbol)+"&interval="+interval+"&limit=250";
+    const response=await fetch(url,{cache:"no-store",headers:{Accept:"application/json"}});
+    if(!response.ok)throw new Error("Binance HTTP "+response.status);
+    const raw=await response.json();
+    const candles=raw.filter(k=>Number(k[6])<Date.now()).map(k=>({time:Number(k[0]),open:Number(k[1]),high:Number(k[2]),low:Number(k[3]),close:Number(k[4]),volume:Number(k[5])}));
+    if(candles.length<60)throw new Error(language==="ar"?"بيانات الشموع غير كافية لهذا الأصل والإطار الزمني.":"Not enough candles for this asset and timeframe.");
+    return {symbol,interval,candles,source:"Binance Spot API"};
+  }
+  if(!NEXFX_API_BASE)throw new Error(language==="ar"?"يلزم نشر server.py أولاً ثم ضبط رابط الخادم لتفعيل تحليل الفوركس والمعادن والأسهم.":"Deploy server.py and configure its URL to enable forex, metals and stock analysis.");
+  const url=NEXFX_API_BASE+"/api/market/klines?market="+encodeURIComponent(marketName)+"&symbol="+encodeURIComponent(tvSymbol)+"&interval="+encodeURIComponent(interval)+"&limit=250";
   const response=await fetch(url,{cache:"no-store",headers:{Accept:"application/json"}});
-  if(!response.ok)throw new Error("Binance klines HTTP "+response.status);
-  const raw=await response.json();
-  const candles=raw.filter(k=>Number(k[6])<Date.now()).map(k=>({time:Number(k[0]),open:Number(k[1]),high:Number(k[2]),low:Number(k[3]),close:Number(k[4]),volume:Number(k[5])}));
-  if(candles.length<60)throw new Error(language==="ar"?"عدد الشموع المستلمة غير كافٍ للتحليل.":"Not enough candles received for analysis.");
-  return {symbol,interval,candles};
+  if(!response.ok){let message="Market data HTTP "+response.status;try{const body=await response.json();if(body.error)message=body.error;}catch(_){}throw new Error(message);}
+  const data=await response.json();
+  const candles=(data.candles||[]).filter(c=>Number(c.time)<Date.now()).map(c=>({time:Number(c.time),open:Number(c.open),high:Number(c.high),low:Number(c.low),close:Number(c.close),volume:Number(c.volume||0)}));
+  if(candles.length<60)throw new Error(language==="ar"?"بيانات الشموع غير كافية لهذا الأصل والإطار الزمني.":"Not enough candles for this asset and timeframe.");
+  return {symbol:data.provider_symbol||tvSymbol,interval,candles,source:data.source||"Market data provider"};
+}
+function clearAnalysisOutput(message=""){
+  analysisRunToken++;
+  lastAnalysis=null;
+  const title=$("resultTitle"),text=$("resultText");
+  title.textContent=language==="ar"?"لم يتم تشغيل تحليل":"Analysis not run";
+  title.classList.remove("signal-up","signal-down","signal-neutral");
+  text.textContent=message;
+  $("outMode").textContent="—"; $("outPair").textContent="—";
+  $("outEntry").textContent="—"; $("outStop").textContent="—";
+  $("outTP1").textContent="—"; $("outTP2").textContent="—";
+  saveState();
+}
+function paintAnalysisDirection(direction){
+  const title=$("resultTitle");
+  title.classList.remove("signal-up","signal-down","signal-neutral");
+  title.classList.add(direction==="buy"?"signal-up":direction==="sell"?"signal-down":"signal-neutral");
 }
 async function runMarketAnalysis(mode){
-  const status=$("resultText"); status.textContent=language==="ar"?"جارٍ جلب الشموع الحقيقية وحساب المؤشرات…":"Loading real candles and calculating indicators…";
-  $("resultTitle").textContent=language==="ar"?"تحليل السوق":"Market analysis";
+  const runToken=++analysisRunToken;
+  const asset=[...selected], marketName=market, interval=intervalForSelectedTimeframe();
+  const status=$("resultText"); status.textContent=language==="ar"?"جارٍ جلب بيانات السوق وحساب المؤشرات…":"Loading market data and calculating indicators…";
+  $("resultTitle").textContent=language==="ar"?"جارٍ تحليل الأصل المحدد":"Analyzing selected asset";
+  $("resultTitle").classList.remove("signal-up","signal-down","signal-neutral");
+  $("outMode").textContent=mode==="auto"?(language==="ar"?"تلقائي":"Automatic"):(language==="ar"?"فني":"Technical");
+  $("outPair").textContent=asset[0];
+  $("outEntry").textContent="—"; $("outStop").textContent="—"; $("outTP1").textContent="—"; $("outTP2").textContent="—";
   try{
-    const {symbol,interval,candles}=await fetchSelectedBinanceCandles();
+    const {symbol,interval:usedInterval,candles,source}=await fetchSelectedMarketCandles(asset,marketName,interval);
+    if(runToken!==analysisRunToken||asset[2]!==selected[2]||marketName!==market||usedInterval!==intervalForSelectedTimeframe())return;
     const closes=candles.map(c=>c.close),last=candles[candles.length-1];
     const ema9=ema(closes,9),ema21=ema(closes,21),ema50=ema(closes,50),rsi14=rsi(closes,14);
     const macdLine=ema(closes,12)-ema(closes,26);
-    // MACD signal is calculated from the full EMA12-EMA26 series.
     const macdSeries=[]; for(let i=25;i<closes.length;i++){const part=closes.slice(0,i+1);macdSeries.push(ema(part,12)-ema(part,26));}
     const signal=ema(macdSeries,9),atr=calculateAtr(candles,14);
-    if([ema9,ema21,ema50,rsi14,macdLine,signal,atr].some(v=>!Number.isFinite(v)))throw new Error("Indicator calculation incomplete");
+    if([ema9,ema21,ema50,rsi14,macdLine,signal,atr].some(v=>!Number.isFinite(v))||atr<=0)throw new Error("Indicator calculation incomplete");
     const bullish=ema9>ema21&&macdLine>signal&&rsi14>=50&&rsi14<70;
     const bearish=ema9<ema21&&macdLine<signal&&rsi14<=50&&rsi14>30;
     const direction=bullish?"buy":bearish?"sell":"neutral";
-    const entry=last.close, distance=atr*1.5;
+    const entry=last.close,distance=atr*1.5;
     const stop=direction==="buy"?entry-distance:direction==="sell"?entry+distance:null;
     const tp1=direction==="buy"?entry+distance:direction==="sell"?entry-distance:null;
     const tp2=direction==="buy"?entry+distance*2:direction==="sell"?entry-distance*2:null;
     const fmt=n=>formatMarketPrice(n);
     const title=direction==="buy"?(language==="ar"?"ميل فني صاعد":"Bullish technical bias"):direction==="sell"?(language==="ar"?"ميل فني هابط":"Bearish technical bias"):(language==="ar"?"لا توجد إشارة مكتملة":"No confirmed signal");
-    const labels=language==="ar"?`السعر: ${fmt(entry)} · EMA9: ${fmt(ema9)} · EMA21: ${fmt(ema21)} · EMA50: ${fmt(ema50)} · RSI14: ${rsi14.toFixed(2)} · MACD: ${macdLine.toFixed(6)} / Signal: ${signal.toFixed(6)} · ATR14: ${fmt(atr)} · الفاصل: ${interval}.`:`Price: ${fmt(entry)} · EMA9: ${fmt(ema9)} · EMA21: ${fmt(ema21)} · EMA50: ${fmt(ema50)} · RSI14: ${rsi14.toFixed(2)} · MACD: ${macdLine.toFixed(6)} / Signal: ${signal.toFixed(6)} · ATR14: ${fmt(atr)} · Interval: ${interval}.`;
-    const riskText=direction==="neutral"?(language==="ar"?"لا توجد مستويات دخول أو أهداف مقترحة لأن الشروط غير متوافقة.":"No entry or targets are proposed because the signal conditions do not align."):(language==="ar"?`دخول مرجعي: ${fmt(entry)} · وقف خسارة حسابي: ${fmt(stop)} · TP1: ${fmt(tp1)} · TP2: ${fmt(tp2)} (مبنية على ATR، وليست توصية مضمونة).`:`Reference entry: ${fmt(entry)} · ATR-based stop: ${fmt(stop)} · TP1: ${fmt(tp1)} · TP2: ${fmt(tp2)} (not guaranteed trading advice).`);
-    const text=labels+" "+riskText;
-    $("resultTitle").textContent=title; $("resultText").textContent=text;
-    $("outMode").textContent=mode==="auto"?(language==="ar"?"تلقائي · Binance":"Automatic · Binance"):(language==="ar"?"فني · Binance":"Technical · Binance");
-    $("outPair").textContent=selected[0]; $("outEntry").textContent=fmt(entry);
-    $("outStop").textContent=stop===null?"—":fmt(stop); $("outTP1").textContent=tp1===null?"—":fmt(tp1); $("outTP2").textContent=tp2===null?"—":fmt(tp2);
-    lastAnalysis={title,text,mode:mode,pair:selected[0],entry:fmt(entry),stop:stop===null?"—":fmt(stop),tp1:tp1===null?"—":fmt(tp1),tp2:tp2===null?"—":fmt(tp2),direction,indicators:{ema9,ema21,ema50,rsi14,macd:macdLine,macdSignal:signal,atr},source:"Binance Spot API",timeframe:interval,asOf:new Date(last.time).toISOString()};
+    $("resultTitle").textContent=title; $("resultText").textContent=""; paintAnalysisDirection(direction);
+    $("outMode").textContent=mode==="auto"?(language==="ar"?"تلقائي":"Automatic"):(language==="ar"?"فني":"Technical");
+    $("outPair").textContent=asset[0];
+    $("outEntry").textContent=direction==="neutral"?"—":fmt(entry);
+    $("outStop").textContent=stop===null?"—":fmt(stop);
+    $("outTP1").textContent=tp1===null?"—":fmt(tp1);
+    $("outTP2").textContent=tp2===null?"—":fmt(tp2);
+    lastAnalysis={title,text:"",mode:mode,pair:asset[0],entry:direction==="neutral"?"—":fmt(entry),stop:stop===null?"—":fmt(stop),tp1:tp1===null?"—":fmt(tp1),tp2:tp2===null?"—":fmt(tp2),direction,indicators:{ema9,ema21,ema50,rsi14,macd:macdLine,macdSignal:signal,atr},source,timeframe:usedInterval,asOf:new Date(last.time).toISOString()};
     saveState();
   }catch(error){
+    if(runToken!==analysisRunToken)return;
     console.error("NEXFX analysis:",error);
     $("resultTitle").textContent=language==="ar"?"تعذر إكمال التحليل":"Analysis unavailable";
-    $("resultText").textContent=error.message|| (language==="ar"?"تعذر جلب بيانات موثوقة من Binance.":"Could not retrieve verified Binance data.");
+    $("resultTitle").classList.remove("signal-up","signal-down","signal-neutral");
+    $("resultText").textContent=error.message|| (language==="ar"?"تعذر جلب بيانات موثوقة.":"Could not retrieve verified market data.");
+    $("outEntry").textContent="—"; $("outStop").textContent="—"; $("outTP1").textContent="—"; $("outTP2").textContent="—";
+    lastAnalysis=null; saveState();
   }
 }
 
@@ -2692,6 +2811,7 @@ function setMarket(name){
   if(!assets[market].some(x=>x[2]===selected[2])){
     selected=assets[market][0];
   }
+  clearAnalysisOutput();
   renderAssets();
   updateSideInformation();
   renderChart();
@@ -2714,6 +2834,7 @@ function updateSideInformation(){
 }
 
 function selectAsset(item){
+  if(selected[2]!==item[2])clearAnalysisOutput();
   selected=item;
   updateSideInformation();
   renderAssets();
@@ -2884,6 +3005,7 @@ function renderChart(){
   container.appendChild(script);
 }
 function displaySavedAnalysis(){
+  if(lastAnalysis && lastAnalysis.pair!==selected[0])lastAnalysis=null;
   if(!lastAnalysis){
     $("resultTitle").textContent=t("notRun");
     $("resultText").textContent=t("enterLevels");
@@ -2896,7 +3018,8 @@ function displaySavedAnalysis(){
     return;
   }
   $("resultTitle").textContent=lastAnalysis.title||t("notRun");
-  $("resultText").textContent=lastAnalysis.text||t("enterLevels");
+  $("resultText").textContent=lastAnalysis.text||"";
+  paintAnalysisDirection(lastAnalysis.direction||"neutral");
   $("outMode").textContent=lastAnalysis.mode||"—";
   $("outPair").textContent=lastAnalysis.pair||"—";
   $("outEntry").textContent=lastAnalysis.entry??"—";
@@ -2928,8 +3051,8 @@ async function runAnalysis(){
   const risk=Math.abs(entry-stop),reward1=Math.abs(tp1-entry),reward2=Math.abs(tp2-entry);
   const rr1=(reward1/risk).toFixed(2),rr2=(reward2/risk).toFixed(2);
   const title=direction==="buy"?t("buy"):t("sell");
-  const text=(language==="ar"?"تم التحقق من ترتيب المستويات. نسبة العائد إلى المخاطرة: ":"Levels validated. Reward/risk ratio: ")+"TP1 1:"+rr1+" · TP2 1:"+rr2;
-  $("resultTitle").textContent=title; $("resultText").textContent=text;
+  const text="";
+  $("resultTitle").textContent=title; $("resultText").textContent=text; paintAnalysisDirection(direction);
   $("outMode").textContent=t("manual"); $("outPair").textContent=selected[0];
   $("outEntry").textContent=entry; $("outStop").textContent=stop; $("outTP1").textContent=tp1; $("outTP2").textContent=tp2;
   lastAnalysis={title,text,mode:t("manual"),pair:selected[0],entry,stop,tp1,tp2,direction,rewardRiskTP1:rr1,rewardRiskTP2:rr2};
@@ -2962,7 +3085,7 @@ $("showFav").addEventListener("click",()=>{
   renderAssets(); saveState();
 });
 
-$("timeframe").addEventListener("change",()=>{ renderChart(); saveState(); });
+$("timeframe").addEventListener("change",()=>{ clearAnalysisOutput(); updateSideInformation(); renderChart(); saveState(); });
 
 $("executionConnectBtn").addEventListener("click",()=>{
   const platform=$("executionPlatform").value;
@@ -3001,6 +3124,39 @@ $("executionConfirmBtn").addEventListener("click",()=>{
 });
 
 $("runAnalysis").addEventListener("click",runAnalysis);
+
+// Demo risk controls: local settings only; no broker connection or order execution.
+(function initAutopilotPreparation(){
+  const keys={balance:"nexfx_demo_balance",daily:"nexfx_demo_daily_loss",maxTrades:"nexfx_demo_max_trades",spread:"nexfx_demo_max_spread"};
+  const fields={balance:$("autopilotBalance"),daily:$("autopilotDailyLoss"),maxTrades:$("autopilotMaxTrades"),spread:$("autopilotMaxSpread")};
+  const riskInput=$("executionRisk"),budget=$("autopilotRiskBudget"),status=$("autopilotSettingsStatus");
+  const readNumber=(el)=>Number(el&&el.value);
+  function updateBudget(){
+    const balance=readNumber(fields.balance),risk=readNumber(riskInput);
+    if(!Number.isFinite(balance)||balance<=0||!Number.isFinite(risk)||risk<=0){budget.textContent="—";return;}
+    const amount=balance*risk/100;
+    budget.textContent=new Intl.NumberFormat(language==="ar"?"ar-EG":"en-US",{minimumFractionDigits:2,maximumFractionDigits:2}).format(amount);
+  }
+  try{
+    for(const [key,el] of Object.entries(fields)){
+      const saved=localStorage.getItem(keys[key]);
+      if(saved!==null)el.value=saved;
+    }
+  }catch(_){}
+  [fields.balance,fields.daily,fields.maxTrades,fields.spread,riskInput].forEach(el=>el&&el.addEventListener("input",updateBudget));
+  $("autopilotSaveSettings").addEventListener("click",()=>{
+    const balance=readNumber(fields.balance),daily=readNumber(fields.daily),maxTrades=readNumber(fields.maxTrades),spread=readNumber(fields.spread),risk=readNumber(riskInput);
+    const valid=balance>0&&daily>=0.1&&daily<=10&&Number.isInteger(maxTrades)&&maxTrades>=1&&maxTrades<=20&&spread>=0&&risk>=0.1&&risk<=2;
+    if(!valid){status.textContent=t("autopilotSettingsInvalid");return;}
+    try{
+      localStorage.setItem(keys.balance,String(balance));localStorage.setItem(keys.daily,String(daily));
+      localStorage.setItem(keys.maxTrades,String(maxTrades));localStorage.setItem(keys.spread,String(spread));
+      status.textContent=t("autopilotSettingsSaved");
+    }catch(_){status.textContent=language==="ar"?"تعذر الحفظ على هذا الجهاز.":"Could not save settings on this device.";}
+    updateBudget();
+  });
+  updateBudget();
+})();
 
 AuthController.init();
 loadUserScopedState();
