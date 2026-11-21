@@ -1322,6 +1322,16 @@ body{background:radial-gradient(ellipse at 50% 0%,#15365b 0%,#0b1b30 58%,#071326
 }
 </style>
 
+
+<style id="nexfx-live-market-data">
+.asset-row{position:relative}
+.asset-quote{margin-inline-start:auto;display:flex;flex-direction:column;align-items:flex-end;gap:1px;min-width:76px;font-size:10px;line-height:1.25;direction:ltr;font-variant-numeric:tabular-nums}
+.asset-quote b{font-size:10px;color:var(--white);font-weight:700}
+.asset-quote small{font-size:9px}
+.asset-quote .up{color:#18dc91}.asset-quote .down{color:#ff5265}.asset-quote .muted{color:var(--muted)}
+@media(max-width:700px){.asset-quote{min-width:68px}.asset-quote b{font-size:9px}}
+</style>
+
 </head>
 
 <body>
@@ -1724,7 +1734,7 @@ technical:"التحليل الفني",manual:"التحليل اليدوي",autom
 tradeDirection:"اتجاه الصفقة",entry:"سعر الدخول",stop:"وقف الخسارة SL",
 run:"تشغيل التحليل",output:"مخرجات التحليل",notRun:"لم يتم تشغيل تحليل",
 enterLevels:"اختر نوع التحليل وأدخل المستويات المطلوبة.",asset:"الأصل",
-analysisNote:"التحليل الفني والتلقائي يحتاجان إلى مصدر بيانات ومحرك تحليل متصل. التحليل اليدوي ينظم المستويات المدخلة فقط.",
+analysisNote:"التحليل الفني والتلقائي يستخدمان بيانات شموع Binance للأزواج الرقمية المدعومة. المؤشرات والمستويات حسابات فنية آلية وليست توصية أو ضماناً للنتيجة.",
 tradeMonitor:"مراقبة الصفقات",tradeMonitorInfo:"تابع صفقاتك المفتوحة والمغلقة، واطّلع على حالة كل صفقة ومستويات الدخول ووقف الخسارة والأهداف ونتائجها عندما تكون بيانات التداول متصلة.",
 smartExecutionNav:"التنفيذ الذكي",
 smartExecutionTitle:"NEXFX AI — التنفيذ الذكي للصفقات",
@@ -2376,6 +2386,123 @@ let favorites=[];
 let chartGeneration=0;
 let lastAnalysis=null;
 
+// Public Binance spot market data. No API key is required for public quotes/klines.
+const NEXFX_BINANCE_BASE="https://data-api.binance.vision/api/v3";
+const NEXFX_QUOTE_REFRESH_MS=15000;
+const liveCryptoQuotes=new Map();
+let quoteRefreshBusy=false;
+const binanceIntervals={"1":"1m","5":"5m","15":"15m","60":"1h","240":"4h","D":"1d","W":"1w"};
+function cryptoPairFromTradingView(tvSymbol){
+  const match=/^BINANCE:([A-Z0-9]+)$/.exec(String(tvSymbol||""));
+  return match?match[1]:null;
+}
+function formatMarketPrice(value){
+  const n=Number(value); if(!Number.isFinite(n))return "—";
+  return n>=1000?n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}):n>=1?n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:4}):n.toLocaleString(undefined,{minimumFractionDigits:4,maximumFractionDigits:8});
+}
+async function refreshCryptoQuotes(){
+  if(quoteRefreshBusy)return; quoteRefreshBusy=true;
+  try{
+    const symbols=[...new Set(assets.crypto.map(x=>cryptoPairFromTradingView(x[2])).filter(Boolean))];
+    const url=NEXFX_BINANCE_BASE+"/ticker/24hr?symbols="+encodeURIComponent(JSON.stringify(symbols));
+    const response=await fetch(url,{cache:"no-store",headers:{Accept:"application/json"}});
+    if(!response.ok)throw new Error("Binance HTTP "+response.status);
+    const rows=await response.json();
+    if(!Array.isArray(rows))throw new Error("Unexpected Binance response");
+    const now=Date.now();
+    rows.forEach(row=>{
+      const price=Number(row.lastPrice),change=Number(row.priceChangePercent),volume=Number(row.quoteVolume);
+      if(row.symbol&&Number.isFinite(price)&&price>0)liveCryptoQuotes.set(row.symbol,{price,change,volume,updated:now,source:"Binance Spot"});
+    });
+    updateVisibleAssetQuotes();
+    const pulse=document.getElementById("marketPulseStatus");
+    if(pulse){pulse.textContent=(language==="ar"?"بيانات Binance المباشرة · تم التحديث ":"Live Binance data · Updated ")+new Date(now).toLocaleTimeString();}
+  }catch(error){
+    console.warn("NEXFX live quotes unavailable:",error);
+    const pulse=document.getElementById("marketPulseStatus");
+    if(pulse)pulse.textContent=language==="ar"?"تعذر جلب بيانات Binance حالياً؛ أعد المحاولة لاحقاً.":"Binance data is temporarily unavailable; retry later.";
+  }finally{quoteRefreshBusy=false;}
+}
+function updateVisibleAssetQuotes(){
+  document.querySelectorAll("[data-live-quote]").forEach(node=>{
+    const q=liveCryptoQuotes.get(node.dataset.liveQuote);
+    const price=node.querySelector("b"),change=node.querySelector("small");
+    if(!q||!price||!change)return;
+    price.textContent=formatMarketPrice(q.price);
+    change.textContent=(q.change>=0?"+":"")+q.change.toFixed(2)+"%";
+    change.className=q.change>=0?"up":"down";
+    node.title="Binance Spot · "+new Date(q.updated).toLocaleTimeString();
+  });
+}
+function ema(values,period){
+  if(values.length<period)return null;
+  const k=2/(period+1); let value=values.slice(0,period).reduce((a,b)=>a+b,0)/period;
+  for(let i=period;i<values.length;i++)value=values[i]*k+value*(1-k);
+  return value;
+}
+function rsi(values,period=14){
+  if(values.length<=period)return null; let gain=0,loss=0;
+  for(let i=1;i<=period;i++){const d=values[i]-values[i-1];if(d>0)gain+=d;else loss-=d;}
+  let avgGain=gain/period,avgLoss=loss/period;
+  for(let i=period+1;i<values.length;i++){const d=values[i]-values[i-1];avgGain=(avgGain*(period-1)+Math.max(d,0))/period;avgLoss=(avgLoss*(period-1)+Math.max(-d,0))/period;}
+  return avgLoss===0?100:100-(100/(1+avgGain/avgLoss));
+}
+function calculateAtr(candles,period=14){
+  if(candles.length<=period)return null; const tr=[];
+  for(let i=1;i<candles.length;i++){const c=candles[i],p=candles[i-1];tr.push(Math.max(c.high-c.low,Math.abs(c.high-p.close),Math.abs(c.low-p.close)));}
+  return tr.slice(-period).reduce((a,b)=>a+b,0)/period;
+}
+async function fetchSelectedBinanceCandles(){
+  const symbol=cryptoPairFromTradingView(selected[2]);
+  if(!symbol)throw new Error(language==="ar"?"التحليل الآلي متاح حالياً لأزواج Binance الرقمية فقط.":"Automated analysis currently supports Binance crypto pairs only.");
+  const interval=binanceIntervals[$("timeframe").value];
+  if(!interval)throw new Error("Unsupported timeframe");
+  const url=NEXFX_BINANCE_BASE+"/klines?symbol="+encodeURIComponent(symbol)+"&interval="+interval+"&limit=250";
+  const response=await fetch(url,{cache:"no-store",headers:{Accept:"application/json"}});
+  if(!response.ok)throw new Error("Binance klines HTTP "+response.status);
+  const raw=await response.json();
+  const candles=raw.filter(k=>Number(k[6])<Date.now()).map(k=>({time:Number(k[0]),open:Number(k[1]),high:Number(k[2]),low:Number(k[3]),close:Number(k[4]),volume:Number(k[5])}));
+  if(candles.length<60)throw new Error(language==="ar"?"عدد الشموع المستلمة غير كافٍ للتحليل.":"Not enough candles received for analysis.");
+  return {symbol,interval,candles};
+}
+async function runMarketAnalysis(mode){
+  const status=$("resultText"); status.textContent=language==="ar"?"جارٍ جلب الشموع الحقيقية وحساب المؤشرات…":"Loading real candles and calculating indicators…";
+  $("resultTitle").textContent=language==="ar"?"تحليل السوق":"Market analysis";
+  try{
+    const {symbol,interval,candles}=await fetchSelectedBinanceCandles();
+    const closes=candles.map(c=>c.close),last=candles[candles.length-1];
+    const ema9=ema(closes,9),ema21=ema(closes,21),ema50=ema(closes,50),rsi14=rsi(closes,14);
+    const macdLine=ema(closes,12)-ema(closes,26);
+    // MACD signal is calculated from the full EMA12-EMA26 series.
+    const macdSeries=[]; for(let i=25;i<closes.length;i++){const part=closes.slice(0,i+1);macdSeries.push(ema(part,12)-ema(part,26));}
+    const signal=ema(macdSeries,9),atr=calculateAtr(candles,14);
+    if([ema9,ema21,ema50,rsi14,macdLine,signal,atr].some(v=>!Number.isFinite(v)))throw new Error("Indicator calculation incomplete");
+    const bullish=ema9>ema21&&macdLine>signal&&rsi14>=50&&rsi14<70;
+    const bearish=ema9<ema21&&macdLine<signal&&rsi14<=50&&rsi14>30;
+    const direction=bullish?"buy":bearish?"sell":"neutral";
+    const entry=last.close, distance=atr*1.5;
+    const stop=direction==="buy"?entry-distance:direction==="sell"?entry+distance:null;
+    const tp1=direction==="buy"?entry+distance:direction==="sell"?entry-distance:null;
+    const tp2=direction==="buy"?entry+distance*2:direction==="sell"?entry-distance*2:null;
+    const fmt=n=>formatMarketPrice(n);
+    const title=direction==="buy"?(language==="ar"?"ميل فني صاعد":"Bullish technical bias"):direction==="sell"?(language==="ar"?"ميل فني هابط":"Bearish technical bias"):(language==="ar"?"لا توجد إشارة مكتملة":"No confirmed signal");
+    const labels=language==="ar"?`السعر: ${fmt(entry)} · EMA9: ${fmt(ema9)} · EMA21: ${fmt(ema21)} · EMA50: ${fmt(ema50)} · RSI14: ${rsi14.toFixed(2)} · MACD: ${macdLine.toFixed(6)} / Signal: ${signal.toFixed(6)} · ATR14: ${fmt(atr)} · الفاصل: ${interval}.`:`Price: ${fmt(entry)} · EMA9: ${fmt(ema9)} · EMA21: ${fmt(ema21)} · EMA50: ${fmt(ema50)} · RSI14: ${rsi14.toFixed(2)} · MACD: ${macdLine.toFixed(6)} / Signal: ${signal.toFixed(6)} · ATR14: ${fmt(atr)} · Interval: ${interval}.`;
+    const riskText=direction==="neutral"?(language==="ar"?"لا توجد مستويات دخول أو أهداف مقترحة لأن الشروط غير متوافقة.":"No entry or targets are proposed because the signal conditions do not align."):(language==="ar"?`دخول مرجعي: ${fmt(entry)} · وقف خسارة حسابي: ${fmt(stop)} · TP1: ${fmt(tp1)} · TP2: ${fmt(tp2)} (مبنية على ATR، وليست توصية مضمونة).`:`Reference entry: ${fmt(entry)} · ATR-based stop: ${fmt(stop)} · TP1: ${fmt(tp1)} · TP2: ${fmt(tp2)} (not guaranteed trading advice).`);
+    const text=labels+" "+riskText;
+    $("resultTitle").textContent=title; $("resultText").textContent=text;
+    $("outMode").textContent=mode==="auto"?(language==="ar"?"تلقائي · Binance":"Automatic · Binance"):(language==="ar"?"فني · Binance":"Technical · Binance");
+    $("outPair").textContent=selected[0]; $("outEntry").textContent=fmt(entry);
+    $("outStop").textContent=stop===null?"—":fmt(stop); $("outTP1").textContent=tp1===null?"—":fmt(tp1); $("outTP2").textContent=tp2===null?"—":fmt(tp2);
+    lastAnalysis={title,text,mode:mode,pair:selected[0],entry:fmt(entry),stop:stop===null?"—":fmt(stop),tp1:tp1===null?"—":fmt(tp1),tp2:tp2===null?"—":fmt(tp2),direction,indicators:{ema9,ema21,ema50,rsi14,macd:macdLine,macdSignal:signal,atr},source:"Binance Spot API",timeframe:interval,asOf:new Date(last.time).toISOString()};
+    saveState();
+  }catch(error){
+    console.error("NEXFX analysis:",error);
+    $("resultTitle").textContent=language==="ar"?"تعذر إكمال التحليل":"Analysis unavailable";
+    $("resultText").textContent=error.message|| (language==="ar"?"تعذر جلب بيانات موثوقة من Binance.":"Could not retrieve verified Binance data.");
+  }
+}
+
+
 function loadUserScopedState(){
   const savedState=safeRead(AuthController.getStorageKey(),{})||{};
   language=languages.some(x=>x.code===savedState.language)?savedState.language:language;
@@ -2613,6 +2740,15 @@ function renderAssets(){
     const icon=document.createElement("span");
     icon.className="asset-icon";icon.textContent=item[1];
     const name=document.createElement("span");name.textContent=item[0];
+    const pair=market==="crypto"?cryptoPairFromTradingView(item[2]):null;
+    if(pair){
+      const quote=document.createElement("span");quote.className="asset-quote";quote.dataset.liveQuote=pair;
+      const q=liveCryptoQuotes.get(pair);
+      const price=document.createElement("b");price.textContent=q?formatMarketPrice(q.price):"—";
+      const change=document.createElement("small");change.textContent=q?((q.change>=0?"+":"")+q.change.toFixed(2)+"%"):(language==="ar"?"بانتظار السعر":"Loading");
+      change.className=q?(q.change>=0?"up":"down"):"muted";
+      quote.append(price,change); row.append(icon,name,quote);
+    }else{row.append(icon,name);}
     const star=document.createElement("button");
     star.type="button";
     star.className="asset-favorite";
@@ -2623,7 +2759,7 @@ function renderAssets(){
       event.stopPropagation();
       toggleFavoriteSymbol(item[2]);
     });
-    row.append(icon,name,star);
+    row.append(star);
     row.addEventListener("click",()=>selectAsset(item));
     holder.appendChild(row);
   });
@@ -2769,7 +2905,7 @@ function displaySavedAnalysis(){
   $("outTP2").textContent=lastAnalysis.tp2??"—";
 }
 
-function runAnalysis(){
+async function runAnalysis(){
   const mode=$("analysisMode").value;
   const direction=$("direction").value;
   const entry=Number($("entry").value);
@@ -2777,28 +2913,26 @@ function runAnalysis(){
   const tp1=Number($("tp1").value);
   const tp2=Number($("tp2").value);
 
-  if(mode!=="manual"){
-    $("resultTitle").textContent=t("needData");
-    $("resultText").textContent=t("analysisNote");
+  if(mode==="technical"||mode==="auto"){
+    await runMarketAnalysis(mode);
     return;
   }
 
   if(![entry,stop,tp1,tp2].every(n=>Number.isFinite(n)&&n>0)){
     alert(t("badEntry"));return;
   }
-
+  const valid=direction==="buy"?(stop<entry&&tp1>entry&&tp2>tp1):(stop>entry&&tp1<entry&&tp2<tp1);
+  if(!valid){
+    alert(language==="ar"?"تحقق من ترتيب المستويات: في الشراء يجب أن يكون SL أقل من الدخول وTP1 ثم TP2 أعلى منه؛ وفي البيع العكس.":"Check level order: for BUY, SL < entry < TP1 < TP2; for SELL, SL > entry > TP1 > TP2.");return;
+  }
+  const risk=Math.abs(entry-stop),reward1=Math.abs(tp1-entry),reward2=Math.abs(tp2-entry);
+  const rr1=(reward1/risk).toFixed(2),rr2=(reward2/risk).toFixed(2);
   const title=direction==="buy"?t("buy"):t("sell");
-  const text=t("manualDone");
-  $("resultTitle").textContent=title;
-  $("resultText").textContent=text;
-  $("outMode").textContent=t("manual");
-  $("outPair").textContent=selected[0];
-  $("outEntry").textContent=entry;
-  $("outStop").textContent=stop;
-  $("outTP1").textContent=tp1;
-  $("outTP2").textContent=tp2;
-
-  lastAnalysis={title,text,mode:t("manual"),pair:selected[0],entry,stop,tp1,tp2,direction};
+  const text=(language==="ar"?"تم التحقق من ترتيب المستويات. نسبة العائد إلى المخاطرة: ":"Levels validated. Reward/risk ratio: ")+"TP1 1:"+rr1+" · TP2 1:"+rr2;
+  $("resultTitle").textContent=title; $("resultText").textContent=text;
+  $("outMode").textContent=t("manual"); $("outPair").textContent=selected[0];
+  $("outEntry").textContent=entry; $("outStop").textContent=stop; $("outTP1").textContent=tp1; $("outTP2").textContent=tp2;
+  lastAnalysis={title,text,mode:t("manual"),pair:selected[0],entry,stop,tp1,tp2,direction,rewardRiskTP1:rr1,rewardRiskTP2:rr2};
   saveState();
 }
 
@@ -2871,6 +3005,8 @@ $("runAnalysis").addEventListener("click",runAnalysis);
 AuthController.init();
 loadUserScopedState();
 saveState();
+refreshCryptoQuotes();
+setInterval(refreshCryptoQuotes,NEXFX_QUOTE_REFRESH_MS);
 </script>
 
 <!-- Admin statistics scaffold: intentionally no fabricated counts; connect to protected Firebase data before enabling. -->
