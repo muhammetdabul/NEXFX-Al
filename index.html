@@ -2772,6 +2772,9 @@ function setLanguage(lang){
   renderAssets();
   renderFavorites();
   updateSideInformation();
+  // Re-render the analysis output using the newly selected language.
+  // This covers the empty state and previously saved analysis results.
+  displaySavedAnalysis();
   saveState();
   renderChart();
 }
@@ -2990,9 +2993,13 @@ function displaySavedAnalysis(){
     $("outTP2").textContent="—";
     return;
   }
-  $("resultTitle").textContent=lastAnalysis.title||t("notRun");
+  const savedDirection=lastAnalysis.direction||"neutral";
+  const savedTitle=lastAnalysis.mode==="manual"
+    ? (savedDirection==="buy"?t("buy"):t("sell"))
+    : savedDirection==="buy"?at("bull"):savedDirection==="sell"?at("bear"):at("neutral");
+  $("resultTitle").textContent=savedTitle||lastAnalysis.title||t("notRun");
   $("resultText").textContent=lastAnalysis.text||"";
-  paintAnalysisDirection(lastAnalysis.direction||"neutral");
+  paintAnalysisDirection(savedDirection);
   $("outMode").textContent=lastAnalysis.mode==="manual"?t("manual"):lastAnalysis.mode==="auto"?at("automatic"):lastAnalysis.mode==="technical"?at("technical"):lastAnalysis.mode||"—";
   $("outPair").textContent=lastAnalysis.pair||"—";
   $("outEntry").textContent=lastAnalysis.entry??"—";
