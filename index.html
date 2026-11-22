@@ -2353,6 +2353,10 @@ const AuthController = {
     const auth = firebase.auth();
     auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(console.error);
     auth.onAuthStateChanged(async user=>{
+      if(nexfxRiskUnsubscribe){nexfxRiskUnsubscribe();nexfxRiskUnsubscribe=null;}
+      clearTimeout(nexfxRiskSaveTimer);
+      nexfxRiskPending=false;
+      nexfxCloudReady=false;
       this.currentUser = user ? {uid:user.uid,email:user.email,provider:user.providerData?.[0]?.providerId || "password"} : null;
       this.updateAuthUI();
       loadUserScopedState();
@@ -2744,50 +2748,128 @@ function restoreForm(savedState={}){
 
 let nexfxCloudSaveTimer=null;
 let nexfxCloudReady=false;
+let nexfxRiskSaveTimer=null;
+let nexfxRiskUnsubscribe=null;
+let nexfxRiskEditVersion=0;
+let nexfxRiskPending=false;
+
 function getRiskSettings(){
   const keys={balance:"nexfx_demo_balance",daily:"nexfx_demo_daily_loss",maxTrades:"nexfx_demo_max_trades",spread:"nexfx_demo_max_spread"};
   const out={};
   for(const [name,key] of Object.entries(keys)){const value=localStorage.getItem(key);if(value!==null)out[name]=value;}
-  const risk=localStorage.getItem("nexfx_demo_risk_per_trade");if(risk!==null)out.risk=risk;
+  const risk=localStorage.getItem("nexfx_demo_risk_per_trade");
+  if(risk!==null)out.risk=risk;
   return out;
 }
 function applyRiskSettings(settings={}){
   const keys={balance:"nexfx_demo_balance",daily:"nexfx_demo_daily_loss",maxTrades:"nexfx_demo_max_trades",spread:"nexfx_demo_max_spread",risk:"nexfx_demo_risk_per_trade"};
-  for(const [name,key] of Object.entries(keys)){if(settings[name]!==undefined)localStorage.setItem(key,String(settings[name]));}
+  for(const [name,key] of Object.entries(keys)){
+    if(settings[name]!==undefined)localStorage.setItem(key,String(settings[name]));
+  }
+  // Cloud restoration must update the visible controls too, not just localStorage.
+  const riskInput=document.getElementById("executionRisk");
+  if(riskInput && settings.risk!==undefined)riskInput.value=String(settings.risk);
+  const fields={balance:"autopilotBalance",daily:"autopilotDailyLoss",maxTrades:"autopilotMaxTrades",spread:"autopilotMaxSpread"};
+  for(const [name,id] of Object.entries(fields)){
+    const el=document.getElementById(id);
+    if(el && settings[name]!==undefined)el.value=String(settings[name]);
+  }
+  if(typeof window.NEXFX_UPDATE_RISK_BUDGET==="function")window.NEXFX_UPDATE_RISK_BUDGET();
+}
+function setCloudSyncStatus(message){
+  const status=document.getElementById("nexfxCloudSyncStatus");
+  if(status)status.textContent=message;
 }
 function scheduleCloudStateSave(state){
-  if(!AuthController.currentUser || !nexfxCloudReady)return;
+  const uid=AuthController.currentUser?.uid;
+  if(!uid || !nexfxCloudReady)return;
   clearTimeout(nexfxCloudSaveTimer);
   nexfxCloudSaveTimer=setTimeout(async()=>{
     try{
-      await nexfxDb.collection("users").doc(AuthController.currentUser.uid).collection("private").doc("state").set({
-        state, riskSettings:getRiskSettings(), updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+      // Keep the shared user document merge-only; do not replace other user data.
+      await nexfxDb.collection("users").doc(uid).collection("private").doc("state").set({
+        state, updatedAt:firebase.firestore.FieldValue.serverTimestamp()
       },{merge:true});
-      const status=document.getElementById("nexfxCloudSyncStatus");if(status)status.textContent="تمت المزامنة السحابية";
+      if(AuthController.currentUser?.uid===uid)setCloudSyncStatus("تمت مزامنة بيانات الحساب");
     }catch(error){
       console.warn("NEXFX cloud sync unavailable; local backup retained:",error);
-      const status=document.getElementById("nexfxCloudSyncStatus");if(status)status.textContent="الحفظ المحلي يعمل؛ المزامنة السحابية بانتظار نشر قواعد Firestore";
+      setCloudSyncStatus("الحفظ المحلي يعمل؛ تعذرت المزامنة السحابية حالياً");
     }
   },900);
 }
+function scheduleRiskCloudSave(){
+  const uid=AuthController.currentUser?.uid;
+  if(!uid || !nexfxCloudReady)return;
+  const editVersion=++nexfxRiskEditVersion;
+  nexfxRiskPending=true;
+  clearTimeout(nexfxRiskSaveTimer);
+  nexfxRiskSaveTimer=setTimeout(async()=>{
+    const settings=getRiskSettings();
+    try{
+      // Save only the risk-settings field so a stale device cannot overwrite favorites/state.
+      await nexfxDb.collection("users").doc(uid).collection("private").doc("state").set({
+        riskSettings:settings,
+        riskUpdatedAt:firebase.firestore.FieldValue.serverTimestamp()
+      },{merge:true});
+      if(AuthController.currentUser?.uid===uid && editVersion===nexfxRiskEditVersion){
+        nexfxRiskPending=false;
+        setCloudSyncStatus("تم حفظ إعدادات المخاطر ومزامنتها");
+      }
+    }catch(error){
+      if(editVersion===nexfxRiskEditVersion)nexfxRiskPending=false;
+      console.warn("NEXFX risk settings cloud save failed:",error);
+      setCloudSyncStatus("تعذر حفظ إعدادات المخاطر سحابياً؛ بقيت القيمة على هذا الجهاز");
+    }
+  },650);
+}
+function startRiskCloudListener(uid){
+  if(nexfxRiskUnsubscribe){nexfxRiskUnsubscribe();nexfxRiskUnsubscribe=null;}
+  const ref=nexfxDb.collection("users").doc(uid).collection("private").doc("state");
+  nexfxRiskUnsubscribe=ref.onSnapshot(snapshot=>{
+    if(!snapshot.exists || AuthController.currentUser?.uid!==uid || nexfxRiskPending)return;
+    const cloud=snapshot.data()||{};
+    if(cloud.riskSettings){
+      applyRiskSettings(cloud.riskSettings);
+      setCloudSyncStatus("تم تحديث إعدادات المخاطر من الحساب السحابي");
+    }
+  },error=>{
+    console.warn("NEXFX risk live sync listener failed:",error);
+    setCloudSyncStatus("تعذر استقبال تحديثات المخاطر المباشرة");
+  });
+}
 async function restoreCloudStateForUser(uid){
   nexfxCloudReady=false;
+  if(nexfxRiskUnsubscribe){nexfxRiskUnsubscribe();nexfxRiskUnsubscribe=null;}
   try{
     const ref=nexfxDb.collection("users").doc(uid).collection("private").doc("state");
     const snap=await ref.get();
+    if(AuthController.currentUser?.uid!==uid)return;
     if(snap.exists){
       const cloud=snap.data()||{};
       if(cloud.state){safeWrite(`nexfx_state_v3_${uid}`,cloud.state);loadUserScopedState();}
       if(cloud.riskSettings)applyRiskSettings(cloud.riskSettings);
+      else{
+        // Preserve this account's existing local risk values when upgrading an older cloud document.
+        const localRisk=getRiskSettings();
+        if(Object.keys(localRisk).length){
+          await ref.set({riskSettings:localRisk,riskUpdatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+          applyRiskSettings(localRisk);
+        }
+      }
     }else{
-      // First sign-in: migrate this account's existing local state to its private cloud document.
+      // First sign-in: migrate existing local data without overwriting a document created meanwhile.
       const local=safeRead(`nexfx_state_v3_${uid}`,null);
-      if(local){await ref.set({state:local,riskSettings:getRiskSettings(),updatedAt:firebase.firestore.FieldValue.serverTimestamp()});}
+      if(local){
+        await ref.set({state:local,riskSettings:getRiskSettings(),updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+      }
     }
+    if(AuthController.currentUser?.uid!==uid)return;
     nexfxCloudReady=true;
+    startRiskCloudListener(uid);
   }catch(error){
     nexfxCloudReady=false;
     console.warn("Could not read Firestore yet. Local data remains available:",error);
+    setCloudSyncStatus("تعذر تحميل البيانات السحابية؛ البيانات المحلية ما زالت متاحة");
   }
 }
 function saveState(){
@@ -3293,6 +3375,7 @@ $("runAnalysis").addEventListener("click",runAnalysis);
     const amount=balance*risk/100;
     budget.textContent=new Intl.NumberFormat("en-US-u-nu-latn",{minimumFractionDigits:2,maximumFractionDigits:2}).format(amount);
   }
+  window.NEXFX_UPDATE_RISK_BUDGET=updateBudget;
   try{
     for(const [key,el] of Object.entries(fields)){
       const saved=localStorage.getItem(keys[key]);
@@ -3300,6 +3383,20 @@ $("runAnalysis").addEventListener("click",runAnalysis);
     }
   }catch(_){}
   [fields.balance,fields.daily,fields.maxTrades,fields.spread,riskInput].forEach(el=>el&&el.addEventListener("input",updateBudget));
+  // The maximum-risk field is saved automatically; no extra save button is required.
+  if(riskInput){
+    riskInput.addEventListener("input",()=>{
+      const value=Number(riskInput.value);
+      if(!Number.isFinite(value)||value<0.1||value>2)return;
+      try{localStorage.setItem("nexfx_demo_risk_per_trade",String(value));}
+      catch(error){console.warn("Could not store risk setting locally:",error);}
+      scheduleRiskCloudSave();
+    });
+    riskInput.addEventListener("change",()=>{
+      const value=Number(riskInput.value);
+      if(Number.isFinite(value)&&value>=0.1&&value<=2)scheduleRiskCloudSave();
+    });
+  }
   $("autopilotSaveSettings").addEventListener("click",()=>{
     const balance=readNumber(fields.balance),daily=readNumber(fields.daily),maxTrades=readNumber(fields.maxTrades),spread=readNumber(fields.spread),risk=readNumber(riskInput);
     const valid=balance>0&&daily>=0.1&&daily<=10&&Number.isInteger(maxTrades)&&maxTrades>=1&&maxTrades<=20&&spread>=0&&risk>=0.1&&risk<=2;
@@ -3308,6 +3405,7 @@ $("runAnalysis").addEventListener("click",runAnalysis);
       localStorage.setItem(keys.balance,String(balance));localStorage.setItem(keys.daily,String(daily));
       localStorage.setItem(keys.maxTrades,String(maxTrades));localStorage.setItem(keys.spread,String(spread));
       status.textContent=t("autopilotSettingsSaved");
+      scheduleRiskCloudSave();
     }catch(_){status.textContent=at("saveError");}
     updateBudget();
   });
