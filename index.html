@@ -2371,6 +2371,8 @@ const AuthController = {
   },
   async signInWithGoogle(){
     const provider = new firebase.auth.GoogleAuthProvider();
+    // Ask Google to show the account chooser instead of silently reusing the last account.
+    provider.setCustomParameters({ prompt: "select_account" });
     await firebase.auth().signInWithPopup(provider);
   },
   async signInWithEmail(){
