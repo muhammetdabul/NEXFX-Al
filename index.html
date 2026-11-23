@@ -3518,6 +3518,215 @@ saveState();
 })();
 </script>
 
+<!-- ===== NEXFX AI Intro: الصق هذا الكل قبل </body> بملف index.html ===== -->
+<style>
+:root{--a:#22d3ee;--b:#22c55e}
+#nx{font-family:"Segoe UI",Tahoma,"Noto Sans","PingFang SC","Microsoft YaHei","Hiragino Sans","Malgun Gothic","Nirmala UI",sans-serif;color:#eaf4ff}
+#nx *{box-sizing:border-box}
+/* ===== NEXFX CINEMATIC INTRO (انسخ من هنا) ===== */
+#nx{position:fixed;inset:0;z-index:100000;background:radial-gradient(ellipse at 50% 0,#0a2540 0,#020817 65%);overflow:hidden;transition:opacity .9s,transform .9s}
+#nx.out{opacity:0;transform:scale(1.1);pointer-events:none}
+#nx canvas{position:absolute;inset:0;width:100%;height:100%}
+.fl{position:absolute;left:-50%;right:-50%;bottom:-5%;height:55%;transform:perspective(420px) rotateX(62deg);background:linear-gradient(var(--a) 1px,transparent 1px),linear-gradient(90deg,var(--a) 1px,transparent 1px);background-size:56px 56px;opacity:.16;animation:fl 3s linear infinite;-webkit-mask-image:linear-gradient(transparent,#000 60%);mask-image:linear-gradient(transparent,#000 60%)}
+@keyframes fl{to{background-position:0 56px}}
+#nx::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,#020817d0 0,#02081770 42%,transparent 78%)}
+.sc{z-index:2}
+.sc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .7s}
+.sc.on{opacity:1;pointer-events:auto}
+.sc.on .rv{animation:up .9s var(--d,0s) cubic-bezier(.2,.8,.2,1) both}
+@keyframes up{from{opacity:0;transform:translateY(28px) scale(.97);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+.k{color:var(--a);letter-spacing:var(--ls,3px);font-size:13px;font-weight:700;border:1px solid color-mix(in srgb,var(--a) 40%,transparent);padding:6px 16px;border-radius:30px;background:color-mix(in srgb,var(--a) 10%,transparent)}
+#nx h2{margin:18px 0 10px;font-size:clamp(28px,8vw,56px);line-height:1.25;font-weight:800;background:linear-gradient(100deg,#fff 30%,var(--a) 65%,var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
+.s{max-width:520px;color:#9db4cc;font-size:clamp(14px,3.6vw,18px);line-height:1.8;margin:0 0 22px}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:min(92vw,480px)}
+.c{background:linear-gradient(145deg,#ffffff14,#ffffff05);border:1px solid #ffffff1f;border-radius:18px;padding:14px;backdrop-filter:blur(10px);text-align:start;box-shadow:0 10px 40px #0006}
+.c small{color:#8aa2bb;font-size:12px}.c b{display:block;font:700 19px ui-monospace,Menlo,monospace;margin-top:4px}
+.up{color:var(--b)}.dn{color:#ef4444}
+.ch{width:min(92vw,460px);background:#04122388;border:1px solid #ffffff1f;border-radius:20px;padding:12px;backdrop-filter:blur(10px)}
+.ch svg{width:100%;display:block;overflow:visible}
+.ln{opacity:0;animation:none}
+.sc.on .ln{animation:fi .6s var(--d) forwards}
+@keyframes fi{to{opacity:1}}
+.pl{fill:none;stroke:var(--a);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;filter:drop-shadow(0 0 6px var(--a))}
+.sc.on .pl{animation:dr 2.4s .3s ease forwards}
+@keyframes dr{to{stroke-dashoffset:0}}
+.rg{position:relative;width:150px;height:150px;margin-bottom:6px}
+.rg svg{transform:rotate(-90deg)}
+.rg circle{fill:none;stroke-width:9;stroke-linecap:round}
+.rg .bgc{stroke:#ffffff14}.rg .fg{stroke:url(#gr);stroke-dasharray:314;stroke-dashoffset:314;filter:drop-shadow(0 0 8px var(--a))}
+.sc.on .rg .fg{animation:rg 2s .4s ease forwards}
+@keyframes rg{to{stroke-dashoffset:235}}
+.rg div{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font:800 28px inherit;font-family:inherit}
+.rg small{font-size:11px;color:#8aa2bb;font-weight:400}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;direction:ltr;margin-bottom:16px}
+.chips span{border:1px solid #ffffff2a;padding:6px 14px;border-radius:20px;font-size:13px;background:#ffffff0d}
+.lg{font-size:clamp(46px,14vw,92px);font-weight:900;letter-spacing:5px;direction:ltr;color:#fff;text-shadow:0 0 30px var(--a),0 0 80px color-mix(in srgb,var(--a) 50%,transparent)}
+.lg i{font-style:normal;color:var(--a)}
+.bt{display:flex;flex-direction:column;gap:12px;align-items:center;margin-top:8px}
+.btn{border:0;cursor:pointer;font:800 19px inherit;font-family:inherit;color:#03111c;background:linear-gradient(100deg,var(--a),var(--b));padding:16px 46px;border-radius:60px;box-shadow:0 0 40px color-mix(in srgb,var(--a) 60%,transparent);animation:pl2 2.2s infinite}
+@keyframes pl2{50%{transform:scale(1.05);box-shadow:0 0 70px color-mix(in srgb,var(--b) 70%,transparent)}}
+.btn.o{background:none;color:#fff;border:1px solid #ffffff44;box-shadow:none;animation:none;font-size:15px;padding:11px 30px}
+.dots{position:absolute;z-index:5;bottom:calc(22px + env(safe-area-inset-bottom,0px));left:0;right:0;display:flex;justify-content:center;gap:8px}
+.dots i{width:26px;height:4px;border-radius:4px;background:#ffffff26;overflow:hidden;cursor:pointer}
+.dots i::after{content:"";display:block;height:100%;width:0;background:var(--a)}
+.dots i.d::after{width:100%}.dots i.on::after{animation:pg 4.6s linear forwards}
+@keyframes pg{to{width:100%}}
+.sk{position:absolute;z-index:6;top:calc(14px + env(safe-area-inset-top,0px));left:14px;background:#0004;border:1px solid #fff3;color:#fffa;border-radius:20px;padding:6px 14px;font:12px inherit;font-family:inherit;cursor:pointer}
+.ds{position:absolute;z-index:6;bottom:6px;right:0;left:0;text-align:center;font-size:10px;color:#fff5}
+</style>
+
+<div id="nx">
+  <canvas id="cv"></canvas><div class="fl"></div>
+  <button class="sk" id="sk" data-i="0" data-a="s">تخطي ›</button>
+
+  <section class="sc on">
+    <span class="k rv" data-i="1">الأسواق العالمية</span>
+    <h2 class="rv" style="--d:.15s" data-i="2">كل أسواق العالم.. بشاشة وحدة</h2>
+    <p class="s rv" style="--d:.3s" data-i="3">كريبتو، فوركس، ذهب ومعادن، وأسهم عالمية، مع شموع يابانية ومؤشرات فنية.</p>
+    <div class="g">
+      <div class="c rv" style="--d:.5s"><small data-i="4" data-p="₿ ">₿ العملات الرقمية</small><b data-p="67420" data-d="0">0</b></div>
+      <div class="c rv" style="--d:.65s"><small>💱 EUR/USD</small><b data-p="1.0842" data-d="4">0</b></div>
+      <div class="c rv" style="--d:.8s"><small data-i="5" data-p="🪙 ">🪙 الذهب XAU</small><b data-p="2386.5" data-d="2">0</b></div>
+      <div class="c rv" style="--d:.95s"><small data-i="6" data-p="📈 ">📈 الأسهم NASDAQ</small><b data-p="17850" data-d="0">0</b></div>
+    </div>
+  </section>
+
+  <section class="sc">
+    <span class="k rv" data-i="7">مركز التحليل الذكي</span>
+    <h2 class="rv" style="--d:.15s" data-i="8">الذكاء الاصطناعي يقرأ السوق عنك</h2>
+    <p class="s rv" style="--d:.3s" data-i="9">دخول، وقف خسارة، وأهداف TP1 و TP2 بتظهر بوضوح قبل ما تقرر.</p>
+    <div class="ch rv" style="--d:.5s">
+      <svg viewBox="0 0 360 190">
+        <g font-size="10" font-family="monospace" direction="ltr">
+          <line class="ln" style="--d:2.6s" x1="0" x2="300" y1="48" y2="48" stroke="#22c55e" stroke-dasharray="4 4"/><text class="ln" style="--d:2.6s" x="305" y="51" fill="#22c55e">TP2</text>
+          <line class="ln" style="--d:2.4s" x1="0" x2="300" y1="78" y2="78" stroke="#22c55e" stroke-dasharray="4 4"/><text class="ln" style="--d:2.4s" x="305" y="81" fill="#22c55e">TP1</text>
+          <line class="ln" style="--d:2.2s" x1="0" x2="300" y1="125" y2="125" stroke="var(--a)" stroke-dasharray="4 4"/><text class="ln" style="--d:2.2s" x="305" y="128" fill="var(--a)">ENTRY</text>
+          <line class="ln" style="--d:2.8s" x1="0" x2="300" y1="165" y2="165" stroke="#ef4444" stroke-dasharray="4 4"/><text class="ln" style="--d:2.8s" x="305" y="168" fill="#ef4444">SL</text>
+        </g>
+        <polyline class="pl" pathLength="1" points="5,150 35,138 60,146 90,122 115,130 145,108 170,118 200,92 225,100 255,66 280,72 300,44"/>
+        <circle class="ln" style="--d:2.6s" cx="300" cy="44" r="5" fill="var(--b)"/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="sc">
+    <span class="k rv" data-i="10">التنفيذ الذكي • إدارة المخاطر</span>
+    <h2 class="rv" style="--d:.15s" data-i="11">قرارك أولاً.. وحمايتك دائماً</h2>
+    <div class="rg rv" style="--d:.3s">
+      <svg viewBox="0 0 120 120" width="150" height="150"><defs><linearGradient id="gr"><stop offset="0" stop-color="var(--a)"/><stop offset="1" stop-color="var(--b)"/></linearGradient></defs><circle class="bgc" cx="60" cy="60" r="50"/><circle class="fg" cx="60" cy="60" r="50"/></svg>
+      <div>🛡️<small data-i="12">حد المخاطرة</small></div>
+    </div>
+    <div class="chips rv" style="--d:.5s"><span>MT4</span><span>MT5</span><span>cTrader</span><span>Binance</span></div>
+    <p class="s rv" style="--d:.65s" data-i="13">حدود خسارة يومية وإدارة مخاطرة لكل صفقة، وما في أمر بينفذ بدون موافقتك.</p>
+  </section>
+
+  <section class="sc">
+    <div class="lg rv">NEXFX <i>AI</i></div>
+    <h2 class="rv" style="--d:.3s" data-i="14">منصتك الذكية للتداول جاهزة</h2>
+    <p class="s rv" style="--d:.45s">SMART TRADING • SMARTER DECISIONS</p>
+    <div class="bt rv" style="--d:.7s">
+      <button class="btn" id="go" data-i="15" data-a="b">ابدأ الآن ←</button>
+      <button class="btn o" id="go2" data-i="16">ادخل إلى المنصة</button>
+    </div>
+  </section>
+
+  <div class="dots"></div>
+  <div class="ds" data-i="17">الأسعار المعروضة توضيحية</div>
+</div>
+
+<script>
+(function(){
+  var D={"ar":["تخطي","الأسواق العالمية","كل أسواق العالم.. بشاشة وحدة","كريبتو، فوركس، ذهب ومعادن، وأسهم عالمية، مع شموع يابانية ومؤشرات فنية.","العملات الرقمية","الذهب XAU","الأسهم NASDAQ","مركز التحليل الذكي","الذكاء الاصطناعي يقرأ السوق عنك","دخول، وقف خسارة، وأهداف TP1 و TP2 بتظهر بوضوح قبل ما تقرر.","التنفيذ الذكي • إدارة المخاطر","قرارك أولاً.. وحمايتك دائماً","حد المخاطرة","حدود خسارة يومية وإدارة مخاطرة لكل صفقة، وما في أمر بينفذ بدون موافقتك.","منصتك الذكية للتداول جاهزة","ابدأ الآن","ادخل إلى المنصة","الأسعار المعروضة توضيحية","الذكاء الاصطناعي يحلل الأسواق","MACD تقاطع صاعد","نمط: اختراق مقاومة","دعم عند 2380","قوة الاتجاه 87%","إشارة BUY","تحليل الحجم...","ثقة الذكاء الاصطناعي 92%","رصد سيولة عالية"],"en":["Skip","GLOBAL MARKETS","Every market in the world.. on one screen","Crypto, forex, gold & metals and global stocks, with candlesticks and technical indicators.","Crypto","Gold XAU","NASDAQ Stocks","SMART ANALYSIS CENTER","AI reads the market for you","Entry, stop loss and TP1 & TP2 targets shown clearly before you decide.","SMART EXECUTION • RISK MANAGEMENT","Your decision first.. your protection always","Risk limit","Daily loss limits and per-trade risk control, and no order is executed without your approval.","Your smart trading platform is ready","Start Now","Enter the Platform","Prices shown are illustrative","AI ANALYZING MARKETS","MACD bullish cross","Pattern: resistance breakout","Support at 2380","Trend strength 87%","BUY signal","Analyzing volume...","AI confidence 92%","High liquidity detected"],"fr":["Passer","MARCHÉS MONDIAUX","Tous les marchés du monde.. sur un seul écran","Crypto, forex, or et métaux, actions mondiales, avec chandeliers japonais et indicateurs techniques.","Crypto","Or XAU","Actions NASDAQ","CENTRE D’ANALYSE INTELLIGENTE","L’IA lit le marché pour vous","Entrée, stop loss et objectifs TP1 et TP2 affichés clairement avant votre décision.","EXÉCUTION INTELLIGENTE • GESTION DES RISQUES","Votre décision d’abord.. votre protection toujours","Limite de risque","Limites de perte quotidiennes et contrôle du risque par trade ; aucun ordre n’est exécuté sans votre accord.","Votre plateforme de trading intelligente est prête","Commencer","Accéder à la plateforme","Les prix affichés sont indicatifs","L’IA ANALYSE LES MARCHÉS","MACD : croisement haussier","Figure : cassure de résistance","Support à 2380","Force de la tendance 87 %","Signal BUY","Analyse du volume...","Confiance de l’IA 92 %","Forte liquidité détectée"],"tr":["Atla","KÜRESEL PİYASALAR","Dünyadaki tüm piyasalar.. tek ekranda","Kripto, forex, altın ve madenler, küresel hisseler; mum grafikleri ve teknik göstergelerle.","Kripto","Altın XAU","NASDAQ Hisseleri","AKILLI ANALİZ MERKEZİ","Yapay zeka piyasayı sizin için okur","Giriş, zarar durdur ve TP1 ile TP2 hedefleri, karar vermeden önce net şekilde gösterilir.","AKILLI İŞLEM • RİSK YÖNETİMİ","Önce sizin kararınız.. her zaman korumanız","Risk limiti","Günlük zarar limitleri ve işlem başına risk kontrolü; onayınız olmadan hiçbir emir gönderilmez.","Akıllı trading platformunuz hazır","Hemen Başla","Platforma Gir","Gösterilen fiyatlar örnek amaçlıdır","YAPAY ZEKA PİYASALARI ANALİZ EDİYOR","MACD yükseliş kesişimi","Formasyon: direnç kırılımı","2380 seviyesinde destek","Trend gücü %87","BUY sinyali","Hacim analiz ediliyor...","Yapay zeka güveni %92","Yüksek likidite tespit edildi"],"de":["Überspringen","GLOBALE MÄRKTE","Alle Märkte der Welt.. auf einem Bildschirm","Krypto, Forex, Gold und Metalle sowie globale Aktien, mit Candlesticks und technischen Indikatoren.","Krypto","Gold XAU","NASDAQ-Aktien","INTELLIGENTES ANALYSEZENTRUM","Die KI liest den Markt für Sie","Einstieg, Stop-Loss und die Ziele TP1 und TP2 werden klar angezeigt, bevor Sie entscheiden.","INTELLIGENTE AUSFÜHRUNG • RISIKOMANAGEMENT","Ihre Entscheidung zuerst.. Ihr Schutz immer","Risikolimit","Tägliche Verlustlimits und Risikokontrolle pro Trade; keine Order wird ohne Ihre Zustimmung ausgeführt.","Ihre intelligente Trading-Plattform ist bereit","Jetzt starten","Zur Plattform","Angezeigte Preise sind Beispielwerte","KI ANALYSIERT DIE MÄRKTE","MACD: bullisches Kreuz","Muster: Widerstandsausbruch","Unterstützung bei 2380","Trendstärke 87 %","BUY-Signal","Volumen wird analysiert...","KI-Konfidenz 92 %","Hohe Liquidität erkannt"],"es":["Omitir","MERCADOS GLOBALES","Todos los mercados del mundo.. en una sola pantalla","Cripto, forex, oro y metales, y acciones globales, con velas japonesas e indicadores técnicos.","Cripto","Oro XAU","Acciones NASDAQ","CENTRO DE ANÁLISIS INTELIGENTE","La IA lee el mercado por ti","Entrada, stop loss y objetivos TP1 y TP2 claramente visibles antes de decidir.","EJECUCIÓN INTELIGENTE • GESTIÓN DE RIESGO","Tu decisión primero.. tu protección siempre","Límite de riesgo","Límites de pérdida diaria y control de riesgo por operación; ninguna orden se ejecuta sin tu aprobación.","Tu plataforma de trading inteligente está lista","Empezar ahora","Entrar a la plataforma","Los precios mostrados son ilustrativos","LA IA ESTÁ ANALIZANDO LOS MERCADOS","MACD: cruce alcista","Patrón: ruptura de resistencia","Soporte en 2380","Fuerza de tendencia 87 %","Señal BUY","Analizando volumen...","Confianza de la IA 92 %","Alta liquidez detectada"],"pt":["Pular","MERCADOS GLOBAIS","Todos os mercados do mundo.. em uma só tela","Cripto, forex, ouro e metais e ações globais, com candles japoneses e indicadores técnicos.","Cripto","Ouro XAU","Ações NASDAQ","CENTRO DE ANÁLISE INTELIGENTE","A IA lê o mercado por você","Entrada, stop loss e alvos TP1 e TP2 exibidos com clareza antes da sua decisão.","EXECUÇÃO INTELIGENTE • GESTÃO DE RISCO","Sua decisão primeiro.. sua proteção sempre","Limite de risco","Limites de perda diária e controle de risco por operação; nenhuma ordem é executada sem a sua aprovação.","Sua plataforma de trading inteligente está pronta","Começar agora","Entrar na plataforma","Os preços exibidos são ilustrativos","IA ANALISANDO OS MERCADOS","MACD: cruzamento de alta","Padrão: rompimento de resistência","Suporte em 2380","Força da tendência 87%","Sinal BUY","Analisando volume...","Confiança da IA 92%","Alta liquidez detectada"],"it":["Salta","MERCATI GLOBALI","Tutti i mercati del mondo.. su un unico schermo","Crypto, forex, oro e metalli e azioni globali, con candele giapponesi e indicatori tecnici.","Crypto","Oro XAU","Azioni NASDAQ","CENTRO DI ANALISI INTELLIGENTE","L’IA legge il mercato per te","Ingresso, stop loss e obiettivi TP1 e TP2 mostrati chiaramente prima di decidere.","ESECUZIONE INTELLIGENTE • GESTIONE DEL RISCHIO","Prima la tua decisione.. sempre la tua protezione","Limite di rischio","Limiti di perdita giornaliera e controllo del rischio per operazione; nessun ordine viene eseguito senza la tua approvazione.","La tua piattaforma di trading intelligente è pronta","Inizia ora","Entra nella piattaforma","I prezzi mostrati sono indicativi","L’IA STA ANALIZZANDO I MERCATI","MACD: incrocio rialzista","Pattern: rottura di resistenza","Supporto a 2380","Forza del trend 87%","Segnale BUY","Analisi del volume...","Affidabilità IA 92%","Alta liquidità rilevata"],"ru":["Пропустить","МИРОВЫЕ РЫНКИ","Все рынки мира.. на одном экране","Крипто, форекс, золото и металлы, мировые акции — со свечными графиками и техническими индикаторами.","Крипто","Золото XAU","Акции NASDAQ","ЦЕНТР УМНОГО АНАЛИЗА","ИИ читает рынок за вас","Вход, стоп-лосс и цели TP1 и TP2 наглядно показаны до принятия решения.","УМНОЕ ИСПОЛНЕНИЕ • УПРАВЛЕНИЕ РИСКАМИ","Сначала ваше решение.. и всегда ваша защита","Лимит риска","Дневные лимиты убытков и контроль риска по каждой сделке; ни один ордер не исполняется без вашего согласия.","Ваша умная торговая платформа готова","Начать","Войти на платформу","Показанные цены носят иллюстративный характер","ИИ АНАЛИЗИРУЕТ РЫНКИ","MACD: бычье пересечение","Паттерн: пробой сопротивления","Поддержка на 2380","Сила тренда 87%","Сигнал BUY","Анализ объёма...","Уверенность ИИ 92%","Обнаружена высокая ликвидность"],"zh":["跳过","全球市场","全球市场，尽在一屏","加密货币、外汇、黄金与金属、全球股票，配备K线图和技术指标。","加密货币","黄金 XAU","纳斯达克股票","智能分析中心","AI 为您解读市场","入场价、止损以及 TP1、TP2 目标，决策前一目了然。","智能执行 • 风险管理","您先做决定，我们始终保护您","风险上限","每日亏损上限与单笔风险控制，未经您的批准不会执行任何订单。","您的智能交易平台已就绪","立即开始","进入平台","所示价格仅为演示","AI 正在分析市场","MACD 金叉","形态：突破阻力位","支撑位 2380","趋势强度 87%","BUY 买入信号","正在分析成交量...","AI 置信度 92%","检测到高流动性"],"ja":["スキップ","グローバル市場","世界中の市場を、ひとつの画面で","暗号資産、FX、金・金属、世界の株式を、ローソク足とテクニカル指標で。","暗号資産","ゴールド XAU","NASDAQ株式","スマート分析センター","AIがあなたの代わりに市場を読む","エントリー、ストップロス、TP1・TP2の目標を、判断の前にわかりやすく表示。","スマート執行 • リスク管理","まずあなたの判断を、そして常に保護を","リスク上限","1日の損失上限と1取引あたりのリスク管理。あなたの承認なしに注文は実行されません。","あなたのスマート取引プラットフォームの準備ができました","今すぐ始める","プラットフォームに入る","表示価格はイメージです","AIが市場を分析中","MACD ゴールデンクロス","パターン：レジスタンス突破","サポート 2380","トレンド強度 87%","BUY シグナル","出来高を分析中...","AI 信頼度 92%","高い流動性を検出"],"ko":["건너뛰기","글로벌 시장","전 세계 시장을 한 화면에서","암호화폐, 외환, 금·금속, 글로벌 주식을 캔들 차트와 기술 지표로 확인하세요.","암호화폐","금 XAU","나스닥 주식","스마트 분석 센터","AI가 시장을 대신 읽어 드립니다","진입가, 손절, TP1·TP2 목표가 결정 전에 명확하게 표시됩니다.","스마트 실행 • 리스크 관리","먼저 당신의 결정, 언제나 당신의 보호","리스크 한도","일일 손실 한도와 거래별 리스크 관리, 승인 없이는 어떤 주문도 실행되지 않습니다.","스마트 트레이딩 플랫폼이 준비되었습니다","지금 시작","플랫폼 입장","표시된 가격은 예시입니다","AI가 시장을 분석 중","MACD 골든크로스","패턴: 저항선 돌파","지지선 2380","추세 강도 87%","BUY 신호","거래량 분석 중...","AI 신뢰도 92%","높은 유동성 감지"],"hi":["छोड़ें","वैश्विक बाज़ार","दुनिया के सभी बाज़ार.. एक ही स्क्रीन पर","क्रिप्टो, फॉरेक्स, सोना व धातुएँ और वैश्विक शेयर, कैंडलस्टिक और तकनीकी संकेतकों के साथ।","क्रिप्टो","सोना XAU","NASDAQ शेयर","स्मार्ट विश्लेषण केंद्र","AI आपके लिए बाज़ार पढ़ता है","एंट्री, स्टॉप लॉस और TP1 व TP2 लक्ष्य, निर्णय से पहले साफ़ दिखते हैं।","स्मार्ट एक्ज़ीक्यूशन • जोखिम प्रबंधन","पहले आपका निर्णय.. हमेशा आपकी सुरक्षा","जोखिम सीमा","दैनिक नुकसान सीमा और हर ट्रेड पर जोखिम नियंत्रण; आपकी मंज़ूरी के बिना कोई ऑर्डर नहीं भेजा जाता।","आपका स्मार्ट ट्रेडिंग प्लेटफ़ॉर्म तैयार है","अभी शुरू करें","प्लेटफ़ॉर्म में प्रवेश करें","दिखाई गई कीमतें केवल उदाहरण हैं","AI बाज़ारों का विश्लेषण कर रहा है","MACD तेज़ी का क्रॉसओवर","पैटर्न: रेज़िस्टेंस ब्रेकआउट","सपोर्ट 2380 पर","ट्रेंड की ताक़त 87%","BUY सिग्नल","वॉल्यूम का विश्लेषण...","AI विश्वास 92%","उच्च लिक्विडिटी मिली"],"id":["Lewati","PASAR GLOBAL","Semua pasar dunia.. dalam satu layar","Kripto, forex, emas & logam, dan saham global, lengkap dengan candlestick dan indikator teknikal.","Kripto","Emas XAU","Saham NASDAQ","PUSAT ANALISIS PINTAR","AI membaca pasar untuk Anda","Entry, stop loss, serta target TP1 dan TP2 ditampilkan jelas sebelum Anda memutuskan.","EKSEKUSI PINTAR • MANAJEMEN RISIKO","Keputusan Anda lebih dulu.. perlindungan Anda selalu","Batas risiko","Batas kerugian harian dan kontrol risiko per transaksi; tidak ada order yang dieksekusi tanpa persetujuan Anda.","Platform trading pintar Anda siap","Mulai Sekarang","Masuk ke Platform","Harga yang ditampilkan hanya ilustrasi","AI MENGANALISIS PASAR","MACD: persilangan bullish","Pola: breakout resistance","Support di 2380","Kekuatan tren 87%","Sinyal BUY","Menganalisis volume...","Keyakinan AI 92%","Likuiditas tinggi terdeteksi"],"nl":["Overslaan","WERELDWIJDE MARKTEN","Alle markten van de wereld.. op één scherm","Crypto, forex, goud en metalen en wereldwijde aandelen, met candlesticks en technische indicatoren.","Crypto","Goud XAU","NASDAQ-aandelen","SLIMME ANALYSEHUB","AI leest de markt voor jou","Instap, stop-loss en de doelen TP1 en TP2 duidelijk zichtbaar voordat je beslist.","SLIMME UITVOERING • RISICOBEHEER","Jouw beslissing eerst.. jouw bescherming altijd","Risicolimiet","Dagelijkse verlieslimieten en risicocontrole per trade; er wordt geen order uitgevoerd zonder jouw goedkeuring.","Jouw slimme tradingplatform is klaar","Nu beginnen","Naar het platform","Getoonde prijzen zijn ter illustratie","AI ANALYSEERT DE MARKTEN","MACD: bullish kruising","Patroon: weerstand doorbroken","Support op 2380","Trendkracht 87%","BUY-signaal","Volume wordt geanalyseerd...","AI-betrouwbaarheid 92%","Hoge liquiditeit gedetecteerd"]};
+  var q=new URLSearchParams(location.search).get('lang'),Lg=((q||(navigator.languages&&navigator.languages[0])||navigator.language||'en')+'').toLowerCase().split(/[-_]/)[0];
+  if(!D[Lg])Lg='en';var T=D[Lg],RT=Lg==='ar';
+  function siteLang(){try{var st=safeRead(AuthController.getStorageKey(),{})||{};if(!st.language&&typeof setLanguage==='function'&&Lg!==language&&languages.some(function(l){return l.code===Lg}))setLanguage(Lg)}catch(e){}}
+  var E=document.getElementById('nx');E.setAttribute('dir',RT?'rtl':'ltr');E.setAttribute('lang',Lg);
+  E.style.setProperty('--ls',/^(ar|hi|zh|ja|ko)$/.test(Lg)?'0':'3px');
+  [].forEach.call(E.querySelectorAll('[data-i]'),function(e){var a=e.getAttribute('data-a');e.textContent=(e.getAttribute('data-p')||'')+T[+e.getAttribute('data-i')]+(a==='b'?(RT?' ←':' →'):a==='s'?(RT?' ‹':' ›'):'')});
+  var nx=document.getElementById('nx'),sc=[].slice.call(nx.querySelectorAll('.sc')),dots=nx.querySelector('.dots'),cur=0,tm,ds=[];
+  sc.forEach(function(_,i){var d=document.createElement('i');d.onclick=function(){show(i)};dots.appendChild(d);ds.push(d)});
+  function show(n){
+    cur=n;clearTimeout(tm);
+    sc.forEach(function(s,i){s.classList.toggle('on',i===n)});
+    ds.forEach(function(d,i){d.className='';void d.offsetWidth;d.className=i<n?'d':i===n?(n<sc.length-1?'on':'d'):''});
+    if(n===0)count();
+    if(n<sc.length-1)tm=setTimeout(function(){show(n+1)},4600);
+  }
+  /* عدّاد أسعار */
+  var tk;function count(){
+    clearInterval(tk);var els=nx.querySelectorAll('[data-p]'),t0=Date.now();
+    tk=setInterval(function(){
+      var k=Math.min(1,(Date.now()-t0)/1500);
+      els.forEach(function(e){
+        var p=+e.dataset.p,d=+e.dataset.d,v=p*(k<1?k:1+(Math.random()-.5)*.0012);
+        e.textContent=v.toLocaleString('en',{minimumFractionDigits:d,maximumFractionDigits:d});
+        e.className=k<1?'':(Math.random()>.5?'up':'dn');
+      });
+    },k=1?120:120);
+  }
+  /* خلفية: شموع متحركة + شبكة ذكاء اصطناعي تحلل */
+  var cv=document.getElementById('cv'),x=cv.getContext('2d'),W,H,nodes=[],pulses=[],tags=[],C=[],cp=100,co=0,CW=22,fr=0,lastTag=0;
+  var NL=[4,7,7,5,2],TX=['RSI 68 ↑',T[19],T[20],T[21],T[22],T[23],T[24],'TP1 ✓',T[25],T[26]];
+  function mk(){var o=cp,c=o+(Math.random()-.46)*7;cp=c;return{o:o,c:c,h:Math.max(o,c)+Math.random()*3.5,l:Math.min(o,c)-Math.random()*3.5}}
+  for(var i=0;i<90;i++)C.push(mk());
+  function build(){nodes=[];NL.forEach(function(n,li){for(var j=0;j<n;j++)nodes.push({l:li,x:W*(.08+li*.21),y:H*.16+(j+.5)/n*H*.68,f:0})})}
+  function rs(){var r=devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*r;cv.height=H*r;x.setTransform(r,0,0,r,0,0);build()}
+  rs();addEventListener('resize',rs);
+  function col(n){return getComputedStyle(document.body).getPropertyValue(n).trim()}
+  var raf;(function lp(){
+    var A=col('--a')||'#22d3ee',B=col('--b')||'#22c55e',now=Date.now();fr++;
+    x.clearRect(0,0,W,H);x.shadowBlur=0;
+    /* شموع */
+    co+=.5;if(co>=CW){co-=CW;C.shift();C.push(mk())}
+    var n=Math.ceil(W/CW)+2,arr=C.slice(-n),mn=1e9,mxv=-1e9;
+    arr.forEach(function(k){mn=Math.min(mn,k.l);mxv=Math.max(mxv,k.h)});
+    var top=H*.28,bot=H*.9,sc=(bot-top)/(mxv-mn||1);
+    function Y(v){return bot-(v-mn)*sc}
+    arr.forEach(function(k,i){
+      var px=W-(arr.length-1-i)*CW-co-CW/2,up=k.c>=k.o,c=up?B:'#ef4444';
+      x.globalAlpha=.42;x.strokeStyle=c;x.fillStyle=c;x.lineWidth=2;
+      x.beginPath();x.moveTo(px,Y(k.h));x.lineTo(px,Y(k.l));x.stroke();
+      var a=Y(k.o),b=Y(k.c);x.fillRect(px-6,Math.min(a,b),12,Math.max(2,Math.abs(a-b)));
+    });
+    x.globalAlpha=.75;x.strokeStyle=A;x.lineWidth=2.5;x.shadowColor=A;x.shadowBlur=14;x.beginPath();
+    arr.forEach(function(k,i){var px=W-(arr.length-1-i)*CW-co-CW/2;i?x.lineTo(px,Y(k.c)):x.moveTo(px,Y(k.c))});
+    x.stroke();x.shadowBlur=0;
+    /* شبكة الذكاء الاصطناعي */
+    x.globalAlpha=.09;x.strokeStyle=A;x.lineWidth=1;
+    nodes.forEach(function(a){nodes.forEach(function(b){if(b.l===a.l+1){x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.stroke()}})});
+    if(fr%5===0){var l=Math.floor(Math.random()*(NL.length-1)),as=nodes.filter(function(q){return q.l===l}),bs=nodes.filter(function(q){return q.l===l+1});
+      pulses.push({a:as[Math.floor(Math.random()*as.length)],b:bs[Math.floor(Math.random()*bs.length)],t:0})}
+    pulses=pulses.filter(function(p){
+      p.t+=.025;var px=p.a.x+(p.b.x-p.a.x)*p.t,py=p.a.y+(p.b.y-p.a.y)*p.t;
+      x.globalAlpha=.95;x.fillStyle=B;x.shadowColor=B;x.shadowBlur=14;x.beginPath();x.arc(px,py,3,0,7);x.fill();x.shadowBlur=0;
+      if(p.t>=1){p.b.f=1;return false}return true});
+    nodes.forEach(function(q){q.f*=.93;x.globalAlpha=.5+q.f*.5;x.fillStyle=A;x.shadowColor=A;x.shadowBlur=6+q.f*18;x.beginPath();x.arc(q.x,q.y,3.5+q.f*4,0,7);x.fill()});
+    x.shadowBlur=0;
+    /* شعاع المسح */
+    var sx=(now/9)%(W+240)-120,g=x.createLinearGradient(sx-120,0,sx+4,0);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,A);
+    x.globalAlpha=.16;x.fillStyle=g;x.fillRect(sx-120,0,124,H);x.globalAlpha=.5;x.fillStyle=A;x.fillRect(sx+2,0,2,H);
+    /* عبارات التحليل */
+    if(now-lastTag>900){lastTag=now;tags.push({s:TX[Math.floor(Math.random()*TX.length)],x:W*.12+Math.random()*W*.76,y:H*.14+Math.random()*H*.72,t:0})}
+    x.font='600 13px "Segoe UI",Tahoma,"Noto Sans","PingFang SC","Microsoft YaHei","Hiragino Sans","Malgun Gothic","Nirmala UI",sans-serif';x.textAlign='center';
+    tags=tags.filter(function(g2){
+      g2.t+=.012;var al=Math.sin(Math.min(1,g2.t)*Math.PI),w=x.measureText(g2.s).width+24;
+      x.globalAlpha=al*.9;x.fillStyle='#04122ccc';x.strokeStyle=A;x.lineWidth=1;
+      x.fillRect(g2.x-w/2,g2.y-14,w,28);x.strokeRect(g2.x-w/2,g2.y-14,w,28);
+      x.fillStyle='#e6f6ff';x.fillText(g2.s,g2.x,g2.y+5);
+      return g2.t<1});
+    /* HUD */
+    x.globalAlpha=.55+.45*Math.sin(now/300);x.fillStyle=B;x.textAlign='center';x.font='700 12px "Segoe UI",Tahoma,"Noto Sans","PingFang SC","Microsoft YaHei","Hiragino Sans","Malgun Gothic","Nirmala UI",sans-serif';
+    x.fillText('● '+T[18],W/2,calcTop());x.globalAlpha=1;
+    raf=requestAnimationFrame(lp);
+  })();
+  function calcTop(){return 30}
+  function enter(){nx.classList.add('out');document.documentElement.style.overflow='';siteLang();clearTimeout(tm);clearInterval(tk);setTimeout(function(){cancelAnimationFrame(raf);nx.style.display='none'},950)}
+  ['go','go2','sk'].forEach(function(id){document.getElementById(id).onclick=enter});
+  document.documentElement.style.overflow='hidden';
+  show(0);
+})();
+</script>
+
 </body>
 </html>
 
