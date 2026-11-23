@@ -2359,12 +2359,21 @@ const AuthController = {
     const auth = firebase.auth();
     auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(console.error);
     auth.onAuthStateChanged(async user=>{
-      if(!user && nexfxCloudUnsubscribe){nexfxCloudUnsubscribe();nexfxCloudUnsubscribe=null;}
+      const nextUID=user?.uid || "guest";
+      const previousUID=this.currentUser?.uid || "guest";
+      if(previousUID!==nextUID){
+        clearTimeout(nexfxCloudSaveTimer);
+        nexfxCloudSaveTimer=null;
+        nexfxCloudReady=false;
+        if(nexfxCloudUnsubscribe){nexfxCloudUnsubscribe();nexfxCloudUnsubscribe=null;}
+      }
       this.currentUser = user ? {uid:user.uid,email:user.email,provider:user.providerData?.[0]?.providerId || "password"} : null;
       this.updateAuthUI();
       loadUserScopedState();
+      loadRiskSettingsForUser(nextUID);
       if(user){
         await restoreCloudStateForUser(user.uid);
+        if(this.currentUser?.uid!==user.uid)return;
         saveState();
       }
     });
@@ -2392,9 +2401,7 @@ const AuthController = {
   },
   async signOut(){
     await firebase.auth().signOut();
-    this.currentUser=null;
-    this.updateAuthUI();
-    loadUserScopedState();
+    // The auth-state listener performs the account switch and clears pending sync work.
   },
   updateAuthUI(){
     const badge=$("userBadge");
@@ -2753,104 +2760,167 @@ function restoreForm(savedState={}){
 
 let nexfxCloudSaveTimer=null;
 let nexfxCloudReady=false;
-function getRiskSettings(){
-  const keys={balance:"nexfx_demo_balance",daily:"nexfx_demo_daily_loss",maxTrades:"nexfx_demo_max_trades",spread:"nexfx_demo_max_spread"};
+const NEXFX_RISK_FIELDS={
+  balance:"nexfx_demo_balance",
+  daily:"nexfx_demo_daily_loss",
+  maxTrades:"nexfx_demo_max_trades",
+  spread:"nexfx_demo_max_spread",
+  risk:"nexfx_demo_risk_per_trade"
+};
+function getRiskStorageKey(name,uid=AuthController.getActiveUID()){
+  return `nexfx_risk_v1_${encodeURIComponent(uid)}_${name}`;
+}
+function getRiskSettings(uid=AuthController.getActiveUID()){
   const out={};
-  for(const [name,key] of Object.entries(keys)){const value=localStorage.getItem(key);if(value!==null)out[name]=value;}
-  const risk=localStorage.getItem("nexfx_demo_risk_per_trade");if(risk!==null)out.risk=risk;
+  for(const name of Object.keys(NEXFX_RISK_FIELDS)){
+    const value=localStorage.getItem(getRiskStorageKey(name,uid));
+    if(value!==null)out[name]=value;
+  }
   return out;
 }
-function applyRiskSettings(settings={}){
-  const keys={balance:"nexfx_demo_balance",daily:"nexfx_demo_daily_loss",maxTrades:"nexfx_demo_max_trades",spread:"nexfx_demo_max_spread",risk:"nexfx_demo_risk_per_trade"};
-  for(const [name,key] of Object.entries(keys)){if(settings[name]!==undefined)localStorage.setItem(key,String(settings[name]));}
+function applyRiskSettings(settings={},uid=AuthController.getActiveUID()){
+  if(uid!==AuthController.getActiveUID())return false;
+  for(const name of Object.keys(NEXFX_RISK_FIELDS)){
+    if(settings[name]!==undefined){
+      localStorage.setItem(getRiskStorageKey(name,uid),String(settings[name]));
+    }
+  }
+  return true;
+}
+function resetRiskControlsToDefaults(){
+  const ids=["autopilotBalance","autopilotDailyLoss","autopilotMaxTrades","autopilotMaxSpread","executionRisk"];
+  for(const id of ids){
+    const el=document.getElementById(id);
+    if(el && el.defaultValue!==undefined)el.value=el.defaultValue;
+  }
+  const budget=document.getElementById("autopilotRiskBudget");
+  if(budget)budget.textContent="—";
+}
+function loadRiskSettingsForUser(uid){
+  if(uid!==AuthController.getActiveUID())return;
+  resetRiskControlsToDefaults();
+  const settings=getRiskSettings(uid);
+  if(Object.keys(settings).length)applyRemoteRiskSettings(settings,uid);
 }
 function scheduleCloudStateSave(state){
-  if(!AuthController.currentUser || !nexfxCloudReady)return;
+  const uid=AuthController.currentUser?.uid;
+  if(!uid || !nexfxCloudReady || (state?.uid && state.uid!==uid))return;
+  const stateSnapshot=JSON.parse(JSON.stringify(state));
+  const riskSnapshot=getRiskSettings(uid);
   clearTimeout(nexfxCloudSaveTimer);
   nexfxCloudSaveTimer=setTimeout(async()=>{
+    if(AuthController.currentUser?.uid!==uid)return;
     try{
-      await nexfxDb.collection("users").doc(AuthController.currentUser.uid).collection("private").doc("state").set({
-        state, riskSettings:getRiskSettings(), updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+      await nexfxDb.collection("users").doc(uid).collection("private").doc("state").set({
+        state:stateSnapshot,
+        riskSettings:riskSnapshot,
+        updatedAt:firebase.firestore.FieldValue.serverTimestamp()
       },{merge:true});
-      const status=document.getElementById("nexfxCloudSyncStatus");if(status)status.textContent="تمت المزامنة السحابية";
+      if(AuthController.currentUser?.uid===uid)setCloudSyncStatus("تمت مزامنة بيانات الحساب");
     }catch(error){
       console.warn("NEXFX cloud sync unavailable; local backup retained:",error);
-      const status=document.getElementById("nexfxCloudSyncStatus");if(status)status.textContent="الحفظ المحلي يعمل؛ المزامنة السحابية بانتظار نشر قواعد Firestore";
+      if(AuthController.currentUser?.uid===uid)setCloudSyncStatus("الحفظ المحلي يعمل؛ تعذرت المزامنة السحابية حالياً");
     }
   },900);
 }
 let nexfxCloudUnsubscribe=null;
 let nexfxApplyingRemoteState=false;
 
-function applyRemoteRiskSettings(settings={}){
-  applyRiskSettings(settings);
-  const riskInput=document.getElementById("executionRisk");
-  const fields={
-    balance:document.getElementById("autopilotBalance"),
-    daily:document.getElementById("autopilotDailyLoss"),
-    maxTrades:document.getElementById("autopilotMaxTrades"),
-    spread:document.getElementById("autopilotMaxSpread")
-  };
-  if(settings.risk!==undefined && riskInput) riskInput.value=String(settings.risk);
-  const storageKeys={
-    balance:"nexfx_demo_balance",daily:"nexfx_demo_daily_loss",
-    maxTrades:"nexfx_demo_max_trades",spread:"nexfx_demo_max_spread"
-  };
-  for(const [name,el] of Object.entries(fields)){
-    const value=settings[name] ?? localStorage.getItem(storageKeys[name]);
-    if(value!==null && value!==undefined && el) el.value=String(value);
+function applyRemoteRiskSettings(settings={},uid=AuthController.getActiveUID()){
+  if(uid!==AuthController.getActiveUID())return;
+  const wasApplying=nexfxApplyingRemoteState;
+  nexfxApplyingRemoteState=true;
+  try{
+    applyRiskSettings(settings,uid);
+    const riskInput=document.getElementById("executionRisk");
+    const fields={
+      balance:document.getElementById("autopilotBalance"),
+      daily:document.getElementById("autopilotDailyLoss"),
+      maxTrades:document.getElementById("autopilotMaxTrades"),
+      spread:document.getElementById("autopilotMaxSpread")
+    };
+    if(settings.risk!==undefined && riskInput)riskInput.value=String(settings.risk);
+    for(const [name,el] of Object.entries(fields)){
+      if(settings[name]!==undefined && el)el.value=String(settings[name]);
+    }
+    if(riskInput)riskInput.dispatchEvent(new Event("input",{bubbles:true}));
+    Object.values(fields).forEach(el=>el&&el.dispatchEvent(new Event("input",{bubbles:true})));
+  }finally{
+    nexfxApplyingRemoteState=wasApplying;
   }
-  if(riskInput) riskInput.dispatchEvent(new Event("input",{bubbles:true}));
-  Object.values(fields).forEach(el=>el&&el.dispatchEvent(new Event("input",{bubbles:true})));
 }
 
 async function restoreCloudStateForUser(uid){
+  if(AuthController.currentUser?.uid!==uid)return;
   nexfxCloudReady=false;
   if(nexfxCloudUnsubscribe){nexfxCloudUnsubscribe();nexfxCloudUnsubscribe=null;}
   try{
     const ref=nexfxDb.collection("users").doc(uid).collection("private").doc("state");
     const snap=await ref.get();
+    if(AuthController.currentUser?.uid!==uid)return;
     if(snap.exists){
       const cloud=snap.data()||{};
-      if(cloud.state){safeWrite(`nexfx_state_v3_${uid}`,cloud.state);loadUserScopedState();}
-      if(cloud.riskSettings)applyRemoteRiskSettings(cloud.riskSettings);
-    }else{
-      // First sign-in: migrate this account's existing local state to its private cloud document.
-      const local=safeRead(`nexfx_state_v3_${uid}`,null);
-      if(local){
-        await ref.set({
-          state:local,
-          riskSettings:getRiskSettings(),
-          updatedAt:firebase.firestore.FieldValue.serverTimestamp()
-        },{merge:true});
+      if(cloud.state){
+        safeWrite(`nexfx_state_v3_${uid}`,cloud.state);
+        loadUserScopedState();
       }
+      if(cloud.riskSettings){
+        applyRemoteRiskSettings(cloud.riskSettings,uid);
+      }else{
+        // Never import old shared localStorage values: their account ownership is unknown.
+        const localRisk=getRiskSettings(uid);
+        if(Object.keys(localRisk).length){
+          await ref.set({riskSettings:localRisk,riskUpdatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+          if(AuthController.currentUser?.uid!==uid)return;
+          applyRemoteRiskSettings(localRisk,uid);
+        }else{
+          loadRiskSettingsForUser(uid);
+        }
+      }
+    }else{
+      const local=safeRead(`nexfx_state_v3_${uid}`,null);
+      const localRisk=getRiskSettings(uid);
+      const initialData={updatedAt:firebase.firestore.FieldValue.serverTimestamp()};
+      if(local)initialData.state=local;
+      if(Object.keys(localRisk).length)initialData.riskSettings=localRisk;
+      if(local || Object.keys(localRisk).length){
+        await ref.set(initialData,{merge:true});
+        if(AuthController.currentUser?.uid!==uid)return;
+      }
+      loadRiskSettingsForUser(uid);
     }
+    if(AuthController.currentUser?.uid!==uid)return;
     nexfxCloudReady=true;
     const status=document.getElementById("nexfxCloudSyncStatus");
     if(status)status.textContent="متصل بالسحابة — بانتظار التحديثات";
     nexfxCloudUnsubscribe=ref.onSnapshot(snapshot=>{
-      if(!snapshot.exists)return;
+      if(AuthController.currentUser?.uid!==uid || !snapshot.exists)return;
       const cloud=snapshot.data()||{};
       nexfxApplyingRemoteState=true;
       try{
         if(cloud.state){
           safeWrite(`nexfx_state_v3_${uid}`,cloud.state);
-          if(AuthController.currentUser?.uid===uid) loadUserScopedState();
+          loadUserScopedState();
         }
-        if(cloud.riskSettings) applyRemoteRiskSettings(cloud.riskSettings);
+        if(cloud.riskSettings)applyRemoteRiskSettings(cloud.riskSettings,uid);
       }finally{
         nexfxApplyingRemoteState=false;
       }
-      const syncStatus=document.getElementById("nexfxCloudSyncStatus");
-      if(syncStatus)syncStatus.textContent="تم استقبال آخر تحديث من السحابة";
+      if(AuthController.currentUser?.uid===uid){
+        const syncStatus=document.getElementById("nexfxCloudSyncStatus");
+        if(syncStatus)syncStatus.textContent="تم استقبال آخر تحديث من السحابة";
+      }
     },error=>{
+      if(AuthController.currentUser?.uid!==uid)return;
       console.warn("NEXFX Firestore live sync listener failed:",error);
       const syncStatus=document.getElementById("nexfxCloudSyncStatus");
       if(syncStatus)syncStatus.textContent="تعذرت المزامنة المباشرة — تحقق من صلاحيات Firestore والاتصال";
     });
   }catch(error){
+    if(AuthController.currentUser?.uid!==uid)return;
     nexfxCloudReady=false;
     console.warn("Could not read Firestore yet. Local data remains available:",error);
+    loadRiskSettingsForUser(uid);
     const status=document.getElementById("nexfxCloudSyncStatus");
     if(status)status.textContent="السحابة غير متاحة — تحقق من قواعد Firestore والاتصال";
   }
@@ -3348,7 +3418,6 @@ $("runAnalysis").addEventListener("click",runAnalysis);
 
 // Demo risk controls: local settings only; no broker connection or order execution.
 (function initAutopilotPreparation(){
-  const keys={balance:"nexfx_demo_balance",daily:"nexfx_demo_daily_loss",maxTrades:"nexfx_demo_max_trades",spread:"nexfx_demo_max_spread"};
   const fields={balance:$("autopilotBalance"),daily:$("autopilotDailyLoss"),maxTrades:$("autopilotMaxTrades"),spread:$("autopilotMaxSpread")};
   const riskInput=$("executionRisk"),budget=$("autopilotRiskBudget"),status=$("autopilotSettingsStatus"),riskWarning=$("executionRiskWarning");
   const readNumber=(el)=>Number(el&&el.value);
@@ -3363,12 +3432,7 @@ $("runAnalysis").addEventListener("click",runAnalysis);
     const amount=balance*risk/100;
     budget.textContent=new Intl.NumberFormat("en-US-u-nu-latn",{minimumFractionDigits:2,maximumFractionDigits:2}).format(amount);
   }
-  try{
-    for(const [key,el] of Object.entries(fields)){
-      const saved=localStorage.getItem(keys[key]);
-      if(saved!==null)el.value=saved;
-    }
-  }catch(_){}
+  // Settings load only after Firebase identifies the active user UID.
   [fields.balance,fields.daily,fields.maxTrades,fields.spread,riskInput].forEach(el=>el&&el.addEventListener("input",updateBudget));
   // The risk percentage itself syncs automatically after the user finishes editing it.
   let riskCloudInputTimer=null;
@@ -3379,7 +3443,8 @@ $("runAnalysis").addEventListener("click",runAnalysis);
       const risk=readNumber(riskInput);
       if(!Number.isFinite(risk)||risk<0.1||risk>5)return;
       try{
-        localStorage.setItem("nexfx_demo_risk_per_trade",String(risk));
+        const uid=AuthController.getActiveUID();
+        applyRiskSettings({risk},uid);
         if(typeof saveState==="function")saveState();
         const syncStatus=document.getElementById("nexfxCloudSyncStatus");
         if(syncStatus)syncStatus.textContent=AuthController.currentUser
@@ -3393,9 +3458,8 @@ $("runAnalysis").addEventListener("click",runAnalysis);
     const valid=balance>0&&daily>=0.1&&daily<=10&&Number.isInteger(maxTrades)&&maxTrades>=1&&maxTrades<=20&&spread>=0&&risk>=0.1&&risk<=5;
     if(!valid){status.textContent=t("autopilotSettingsInvalid");return;}
     try{
-      localStorage.setItem(keys.balance,String(balance));localStorage.setItem(keys.daily,String(daily));
-      localStorage.setItem(keys.maxTrades,String(maxTrades));localStorage.setItem(keys.spread,String(spread));
-      localStorage.setItem("nexfx_demo_risk_per_trade",String(risk));
+      const uid=AuthController.getActiveUID();
+      applyRiskSettings({balance,daily,maxTrades,spread,risk},uid);
       status.textContent=t("autopilotSettingsSaved");
       // Save the selected risk together with the user's cloud state.
       if(typeof saveState==="function") saveState();
