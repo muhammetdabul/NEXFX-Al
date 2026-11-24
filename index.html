@@ -2752,7 +2752,7 @@ async function runMarketAnalysis(mode){
     const fmt=n=>formatMarketPrice(n);
     const title=direction==="buy"?(at("bull")):direction==="sell"?(at("bear")):(at("neutral"));
     $("resultTitle").textContent=title;
-    $("resultText").textContent="مصدر البيانات: "+source+" | آخر شمعة مغلقة (UTC): "+new Date(last.time).toISOString()+" | الإغلاق: "+fmt(last.close);
+    $("resultText").textContent="";
     paintAnalysisDirection(direction);
     $("outMode").textContent=mode==="auto"?(at("automatic")):(at("technical"));
     $("outPair").textContent=asset[0];
@@ -3364,7 +3364,8 @@ function displaySavedAnalysis(){
     ? (savedDirection==="buy"?t("buy"):t("sell"))
     : savedDirection==="buy"?at("bull"):savedDirection==="sell"?at("bear"):at("neutral");
   $("resultTitle").textContent=savedTitle||lastAnalysis.title||t("notRun");
-  $("resultText").textContent=lastAnalysis.text||"";
+  const savedAnalysisText=lastAnalysis.text||"";
+  $("resultText").textContent=savedAnalysisText.startsWith("مصدر البيانات:")?"":savedAnalysisText;
   paintAnalysisDirection(savedDirection);
   $("outMode").textContent=lastAnalysis.mode==="manual"?t("manual"):lastAnalysis.mode==="auto"?at("automatic"):lastAnalysis.mode==="technical"?at("technical"):lastAnalysis.mode||"—";
   $("outPair").textContent=lastAnalysis.pair||"—";
