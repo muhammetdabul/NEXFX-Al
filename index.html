@@ -1055,7 +1055,11 @@ button,input,select,textarea{
 .pulse-item b{direction:ltr;text-align:end;color:var(--gold2);font-variant-numeric:tabular-nums}
 .pulse-item small{color:var(--muted)}
 .pulse-footnote{line-height:1.4}
-#timeframe{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
+.chart-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0 0 9px;padding:7px 9px;background:#071629;border:1px solid var(--line);border-radius:8px}
+.chart-toolbar .chart-pair{font-size:12px;font-weight:800;direction:ltr}
+.timeframe-control{display:flex;align-items:center;gap:8px;color:var(--gold2);font-size:11px;white-space:nowrap}
+.timeframe-control select#timeframe{width:auto;min-width:78px;min-height:34px;padding:5px 8px;background:#10243c;color:#fff;border:1px solid var(--gold);border-radius:7px;font-size:12px;direction:ltr}
+@media(max-width:380px){.chart-toolbar{gap:6px;padding:6px}.timeframe-control{gap:5px;font-size:10px}.timeframe-control select#timeframe{min-width:68px;min-height:32px;padding:4px 5px}}
 .layout{grid-template-columns:minmax(165px,.72fr) minmax(360px,2.25fr) minmax(175px,.78fr)}
 @media(min-width:1100px){.layout{grid-template-columns:minmax(165px,.68fr) minmax(480px,2.45fr) minmax(180px,.72fr)}}
 @media(max-width:1099px){.layout{grid-template-columns:minmax(150px,.75fr) minmax(0,2fr)}.market-pulse{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:7px;align-items:start}.market-pulse .pulse-heading,.market-pulse>p{grid-column:1/-1}.pulse-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -1541,19 +1545,33 @@ html.nx-skip #nx-cover{display:none!important}
         <button class="small-btn" id="showFav" data-t="favorites">المفضلة</button>
       </div>
       <div class="asset-list" id="assetList"></div>
-
+      <p class="muted" id="cryptoSyncStatus" role="status" aria-live="polite">جارٍ التحقق من أزواج Binance Spot...</p>
 
     </aside>
 
     <section class="inner chart-column">
-      <div hidden aria-hidden="true">
-        <span id="chartPair">BINANCE:BTCUSDT</span>
-        <select id="timeframe" tabindex="-1">
-          <option value="1">1m</option><option value="5">5m</option>
-          <option value="15" selected>15m</option><option value="60">1H</option>
-          <option value="240">4H</option><option value="D">1D</option>
-          <option value="W">1W</option>
-        </select>
+      <div class="chart-toolbar">
+        <span id="chartPair" class="chart-pair">BINANCE:BTCUSDT</span>
+        <label class="timeframe-control" for="timeframe">
+          <span data-t="timeframe">الإطار الزمني</span>
+          <select id="timeframe" aria-label="الإطار الزمني">
+            <option value="1m">1m</option>
+            <option value="3m">3m</option>
+            <option value="5m">5m</option>
+            <option value="15m">15m</option>
+            <option value="30m">30m</option>
+            <option value="1h" selected>1H</option>
+            <option value="2h">2H</option>
+            <option value="4h">4H</option>
+            <option value="6h">6H</option>
+            <option value="8h">8H</option>
+            <option value="12h">12H</option>
+            <option value="1d">1D</option>
+            <option value="3d">3D</option>
+            <option value="1w">1W</option>
+            <option value="1M">1M</option>
+          </select>
+        </label>
       </div>
       <div class="tradingview-box">
         <div class="chart-placeholder" id="chartPlaceholder">جاري تحميل الشارت...</div>
@@ -2640,9 +2658,61 @@ const NEXFX_API_BASE=""; // بعد نشر server.py ضع هنا رابط الخ�
 
 // Public Binance spot market data. No API key is required for public quotes/klines.
 const NEXFX_BINANCE_BASE="https://data-api.binance.vision/api/v3";
-// Stage 1 test scope: BTC/USDT on the 1-hour Binance interval only.
-// The remaining timeframes will be enabled after this test is confirmed.
-const binanceIntervals=Object.freeze({"60":"1h"});
+// Binance Spot kline intervals. The UI value is also the Binance REST interval.
+const binanceIntervals=Object.freeze({
+  "1m":"1m","3m":"3m","5m":"5m","15m":"15m","30m":"30m",
+  "1h":"1h","2h":"2h","4h":"4h","6h":"6h","8h":"8h","12h":"12h",
+  "1d":"1d","3d":"3d","1w":"1w","1M":"1M"
+});
+const tradingViewIntervals=Object.freeze({
+  "1m":"1","3m":"3","5m":"5","15m":"15","30m":"30",
+  "1h":"60","2h":"120","4h":"240","6h":"360","8h":"480","12h":"720",
+  "1d":"D","3d":"3D","1w":"W","1M":"M"
+});
+const cryptoAssetsCatalog=assets.crypto.slice();
+let cryptoAssetsArchive=[];
+let binanceSpotSymbols=new Set();
+let binanceSpotReady=false;
+let binanceSpotSyncPromise=null;
+async function syncCryptoAssetsWithBinance(){
+  if(binanceSpotReady)return true;
+  if(binanceSpotSyncPromise)return binanceSpotSyncPromise;
+  binanceSpotSyncPromise=(async()=>{
+    const response=await fetch(NEXFX_BINANCE_BASE+"/exchangeInfo",{cache:"no-store",headers:{Accept:"application/json"}});
+    if(!response.ok)throw new Error("Binance exchangeInfo HTTP "+response.status);
+    const data=await response.json();
+    if(!data||!Array.isArray(data.symbols))throw new Error("Binance returned an unexpected exchangeInfo response.");
+    const available=new Set(data.symbols
+      .filter(item=>item&&item.quoteAsset==="USDT"&&item.status==="TRADING"&&item.isSpotTradingAllowed!==false)
+      .map(item=>String(item.symbol||"")));
+    const active=cryptoAssetsCatalog.filter(item=>available.has(cryptoPairFromTradingView(item[2])));
+    if(!active.length)throw new Error("No configured NEXFX USDT pairs were verified on Binance Spot.");
+    binanceSpotSymbols=available;
+    cryptoAssetsArchive=cryptoAssetsCatalog.filter(item=>!active.includes(item));
+    assets.crypto=active;
+    binanceSpotReady=true;
+    if(market==="crypto"&&!assets.crypto.some(item=>item[2]===selected[2])){
+      selected=assets.crypto.find(item=>item[2]==="BINANCE:BTCUSDT")||assets.crypto[0];
+      clearAnalysisOutput();
+    }
+    const status=$("cryptoSyncStatus");
+    if(status)status.textContent=language==="ar"
+      ?`تم التحقق من Binance Spot: ${active.length} زوجاً مفعّلاً، و${cryptoAssetsArchive.length} في الأرشيف.`
+      :`Binance Spot verified: ${active.length} active pairs, ${cryptoAssetsArchive.length} archived.`;
+    if(market==="crypto"){
+      renderAssets();renderFavorites();updateSideInformation();
+    }
+    return true;
+  })().catch(error=>{
+    binanceSpotSyncPromise=null;
+    const status=$("cryptoSyncStatus");
+    if(status)status.textContent=language==="ar"
+      ?"تعذر التحقق من أزواج Binance حالياً؛ لن يعمل تحليل العملات الرقمية حتى ينجح التحقق."
+      :"Could not verify Binance pairs. Crypto analysis stays locked until verification succeeds.";
+    throw error;
+  });
+  return binanceSpotSyncPromise;
+}
 function cryptoPairFromTradingView(tvSymbol){
   const match=/^BINANCE:([A-Z0-9]+)$/.exec(String(tvSymbol||""));
   return match?match[1]:null;
@@ -2678,10 +2748,9 @@ function intervalForSelectedTimeframe(){
 async function fetchSelectedMarketCandles(asset, marketName, interval){
   const tvSymbol=asset[2];
   if(marketName==="crypto"){
-    if(tvSymbol!=="BINANCE:BTCUSDT")throw new Error("مرحلة الاختبار الحالية مخصصة لزوج BTC/USDT فقط.");
     const symbol=cryptoPairFromTradingView(tvSymbol);
     if(!symbol)throw new Error(at("invalidSymbol"));
-    if(interval!=="1h")throw new Error(at("unsupported"));
+    if(!binanceSpotReady||!binanceSpotSymbols.has(symbol))throw new Error("هذا الزوج غير متحقق منه كزوج Binance Spot متاح للتداول حالياً.");
     const url=NEXFX_BINANCE_BASE+"/klines?symbol="+encodeURIComponent(symbol)+"&interval="+encodeURIComponent(interval)+"&limit=250";
     const response=await fetch(url,{cache:"no-store",headers:{Accept:"application/json"}});
     if(!response.ok)throw new Error("Binance HTTP "+response.status);
@@ -2734,6 +2803,11 @@ async function runMarketAnalysis(mode){
   $("outPair").textContent=asset[0];
   $("outEntry").textContent="—"; $("outStop").textContent="—"; $("outTP1").textContent="—"; $("outTP2").textContent="—";
   try{
+    if(marketName==="crypto"){
+      await syncCryptoAssetsWithBinance();
+      if(!binanceSpotSymbols.has(cryptoPairFromTradingView(asset[2])))
+        throw new Error("تم نقل هذا الزوج إلى الأرشيف لأنه غير متاح حالياً للتداول الفوري على Binance.");
+    }
     const {symbol,interval:usedInterval,candles,source}=await fetchSelectedMarketCandles(asset,marketName,interval);
     if(runToken!==analysisRunToken||asset[2]!==selected[2]||marketName!==market||usedInterval!==intervalForSelectedTimeframe())return;
     const closes=candles.map(c=>c.close),last=candles[candles.length-1];
@@ -2777,16 +2851,16 @@ async function runMarketAnalysis(mode){
 function loadUserScopedState(){
   const savedState=safeRead(AuthController.getStorageKey(),{})||{};
   language=languages.some(x=>x.code===savedState.language)?savedState.language:language;
-  // Temporary stage-1 launch state: open directly on BTC/USDT for the 1H test.
-  // Other saved preferences remain untouched in storage and will be restored after this test phase.
   market="crypto";
-  selected=assets.crypto.find(x=>x[2]==="BINANCE:BTCUSDT")||assets.crypto[0];
+  const savedSymbol=typeof savedState.selectedSymbol==="string"?savedState.selectedSymbol:"BINANCE:BTCUSDT";
+  selected=assets.crypto.find(x=>x[2]===savedSymbol)||assets.crypto.find(x=>x[2]==="BINANCE:BTCUSDT")||assets.crypto[0];
   onlyFavorites=!!savedState.onlyFavorites;
   favorites=Array.isArray(savedState.favorites)?savedState.favorites:(safeRead(AuthController.getFavoritesKey(),[])||[]);
   lastAnalysis=null; // Do not display a previously saved result during the live-data test.
 
   restoreForm(savedState);
-  $("timeframe").value="60"; // Force the first live-data test to 1H.
+  const savedTimeframe=typeof savedState.timeframe==="string"?savedState.timeframe:"1h";
+  $("timeframe").value=binanceIntervals[savedTimeframe]?savedTimeframe:"1h";
   updateDocumentDirection();
   translateInterface();
   document.querySelectorAll(".category").forEach(btn=>{
@@ -2804,7 +2878,6 @@ function loadUserScopedState(){
 
 function restoreForm(savedState={}){
   const form=savedState.form||{};
-  $("timeframe").value="60"; // Stage 1: BTC/USDT on 1H only.
   $("search").value=typeof savedState.search==="string"?savedState.search:"";
   $("analysisMode").value=["technical","manual","auto"].includes(form.mode)?form.mode:"technical";
   $("direction").value=form.direction==="sell"?"sell":"buy";
@@ -3274,7 +3347,7 @@ function renderChart(){
   const container=$("tradingviewChart");
   const placeholder=$("chartPlaceholder");
   const symbol=selected[2];
-  const interval=$("timeframe").value;
+  const interval=tradingViewIntervals[$("timeframe").value]||"60";
 
   updateSideInformation();
   placeholder.style.display="grid";
@@ -3531,6 +3604,7 @@ $("runAnalysis").addEventListener("click",runAnalysis);
 
 AuthController.init();
 loadUserScopedState();
+syncCryptoAssetsWithBinance().catch(error=>console.warn("NEXFX Binance Spot symbol verification:",error));
 saveState();
 // Sidebar quote polling disabled: asset rows show symbols, icons and favorites only.
 
