@@ -1793,6 +1793,7 @@ html.nx-skip #nx-cover{display:none!important}
 <footer><strong style="color:var(--gold2)">NEXFX AI</strong><br>SMART TRADING • SMARTER DECISIONS<br>© 2026</footer>
 
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script>
@@ -1806,6 +1807,32 @@ const firebaseConfig = {
   measurementId: "G-DHZS8ZXPV1"
 };
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+
+// NEXFX AI — Firebase App Check (reCAPTCHA Enterprise)
+// Replace only the placeholder below with the complete Site Key registered
+// for this same web app in Firebase App Check. Do not put Secret Keys here.
+const NEXFX_RECAPTCHA_ENTERPRISE_SITE_KEY = "6LdENTAuAAAAAC4Ybc7AodArdV-N0V3jMU7yAPzS";
+
+if (
+  NEXFX_RECAPTCHA_ENTERPRISE_SITE_KEY &&
+  !NEXFX_RECAPTCHA_ENTERPRISE_SITE_KEY.includes("PUT_YOUR_")
+) {
+  try {
+    const nexfxAppCheck = firebase.appCheck();
+    nexfxAppCheck.activate(
+      new firebase.appCheck.ReCaptchaEnterpriseProvider(
+        NEXFX_RECAPTCHA_ENTERPRISE_SITE_KEY
+      ),
+      true
+    );
+    console.info("NEXFX AI: Firebase App Check initialized.");
+  } catch (appCheckError) {
+    console.error("NEXFX AI: App Check initialization failed:", appCheckError);
+  }
+} else {
+  console.warn("NEXFX AI: Add the complete reCAPTCHA Enterprise Site Key to enable App Check.");
+}
+
 // Firestore cloud storage is enabled after the project owner publishes the matching security rules.
 const nexfxDb = firebase.firestore();
 </script>
