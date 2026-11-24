@@ -2640,6 +2640,9 @@ const NEXFX_API_BASE=""; // بعد نشر server.py ضع هنا رابط الخ�
 
 // Public Binance spot market data. No API key is required for public quotes/klines.
 const NEXFX_BINANCE_BASE="https://data-api.binance.vision/api/v3";
+// Stage 1 test scope: BTC/USDT on the 1-hour Binance interval only.
+// The remaining timeframes will be enabled after this test is confirmed.
+const binanceIntervals=Object.freeze({"60":"1h"});
 function cryptoPairFromTradingView(tvSymbol){
   const match=/^BINANCE:([A-Z0-9]+)$/.exec(String(tvSymbol||""));
   return match?match[1]:null;
@@ -2675,15 +2678,25 @@ function intervalForSelectedTimeframe(){
 async function fetchSelectedMarketCandles(asset, marketName, interval){
   const tvSymbol=asset[2];
   if(marketName==="crypto"){
+    if(tvSymbol!=="BINANCE:BTCUSDT")throw new Error("مرحلة الاختبار الحالية مخصصة لزوج BTC/USDT فقط.");
     const symbol=cryptoPairFromTradingView(tvSymbol);
     if(!symbol)throw new Error(at("invalidSymbol"));
-    const url=NEXFX_BINANCE_BASE+"/klines?symbol="+encodeURIComponent(symbol)+"&interval="+interval+"&limit=250";
+    if(interval!=="1h")throw new Error(at("unsupported"));
+    const url=NEXFX_BINANCE_BASE+"/klines?symbol="+encodeURIComponent(symbol)+"&interval="+encodeURIComponent(interval)+"&limit=250";
     const response=await fetch(url,{cache:"no-store",headers:{Accept:"application/json"}});
     if(!response.ok)throw new Error("Binance HTTP "+response.status);
     const raw=await response.json();
-    const candles=raw.filter(k=>Number(k[6])<Date.now()).map(k=>({time:Number(k[0]),open:Number(k[1]),high:Number(k[2]),low:Number(k[3]),close:Number(k[4]),volume:Number(k[5])}));
-    if(candles.length<60)throw new Error(at("insufficient"));
-    return {symbol,interval,candles,source:"Binance Spot API"};
+    if(!Array.isArray(raw))throw new Error("Binance returned an unexpected candle response.");
+    const now=Date.now();
+    const candles=raw.filter(k=>Array.isArray(k)&&k.length>=7&&Number(k[6])<now).map(k=>({
+      time:Number(k[0]),open:Number(k[1]),high:Number(k[2]),low:Number(k[3]),close:Number(k[4]),volume:Number(k[5])
+    })).filter(c=>[
+      c.time,c.open,c.high,c.low,c.close,c.volume
+    ].every(Number.isFinite)&&c.time>0&&c.open>0&&c.high>0&&c.low>0&&c.close>0&&c.volume>=0&&c.high>=Math.max(c.open,c.close,c.low)&&c.low<=Math.min(c.open,c.close,c.high));
+    candles.sort((a,b)=>a.time-b.time);
+    const uniqueCandles=candles.filter((c,i)=>i===0||c.time!==candles[i-1].time);
+    if(uniqueCandles.length<60)throw new Error(at("insufficient"));
+    return {symbol,interval,candles:uniqueCandles,source:"Binance Spot API",asOf:new Date(uniqueCandles[uniqueCandles.length-1].time).toISOString()};
   }
   if(!NEXFX_API_BASE)throw new Error(at("serverNeeded"));
   const url=NEXFX_API_BASE+"/api/market/klines?market="+encodeURIComponent(marketName)+"&symbol="+encodeURIComponent(tvSymbol)+"&interval="+encodeURIComponent(interval)+"&limit=250";
@@ -2738,7 +2751,9 @@ async function runMarketAnalysis(mode){
     const tp2=direction==="buy"?entry+distance*2:direction==="sell"?entry-distance*2:null;
     const fmt=n=>formatMarketPrice(n);
     const title=direction==="buy"?(at("bull")):direction==="sell"?(at("bear")):(at("neutral"));
-    $("resultTitle").textContent=title; $("resultText").textContent=""; paintAnalysisDirection(direction);
+    $("resultTitle").textContent=title;
+    $("resultText").textContent="مصدر البيانات: "+source+" | آخر شمعة مغلقة (UTC): "+new Date(last.time).toISOString()+" | الإغلاق: "+fmt(last.close);
+    paintAnalysisDirection(direction);
     $("outMode").textContent=mode==="auto"?(at("automatic")):(at("technical"));
     $("outPair").textContent=asset[0];
     $("outEntry").textContent=direction==="neutral"?"—":fmt(entry);
@@ -2762,13 +2777,16 @@ async function runMarketAnalysis(mode){
 function loadUserScopedState(){
   const savedState=safeRead(AuthController.getStorageKey(),{})||{};
   language=languages.some(x=>x.code===savedState.language)?savedState.language:language;
-  market=assets[savedState.market]?savedState.market:"crypto";
-  selected=assets[market].find(x=>x[2]===savedState.selectedSymbol)||assets[market][0];
+  // Temporary stage-1 launch state: open directly on BTC/USDT for the 1H test.
+  // Other saved preferences remain untouched in storage and will be restored after this test phase.
+  market="crypto";
+  selected=assets.crypto.find(x=>x[2]==="BINANCE:BTCUSDT")||assets.crypto[0];
   onlyFavorites=!!savedState.onlyFavorites;
   favorites=Array.isArray(savedState.favorites)?savedState.favorites:(safeRead(AuthController.getFavoritesKey(),[])||[]);
-  lastAnalysis=savedState.lastAnalysis||null;
+  lastAnalysis=null; // Do not display a previously saved result during the live-data test.
 
   restoreForm(savedState);
+  $("timeframe").value="60"; // Force the first live-data test to 1H.
   updateDocumentDirection();
   translateInterface();
   document.querySelectorAll(".category").forEach(btn=>{
@@ -2786,7 +2804,7 @@ function loadUserScopedState(){
 
 function restoreForm(savedState={}){
   const form=savedState.form||{};
-  $("timeframe").value=["1","5","15","60","240","D","W"].includes(String(savedState.timeframe))?String(savedState.timeframe):"15";
+  $("timeframe").value="60"; // Stage 1: BTC/USDT on 1H only.
   $("search").value=typeof savedState.search==="string"?savedState.search:"";
   $("analysisMode").value=["technical","manual","auto"].includes(form.mode)?form.mode:"technical";
   $("direction").value=form.direction==="sell"?"sell":"buy";
