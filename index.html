@@ -3588,11 +3588,12 @@ saveState();
 #nx{font-family:"Segoe UI",Tahoma,"Noto Sans","PingFang SC","Microsoft YaHei","Hiragino Sans","Malgun Gothic","Nirmala UI",sans-serif;color:#eaf4ff}
 #nx *{box-sizing:border-box}
 /* ===== NEXFX CINEMATIC INTRO (انسخ من هنا) ===== */
-#nx{position:fixed;inset:0;z-index:100000;background:radial-gradient(ellipse at 50% 0,#0a2540 0,#020817 65%);overflow:hidden;transition:opacity .9s,transform .9s}
+#nx{position:fixed;inset:0;z-index:100000;background:radial-gradient(ellipse at 50% 0,#0a2540 0,#020817 65%);overflow:hidden;transition:opacity .9s,transform .9s;will-change:opacity,transform}
 #nx.out{opacity:0;transform:scale(1.1);pointer-events:none}
 #nx canvas{position:absolute;inset:0;width:100%;height:100%}
-.fl{position:absolute;left:-50%;right:-50%;bottom:-5%;height:55%;transform:perspective(420px) rotateX(62deg);background:linear-gradient(var(--a) 1px,transparent 1px),linear-gradient(90deg,var(--a) 1px,transparent 1px);background-size:56px 56px;opacity:.16;animation:fl 3s linear infinite;-webkit-mask-image:linear-gradient(transparent,#000 60%);mask-image:linear-gradient(transparent,#000 60%)}
-@keyframes fl{to{background-position:0 56px}}
+.fl{position:absolute;left:-50%;right:-50%;bottom:-5%;height:55%;transform:perspective(420px) rotateX(62deg);opacity:.16;overflow:hidden;-webkit-mask-image:linear-gradient(transparent,#000 60%);mask-image:linear-gradient(transparent,#000 60%)}
+.fl::before{content:"";position:absolute;left:0;right:0;top:-56px;bottom:0;background:linear-gradient(var(--a) 1px,transparent 1px),linear-gradient(90deg,var(--a) 1px,transparent 1px);background-size:56px 56px;animation:fl 3s linear infinite;will-change:transform}
+@keyframes fl{to{transform:translateY(56px)}}
 #nx::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,#020817d0 0,#02081770 42%,transparent 78%)}
 .sc{z-index:2}
 .sc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .7s}
@@ -3718,7 +3719,7 @@ saveState();
   }
   /* عدّاد أسعار */
   var tk;function count(){
-    clearInterval(tk);var els=nx.querySelectorAll('[data-p]'),t0=Date.now();
+    clearInterval(tk);var els=nx.querySelectorAll('b[data-p]'),t0=Date.now();
     tk=setInterval(function(){
       var k=Math.min(1,(Date.now()-t0)/1500);
       els.forEach(function(e){
@@ -3734,11 +3735,14 @@ saveState();
   function mk(){var o=cp,c=o+(Math.random()-.46)*7;cp=c;return{o:o,c:c,h:Math.max(o,c)+Math.random()*3.5,l:Math.min(o,c)-Math.random()*3.5}}
   for(var i=0;i<90;i++)C.push(mk());
   function build(){nodes=[];NL.forEach(function(n,li){for(var j=0;j<n;j++)nodes.push({l:li,x:W*(.08+li*.21),y:H*.16+(j+.5)/n*H*.68,f:0})})}
-  function rs(){var r=devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*r;cv.height=H*r;x.setTransform(r,0,0,r,0,0);build()}
+  function rs(){var r=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;cv.width=W*r;cv.height=H*r;x.setTransform(r,0,0,r,0,0);build()}
   rs();addEventListener('resize',rs);
   function col(n){return getComputedStyle(document.body).getPropertyValue(n).trim()}
+  var A0=col('--a')||'#22d3ee',B0=col('--b')||'#22c55e';
+  function glow(c){var s=document.createElement('canvas');s.width=s.height=64;var g=s.getContext('2d');g.fillStyle=c;g.fillRect(0,0,64,64);g.globalCompositeOperation='destination-in';var r=g.createRadialGradient(32,32,0,32,32,32);r.addColorStop(0,'rgba(255,255,255,.9)');r.addColorStop(.3,'rgba(255,255,255,.35)');r.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=r;g.fillRect(0,0,64,64);return s}
+  var GA=glow(A0),GB=glow(B0);
   var raf;(function lp(){
-    var A=col('--a')||'#22d3ee',B=col('--b')||'#22c55e',now=Date.now();fr++;
+    var A=A0,B=B0,now=Date.now();fr++;
     x.clearRect(0,0,W,H);x.shadowBlur=0;
     /* شموع */
     co+=.5;if(co>=CW){co-=CW;C.shift();C.push(mk())}
@@ -3752,19 +3756,19 @@ saveState();
       x.beginPath();x.moveTo(px,Y(k.h));x.lineTo(px,Y(k.l));x.stroke();
       var a=Y(k.o),b=Y(k.c);x.fillRect(px-6,Math.min(a,b),12,Math.max(2,Math.abs(a-b)));
     });
-    x.globalAlpha=.75;x.strokeStyle=A;x.lineWidth=2.5;x.shadowColor=A;x.shadowBlur=14;x.beginPath();
+    x.strokeStyle=A;x.beginPath();
     arr.forEach(function(k,i){var px=W-(arr.length-1-i)*CW-co-CW/2;i?x.lineTo(px,Y(k.c)):x.moveTo(px,Y(k.c))});
-    x.stroke();x.shadowBlur=0;
+    x.globalAlpha=.2;x.lineWidth=9;x.stroke();x.globalAlpha=.75;x.lineWidth=2.5;x.stroke();
     /* شبكة الذكاء الاصطناعي */
     x.globalAlpha=.09;x.strokeStyle=A;x.lineWidth=1;
-    nodes.forEach(function(a){nodes.forEach(function(b){if(b.l===a.l+1){x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.stroke()}})});
+    x.beginPath();nodes.forEach(function(a){nodes.forEach(function(b){if(b.l===a.l+1){x.moveTo(a.x,a.y);x.lineTo(b.x,b.y)}})});x.stroke();
     if(fr%5===0){var l=Math.floor(Math.random()*(NL.length-1)),as=nodes.filter(function(q){return q.l===l}),bs=nodes.filter(function(q){return q.l===l+1});
       pulses.push({a:as[Math.floor(Math.random()*as.length)],b:bs[Math.floor(Math.random()*bs.length)],t:0})}
     pulses=pulses.filter(function(p){
       p.t+=.025;var px=p.a.x+(p.b.x-p.a.x)*p.t,py=p.a.y+(p.b.y-p.a.y)*p.t;
-      x.globalAlpha=.95;x.fillStyle=B;x.shadowColor=B;x.shadowBlur=14;x.beginPath();x.arc(px,py,3,0,7);x.fill();x.shadowBlur=0;
+      x.globalAlpha=.6;x.drawImage(GB,px-17,py-17,34,34);x.globalAlpha=.95;x.fillStyle=B;x.beginPath();x.arc(px,py,3,0,7);x.fill();
       if(p.t>=1){p.b.f=1;return false}return true});
-    nodes.forEach(function(q){q.f*=.93;x.globalAlpha=.5+q.f*.5;x.fillStyle=A;x.shadowColor=A;x.shadowBlur=6+q.f*18;x.beginPath();x.arc(q.x,q.y,3.5+q.f*4,0,7);x.fill()});
+    nodes.forEach(function(q){q.f*=.93;var al=.5+q.f*.5,rr=3.5+q.f*4,gs=rr+6+q.f*18;x.globalAlpha=al*.55;x.drawImage(GA,q.x-gs,q.y-gs,gs*2,gs*2);x.globalAlpha=al;x.fillStyle=A;x.beginPath();x.arc(q.x,q.y,rr,0,7);x.fill()});
     x.shadowBlur=0;
     /* شعاع المسح */
     var sx=(now/9)%(W+240)-120,g=x.createLinearGradient(sx-120,0,sx+4,0);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,A);
