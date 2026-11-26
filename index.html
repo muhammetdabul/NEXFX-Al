@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- NEXFX AI crypto live-quote and candle-readability patch: 2026-11-25 -->\n<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -243,6 +243,14 @@ input,select{
 .asset-row .asset-favorite{direction:ltr}
 .asset-icon{font-size:19px}
 .chart-pair{direction:ltr;color:var(--gold2);font-weight:bold}
+.chart-timeframe-control{
+  display:flex;align-items:center;gap:9px;flex-wrap:wrap;
+  margin:8px 0 4px;padding:8px 10px;
+  border:1px solid var(--line);border-radius:8px;background:#071629;
+}
+.chart-timeframe-control label{color:var(--gold2);font-size:11px;font-weight:bold}
+.chart-timeframe-control select{width:auto;min-width:82px;max-width:110px;min-height:32px;padding:4px 8px}
+.chart-timeframe-control .muted{font-size:10px}
 
 .tradingview-box{
   position:relative;height:500px;min-height:460px;
@@ -259,7 +267,7 @@ input,select{
 .signal-box{background:#071629;border:1px solid var(--line);border-radius:9px;padding:12px;margin-top:10px}
 .signal-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
 .signal-cell{background:#10243c;border:1px solid #d6a94829;border-radius:8px;padding:8px;min-width:0}
-.signal-cell small{display:block;color:var(--muted);font-size:9px}
+.signal-cell small{display:block;color:#e8edf5;font-size:9px}
 .signal-cell b{display:block;color:var(--gold2);direction:ltr;font-size:12px;overflow-wrap:anywhere}
 .signal-box p:empty{display:none}
 #resultTitle{margin:0 0 5px}
@@ -270,6 +278,7 @@ input,select{
 #outStop{color:#ff5265}
 #outTP1,#outTP2{color:#18dc91}
 #outPair,#outMode{color:#f4d98a}
+#resultText{color:#f4f6fb}
 
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .field{display:flex;flex-direction:column;gap:5px;margin-bottom:9px}
@@ -1055,11 +1064,6 @@ button,input,select,textarea{
 .pulse-item b{direction:ltr;text-align:end;color:var(--gold2);font-variant-numeric:tabular-nums}
 .pulse-item small{color:var(--muted)}
 .pulse-footnote{line-height:1.4}
-.chart-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0 0 9px;padding:7px 9px;background:#071629;border:1px solid var(--line);border-radius:8px}
-.chart-toolbar .chart-pair{font-size:12px;font-weight:800;direction:ltr}
-.timeframe-control{display:flex;align-items:center;gap:8px;color:var(--gold2);font-size:11px;white-space:nowrap}
-.timeframe-control select#timeframe{width:auto;min-width:78px;min-height:34px;padding:5px 8px;background:#10243c;color:#fff;border:1px solid var(--gold);border-radius:7px;font-size:12px;direction:ltr}
-@media(max-width:380px){.chart-toolbar{gap:6px;padding:6px}.timeframe-control{gap:5px;font-size:10px}.timeframe-control select#timeframe{min-width:68px;min-height:32px;padding:4px 5px}}
 .layout{grid-template-columns:minmax(165px,.72fr) minmax(360px,2.25fr) minmax(175px,.78fr)}
 @media(min-width:1100px){.layout{grid-template-columns:minmax(165px,.68fr) minmax(480px,2.45fr) minmax(180px,.72fr)}}
 @media(max-width:1099px){.layout{grid-template-columns:minmax(150px,.75fr) minmax(0,2fr)}.market-pulse{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:7px;align-items:start}.market-pulse .pulse-heading,.market-pulse>p{grid-column:1/-1}.pulse-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -1185,6 +1189,33 @@ button,input,select,textarea{
 .autopilot-status{margin-top:10px;color:var(--muted);font-size:.86rem;line-height:1.55}
 @media(max-width:600px){.autopilot-extra{grid-template-columns:minmax(0,1fr)}.autopilot-fields{grid-template-columns:minmax(0,1fr)}}
 
+
+#resultText{white-space:pre-line;}
+
+/* NEXFX AI: localized Latin-digit signal date picker */
+.signal-date-picker{position:relative;width:100%}
+.signal-date-control{display:grid;grid-template-columns:minmax(0,1fr) 42px;gap:6px;direction:ltr}
+.signal-date-display{direction:ltr!important;text-align:left!important;font-variant-numeric:tabular-nums;cursor:pointer}
+.signal-calendar-trigger{display:grid;place-items:center;min-height:40px;border:1px solid #e0b84f;border-radius:8px;background:linear-gradient(145deg,#182d48,#071629);color:#ffe7a0;font-size:21px;box-shadow:0 0 9px #e0b84f35}
+.signal-calendar-trigger:hover,.signal-calendar-trigger:focus-visible{background:#243d5d;outline:2px solid #ffe7a0;outline-offset:2px}
+.signal-calendar-popup{display:none;position:fixed;z-index:2147483000;top:50vh;left:50vw;right:auto;bottom:auto;transform:translate(-50%,-50%);width:min(292px,calc(100vw - 24px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;overscroll-behavior:contain;padding:9px;background:#071629;border:1px solid #e0b84f;border-radius:12px;box-shadow:0 14px 36px #000d;color:#f8f7f2;direction:ltr;box-sizing:border-box;margin:0}
+.signal-calendar-popup.open{display:block}
+.signal-calendar-week{display:none!important}
+.signal-calendar-head{display:grid;grid-template-columns:38px minmax(0,1fr) 38px;align-items:center;gap:8px;margin-bottom:10px}
+.signal-calendar-head button,.signal-calendar-day{border:1px solid #b58b32;background:#102744;color:#ffe7a0;border-radius:7px;min-height:36px;box-sizing:border-box}
+.signal-calendar-head strong{text-align:center;font-size:13px;color:#ffe7a0}
+.signal-calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));grid-auto-rows:34px;gap:4px;text-align:center;width:100%;align-items:stretch}
+.signal-calendar-day{display:grid;place-items:center;width:100%;height:100%;min-width:0;min-height:0;padding:0;color:#f8f7f2;font-size:12px;font-variant-numeric:tabular-nums;font-weight:600;line-height:1}
+.signal-calendar-day:hover{background:#29496b}
+.signal-calendar-day.selected{background:#e0b84f;color:#10151e;font-weight:800}
+.signal-calendar-day.today{border-color:#fff0b3}
+.signal-calendar-day:disabled{opacity:.25;cursor:default}
+.signal-calendar-symbols{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin-top:8px;padding-top:8px;border-top:1px solid #ffffff20}.signal-calendar-symbols button{min-width:0;height:27px;padding:0;border:1px solid #8e7135;border-radius:6px;background:#102744;color:#ffe7a0;font-size:13px;font-weight:700}.signal-calendar-symbols button:active{background:#e0b84f;color:#10151e}.signal-calendar-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid #ffffff20}
+.signal-calendar-footer label{font-size:11px;color:#b7c3d4}
+.signal-calendar-footer input{width:112px;max-width:38%;min-height:36px;color:#fff;background:#061326;border-color:#b58b32;direction:ltr;text-align:center;font-variant-numeric:tabular-nums;box-sizing:border-box}
+.signal-calendar-footer button{min-height:36px;padding:5px 12px;border:1px solid #e0b84f;border-radius:7px;background:#e0b84f;color:#10151e;font-weight:700;font-size:11px;white-space:nowrap}
+@media(max-width:600px){.signal-calendar-popup{top:50vh;left:50vw;width:min(286px,calc(100vw - 20px));padding:8px}.signal-calendar-grid{grid-auto-rows:clamp(28px,7.8vw,33px);gap:3px}.signal-calendar-day{height:100%;min-height:0}.signal-calendar-symbols{gap:3px}.signal-calendar-symbols button{height:24px}.signal-calendar-footer{gap:5px}.signal-calendar-footer input{width:92px}}
+@media(max-height:520px){.signal-calendar-popup{max-height:calc(100dvh - 16px);padding:7px}.signal-calendar-grid{grid-auto-rows:27px;gap:2px}.signal-calendar-head{margin-bottom:6px}.signal-calendar-symbols{margin-top:5px;padding-top:5px}.signal-calendar-footer{margin-top:5px;padding-top:5px}}
 
 </style>
 <style id="nexfx-live-fx-quotes-and-layout">
@@ -1452,6 +1483,44 @@ body{background:radial-gradient(ellipse at 50% 0%,#15365b 0%,#0b1b30 58%,#071326
 }
 </style>
 
+
+<style id="nexfx-binance-timeframe-toolbar-v2">
+.chart-timeframe-control{display:flex;flex-direction:column;align-items:stretch;gap:7px;margin:7px 0 5px;padding:8px 9px;background:#071629;border:1px solid rgba(224,184,79,.34);border-radius:9px;min-width:0}
+.chart-timeframe-heading{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.chart-timeframe-heading label{font-size:11px;color:var(--gold2);font-weight:700}
+.chart-source-label{font-size:9px;letter-spacing:.5px;color:#9fb5cc;border:1px solid #ffffff20;border-radius:12px;padding:2px 7px;white-space:nowrap}
+.chart-timeframe-buttons{display:flex;align-items:center;gap:5px;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;max-width:100%;padding:1px 1px 5px;scrollbar-width:thin;scrollbar-color:#8c713b transparent;-webkit-overflow-scrolling:touch;direction:ltr}
+.chart-timeframe-buttons button{flex:0 0 auto;min-width:38px;min-height:31px;padding:4px 8px;border:1px solid rgba(224,184,79,.34);border-radius:6px;background:#10243c;color:#dce6f2;font:600 10px/1.2 Arial,Tahoma,sans-serif;white-space:nowrap;touch-action:manipulation}
+.chart-timeframe-buttons button:hover{border-color:var(--gold2);color:var(--gold2)}
+.chart-timeframe-buttons button.active{background:linear-gradient(135deg,#e0b84f,#b88728);border-color:#ffe7a0;color:#101827;font-weight:800;box-shadow:0 0 9px #e0b84f30}
+.chart-market-meta{display:flex;align-items:center;gap:9px;flex-wrap:wrap;min-width:0;font-size:10px;line-height:1.4}
+.chart-market-meta strong{direction:ltr;color:var(--gold2);font-size:12px;white-space:nowrap}
+#chartLivePrice{direction:ltr;color:#fff;font-weight:700;font-variant-numeric:tabular-nums}
+.chart-live-source{color:var(--muted);font-size:9px}
+#chartLiveState{color:#16a34a;font-weight:700}
+#chartTimeframeStatus{font-size:9px;line-height:1.4;min-height:13px}
+#timeframe{display:none!important}
+#chartTimeframeToolbar:not(.crypto-mode) #timeframe{display:inline-block!important;min-width:82px;max-width:110px;min-height:32px;padding:4px 8px}
+#chartTimeframeToolbar:not(.crypto-mode) #chartTimeframeButtons,
+#chartTimeframeToolbar:not(.crypto-mode) .chart-market-meta{display:none!important}
+#chartTimeframeToolbar:not(.crypto-mode) .chart-source-label{display:none}
+@media(max-width:700px){
+ .chart-timeframe-control{gap:6px;padding:7px;margin:6px 0 4px}
+ .chart-timeframe-buttons{gap:4px;padding-bottom:5px}
+ .chart-timeframe-buttons button{min-width:36px;min-height:32px;padding:4px 7px;font-size:10px}
+ .chart-timeframe-heading label{font-size:10px}
+ .chart-market-meta{gap:7px;font-size:9px}
+ .chart-market-meta strong{font-size:11px}
+}
+@media(max-width:380px){
+ .chart-timeframe-buttons button{min-width:34px;min-height:31px;padding:4px 6px;font-size:9px}
+ .chart-timeframe-control{padding:6px}
+}
+@media(min-width:701px) and (max-width:1100px){
+ .chart-timeframe-buttons button{min-width:36px;padding-inline:6px}
+}
+</style>
+
 </head>
 
 <body>
@@ -1550,31 +1619,28 @@ html.nx-skip #nx-cover{display:none!important}
     </aside>
 
     <section class="inner chart-column">
-      <div class="chart-toolbar">
-        <span id="chartPair" class="chart-pair">BINANCE:BTCUSDT</span>
-        <label class="timeframe-control" for="timeframe">
-          <span data-t="timeframe">الإطار الزمني</span>
-          <select id="timeframe" aria-label="الإطار الزمني">
-            <option value="1m">1m</option>
-            <option value="3m">3m</option>
-            <option value="5m">5m</option>
-            <option value="15m">15m</option>
-            <option value="30m">30m</option>
-            <option value="1h" selected>1H</option>
-            <option value="2h">2H</option>
-            <option value="4h">4H</option>
-            <option value="6h">6H</option>
-            <option value="8h">8H</option>
-            <option value="12h">12H</option>
-            <option value="1d">1D</option>
-            <option value="3d">3D</option>
-            <option value="1w">1W</option>
-            <option value="1M">1M</option>
-          </select>
-        </label>
+      <!-- Hidden symbol compatibility only. The timeframe toolbar above the chart controls chart rendering and analysis. -->
+      <span id="chartPair" hidden aria-hidden="true">BINANCE:BTCUSDT</span>
+      <div class="chart-timeframe-control" id="chartTimeframeToolbar">
+        <div class="chart-timeframe-heading">
+          <label data-t="timeframe">فريم الشارت والتحليل</label>
+          <span class="chart-source-label">BINANCE SPOT</span>
+        </div>
+        <div class="chart-timeframe-buttons" id="chartTimeframeButtons" role="group" aria-label="اختيار الفريم">
+          <button type="button" data-timeframe="1m">1m</button><button type="button" data-timeframe="3m">3m</button><button type="button" data-timeframe="5m">5m</button><button type="button" data-timeframe="15m">15m</button><button type="button" data-timeframe="30m">30m</button><button type="button" data-timeframe="1h" class="active" aria-pressed="true">1H</button><button type="button" data-timeframe="2h">2H</button><button type="button" data-timeframe="4h">4H</button><button type="button" data-timeframe="6h">6H</button><button type="button" data-timeframe="8h">8H</button><button type="button" data-timeframe="12h">12H</button><button type="button" data-timeframe="1d">1D</button><button type="button" data-timeframe="3d">3D</button><button type="button" data-timeframe="1w">1W</button><button type="button" data-timeframe="1M">1M</button>
+        </div>
+        <select id="timeframe" aria-label="Chart timeframe and analysis" tabindex="-1" aria-hidden="true">
+          <option value="1m">1m</option><option value="3m">3m</option><option value="5m">5m</option><option value="15m">15m</option><option value="30m">30m</option><option value="1h" selected>1H</option><option value="2h">2H</option><option value="4h">4H</option><option value="6h">6H</option><option value="8h">8H</option><option value="12h">12H</option><option value="1d">1D</option><option value="3d">3D</option><option value="1w">1W</option><option value="1M">1M</option>
+        </select>
+        <div class="chart-market-meta" aria-live="polite">
+          <strong id="chartMarketSymbol">BTC/USDT</strong>
+          <span id="chartLivePrice">—</span>
+          <span class="chart-live-source">Binance Spot · <b id="chartLiveState">جارٍ الاتصال…</b></span>
+        </div>
+        <span class="muted" id="chartTimeframeStatus">اختَر الفريم ليتغيّر الشارت والتحليل معاً.</span>
       </div>
       <div class="tradingview-box">
-        <div class="chart-placeholder" id="chartPlaceholder">جاري تحميل الشارت...</div>
+        <div class="chart-placeholder" id="chartPlaceholder" data-t="loadingChart">جاري تحميل الشارت...</div>
         <div id="tradingviewChart" class="tradingview-widget-container">
           <div class="tradingview-widget-container__widget"></div>
         </div>
@@ -1630,10 +1696,37 @@ html.nx-skip #nx-cover{display:none!important}
         </select>
       </div>
       <div class="two-col">
-        <div class="field"><label data-t="entry" for="entry">سعر الدخول</label><input id="entry" type="number" step="any"></div>
-        <div class="field"><label data-t="stop" for="stop">وقف الخسارة SL</label><input id="stop" type="number" step="any"></div>
-        <div class="field"><label for="tp1">TP1</label><input id="tp1" type="number" step="any"></div>
-        <div class="field"><label for="tp2">TP2</label><input id="tp2" type="number" step="any"></div>
+        <div class="field"><label data-t="entry" for="entry">سعر الدخول</label><input id="entry" type="text" inputmode="decimal" autocomplete="off" spellcheck="false"></div>
+        <div class="field"><label data-t="stop" for="stop">وقف الخسارة SL</label><input id="stop" type="text" inputmode="decimal" autocomplete="off" spellcheck="false"></div>
+        <div class="field"><label for="tp1">TP1</label><input id="tp1" type="text" inputmode="decimal" autocomplete="off" spellcheck="false"></div>
+        <div class="field"><label for="tp2">TP2</label><input id="tp2" type="text" inputmode="decimal" autocomplete="off" spellcheck="false"></div>
+        <div class="field">
+          <label for="signalIssuedAtDisplay" data-signal-issued-label>وقت صدور التوصية</label>
+          <div class="signal-date-picker" id="signalDatePicker">
+            <div class="signal-date-control">
+              <input id="signalIssuedAtDisplay" class="signal-date-display" type="text" required placeholder="YYYY-MM-DD HH:MM" inputmode="numeric" aria-haspopup="dialog" aria-expanded="false" autocomplete="off" spellcheck="false">
+              <button class="signal-calendar-trigger" id="signalCalendarTrigger" type="button" aria-label="Open calendar" title="Open calendar">▦</button>
+            </div>
+            <input id="signalIssuedAt" type="hidden" value="">
+            <div class="signal-calendar-popup" id="signalCalendarPopup" role="dialog" aria-label="Signal issue date and time calendar">
+              <div class="signal-calendar-head">
+                <button type="button" id="signalCalendarPrev" aria-label="Previous month">‹</button>
+                <strong id="signalCalendarMonth"></strong>
+                <button type="button" id="signalCalendarNext" aria-label="Next month">›</button>
+              </div>
+              <div class="signal-calendar-week" id="signalCalendarWeek"></div>
+              <div class="signal-calendar-grid" id="signalCalendarGrid"></div>
+              <div class="signal-calendar-symbols" id="signalCalendarSymbols" aria-label="Quick symbols">
+                <button type="button" data-calendar-symbol=".">.</button><button type="button" data-calendar-symbol=":">:</button><button type="button" data-calendar-symbol="-">−</button><button type="button" data-calendar-symbol="/">/</button><button type="button" data-calendar-symbol=",">,</button><button type="button" data-calendar-symbol="!">!</button><button type="button" data-calendar-symbol="?">?</button>
+              </div>
+              <div class="signal-calendar-footer">
+                <label id="signalCalendarTimeLabel" for="signalCalendarTime">Time</label>
+                <input id="signalCalendarTime" type="text" value="12:00" inputmode="numeric" pattern="[0-9]{2}:[0-9]{2}" maxlength="5" lang="en" dir="ltr" autocomplete="off" aria-label="Time in 24-hour format">
+                <button type="button" id="signalCalendarApply">Apply</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <button class="primary" id="runAnalysis" style="width:100%" data-t="run">تشغيل التحليل</button>
     </div>
@@ -2601,6 +2694,68 @@ const accountAndChartLabels={
   nl:{account:"Mijn account",logout:"Uitloggen",measure:"Punten meten (+)",draw:"Tekentools",measureHint:"Kies het meetinstrument in de TradingView-werkbalk en markeer begin- en eindpunt.",drawHint:"Gebruik de TradingView-werkbalk voor pijlen, trendlijnen, prijsniveaus en tekst."}
 };
 
+
+// Centralized translations for chart status and analysis report metadata.
+// Every new user-facing status/report string should use these keys, never hard-coded Arabic.
+const chartStatusI18n={
+ar:{loaded:"يعرض الشارت بيانات Binance المحمّلة؛ التحديث المباشر غير مدعوم في هذا المتصفح.",retry:"انقطع تحديث Binance؛ إعادة المحاولة خلال {seconds} ثانية…",syncing:"اتصال Binance مباشر · جارٍ مزامنة آخر البيانات",recover:"تعذر استقبال تحديث Binance؛ جارٍ استعادة الاتصال…",loading:"جارٍ تحميل بيانات Binance…",updated:"تم تحديث بيانات Binance · {count} شمعة",older:"بيانات Binance محمّلة · {count} شمعة · اسحب لليسار لتحميل الأقدم",spot:"بيانات Binance Spot · اسحب لليسار لتحميل الشموع الأقدم",reconnected:"تمت مزامنة بيانات Binance بعد عودة الاتصال · {count} شمعة",error:"تعذر تحميل بيانات الشارت. تحقق من الاتصال وحاول مجدداً.",other:"فريم الشارت والتحليل للأسواق الأخرى (قيد المعالجة لاحقاً).",timeframe:"اختَر الفريم ليتغيّر الشارت والتحليل معاً.",cryptoChecking:'جارٍ التحقق من أزواج Binance Spot...',cryptoVerified:'تم التحقق من Binance Spot: {active} زوجاً مفعّلاً، و{archive} في الأرشيف.',cryptoVerifyFail:'تعذر التحقق من أزواج Binance حالياً؛ لن يعمل تحليل العملات الرقمية حتى ينجح التحقق.',liveConnecting:'جارٍ الاتصال…',liveUnsupported:'التحديث المباشر غير مدعوم',live:'مباشر'},
+en:{loaded:"The chart is showing cached Binance data; live updates are not supported in this browser.",retry:"Binance stream disconnected; retrying in {seconds}s…",syncing:"Binance live connection · syncing latest data",recover:"Binance updates interrupted; reconnecting…",loading:"Loading Binance data…",updated:"Binance data updated · {count} candles",older:"Binance data loaded · {count} candles · drag left to load older candles",spot:"Binance Spot data · drag left to load older candles",reconnected:"Binance data synchronized after reconnection · {count} candles",error:"Could not load chart data. Check your connection and try again.",other:"Chart and analysis timeframe for other markets (coming later).",timeframe:"Choose a timeframe to update the chart and analysis together.",cryptoChecking:'Verifying Binance Spot pairs…',cryptoVerified:'Binance Spot verified: {active} active pairs, {archive} archived.',cryptoVerifyFail:'Could not verify Binance pairs. Crypto analysis stays locked until verification succeeds.',liveConnecting:'Connecting…',liveUnsupported:'Live updates are not supported',live:'Live'},
+fr:{loaded:"Le graphique affiche les données Binance en cache ; les mises à jour en direct ne sont pas prises en charge par ce navigateur.",retry:"Flux Binance interrompu ; nouvelle tentative dans {seconds} s…",syncing:"Connexion Binance en direct · synchronisation des dernières données",recover:"Mises à jour Binance interrompues ; reconnexion…",loading:"Chargement des données Binance…",updated:"Données Binance mises à jour · {count} bougies",older:"Données Binance chargées · {count} bougies · faites glisser vers la gauche pour charger les anciennes",spot:"Données Binance Spot · faites glisser vers la gauche pour charger les anciennes bougies",reconnected:"Données Binance synchronisées après reconnexion · {count} bougies",error:"Impossible de charger le graphique. Vérifiez la connexion et réessayez.",other:"Période du graphique et de l’analyse pour les autres marchés (à venir).",timeframe:"Choisissez une période pour synchroniser le graphique et l’analyse.",cryptoChecking:'Vérification des paires Binance Spot…',cryptoVerified:'Binance Spot vérifié : {active} paires actives, {archive} archivées.',cryptoVerifyFail:'Impossible de vérifier les paires Binance. L’analyse crypto reste bloquée jusqu’à la vérification.',liveConnecting:'Connexion…',liveUnsupported:'Mises à jour en direct non prises en charge',live:'En direct'},
+tr:{loaded:"Grafik önbellekteki Binance verilerini gösteriyor; bu tarayıcıda canlı güncelleme desteklenmiyor.",retry:"Binance akışı kesildi; {seconds} sn içinde yeniden denenecek…",syncing:"Binance canlı bağlantısı · son veriler eşitleniyor",recover:"Binance güncellemeleri kesildi; yeniden bağlanılıyor…",loading:"Binance verileri yükleniyor…",updated:"Binance verileri güncellendi · {count} mum",older:"Binance verileri yüklendi · {count} mum · eski mumları yüklemek için sola kaydırın",spot:"Binance Spot verileri · eski mumları yüklemek için sola kaydırın",reconnected:"Bağlantı sonrası Binance verileri eşitlendi · {count} mum",error:"Grafik verileri yüklenemedi. Bağlantınızı kontrol edip tekrar deneyin.",other:"Diğer piyasalar için grafik ve analiz zaman aralığı (daha sonra).",timeframe:"Grafik ve analizi birlikte güncellemek için zaman aralığı seçin.",cryptoChecking:'Binance Spot pariteleri doğrulanıyor…',cryptoVerified:'Binance Spot doğrulandı: {active} etkin parite, {archive} arşivde.',cryptoVerifyFail:'Binance pariteleri doğrulanamadı. Kripto analizi doğrulama başarılı olana kadar kilitli.',liveConnecting:'Bağlanıyor…',liveUnsupported:'Canlı güncellemeler desteklenmiyor',live:'Canlı'},
+de:{loaded:"Der Chart zeigt zwischengespeicherte Binance-Daten; Live-Updates werden in diesem Browser nicht unterstützt.",retry:"Binance-Datenstrom getrennt; neuer Versuch in {seconds} s…",syncing:"Live-Verbindung zu Binance · neueste Daten werden synchronisiert",recover:"Binance-Updates unterbrochen; Verbindung wird wiederhergestellt…",loading:"Binance-Daten werden geladen…",updated:"Binance-Daten aktualisiert · {count} Kerzen",older:"Binance-Daten geladen · {count} Kerzen · nach links ziehen, um ältere Kerzen zu laden",spot:"Binance-Spot-Daten · nach links ziehen, um ältere Kerzen zu laden",reconnected:"Binance-Daten nach Wiederverbindung synchronisiert · {count} Kerzen",error:"Chartdaten konnten nicht geladen werden. Verbindung prüfen und erneut versuchen.",other:"Chart- und Analysezeitraum für andere Märkte (später verfügbar).",timeframe:"Zeitraum wählen, um Chart und Analyse gemeinsam zu aktualisieren.",cryptoChecking:'Binance-Spot-Paare werden überprüft…',cryptoVerified:'Binance Spot bestätigt: {active} aktive Paare, {archive} archiviert.',cryptoVerifyFail:'Binance-Paare konnten nicht bestätigt werden. Kryptoanalyse bleibt bis zur Prüfung gesperrt.',liveConnecting:'Verbindung wird hergestellt…',liveUnsupported:'Live-Updates werden nicht unterstützt',live:'Live'},
+es:{loaded:"El gráfico muestra datos de Binance en caché; este navegador no admite actualizaciones en directo.",retry:"Flujo de Binance desconectado; nuevo intento en {seconds} s…",syncing:"Conexión en directo con Binance · sincronizando los últimos datos",recover:"Se interrumpieron las actualizaciones de Binance; reconectando…",loading:"Cargando datos de Binance…",updated:"Datos de Binance actualizados · {count} velas",older:"Datos de Binance cargados · {count} velas · desliza a la izquierda para cargar velas anteriores",spot:"Datos de Binance Spot · desliza a la izquierda para cargar velas anteriores",reconnected:"Datos de Binance sincronizados tras reconectar · {count} velas",error:"No se pudieron cargar los datos del gráfico. Comprueba la conexión e inténtalo de nuevo.",other:"Marco temporal del gráfico y análisis para otros mercados (próximamente).",timeframe:"Elige un marco temporal para actualizar juntos el gráfico y el análisis.",cryptoChecking:'Verificando pares de Binance Spot…',cryptoVerified:'Binance Spot verificado: {active} pares activos, {archive} archivados.',cryptoVerifyFail:'No se pudieron verificar los pares de Binance. El análisis cripto seguirá bloqueado hasta verificarlo.',liveConnecting:'Conectando…',liveUnsupported:'Las actualizaciones en directo no son compatibles',live:'En directo'},
+pt:{loaded:"O gráfico está a mostrar dados Binance em cache; este navegador não suporta atualizações em direto.",retry:"Fluxo Binance desligado; nova tentativa em {seconds} s…",syncing:"Ligação Binance em direto · a sincronizar os dados mais recentes",recover:"Atualizações Binance interrompidas; a restabelecer ligação…",loading:"A carregar dados Binance…",updated:"Dados Binance atualizados · {count} velas",older:"Dados Binance carregados · {count} velas · deslize para a esquerda para carregar velas anteriores",spot:"Dados Binance Spot · deslize para a esquerda para carregar velas anteriores",reconnected:"Dados Binance sincronizados após reconexão · {count} velas",error:"Não foi possível carregar o gráfico. Verifique a ligação e tente novamente.",other:"Período do gráfico e da análise para outros mercados (mais tarde).",timeframe:"Escolha um período para atualizar o gráfico e a análise em conjunto.",cryptoChecking:'A verificar pares Binance Spot…',cryptoVerified:'Binance Spot verificado: {active} pares ativos, {archive} arquivados.',cryptoVerifyFail:'Não foi possível verificar os pares Binance. A análise cripto fica bloqueada até à verificação.',liveConnecting:'A ligar…',liveUnsupported:'As atualizações em direto não são suportadas',live:'Em direto'},
+it:{loaded:"Il grafico mostra i dati Binance memorizzati; gli aggiornamenti in tempo reale non sono supportati da questo browser.",retry:"Flusso Binance disconnesso; nuovo tentativo tra {seconds} s…",syncing:"Connessione Binance attiva · sincronizzazione degli ultimi dati",recover:"Aggiornamenti Binance interrotti; riconnessione…",loading:"Caricamento dati Binance…",updated:"Dati Binance aggiornati · {count} candele",older:"Dati Binance caricati · {count} candele · trascina a sinistra per caricare quelle precedenti",spot:"Dati Binance Spot · trascina a sinistra per caricare le candele precedenti",reconnected:"Dati Binance sincronizzati dopo la riconnessione · {count} candele",error:"Impossibile caricare il grafico. Controlla la connessione e riprova.",other:"Intervallo del grafico e dell’analisi per gli altri mercati (in seguito).",timeframe:"Scegli un intervallo per aggiornare insieme grafico e analisi.",cryptoChecking:'Verifica delle coppie Binance Spot…',cryptoVerified:'Binance Spot verificato: {active} coppie attive, {archive} archiviate.',cryptoVerifyFail:'Impossibile verificare le coppie Binance. L’analisi crypto resta bloccata fino alla verifica.',liveConnecting:'Connessione…',liveUnsupported:'Gli aggiornamenti in tempo reale non sono supportati',live:'Live'},
+ru:{loaded:"На графике показаны сохранённые данные Binance; обновления в реальном времени не поддерживаются этим браузером.",retry:"Поток Binance отключён; повтор через {seconds} с…",syncing:"Прямое подключение Binance · синхронизация последних данных",recover:"Обновления Binance прерваны; восстановление соединения…",loading:"Загрузка данных Binance…",updated:"Данные Binance обновлены · свечей: {count}",older:"Данные Binance загружены · свечей: {count} · проведите влево, чтобы загрузить более старые",spot:"Данные Binance Spot · проведите влево, чтобы загрузить старые свечи",reconnected:"Данные Binance синхронизированы после переподключения · свечей: {count}",error:"Не удалось загрузить график. Проверьте подключение и повторите попытку.",other:"Таймфрейм графика и анализа для других рынков (позже).",timeframe:"Выберите таймфрейм для совместного обновления графика и анализа.",cryptoChecking:'Проверка пар Binance Spot…',cryptoVerified:'Binance Spot проверен: активных пар — {active}, в архиве — {archive}.',cryptoVerifyFail:'Не удалось проверить пары Binance. Анализ криптовалют заблокирован до успешной проверки.',liveConnecting:'Подключение…',liveUnsupported:'Обновления в реальном времени не поддерживаются',live:'В эфире'},
+zh:{loaded:"图表正在显示缓存的 Binance 数据；此浏览器不支持实时更新。",retry:"Binance 数据流已断开；{seconds} 秒后重试…",syncing:"Binance 实时连接 · 正在同步最新数据",recover:"Binance 更新中断；正在重新连接…",loading:"正在加载 Binance 数据…",updated:"Binance 数据已更新 · {count} 根 K 线",older:"Binance 数据已加载 · {count} 根 K 线 · 向左拖动以加载更早的 K 线",spot:"Binance 现货数据 · 向左拖动以加载更早的 K 线",reconnected:"重新连接后已同步 Binance 数据 · {count} 根 K 线",error:"无法加载图表数据。请检查网络连接后重试。",other:"其他市场的图表和分析周期（稍后提供）。",timeframe:"选择周期以同时更新图表和分析。",cryptoChecking:'正在验证 Binance 现货交易对…',cryptoVerified:'Binance 现货已验证：{active} 个活跃交易对，{archive} 个已归档。',cryptoVerifyFail:'无法验证 Binance 交易对。验证成功前，加密货币分析将保持锁定。',liveConnecting:'正在连接…',liveUnsupported:'此浏览器不支持实时更新',live:'实时'},
+ja:{loaded:"チャートにはキャッシュされたBinanceデータが表示されています。このブラウザーではリアルタイム更新に対応していません。",retry:"Binanceストリームが切断されました。{seconds}秒後に再試行…",syncing:"Binanceライブ接続 · 最新データを同期中",recover:"Binanceの更新が中断されました。再接続中…",loading:"Binanceデータを読み込み中…",updated:"Binanceデータを更新しました · {count}本のローソク足",older:"Binanceデータを読み込みました · {count}本 · 左へドラッグして過去のローソク足を読み込む",spot:"Binance Spotデータ · 左へドラッグして過去のローソク足を読み込む",reconnected:"再接続後にBinanceデータを同期しました · {count}本",error:"チャートデータを読み込めません。接続を確認して再試行してください。",other:"他市場のチャート・分析時間足（後日対応）。",timeframe:"時間足を選択するとチャートと分析が同時に更新されます。",cryptoChecking:'Binance Spotの取引ペアを確認中…',cryptoVerified:'Binance Spotを確認しました：有効なペア {active} 件、アーカイブ {archive} 件。',cryptoVerifyFail:'Binanceペアを確認できませんでした。確認が完了するまで暗号資産分析はロックされます。',liveConnecting:'接続中…',liveUnsupported:'リアルタイム更新には対応していません',live:'ライブ'},
+ko:{loaded:"차트에 캐시된 Binance 데이터가 표시됩니다. 이 브라우저에서는 실시간 업데이트를 지원하지 않습니다.",retry:"Binance 스트림 연결이 끊겼습니다. {seconds}초 후 재시도…",syncing:"Binance 실시간 연결 · 최신 데이터 동기화 중",recover:"Binance 업데이트가 중단되었습니다. 다시 연결하는 중…",loading:"Binance 데이터 불러오는 중…",updated:"Binance 데이터 업데이트됨 · {count}개 캔들",older:"Binance 데이터 로드됨 · {count}개 캔들 · 이전 캔들을 불러오려면 왼쪽으로 드래그하세요",spot:"Binance 현물 데이터 · 이전 캔들을 불러오려면 왼쪽으로 드래그하세요",reconnected:"재연결 후 Binance 데이터 동기화 완료 · {count}개 캔들",error:"차트 데이터를 불러오지 못했습니다. 연결을 확인하고 다시 시도하세요.",other:"다른 시장의 차트 및 분석 시간 간격(추후 제공).",timeframe:"시간 간격을 선택하면 차트와 분석이 함께 업데이트됩니다.",cryptoChecking:'Binance 현물 거래쌍 확인 중…',cryptoVerified:'Binance 현물 확인 완료: 활성 거래쌍 {active}개, 보관 {archive}개.',cryptoVerifyFail:'Binance 거래쌍을 확인하지 못했습니다. 확인이 완료될 때까지 암호화폐 분석이 잠깁니다.',liveConnecting:'연결 중…',liveUnsupported:'실시간 업데이트를 지원하지 않습니다',live:'실시간'},
+hi:{loaded:"चार्ट कैश किए गए Binance डेटा को दिखा रहा है; यह ब्राउज़र लाइव अपडेट का समर्थन नहीं करता।",retry:"Binance स्ट्रीम डिस्कनेक्ट हुई; {seconds} सेकंड में फिर प्रयास…",syncing:"Binance लाइव कनेक्शन · नवीनतम डेटा सिंक हो रहा है",recover:"Binance अपडेट बाधित; फिर से कनेक्ट हो रहा है…",loading:"Binance डेटा लोड हो रहा है…",updated:"Binance डेटा अपडेट हुआ · {count} कैंडल",older:"Binance डेटा लोड हुआ · {count} कैंडल · पुरानी कैंडल लोड करने के लिए बाईं ओर खिसकाएँ",spot:"Binance Spot डेटा · पुरानी कैंडल लोड करने के लिए बाईं ओर खिसकाएँ",reconnected:"पुनः कनेक्शन के बाद Binance डेटा सिंक हुआ · {count} कैंडल",error:"चार्ट डेटा लोड नहीं हो सका। कनेक्शन जाँचें और फिर प्रयास करें।",other:"अन्य बाज़ारों के लिए चार्ट और विश्लेषण समय-सीमा (बाद में)।",timeframe:"चार्ट और विश्लेषण को साथ अपडेट करने के लिए समय-सीमा चुनें।",cryptoChecking:'Binance Spot जोड़े सत्यापित हो रहे हैं…',cryptoVerified:'Binance Spot सत्यापित: {active} सक्रिय जोड़े, {archive} संग्रहित।',cryptoVerifyFail:'Binance जोड़ों का सत्यापन नहीं हो सका। सत्यापन सफल होने तक क्रिप्टो विश्लेषण बंद रहेगा।',liveConnecting:'कनेक्ट हो रहा है…',liveUnsupported:'लाइव अपडेट समर्थित नहीं हैं',live:'लाइव'},
+id:{loaded:"Grafik menampilkan data Binance tersimpan; pembaruan langsung tidak didukung browser ini.",retry:"Aliran Binance terputus; mencoba lagi dalam {seconds} dtk…",syncing:"Koneksi langsung Binance · menyinkronkan data terbaru",recover:"Pembaruan Binance terhenti; menyambungkan kembali…",loading:"Memuat data Binance…",updated:"Data Binance diperbarui · {count} candle",older:"Data Binance dimuat · {count} candle · geser ke kiri untuk memuat candle yang lebih lama",spot:"Data Binance Spot · geser ke kiri untuk memuat candle yang lebih lama",reconnected:"Data Binance disinkronkan setelah tersambung kembali · {count} candle",error:"Data grafik tidak dapat dimuat. Periksa koneksi lalu coba lagi.",other:"Kerangka waktu grafik dan analisis untuk pasar lain (nanti).",timeframe:"Pilih kerangka waktu untuk memperbarui grafik dan analisis bersama.",cryptoChecking:'Memverifikasi pasangan Binance Spot…',cryptoVerified:'Binance Spot terverifikasi: {active} pasangan aktif, {archive} diarsipkan.',cryptoVerifyFail:'Pasangan Binance tidak dapat diverifikasi. Analisis kripto dikunci sampai verifikasi berhasil.',liveConnecting:'Menghubungkan…',liveUnsupported:'Pembaruan langsung tidak didukung',live:'Langsung'},
+nl:{loaded:"De grafiek toont gecachte Binance-gegevens; live-updates worden niet ondersteund in deze browser.",retry:"Binance-stream verbroken; nieuwe poging over {seconds} sec…",syncing:"Live Binance-verbinding · nieuwste gegevens synchroniseren",recover:"Binance-updates onderbroken; opnieuw verbinden…",loading:"Binance-gegevens laden…",updated:"Binance-gegevens bijgewerkt · {count} candles",older:"Binance-gegevens geladen · {count} candles · sleep naar links om oudere candles te laden",spot:"Binance Spot-gegevens · sleep naar links om oudere candles te laden",reconnected:"Binance-gegevens gesynchroniseerd na opnieuw verbinden · {count} candles",error:"Grafiekgegevens konden niet worden geladen. Controleer de verbinding en probeer opnieuw.",other:"Grafiek- en analysetijdsbestek voor andere markten (later).",timeframe:"Kies een tijdsbestek om grafiek en analyse tegelijk bij te werken."}
+};
+const chartRetryHintI18n={ar:"اضغط هنا لإعادة المحاولة.",en:"Click here to retry.",fr:"Cliquez ici pour réessayer.",tr:"Yeniden denemek için buraya tıklayın.",de:"Zum erneuten Versuch hier klicken.",es:"Haz clic aquí para volver a intentarlo.",pt:"Clique aqui para tentar novamente.",it:"Fai clic qui per riprovare.",ru:"Нажмите здесь, чтобы повторить попытку.",zh:"点击此处重试。",ja:"ここをクリックして再試行してください。",ko:"다시 시도하려면 여기를 클릭하세요.",hi:"फिर से प्रयास करने के लिए यहाँ क्लिक करें।",id:"Klik di sini untuk mencoba lagi.",nl:"Klik hier om het opnieuw te proberen."};
+function chartRetryHint(){return chartRetryHintI18n[language]||chartRetryHintI18n.en;}
+function chartText(key,values={}){const pack=chartStatusI18n[language]||chartStatusI18n.en;return (pack[key]||chartStatusI18n.en[key]||key).replace(/\{(\w+)\}/g,(_,k)=>String(values[k]??""));}
+
+const chartLiveI18n={
+ar:{reconnect:"إعادة الاتصال…",connected:"متصل · جارٍ تحديث البيانات",waiting:"متصل · بانتظار تحديث السعر",live:"مباشر",closed:"مباشر · أُغلقت الشمعة",unstable:"الاتصال غير مستقر",priceUnavailable:"السعر اللحظي غير متاح مؤقتاً"},
+en:{reconnect:"Reconnecting…",connected:"Connected · updating data",waiting:"Connected · waiting for price update",live:"LIVE",closed:"LIVE · candle closed",unstable:"Connection unstable",priceUnavailable:"Live price temporarily unavailable"},
+fr:{reconnect:"Reconnexion…",connected:"Connecté · mise à jour des données",waiting:"Connecté · en attente du prix",live:"EN DIRECT",closed:"EN DIRECT · bougie clôturée",unstable:"Connexion instable",priceUnavailable:"Prix en direct temporairement indisponible"},
+tr:{reconnect:"Yeniden bağlanıyor…",connected:"Bağlandı · veriler güncelleniyor",waiting:"Bağlandı · fiyat güncellemesi bekleniyor",live:"CANLI",closed:"CANLI · mum kapandı",unstable:"Bağlantı kararsız",priceUnavailable:"Canlı fiyat geçici olarak kullanılamıyor"},
+de:{reconnect:"Verbindung wird wiederhergestellt…",connected:"Verbunden · Daten werden aktualisiert",waiting:"Verbunden · warte auf Preisaktualisierung",live:"LIVE",closed:"LIVE · Kerze geschlossen",unstable:"Verbindung instabil",priceUnavailable:"Live-Preis vorübergehend nicht verfügbar"},
+es:{reconnect:"Reconectando…",connected:"Conectado · actualizando datos",waiting:"Conectado · esperando actualización del precio",live:"EN VIVO",closed:"EN VIVO · vela cerrada",unstable:"Conexión inestable",priceUnavailable:"Precio en directo no disponible temporalmente"},
+pt:{reconnect:"A restabelecer ligação…",connected:"Ligado · a atualizar dados",waiting:"Ligado · à espera da atualização do preço",live:"EM DIRETO",closed:"EM DIRETO · vela fechada",unstable:"Ligação instável",priceUnavailable:"Preço em direto temporariamente indisponível"},
+it:{reconnect:"Riconnessione…",connected:"Connesso · aggiornamento dati",waiting:"Connesso · in attesa del prezzo",live:"LIVE",closed:"LIVE · candela chiusa",unstable:"Connessione instabile",priceUnavailable:"Prezzo in tempo reale temporaneamente non disponibile"},
+ru:{reconnect:"Повторное подключение…",connected:"Подключено · обновление данных",waiting:"Подключено · ожидание обновления цены",live:"LIVE",closed:"LIVE · свеча закрыта",unstable:"Нестабильное соединение",priceUnavailable:"Текущая цена временно недоступна"},
+zh:{reconnect:"正在重新连接…",connected:"已连接 · 正在更新数据",waiting:"已连接 · 等待价格更新",live:"实时",closed:"实时 · K线已收盘",unstable:"连接不稳定",priceUnavailable:"实时价格暂时不可用"},
+ja:{reconnect:"再接続中…",connected:"接続済み · データ更新中",waiting:"接続済み · 価格更新を待機中",live:"ライブ",closed:"ライブ · ローソク足確定",unstable:"接続が不安定です",priceUnavailable:"リアルタイム価格は一時的に利用できません"},
+ko:{reconnect:"재연결 중…",connected:"연결됨 · 데이터 업데이트 중",waiting:"연결됨 · 가격 업데이트 대기 중",live:"실시간",closed:"실시간 · 캔들 마감",unstable:"연결이 불안정합니다",priceUnavailable:"실시간 가격을 일시적으로 사용할 수 없습니다"},
+hi:{reconnect:"फिर से कनेक्ट हो रहा है…",connected:"कनेक्टेड · डेटा अपडेट हो रहा है",waiting:"कनेक्टेड · मूल्य अपडेट की प्रतीक्षा",live:"लाइव",closed:"लाइव · कैंडल बंद हुई",unstable:"कनेक्शन अस्थिर है",priceUnavailable:"लाइव मूल्य अस्थायी रूप से उपलब्ध नहीं है"},
+id:{reconnect:"Menghubungkan kembali…",connected:"Terhubung · memperbarui data",waiting:"Terhubung · menunggu pembaruan harga",live:"LANGSUNG",closed:"LANGSUNG · candle ditutup",unstable:"Koneksi tidak stabil",priceUnavailable:"Harga langsung sementara tidak tersedia"},
+nl:{reconnect:"Opnieuw verbinden…",connected:"Verbonden · gegevens bijwerken",waiting:"Verbonden · wachten op prijsupdate",live:"LIVE",closed:"LIVE · candle gesloten",unstable:"Verbinding instabiel",priceUnavailable:"Liveprijs tijdelijk niet beschikbaar"}
+};
+function liveText(key){const pack=chartLiveI18n[language]||chartLiveI18n.en;return pack[key]||chartLiveI18n.en[key]||key;}
+
+const analysisReportI18n={
+ar:{support:"أقرب دعم",resistance:"أقرب مقاومة",unavailable:"غير متاح",rewardRisk:"العائد/المخاطرة",source:"المصدر",timeframe:"الفريم",updated:"آخر تحديث",entry:"الدخول",issued:"وقت صدور التوصية",livePrice:"السعر الحالي من Binance",status:"حالة التوصية",within:"التوصية ضمن المدة المحددة.",stale:"منتهية الصلاحية: عمر التوصية تجاوز ثلاثة أضعاف الإطار الزمني.",stopped:"السعر الحالي عند وقف الخسارة أو تجاوزه؛ التوصية غير صالحة للدخول.",target:"تم الوصول إلى الهدف الأول أو تجاوزه؛ لا تدخل اعتماداً على التوصية الأصلية.",missed:"فرصة الدخول قد فاتت: السعر الحالي تجاوز مستوى الدخول باتجاه الصفقة.",buy:"شراء",sell:"بيع",manualInvalid:"أدخل سعراً صحيحاً في خانة {field}. جميع الخانات الأربع مطلوبة: الدخول ووقف الخسارة وTP1 وTP2.",future:"أدخل وقت صدور التوصية بشكل صحيح؛ لا يمكن أن يكون في المستقبل.",cryptoOnly:"التحقق اللحظي من التوصيات اليدوية متاح حالياً للعملات الرقمية عبر Binance فقط. ربط الفوركس والمعادن والأسهم يتطلب خادم بيانات سوق.",priceFail:"تعذر التحقق من السعر الحالي عبر Binance؛ لم نعتمد التوصية. أعد المحاولة عند عودة الاتصال.",cryptoChecking:'Binance Spot-paren controleren…',cryptoVerified:'Binance Spot geverifieerd: {active} actieve paren, {archive} gearchiveerd.',cryptoVerifyFail:'Binance-paren konden niet worden geverifieerd. Cryptoanalyse blijft vergrendeld totdat verificatie slaagt.',liveConnecting:'Verbinden…',liveUnsupported:'Live-updates worden niet ondersteund',live:'Live'},
+en:{support:"Nearest support",resistance:"Nearest resistance",unavailable:"Unavailable",rewardRisk:"Reward/risk",source:"Source",timeframe:"Timeframe",updated:"Last update",entry:"Entry",issued:"Signal issued",livePrice:"Current Binance price",status:"Signal status",within:"Signal is within the allowed age.",stale:"Expired: signal age exceeds three timeframe intervals.",stopped:"Current price is at or beyond stop-loss; the signal is invalid for entry.",target:"TP1 appears reached or passed; do not enter using the original signal.",missed:"Entry likely missed: price has moved beyond the entry in the trade direction.",buy:"BUY",sell:"SELL",manualInvalid:"Enter a valid price for {field}. All four fields are required: entry, stop-loss, TP1 and TP2.",future:"Enter a valid signal issue time; it cannot be in the future.",cryptoOnly:"Manual signal verification currently supports Crypto through Binance only. Forex, metals and stocks require a market-data server.",priceFail:"Could not verify the current Binance price; the signal was not accepted. Retry when connected."},
+fr:{support:"Support le plus proche",resistance:"Résistance la plus proche",unavailable:"Indisponible",rewardRisk:"Rendement/risque",source:"Source",timeframe:"Période",updated:"Dernière mise à jour",entry:"Entrée",issued:"Émise le",livePrice:"Prix Binance actuel",status:"État du signal",within:"Le signal respecte la durée autorisée.",stale:"Expiré : le signal dépasse trois périodes.",stopped:"Le prix actuel a atteint ou dépassé le stop-loss ; entrée invalide.",target:"TP1 semble atteint ou dépassé ; n’entrez pas sur la base du signal initial.",missed:"Entrée probablement manquée : le prix a dépassé le niveau d’entrée dans le sens du trade.",buy:"ACHAT",sell:"VENTE",manualInvalid:"Saisissez un prix valide pour {field}. Les quatre champs sont obligatoires.",future:"Saisissez une heure d’émission valide, qui ne peut pas être future.",cryptoOnly:"La vérification manuelle est actuellement disponible uniquement pour les cryptos via Binance. Les autres marchés nécessitent un serveur de données.",priceFail:"Impossible de vérifier le prix Binance actuel ; le signal n’a pas été accepté."},
+tr:{support:"En yakın destek",resistance:"En yakın direnç",unavailable:"Kullanılamıyor",rewardRisk:"Getiri/risk",source:"Kaynak",timeframe:"Zaman aralığı",updated:"Son güncelleme",entry:"Giriş",issued:"Sinyal zamanı",livePrice:"Güncel Binance fiyatı",status:"Sinyal durumu",within:"Sinyal izin verilen süre içinde.",stale:"Süresi doldu: sinyal yaşı üç zaman aralığını aşıyor.",stopped:"Güncel fiyat zarar durdur seviyesinde veya ötesinde; giriş için geçersiz.",target:"TP1'e ulaşılmış veya aşılmış görünüyor; ilk sinyale göre giriş yapmayın.",missed:"Giriş fırsatı kaçmış olabilir: fiyat giriş seviyesini işlem yönünde geçti.",buy:"ALIŞ",sell:"SATIŞ",manualInvalid:"{field} alanına geçerli fiyat girin. Dört alanın tamamı zorunludur.",future:"Geçerli bir sinyal zamanı girin; gelecek bir zaman olamaz.",cryptoOnly:"Manuel sinyal doğrulaması şu anda yalnızca Binance üzerinden kripto için kullanılabilir. Diğer piyasalar veri sunucusu gerektirir.",priceFail:"Güncel Binance fiyatı doğrulanamadı; sinyal kabul edilmedi."},
+de:{support:"Nächste Unterstützung",resistance:"Nächster Widerstand",unavailable:"Nicht verfügbar",rewardRisk:"Chance/Risiko",source:"Quelle",timeframe:"Zeitrahmen",updated:"Letzte Aktualisierung",entry:"Einstieg",issued:"Signalzeit",livePrice:"Aktueller Binance-Preis",status:"Signalstatus",within:"Das Signal liegt innerhalb des zulässigen Zeitraums.",stale:"Abgelaufen: Das Signal ist älter als drei Zeitintervalle.",stopped:"Der aktuelle Preis liegt am oder jenseits des Stop-Loss; Einstieg ungültig.",target:"TP1 scheint erreicht oder überschritten; nicht anhand des ursprünglichen Signals einsteigen.",missed:"Einstieg vermutlich verpasst: Der Preis hat den Einstieg in Handelsrichtung überschritten.",buy:"KAUF",sell:"VERKAUF",manualInvalid:"Geben Sie einen gültigen Preis für {field} ein. Alle vier Felder sind erforderlich.",future:"Geben Sie eine gültige Signalzeit ein; sie darf nicht in der Zukunft liegen.",cryptoOnly:"Die manuelle Signalprüfung unterstützt derzeit nur Krypto über Binance. Andere Märkte benötigen einen Datenserver.",priceFail:"Der aktuelle Binance-Preis konnte nicht geprüft werden; das Signal wurde nicht angenommen."},
+es:{support:"Soporte más cercano",resistance:"Resistencia más cercana",unavailable:"No disponible",rewardRisk:"Rentabilidad/riesgo",source:"Fuente",timeframe:"Temporalidad",updated:"Última actualización",entry:"Entrada",issued:"Emisión",livePrice:"Precio actual de Binance",status:"Estado de la señal",within:"La señal está dentro del plazo permitido.",stale:"Caducada: la antigüedad supera tres intervalos.",stopped:"El precio actual está en el stop-loss o lo ha superado; entrada no válida.",target:"TP1 parece alcanzado o superado; no entres con la señal original.",missed:"Entrada probablemente perdida: el precio superó la entrada en la dirección de la operación.",buy:"COMPRA",sell:"VENTA",manualInvalid:"Introduce un precio válido para {field}. Los cuatro campos son obligatorios.",future:"Introduce una hora de emisión válida; no puede ser futura.",cryptoOnly:"La verificación manual solo está disponible actualmente para criptomonedas mediante Binance. Otros mercados requieren un servidor de datos.",priceFail:"No se pudo verificar el precio actual de Binance; la señal no se aceptó."},
+pt:{support:"Suporte mais próximo",resistance:"Resistência mais próxima",unavailable:"Indisponível",rewardRisk:"Retorno/risco",source:"Fonte",timeframe:"Período",updated:"Última atualização",entry:"Entrada",issued:"Emissão do sinal",livePrice:"Preço atual da Binance",status:"Estado do sinal",within:"O sinal está dentro do prazo permitido.",stale:"Expirado: a idade do sinal excede três períodos.",stopped:"O preço atual está no stop-loss ou além dele; entrada inválida.",target:"TP1 parece ter sido atingido ou ultrapassado; não entre com o sinal original.",missed:"Entrada provavelmente perdida: o preço ultrapassou a entrada na direção da operação.",buy:"COMPRA",sell:"VENDA",manualInvalid:"Insira um preço válido para {field}. Os quatro campos são obrigatórios.",future:"Insira uma hora de emissão válida; não pode estar no futuro.",cryptoOnly:"A verificação manual está disponível apenas para cripto via Binance. Outros mercados exigem um servidor de dados.",priceFail:"Não foi possível verificar o preço atual da Binance; o sinal não foi aceite."},
+it:{support:"Supporto più vicino",resistance:"Resistenza più vicina",unavailable:"Non disponibile",rewardRisk:"Rendimento/rischio",source:"Fonte",timeframe:"Intervallo",updated:"Ultimo aggiornamento",entry:"Ingresso",issued:"Emissione del segnale",livePrice:"Prezzo Binance attuale",status:"Stato del segnale",within:"Il segnale rientra nel periodo consentito.",stale:"Scaduto: l’età del segnale supera tre intervalli.",stopped:"Il prezzo attuale è al livello di stop-loss o oltre; ingresso non valido.",target:"TP1 sembra raggiunto o superato; non entrare usando il segnale originale.",missed:"Ingresso probabilmente perso: il prezzo ha superato il livello nella direzione dell’operazione.",buy:"ACQUISTA",sell:"VENDI",manualInvalid:"Inserisci un prezzo valido per {field}. Tutti e quattro i campi sono obbligatori.",future:"Inserisci un orario di emissione valido, non futuro.",cryptoOnly:"La verifica manuale è attualmente disponibile solo per le criptovalute tramite Binance. Gli altri mercati richiedono un server dati.",priceFail:"Impossibile verificare il prezzo Binance attuale; il segnale non è stato accettato."},
+ru:{support:"Ближайшая поддержка",resistance:"Ближайшее сопротивление",unavailable:"Недоступно",rewardRisk:"Доходность/риск",source:"Источник",timeframe:"Таймфрейм",updated:"Обновлено",entry:"Вход",issued:"Время сигнала",livePrice:"Текущая цена Binance",status:"Статус сигнала",within:"Сигнал находится в допустимом временном диапазоне.",stale:"Срок истёк: возраст сигнала превышает три таймфрейма.",stopped:"Текущая цена достигла стоп-лосса или прошла его; вход недействителен.",target:"Похоже, TP1 достигнут или пройден; не входите по исходному сигналу.",missed:"Вход, вероятно, упущен: цена прошла уровень входа по направлению сделки.",buy:"ПОКУПКА",sell:"ПРОДАЖА",manualInvalid:"Введите корректную цену для поля «{field}». Все четыре поля обязательны.",future:"Укажите корректное время сигнала; оно не может быть в будущем.",cryptoOnly:"Проверка ручных сигналов сейчас доступна только для криптовалют через Binance. Для других рынков нужен сервер данных.",priceFail:"Не удалось проверить текущую цену Binance; сигнал не принят."},
+zh:{support:"最近支撑位",resistance:"最近阻力位",unavailable:"不可用",rewardRisk:"收益/风险",source:"数据源",timeframe:"时间周期",updated:"最后更新",entry:"入场价",issued:"信号发布时间",livePrice:"Binance 当前价格",status:"信号状态",within:"信号处于允许的有效时间内。",stale:"已过期：信号时间超过三个周期。",stopped:"当前价格已达到或超过止损位；该信号不适合入场。",target:"TP1 似乎已达到或突破；请勿依据原始信号入场。",missed:"可能错过入场：价格已沿交易方向越过入场位。",buy:"买入",sell:"卖出",manualInvalid:"请为 {field} 输入有效价格。四个价格字段均为必填项。",future:"请输入有效的信号发布时间，不能晚于当前时间。",cryptoOnly:"目前仅支持通过 Binance 验证加密货币手动信号。其他市场需要部署行情数据服务器。",priceFail:"无法验证 Binance 当前价格；未接受该信号。"},
+ja:{support:"最寄りのサポート",resistance:"最寄りのレジスタンス",unavailable:"利用不可",rewardRisk:"リターン/リスク",source:"データソース",timeframe:"時間足",updated:"最終更新",entry:"エントリー",issued:"シグナル発行時刻",livePrice:"Binance現在価格",status:"シグナル状態",within:"シグナルは許容期間内です。",stale:"期限切れ：シグナルの経過時間が3時間足分を超えています。",stopped:"現在価格が損切り価格に達したか超えています。エントリーは無効です。",target:"TP1に到達または突破した可能性があります。元のシグナルでエントリーしないでください。",missed:"エントリー機会を逃した可能性があります。価格が取引方向にエントリー価格を超えました。",buy:"買い",sell:"売り",manualInvalid:"{field}に有効な価格を入力してください。4つの価格欄はすべて必須です。",future:"有効な発行時刻を入力してください。未来の時刻は指定できません。",cryptoOnly:"手動シグナル検証は現在Binance経由の暗号資産のみ対応しています。他市場にはデータサーバーが必要です。",priceFail:"Binanceの現在価格を検証できなかったため、シグナルは受け付けられませんでした。"},
+ko:{support:"가장 가까운 지지선",resistance:"가장 가까운 저항선",unavailable:"사용할 수 없음",rewardRisk:"수익/위험",source:"출처",timeframe:"시간 간격",updated:"최근 업데이트",entry:"진입가",issued:"신호 발행 시각",livePrice:"Binance 현재 가격",status:"신호 상태",within:"신호가 허용된 유효 기간 내에 있습니다.",stale:"만료됨: 신호 경과 시간이 세 개의 시간 간격을 초과했습니다.",stopped:"현재 가격이 손절가에 도달했거나 넘어섰습니다. 진입할 수 없습니다.",target:"TP1에 도달했거나 넘어선 것으로 보입니다. 원래 신호로 진입하지 마세요.",missed:"진입 기회를 놓쳤을 수 있습니다. 가격이 거래 방향으로 진입가를 넘어섰습니다.",buy:"매수",sell:"매도",manualInvalid:"{field}에 올바른 가격을 입력하세요. 네 가격 항목은 모두 필수입니다.",future:"올바른 신호 발행 시각을 입력하세요. 미래 시각은 사용할 수 없습니다.",cryptoOnly:"현재 수동 신호 검증은 Binance를 통한 암호화폐만 지원합니다. 다른 시장은 데이터 서버가 필요합니다.",priceFail:"Binance 현재 가격을 확인할 수 없어 신호를 승인하지 않았습니다."},
+hi:{support:"निकटतम समर्थन",resistance:"निकटतम प्रतिरोध",unavailable:"उपलब्ध नहीं",rewardRisk:"रिटर्न/जोखिम",source:"स्रोत",timeframe:"समय-सीमा",updated:"अंतिम अपडेट",entry:"प्रवेश",issued:"सिग्नल जारी समय",livePrice:"वर्तमान Binance मूल्य",status:"सिग्नल स्थिति",within:"सिग्नल अनुमत समय-सीमा के भीतर है।",stale:"समाप्त: सिग्नल की आयु तीन समय-अंतराल से अधिक है।",stopped:"वर्तमान मूल्य स्टॉप-लॉस पर या उससे आगे है; प्रवेश अमान्य है।",target:"TP1 संभवतः प्राप्त या पार हो गया है; मूल सिग्नल के आधार पर प्रवेश न करें।",missed:"प्रवेश का अवसर संभवतः निकल गया: मूल्य ट्रेड दिशा में प्रवेश स्तर से आगे बढ़ गया।",buy:"खरीदें",sell:"बेचें",manualInvalid:"{field} के लिए मान्य मूल्य दर्ज करें। चारों फ़ील्ड आवश्यक हैं।",future:"मान्य सिग्नल समय दर्ज करें; यह भविष्य में नहीं हो सकता।",cryptoOnly:"मैन्युअल सिग्नल सत्यापन अभी केवल Binance के माध्यम से क्रिप्टो के लिए उपलब्ध है। अन्य बाज़ारों के लिए डेटा सर्वर चाहिए।",priceFail:"वर्तमान Binance मूल्य सत्यापित नहीं हो सका; सिग्नल स्वीकार नहीं किया गया।"},
+id:{support:"Support terdekat",resistance:"Resistance terdekat",unavailable:"Tidak tersedia",rewardRisk:"Imbal hasil/risiko",source:"Sumber",timeframe:"Kerangka waktu",updated:"Pembaruan terakhir",entry:"Harga masuk",issued:"Waktu sinyal",livePrice:"Harga Binance saat ini",status:"Status sinyal",within:"Sinyal masih dalam batas waktu yang diizinkan.",stale:"Kedaluwarsa: usia sinyal melebihi tiga interval waktu.",stopped:"Harga saat ini berada pada atau melewati stop-loss; sinyal tidak valid untuk masuk.",target:"TP1 tampaknya telah tercapai atau terlewati; jangan masuk berdasarkan sinyal awal.",missed:"Peluang masuk mungkin terlewat: harga bergerak melewati level masuk searah transaksi.",buy:"BELI",sell:"JUAL",manualInvalid:"Masukkan harga valid untuk {field}. Keempat kolom wajib diisi.",future:"Masukkan waktu penerbitan sinyal yang valid; tidak boleh di masa depan.",cryptoOnly:"Verifikasi sinyal manual saat ini hanya mendukung kripto melalui Binance. Pasar lain memerlukan server data.",priceFail:"Harga Binance saat ini tidak dapat diverifikasi; sinyal tidak diterima."},
+nl:{support:"Dichtstbijzijnde steun",resistance:"Dichtstbijzijnde weerstand",unavailable:"Niet beschikbaar",rewardRisk:"Rendement/risico",source:"Bron",timeframe:"Tijdsbestek",updated:"Laatst bijgewerkt",entry:"Instap",issued:"Signaaltijd",livePrice:"Huidige Binance-prijs",status:"Signaalstatus",within:"Het signaal valt binnen de toegestane geldigheidsduur.",stale:"Verlopen: de signaalleeftijd is langer dan drie tijdsperioden.",stopped:"De huidige prijs staat op of voorbij de stop-loss; instap is ongeldig.",target:"TP1 lijkt bereikt of gepasseerd; stap niet in op basis van het oorspronkelijke signaal.",missed:"Instap waarschijnlijk gemist: de prijs is voorbij het instapniveau in de handelsrichting gegaan.",buy:"KOPEN",sell:"VERKOPEN",manualInvalid:"Voer een geldige prijs in voor {field}. Alle vier velden zijn verplicht.",future:"Voer een geldige signaaltijd in; deze mag niet in de toekomst liggen.",cryptoOnly:"Handmatige signaalcontrole ondersteunt momenteel alleen crypto via Binance. Andere markten vereisen een dataserver.",priceFail:"De huidige Binance-prijs kon niet worden gecontroleerd; het signaal is niet geaccepteerd."}
+};
+function reportText(key,values={}){const pack=analysisReportI18n[language]||analysisReportI18n.en;return (pack[key]||analysisReportI18n.en[key]||key).replace(/\{(\w+)\}/g,(_,k)=>String(values[k]??""));}
+
 function safeRead(key,fallback=null){
   try{
     const raw=localStorage.getItem(key);
@@ -2650,6 +2805,16 @@ let selected=assets.crypto[0];
 let onlyFavorites=false;
 let favorites=[];
 let chartGeneration=0;
+let nexfxCryptoChart=null;
+let nexfxCryptoCandleSeries=null;
+let nexfxCryptoSocket=null;
+let nexfxCryptoResizeObserver=null;
+let nexfxCryptoReconnectTimer=null;
+let nexfxCryptoReconnectAttempt=0;
+// Timestamp of the latest Binance aggTrade received for the active chart.
+// Prevents a slower REST ticker response from overwriting a newer WebSocket trade.
+let nexfxCryptoLastWsTradeAt=0;
+let nexfxCryptoStreamCandles=new Map();
 let lastAnalysis=null;
 let analysisRunToken=0;
 // Set this to the deployed server.py service URL (no trailing slash).
@@ -2658,6 +2823,22 @@ const NEXFX_API_BASE=""; // بعد نشر server.py ضع هنا رابط الخ�
 
 // Public Binance spot market data. No API key is required for public quotes/klines.
 const NEXFX_BINANCE_BASE="https://data-api.binance.vision/api/v3";
+// Prevent a stalled network request from leaving the chart in a permanent loading state.
+async function fetchNexfxWithTimeout(url,options={},timeoutMs=15000){
+  const controller=typeof AbortController==="function"?new AbortController():null;
+  const requestOptions={...options};
+  if(controller)requestOptions.signal=controller.signal;
+  let timeoutId;
+  try{
+    return await Promise.race([
+      fetch(url,requestOptions),
+      new Promise((_,reject)=>{timeoutId=setTimeout(()=>{
+        if(controller)controller.abort();
+        reject(new Error("انتهت مهلة الاتصال بمصدر البيانات. تحقق من الإنترنت ثم أعد المحاولة."));
+      },timeoutMs);})
+    ]);
+  }finally{if(timeoutId)clearTimeout(timeoutId);}
+}
 // Binance Spot kline intervals. The UI value is also the Binance REST interval.
 const binanceIntervals=Object.freeze({
   "1m":"1m","3m":"3m","5m":"5m","15m":"15m","30m":"30m",
@@ -2678,17 +2859,19 @@ async function syncCryptoAssetsWithBinance(){
   if(binanceSpotReady)return true;
   if(binanceSpotSyncPromise)return binanceSpotSyncPromise;
   binanceSpotSyncPromise=(async()=>{
-    const response=await fetch(NEXFX_BINANCE_BASE+"/exchangeInfo",{cache:"no-store",headers:{Accept:"application/json"}});
+    const response=await fetchNexfxWithTimeout(NEXFX_BINANCE_BASE+"/exchangeInfo",{cache:"no-store",headers:{Accept:"application/json"}},18000);
     if(!response.ok)throw new Error("Binance exchangeInfo HTTP "+response.status);
     const data=await response.json();
     if(!data||!Array.isArray(data.symbols))throw new Error("Binance returned an unexpected exchangeInfo response.");
-    const available=new Set(data.symbols
-      .filter(item=>item&&item.quoteAsset==="USDT"&&item.status==="TRADING"&&item.isSpotTradingAllowed!==false)
-      .map(item=>String(item.symbol||"")));
-    const active=cryptoAssetsCatalog.filter(item=>available.has(cryptoPairFromTradingView(item[2])));
-    if(!active.length)throw new Error("No configured NEXFX USDT pairs were verified on Binance Spot.");
+    const spotRows=data.symbols.filter(item=>item&&item.quoteAsset==="USDT"&&item.status==="TRADING"&&item.isSpotTradingAllowed!==false);
+    const available=new Set(spotRows.map(item=>String(item.symbol||"")));
+    const catalogBySymbol=new Map(cryptoAssetsCatalog.map(item=>[cryptoPairFromTradingView(item[2]),item]));
+    const active=spotRows.map(item=>catalogBySymbol.get(String(item.symbol))||[
+      String(item.baseAsset||item.symbol),"₿","BINANCE:"+String(item.symbol)
+    ]);
+    if(!active.length)throw new Error("No tradable Binance Spot USDT pairs were returned.");
     binanceSpotSymbols=available;
-    cryptoAssetsArchive=cryptoAssetsCatalog.filter(item=>!active.includes(item));
+    cryptoAssetsArchive=cryptoAssetsCatalog.filter(item=>!available.has(cryptoPairFromTradingView(item[2])));
     assets.crypto=active;
     binanceSpotReady=true;
     if(market==="crypto"&&!assets.crypto.some(item=>item[2]===selected[2])){
@@ -2696,9 +2879,7 @@ async function syncCryptoAssetsWithBinance(){
       clearAnalysisOutput();
     }
     const status=$("cryptoSyncStatus");
-    if(status)status.textContent=language==="ar"
-      ?`تم التحقق من Binance Spot: ${active.length} زوجاً مفعّلاً، و${cryptoAssetsArchive.length} في الأرشيف.`
-      :`Binance Spot verified: ${active.length} active pairs, ${cryptoAssetsArchive.length} archived.`;
+    if(status)status.textContent=chartText("cryptoVerified",{active:active.length,archive:cryptoAssetsArchive.length});
     if(market==="crypto"){
       renderAssets();renderFavorites();updateSideInformation();
     }
@@ -2706,9 +2887,7 @@ async function syncCryptoAssetsWithBinance(){
   })().catch(error=>{
     binanceSpotSyncPromise=null;
     const status=$("cryptoSyncStatus");
-    if(status)status.textContent=language==="ar"
-      ?"تعذر التحقق من أزواج Binance حالياً؛ لن يعمل تحليل العملات الرقمية حتى ينجح التحقق."
-      :"Could not verify Binance pairs. Crypto analysis stays locked until verification succeeds.";
+    if(status)status.textContent=chartText("cryptoVerifyFail");
     throw error;
   });
   return binanceSpotSyncPromise;
@@ -2722,11 +2901,40 @@ function formatMarketPrice(value){
   const opts=n>=1000?{minimumFractionDigits:2,maximumFractionDigits:2}:n>=1?{minimumFractionDigits:2,maximumFractionDigits:4}:{minimumFractionDigits:4,maximumFractionDigits:8};
   return new Intl.NumberFormat("en-US-u-nu-latn",opts).format(n);
 }
+function sma(values,period){
+  if(!Array.isArray(values)||values.length<period)return null;
+  const slice=values.slice(-period);
+  return slice.reduce((sum,value)=>sum+value,0)/period;
+}
+function findRecentPriceLevels(candles,lookback=80){
+  const rows=candles.slice(-lookback);
+  const supports=[],resistances=[];
+  for(let i=2;i<rows.length-2;i++){
+    const c=rows[i];
+    if(c.low<rows[i-1].low&&c.low<rows[i-2].low&&c.low<=rows[i+1].low&&c.low<=rows[i+2].low)supports.push(c.low);
+    if(c.high>rows[i-1].high&&c.high>rows[i-2].high&&c.high>=rows[i+1].high&&c.high>=rows[i+2].high)resistances.push(c.high);
+  }
+  const price=rows[rows.length-1]?.close;
+  const support=supports.filter(v=>v<price).sort((a,b)=>b-a)[0]??null;
+  const resistance=resistances.filter(v=>v>price).sort((a,b)=>a-b)[0]??null;
+  return {support,resistance,lookback:rows.length};
+}
 function ema(values,period){
-  if(values.length<period)return null;
+  if(!Array.isArray(values)||values.length<period)return null;
   const k=2/(period+1); let value=values.slice(0,period).reduce((a,b)=>a+b,0)/period;
   for(let i=period;i<values.length;i++)value=values[i]*k+value*(1-k);
   return value;
+}
+function emaSeries(values,period){
+  if(!Array.isArray(values)||values.length<period)return [];
+  const k=2/(period+1),out=[];
+  let value=values.slice(0,period).reduce((a,b)=>a+b,0)/period;
+  out.push(value);
+  for(let i=period;i<values.length;i++){
+    value=values[i]*k+value*(1-k);
+    out.push(value);
+  }
+  return out;
 }
 function rsi(values,period=14){
   if(values.length<=period)return null; let gain=0,loss=0;
@@ -2736,9 +2944,17 @@ function rsi(values,period=14){
   return avgLoss===0?100:100-(100/(1+avgGain/avgLoss));
 }
 function calculateAtr(candles,period=14){
-  if(candles.length<=period)return null; const tr=[];
-  for(let i=1;i<candles.length;i++){const c=candles[i],p=candles[i-1];tr.push(Math.max(c.high-c.low,Math.abs(c.high-p.close),Math.abs(c.low-p.close)));}
-  return tr.slice(-period).reduce((a,b)=>a+b,0)/period;
+  if(!Array.isArray(candles)||candles.length<=period)return null;
+  const trueRanges=[];
+  for(let i=1;i<candles.length;i++){
+    const current=candles[i],previous=candles[i-1];
+    trueRanges.push(Math.max(current.high-current.low,Math.abs(current.high-previous.close),Math.abs(current.low-previous.close)));
+  }
+  if(trueRanges.length<period)return null;
+  // Wilder ATR: SMA seed, then recursive smoothing over every subsequent candle.
+  let atr=trueRanges.slice(0,period).reduce((sum,value)=>sum+value,0)/period;
+  for(let i=period;i<trueRanges.length;i++)atr=((atr*(period-1))+trueRanges[i])/period;
+  return atr;
 }
 function intervalForSelectedTimeframe(){
   const interval=binanceIntervals[$("timeframe").value];
@@ -2750,9 +2966,10 @@ async function fetchSelectedMarketCandles(asset, marketName, interval){
   if(marketName==="crypto"){
     const symbol=cryptoPairFromTradingView(tvSymbol);
     if(!symbol)throw new Error(at("invalidSymbol"));
-    if(!binanceSpotReady||!binanceSpotSymbols.has(symbol))throw new Error("هذا الزوج غير متحقق منه كزوج Binance Spot متاح للتداول حالياً.");
-    const url=NEXFX_BINANCE_BASE+"/klines?symbol="+encodeURIComponent(symbol)+"&interval="+encodeURIComponent(interval)+"&limit=250";
-    const response=await fetch(url,{cache:"no-store",headers:{Accept:"application/json"}});
+    // Klines themselves are the authoritative per-symbol check. Do not block analysis
+    // behind the much larger exchangeInfo catalogue request on first page load.
+    const url=NEXFX_BINANCE_BASE+"/klines?symbol="+encodeURIComponent(symbol)+"&interval="+encodeURIComponent(interval)+"&limit=1000";
+    const response=await fetchNexfxWithTimeout(url,{cache:"no-store",headers:{Accept:"application/json"}},12000);
     if(!response.ok)throw new Error("Binance HTTP "+response.status);
     const raw=await response.json();
     if(!Array.isArray(raw))throw new Error("Binance returned an unexpected candle response.");
@@ -2764,16 +2981,18 @@ async function fetchSelectedMarketCandles(asset, marketName, interval){
     ].every(Number.isFinite)&&c.time>0&&c.open>0&&c.high>0&&c.low>0&&c.close>0&&c.volume>=0&&c.high>=Math.max(c.open,c.close,c.low)&&c.low<=Math.min(c.open,c.close,c.high));
     candles.sort((a,b)=>a.time-b.time);
     const uniqueCandles=candles.filter((c,i)=>i===0||c.time!==candles[i-1].time);
-    if(uniqueCandles.length<60)throw new Error(at("insufficient"));
+    // 34 completed candles are sufficient to seed EMA26 and its EMA9 signal,
+    // RSI14 and ATR14. EMA50 is reported only when 50 candles exist.
+    if(uniqueCandles.length<34)throw new Error(at("insufficient")+" (34 completed candles are required; received "+uniqueCandles.length+").");
     return {symbol,interval,candles:uniqueCandles,source:"Binance Spot API",asOf:new Date(uniqueCandles[uniqueCandles.length-1].time).toISOString()};
   }
   if(!NEXFX_API_BASE)throw new Error(at("serverNeeded"));
   const url=NEXFX_API_BASE+"/api/market/klines?market="+encodeURIComponent(marketName)+"&symbol="+encodeURIComponent(tvSymbol)+"&interval="+encodeURIComponent(interval)+"&limit=250";
-  const response=await fetch(url,{cache:"no-store",headers:{Accept:"application/json"}});
+  const response=await fetchNexfxWithTimeout(url,{cache:"no-store",headers:{Accept:"application/json"}},12000);
   if(!response.ok){let message="Market data HTTP "+response.status;try{const body=await response.json();if(body.error)message=body.error;}catch(_){}throw new Error(message);}
   const data=await response.json();
   const candles=(data.candles||[]).filter(c=>Number(c.time)<Date.now()).map(c=>({time:Number(c.time),open:Number(c.open),high:Number(c.high),low:Number(c.low),close:Number(c.close),volume:Number(c.volume||0)}));
-  if(candles.length<60)throw new Error(at("insufficient"));
+  if(candles.length<34)throw new Error(at("insufficient")+" (34 completed candles are required; received "+candles.length+").");
   return {symbol:data.provider_symbol||tvSymbol,interval,candles,source:data.source||"Market data provider"};
 }
 function clearAnalysisOutput(message=""){
@@ -2795,6 +3014,7 @@ function paintAnalysisDirection(direction){
 }
 async function runMarketAnalysis(mode){
   const runToken=++analysisRunToken;
+  lastAnalysis=null;
   const asset=[...selected], marketName=market, interval=intervalForSelectedTimeframe();
   const status=$("resultText"); status.textContent=at("loading");
   $("resultTitle").textContent=at("analyzing");
@@ -2802,31 +3022,46 @@ async function runMarketAnalysis(mode){
   $("outMode").textContent=mode==="auto"?(at("automatic")):(at("technical"));
   $("outPair").textContent=asset[0];
   $("outEntry").textContent="—"; $("outStop").textContent="—"; $("outTP1").textContent="—"; $("outTP2").textContent="—";
+  saveState();
   try{
     if(marketName==="crypto"){
-      await syncCryptoAssetsWithBinance();
-      if(!binanceSpotSymbols.has(cryptoPairFromTradingView(asset[2])))
-        throw new Error("تم نقل هذا الزوج إلى الأرشيف لأنه غير متاح حالياً للتداول الفوري على Binance.");
+      // Refresh the full symbol catalogue in the background. The selected pair's
+      // real Binance kline response below is the immediate validation for analysis.
+      syncCryptoAssetsWithBinance().catch(error=>console.warn("Binance symbol catalogue refresh:",error));
     }
     const {symbol,interval:usedInterval,candles,source}=await fetchSelectedMarketCandles(asset,marketName,interval);
     if(runToken!==analysisRunToken||asset[2]!==selected[2]||marketName!==market||usedInterval!==intervalForSelectedTimeframe())return;
     const closes=candles.map(c=>c.close),last=candles[candles.length-1];
-    const ema9=ema(closes,9),ema21=ema(closes,21),ema50=ema(closes,50),rsi14=rsi(closes,14);
-    const macdLine=ema(closes,12)-ema(closes,26);
-    const macdSeries=[]; for(let i=25;i<closes.length;i++){const part=closes.slice(0,i+1);macdSeries.push(ema(part,12)-ema(part,26));}
+    const ema9=ema(closes,9),ema21=ema(closes,21);
+    const ema50=closes.length>=50?ema(closes,50):null;
+    const sma20=sma(closes,20),sma50=sma(closes,50);
+    const priceLevels=findRecentPriceLevels(candles,80);
+    const rsi14=rsi(closes,14);
+    const ema12Series=emaSeries(closes,12),ema26Series=emaSeries(closes,26);
+    const macdSeries=[];
+    // Align the seeded EMA series by candle index before deriving MACD signal.
+    for(let i=0;i<ema26Series.length;i++)macdSeries.push(ema12Series[i+14]-ema26Series[i]);
+    const macdLine=macdSeries[macdSeries.length-1];
     const signal=ema(macdSeries,9),atr=calculateAtr(candles,14);
-    if([ema9,ema21,ema50,rsi14,macdLine,signal,atr].some(v=>!Number.isFinite(v))||atr<=0)throw new Error("Indicator calculation incomplete");
-    const bullish=ema9>ema21&&macdLine>signal&&rsi14>=50&&rsi14<70;
-    const bearish=ema9<ema21&&macdLine<signal&&rsi14<=50&&rsi14>30;
+    if([ema9,ema21,rsi14,macdLine,signal,atr].some(v=>!Number.isFinite(v))||atr<=0)throw new Error("Indicator calculation incomplete");
+    // Separate market bias from an actionable entry decision.
+    const bullishBias=ema9>ema21&&macdLine>signal;
+    const bearishBias=ema9<ema21&&macdLine<signal;
+    const bullish=bullishBias&&rsi14>=50&&rsi14<70;
+    const bearish=bearishBias&&rsi14<=50&&rsi14>30;
     const direction=bullish?"buy":bearish?"sell":"neutral";
+    const marketBias=bullishBias?"bull":bearishBias?"bear":"neutral";
     const entry=last.close,distance=atr*1.5;
     const stop=direction==="buy"?entry-distance:direction==="sell"?entry+distance:null;
     const tp1=direction==="buy"?entry+distance:direction==="sell"?entry-distance:null;
     const tp2=direction==="buy"?entry+distance*2:direction==="sell"?entry-distance*2:null;
     const fmt=n=>formatMarketPrice(n);
-    const title=direction==="buy"?(at("bull")):direction==="sell"?(at("bear")):(at("neutral"));
+    const title=direction==="buy"?adt("buyAction"):direction==="sell"?adt("sellAction"):adt("waitAction");
+    const biasText=marketBias==="bull"?adt("bullBias"):marketBias==="bear"?adt("bearBias"):adt("neutralBias");
     $("resultTitle").textContent=title;
-    $("resultText").textContent="";
+    // Keep the visible report fast to scan: the decision is in the colored title;
+    // the description contains only market direction and actionable context.
+    $("resultText").textContent=biasText;
     paintAnalysisDirection(direction);
     $("outMode").textContent=mode==="auto"?(at("automatic")):(at("technical"));
     $("outPair").textContent=asset[0];
@@ -2834,7 +3069,17 @@ async function runMarketAnalysis(mode){
     $("outStop").textContent=stop===null?"—":fmt(stop);
     $("outTP1").textContent=tp1===null?"—":fmt(tp1);
     $("outTP2").textContent=tp2===null?"—":fmt(tp2);
-    lastAnalysis={title,text:"",mode:mode,pair:asset[0],entry:direction==="neutral"?"—":fmt(entry),stop:stop===null?"—":fmt(stop),tp1:tp1===null?"—":fmt(tp1),tp2:tp2===null?"—":fmt(tp2),direction,indicators:{ema9,ema21,ema50,rsi14,macd:macdLine,macdSignal:signal,atr},source,timeframe:usedInterval,asOf:new Date(last.time).toISOString()};
+    const analysisAsOf=new Date(last.time).toISOString();
+    const analysisAsOfLocal=new Date(last.time).toLocaleString((NEXFX_DATE_LOCALES[language]||"en-GB")+"-u-nu-latn",{dateStyle:"medium",timeStyle:"short",numberingSystem:"latn"});
+    const selectedTimeframeLabel=$("timeframe").selectedOptions[0]?.textContent||usedInterval;
+    const riskDistance=stop===null?null:Math.abs(entry-stop);
+    const rr1=stop===null?null:(Math.abs(tp1-entry)/riskDistance);
+    const rr2=stop===null?null:(Math.abs(tp2-entry)/riskDistance);
+    const levelLine=`${reportText("support")}: ${priceLevels.support===null?reportText("unavailable"):fmt(priceLevels.support)} | ${reportText("resistance")}: ${priceLevels.resistance===null?reportText("unavailable"):fmt(priceLevels.resistance)}`;
+    const rrLine=`${reportText("rewardRisk")}: TP1 ${rr1===null?"—":rr1.toFixed(2)}R | TP2 ${rr2===null?"—":rr2.toFixed(2)}R`;
+    const analysisMeta=`${reportText("source")}: ${source} | ${reportText("timeframe")}: ${selectedTimeframeLabel} | ${reportText("updated")}: ${analysisAsOfLocal}`;
+    status.textContent=[biasText,levelLine,rrLine,analysisMeta].join("\n");
+    lastAnalysis={title,text:status.textContent,mode:mode,pair:asset[0],entry:direction==="neutral"?"—":fmt(entry),stop:stop===null?"—":fmt(stop),tp1:tp1===null?"—":fmt(tp1),tp2:tp2===null?"—":fmt(tp2),direction,marketBias,indicators:{ema9,ema21,ema50,sma20,sma50,rsi14,macd:macdLine,macdSignal:signal,atr},levels:priceLevels,rewardRiskTP1:rr1,rewardRiskTP2:rr2,source,timeframe:usedInterval,asOf:analysisAsOf,candleClose:fmt(last.close)};
     saveState();
   }catch(error){
     if(runToken!==analysisRunToken)return;
@@ -2861,6 +3106,7 @@ function loadUserScopedState(){
   restoreForm(savedState);
   const savedTimeframe=typeof savedState.timeframe==="string"?savedState.timeframe:"1h";
   $("timeframe").value=binanceIntervals[savedTimeframe]?savedTimeframe:"1h";
+  updateTimeframeButtons();
   updateDocumentDirection();
   translateInterface();
   document.querySelectorAll(".category").forEach(btn=>{
@@ -3148,6 +3394,25 @@ const analysisI18n={
  id:{technicalTitle:"Analisis teknikal",technicalDesc:"Analisis berdasarkan data pasar dan indikator teknikal saat sumber data terhubung",manualTitle:"Analisis manual",manualDesc:"Masukkan level masuk, stop-loss, dan target secara manual",autoTitle:"Analisis otomatis",autoDesc:"Siapkan analisis otomatis setelah data pasar dan mesin AI terhubung",loading:"Mengambil data pasar dan menghitung indikator…",analyzing:"Menganalisis aset yang dipilih",technical:"Teknis",automatic:"Otomatis",bull:"Bias teknikal bullish",bear:"Bias teknikal bearish",neutral:"Tidak ada sinyal terkonfirmasi",failed:"Analisis tidak tersedia",noData:"Tidak dapat mengambil data pasar yang tepercaya.",levels:"Periksa urutan: BELI, SL < masuk < TP1 < TP2; JUAL, SL > masuk > TP1 > TP2.",notRun:"Analisis belum dijalankan",binanceLive:"Data Binance langsung · Diperbarui ",binanceError:"Data Binance sementara tidak tersedia.",unsupported:"Kerangka waktu tidak didukung.",invalidSymbol:"Simbol kripto tidak valid.",insufficient:"Data candle tidak mencukupi.",serverNeeded:"Deploy server.py dan atur URL server untuk mengaktifkan analisis forex, logam, dan saham.",loadingPrice:"Memuat",saveError:"Tidak dapat menyimpan di perangkat ini."},
  nl:{technicalTitle:"Technische analyse",technicalDesc:"Analyse op basis van marktgegevens en technische indicatoren zodra een gegevensbron is gekoppeld",manualTitle:"Handmatige analyse",manualDesc:"Voer instap-, stop-loss- en koersdoelniveaus handmatig in",autoTitle:"Automatische analyse",autoDesc:"Bereid automatische analyse voor nadat marktgegevens en de AI-engine zijn gekoppeld",loading:"Marktgegevens ophalen en indicatoren berekenen…",analyzing:"Geselecteerd activum analyseren",technical:"Technisch",automatic:"Automatisch",bull:"Technisch bullish beeld",bear:"Technisch bearish beeld",neutral:"Geen bevestigd signaal",failed:"Analyse niet beschikbaar",noData:"Betrouwbare marktgegevens konden niet worden opgehaald.",levels:"Controleer de volgorde: KOOP, SL < instap < TP1 < TP2; VERKOOP, SL > instap > TP1 > TP2.",notRun:"Analyse niet uitgevoerd",binanceLive:"Live Binance-gegevens · Bijgewerkt ",binanceError:"Binance-gegevens zijn tijdelijk niet beschikbaar.",unsupported:"Niet-ondersteund tijdsbestek.",invalidSymbol:"Ongeldig cryptosymbool.",insufficient:"Onvoldoende candlegegevens.",serverNeeded:"Implementeer server.py en stel de server-URL in om forex-, metaal- en aandelenanalyse in te schakelen.",loadingPrice:"Laden",saveError:"Opslaan op dit apparaat is mislukt."}
 };
+const analysisDecisionI18n={
+ ar:{buyAction:"شراء محتمل · BUY",sellAction:"بيع محتمل · SELL",waitAction:"انتظار · WAIT",bullBias:"اتجاه السوق: صاعد",bearBias:"اتجاه السوق: هابط",neutralBias:"اتجاه السوق: محايد",buyReason:"اكتملت شروط الشراء وفق المؤشرات الفنية المستخدمة. راجع مستويات الدخول ووقف الخسارة قبل اتخاذ القرار.",sellReason:"اكتملت شروط البيع وفق المؤشرات الفنية المستخدمة. راجع مستويات الدخول ووقف الخسارة قبل اتخاذ القرار.",bullWait:"الاتجاه يميل للصعود، لكن شروط الدخول للشراء غير مكتملة حالياً. الأفضل الانتظار.",bearWait:"الاتجاه يميل للهبوط، لكن شروط الدخول للبيع غير مكتملة حالياً. الأفضل الانتظار.",neutralWait:"المؤشرات غير متوافقة على اتجاه واضح؛ لا توجد فرصة دخول مؤكدة حالياً. الأفضل الانتظار.",manualPlan:"خطة يدوية حسب المستويات التي أدخلتها؛ هذه ليست إشارة آلية."},
+ en:{buyAction:"Potential BUY",sellAction:"Potential SELL",waitAction:"WAIT",bullBias:"Market bias: Bullish",bearBias:"Market bias: Bearish",neutralBias:"Market bias: Neutral",buyReason:"The configured technical conditions for a buy signal are met. Review entry and stop-loss levels before acting.",sellReason:"The configured technical conditions for a sell signal are met. Review entry and stop-loss levels before acting.",bullWait:"The market bias is bullish, but the buy-entry conditions are not fully met. Waiting is preferred.",bearWait:"The market bias is bearish, but the sell-entry conditions are not fully met. Waiting is preferred.",neutralWait:"The indicators do not agree on a clear direction. No confirmed entry opportunity is present; waiting is preferred.",manualPlan:"Manual plan based on the levels you entered; this is not an automated signal."},
+ fr:{buyAction:"ACHAT potentiel",sellAction:"VENTE potentielle",waitAction:"ATTENTE",bullBias:"Tendance du marché : haussière",bearBias:"Tendance du marché : baissière",neutralBias:"Tendance du marché : neutre",buyReason:"Les conditions techniques définies pour un achat sont réunies. Vérifiez l'entrée et le stop-loss avant d'agir.",sellReason:"Les conditions techniques définies pour une vente sont réunies. Vérifiez l'entrée et le stop-loss avant d'agir.",bullWait:"La tendance est haussière, mais les conditions d'entrée à l'achat ne sont pas toutes réunies. Il est préférable d'attendre.",bearWait:"La tendance est baissière, mais les conditions d'entrée à la vente ne sont pas toutes réunies. Il est préférable d'attendre.",neutralWait:"Les indicateurs ne confirment pas de direction claire. Aucune entrée confirmée ; mieux vaut attendre.",manualPlan:"Plan manuel basé sur les niveaux saisis ; ce n'est pas un signal automatisé."},
+ tr:{buyAction:"Olası ALIŞ",sellAction:"Olası SATIŞ",waitAction:"BEKLE",bullBias:"Piyasa yönü: Yükseliş",bearBias:"Piyasa yönü: Düşüş",neutralBias:"Piyasa yönü: Yatay",buyReason:"Alış için tanımlanan teknik koşullar oluştu. İşlemden önce giriş ve zarar durdurma seviyelerini kontrol edin.",sellReason:"Satış için tanımlanan teknik koşullar oluştu. İşlemden önce giriş ve zarar durdurma seviyelerini kontrol edin.",bullWait:"Piyasa yükseliş eğiliminde ancak alış giriş koşulları henüz tamamlanmadı. Beklemek daha uygundur.",bearWait:"Piyasa düşüş eğiliminde ancak satış giriş koşulları henüz tamamlanmadı. Beklemek daha uygundur.",neutralWait:"Göstergeler net bir yönde uyuşmuyor. Doğrulanmış giriş fırsatı yok; beklemek daha uygundur.",manualPlan:"Girdiğiniz seviyelere dayalı manuel plan; otomatik sinyal değildir."},
+ de:{buyAction:"Möglicher KAUF",sellAction:"Möglicher VERKAUF",waitAction:"WARTEN",bullBias:"Markttendenz: Aufwärts",bearBias:"Markttendenz: Abwärts",neutralBias:"Markttendenz: Neutral",buyReason:"Die festgelegten technischen Kaufbedingungen sind erfüllt. Einstieg und Stop-Loss vor einer Entscheidung prüfen.",sellReason:"Die festgelegten technischen Verkaufsbedingungen sind erfüllt. Einstieg und Stop-Loss vor einer Entscheidung prüfen.",bullWait:"Die Tendenz ist aufwärtsgerichtet, aber die Kauf-Einstiegsbedingungen sind noch nicht vollständig erfüllt. Warten ist vorzuziehen.",bearWait:"Die Tendenz ist abwärtsgerichtet, aber die Verkaufs-Einstiegsbedingungen sind noch nicht vollständig erfüllt. Warten ist vorzuziehen.",neutralWait:"Die Indikatoren zeigen keine klare gemeinsame Richtung. Kein bestätigter Einstieg; besser abwarten.",manualPlan:"Manueller Plan anhand Ihrer Eingaben; kein automatisches Signal."},
+ es:{buyAction:"COMPRA potencial",sellAction:"VENTA potencial",waitAction:"ESPERAR",bullBias:"Tendencia del mercado: alcista",bearBias:"Tendencia del mercado: bajista",neutralBias:"Tendencia del mercado: neutral",buyReason:"Se cumplen las condiciones técnicas definidas para compra. Revisa la entrada y el stop-loss antes de actuar.",sellReason:"Se cumplen las condiciones técnicas definidas para venta. Revisa la entrada y el stop-loss antes de actuar.",bullWait:"La tendencia es alcista, pero aún no se cumplen todas las condiciones de entrada para comprar. Es preferible esperar.",bearWait:"La tendencia es bajista, pero aún no se cumplen todas las condiciones de entrada para vender. Es preferible esperar.",neutralWait:"Los indicadores no coinciden en una dirección clara. No hay una entrada confirmada; es preferible esperar.",manualPlan:"Plan manual basado en los niveles introducidos; no es una señal automática."},
+ pt:{buyAction:"COMPRA potencial",sellAction:"VENDA potencial",waitAction:"AGUARDAR",bullBias:"Tendência do mercado: alta",bearBias:"Tendência do mercado: baixa",neutralBias:"Tendência do mercado: neutra",buyReason:"As condições técnicas definidas para compra foram cumpridas. Verifique a entrada e o stop-loss antes de agir.",sellReason:"As condições técnicas definidas para venda foram cumpridas. Verifique a entrada e o stop-loss antes de agir.",bullWait:"A tendência é de alta, mas as condições de entrada para compra ainda não foram totalmente cumpridas. É melhor aguardar.",bearWait:"A tendência é de baixa, mas as condições de entrada para venda ainda não foram totalmente cumpridas. É melhor aguardar.",neutralWait:"Os indicadores não apontam para uma direção clara. Não há entrada confirmada; é melhor aguardar.",manualPlan:"Plano manual baseado nos níveis inseridos; não é um sinal automático."},
+ it:{buyAction:"ACQUISTO potenziale",sellAction:"VENDITA potenziale",waitAction:"ATTENDI",bullBias:"Tendenza del mercato: rialzista",bearBias:"Tendenza del mercato: ribassista",neutralBias:"Tendenza del mercato: neutrale",buyReason:"Le condizioni tecniche definite per l'acquisto sono soddisfatte. Controlla ingresso e stop-loss prima di agire.",sellReason:"Le condizioni tecniche definite per la vendita sono soddisfatte. Controlla ingresso e stop-loss prima di agire.",bullWait:"La tendenza è rialzista, ma le condizioni d'ingresso per l'acquisto non sono complete. Meglio attendere.",bearWait:"La tendenza è ribassista, ma le condizioni d'ingresso per la vendita non sono complete. Meglio attendere.",neutralWait:"Gli indicatori non concordano su una direzione chiara. Nessun ingresso confermato; meglio attendere.",manualPlan:"Piano manuale basato sui livelli inseriti; non è un segnale automatico."},
+ ru:{buyAction:"Возможная ПОКУПКА",sellAction:"Возможная ПРОДАЖА",waitAction:"ОЖИДАНИЕ",bullBias:"Направление рынка: восходящее",bearBias:"Направление рынка: нисходящее",neutralBias:"Направление рынка: нейтральное",buyReason:"Выполнены заданные технические условия для покупки. Перед решением проверьте вход и стоп-лосс.",sellReason:"Выполнены заданные технические условия для продажи. Перед решением проверьте вход и стоп-лосс.",bullWait:"Рынок склонен к росту, но условия входа в покупку выполнены не полностью. Лучше подождать.",bearWait:"Рынок склонен к снижению, но условия входа в продажу выполнены не полностью. Лучше подождать.",neutralWait:"Индикаторы не показывают согласованного направления. Подтверждённого входа нет; лучше подождать.",manualPlan:"Ручной план по введённым вами уровням; это не автоматический сигнал."},
+ zh:{buyAction:"潜在买入",sellAction:"潜在卖出",waitAction:"观望",bullBias:"市场方向：看涨",bearBias:"市场方向：看跌",neutralBias:"市场方向：中性",buyReason:"已满足设定的技术买入条件。采取行动前请检查入场价和止损价。",sellReason:"已满足设定的技术卖出条件。采取行动前请检查入场价和止损价。",bullWait:"市场倾向看涨，但买入入场条件尚未全部满足。建议等待。",bearWait:"市场倾向看跌，但卖出入场条件尚未全部满足。建议等待。",neutralWait:"指标未形成一致方向，目前没有确认的入场机会。建议等待。",manualPlan:"根据您输入的价位形成的手动计划；不是自动信号。"},
+ ja:{buyAction:"買い候補",sellAction:"売り候補",waitAction:"様子見",bullBias:"市場方向：上昇",bearBias:"市場方向：下降",neutralBias:"市場方向：中立",buyReason:"設定された買い条件を満たしています。実行前にエントリーと損切りを確認してください。",sellReason:"設定された売り条件を満たしています。実行前にエントリーと損切りを確認してください。",bullWait:"上昇傾向ですが、買いのエントリー条件はまだ揃っていません。様子見が適切です。",bearWait:"下降傾向ですが、売りのエントリー条件はまだ揃っていません。様子見が適切です。",neutralWait:"指標の方向が一致していません。確定したエントリー機会はなく、様子見が適切です。",manualPlan:"入力された価格に基づく手動プランであり、自動シグナルではありません。"},
+ ko:{buyAction:"매수 가능 신호",sellAction:"매도 가능 신호",waitAction:"대기",bullBias:"시장 방향: 상승",bearBias:"시장 방향: 하락",neutralBias:"시장 방향: 중립",buyReason:"설정된 기술적 매수 조건이 충족되었습니다. 실행 전에 진입가와 손절가를 확인하세요.",sellReason:"설정된 기술적 매도 조건이 충족되었습니다. 실행 전에 진입가와 손절가를 확인하세요.",bullWait:"상승 흐름이지만 매수 진입 조건이 아직 모두 충족되지 않았습니다. 대기를 권장합니다.",bearWait:"하락 흐름이지만 매도 진입 조건이 아직 모두 충족되지 않았습니다. 대기를 권장합니다.",neutralWait:"지표가 뚜렷한 방향으로 일치하지 않습니다. 확인된 진입 기회가 없어 대기를 권장합니다.",manualPlan:"입력한 가격 수준에 따른 수동 계획이며 자동 신호가 아닙니다."},
+ hi:{buyAction:"संभावित खरीद",sellAction:"संभावित बिक्री",waitAction:"प्रतीक्षा करें",bullBias:"बाज़ार दिशा: तेज़ी",bearBias:"बाज़ार दिशा: मंदी",neutralBias:"बाज़ार दिशा: तटस्थ",buyReason:"खरीद के लिए निर्धारित तकनीकी शर्तें पूरी हैं। कार्रवाई से पहले एंट्री और स्टॉप-लॉस जाँचें।",sellReason:"बिक्री के लिए निर्धारित तकनीकी शर्तें पूरी हैं। कार्रवाई से पहले एंट्री और स्टॉप-लॉस जाँचें।",bullWait:"बाज़ार तेज़ी की ओर है, लेकिन खरीद की एंट्री शर्तें पूरी नहीं हैं। प्रतीक्षा करना बेहतर है।",bearWait:"बाज़ार मंदी की ओर है, लेकिन बिक्री की एंट्री शर्तें पूरी नहीं हैं। प्रतीक्षा करना बेहतर है।",neutralWait:"संकेतक किसी स्पष्ट दिशा पर सहमत नहीं हैं। पुष्टि किया हुआ प्रवेश अवसर नहीं है; प्रतीक्षा करें।",manualPlan:"आपके दर्ज स्तरों पर आधारित मैन्युअल योजना; यह स्वचालित संकेत नहीं है।"},
+ id:{buyAction:"Potensi BELI",sellAction:"Potensi JUAL",waitAction:"TUNGGU",bullBias:"Arah pasar: Bullish",bearBias:"Arah pasar: Bearish",neutralBias:"Arah pasar: Netral",buyReason:"Kondisi teknikal yang ditetapkan untuk beli telah terpenuhi. Periksa entry dan stop-loss sebelum bertindak.",sellReason:"Kondisi teknikal yang ditetapkan untuk jual telah terpenuhi. Periksa entry dan stop-loss sebelum bertindak.",bullWait:"Arah pasar cenderung naik, tetapi syarat entry beli belum lengkap. Sebaiknya tunggu.",bearWait:"Arah pasar cenderung turun, tetapi syarat entry jual belum lengkap. Sebaiknya tunggu.",neutralWait:"Indikator belum sepakat pada arah yang jelas. Belum ada peluang masuk terkonfirmasi; sebaiknya tunggu.",manualPlan:"Rencana manual berdasarkan level yang Anda masukkan; bukan sinyal otomatis."},
+ nl:{buyAction:"Mogelijke KOOP",sellAction:"Mogelijke VERKOOP",waitAction:"WACHTEN",bullBias:"Marktrichting: stijgend",bearBias:"Marktrichting: dalend",neutralBias:"Marktrichting: neutraal",buyReason:"De ingestelde technische voorwaarden voor kopen zijn vervuld. Controleer instap en stop-loss voordat u handelt.",sellReason:"De ingestelde technische voorwaarden voor verkopen zijn vervuld. Controleer instap en stop-loss voordat u handelt.",bullWait:"De markt neigt omhoog, maar de instapvoorwaarden voor kopen zijn nog niet volledig vervuld. Wachten heeft de voorkeur.",bearWait:"De markt neigt omlaag, maar de instapvoorwaarden voor verkopen zijn nog niet volledig vervuld. Wachten heeft de voorkeur.",neutralWait:"De indicatoren geven geen duidelijke gezamenlijke richting. Er is geen bevestigde instap; wachten heeft de voorkeur.",manualPlan:"Handmatig plan op basis van uw ingevoerde niveaus; geen automatisch signaal."}
+};
+function adt(key){const words=analysisDecisionI18n[language]||analysisDecisionI18n.en;return words[key]||analysisDecisionI18n.en[key]||key;}
+
 function at(key){const words=analysisI18n[language]||analysisI18n.en;return words[key]||analysisI18n.en[key]||key;}
 function translateAnalysisCards(){document.querySelectorAll("[data-analysis-i18n]").forEach(el=>{el.textContent=at(el.dataset.analysisI18n);});}
 
@@ -3164,6 +3429,10 @@ function translateInterface(){
   updateLanguageButton();
   updateTradeDirectionLabels();
   updateAccountAndChartLabels();
+  const timeframeStatus=$("chartTimeframeStatus");if(timeframeStatus&&timeframeStatus.dataset.defaultHint!=="false")timeframeStatus.textContent=chartText("timeframe");
+  const cryptoStatus=$("cryptoSyncStatus");if(cryptoStatus&&!binanceSpotReady)cryptoStatus.textContent=chartText("cryptoChecking");
+  const liveState=$("chartLiveState");if(liveState&&!nexfxCryptoSocket)liveState.textContent=chartText("liveConnecting");
+  const timeframeSelect=$("timeframe");if(timeframeSelect)timeframeSelect.setAttribute("aria-label",t("timeframe"));
   renderLanguageOptions();
 }
 
@@ -3203,9 +3472,115 @@ function toggleSectionInfo(panelId,button){
   button.setAttribute("aria-expanded",String(willOpen));
 }
 
+
+const NEXFX_DATE_LOCALES={ar:"ar",en:"en-GB",tr:"tr",fr:"fr",de:"de",es:"es",pt:"pt",it:"it",ru:"ru",zh:"zh-CN",ja:"ja",ko:"ko",hi:"hi",id:"id",nl:"nl"};
+let nexfxCalendarView=new Date();
+let nexfxSelectedDate=null;
+function nexfxDateLocale(){return NEXFX_DATE_LOCALES[language]||"en-GB"}
+function nexfxLatin(value){return String(value).replace(/[٠-٩۰-۹]/g,ch=>"٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹".indexOf(ch)>=0?String("٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹".indexOf(ch)%10):ch)}
+function nexfxDateParts(date){return [date.getFullYear(),String(date.getMonth()+1).padStart(2,"0"),String(date.getDate()).padStart(2,"0")]}
+function nexfxNormalizeTime(value){
+  const latin=nexfxLatin(value).replace(/[^0-9:]/g,"").slice(0,5);
+  const digits=latin.replace(/:/g,"").slice(0,4);
+  return digits.length>2?digits.slice(0,2)+":"+digits.slice(2):digits;
+}
+function nexfxParseManualDate(value){
+  const v=nexfxLatin(value).trim();
+  const m=v.match(/^(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2})$/);
+  if(!m)return null;
+  const [y,mo,d,hh,mm]=m.slice(1).map(Number);
+  const date=new Date(y,mo-1,d);
+  if(date.getFullYear()!==y||date.getMonth()!==mo-1||date.getDate()!==d||hh>23||mm>59)return null;
+  return {date,time:`${String(hh).padStart(2,"0")}:${String(mm).padStart(2,"0")}`};
+}
+function nexfxDateTimeIsFuture(date,time){
+  if(!(date instanceof Date)||!Number.isFinite(date.getTime()))return true;
+  const parts=String(time||"12:00").split(":").map(Number);
+  if(parts.length!==2||!Number.isInteger(parts[0])||!Number.isInteger(parts[1])||parts[0]>23||parts[1]>59)return true;
+  return new Date(date.getFullYear(),date.getMonth(),date.getDate(),parts[0],parts[1],0,0).getTime()>Date.now();
+}
+function nexfxFutureDateMessage(){
+  return ({ar:"لا يمكن اختيار تاريخ أو وقت في المستقبل.",en:"A future date or time cannot be selected.",tr:"Gelecekteki bir tarih veya saat seçilemez.",fr:"Une date ou une heure future ne peut pas être sélectionnée.",de:"Ein zukünftiges Datum oder eine zukünftige Uhrzeit ist nicht zulässig.",es:"No se puede seleccionar una fecha u hora futura.",pt:"Não é possível selecionar uma data ou hora futura.",it:"Non è possibile selezionare una data o un'ora futura.",ru:"Нельзя выбрать будущую дату или время.",zh:"不能选择未来的日期或时间。",ja:"未来の日付や時刻は選択できません。",ko:"미래 날짜 또는 시간은 선택할 수 없습니다.",hi:"भविष्य की तारीख या समय नहीं चुना जा सकता।",id:"Tanggal atau waktu di masa depan tidak dapat dipilih.",nl:"Een toekomstige datum of tijd kan niet worden geselecteerd."}[language]||"A future date or time cannot be selected.");
+}
+function nexfxUpdateIssuedValue(){
+  const hidden=$("signalIssuedAt"),display=$("signalIssuedAtDisplay");
+  if(!hidden||!display||!nexfxSelectedDate)return;
+  const [y,m,d]=nexfxDateParts(nexfxSelectedDate),time=nexfxNormalizeTime($("signalCalendarTime").value)||"12:00";
+  hidden.value=`${y}-${m}-${d}T${time}`;
+  display.value=`${y}-${m}-${d} ${time}`;
+}
+function nexfxRenderCalendar(){
+  const popup=$("signalCalendarPopup");if(!popup)return;
+  const locale=nexfxDateLocale(),year=nexfxCalendarView.getFullYear(),month=nexfxCalendarView.getMonth();
+  const fmtOpts={calendar:"gregory",numberingSystem:"latn"};
+  $("signalCalendarMonth").textContent=new Intl.DateTimeFormat(locale,{month:"long",year:"numeric",...fmtOpts}).format(new Date(year,month,1));
+  const week=$("signalCalendarWeek"),grid=$("signalCalendarGrid");week.innerHTML="";grid.innerHTML="";
+  const mondayFirst=[1,2,3,4,5,6,0];
+  mondayFirst.forEach(day=>{
+    const d=new Date(2024,0,day-1);
+    const span=document.createElement("span");
+    span.textContent=new Intl.DateTimeFormat(locale,{weekday:"short",...fmtOpts}).format(d);
+    week.appendChild(span);
+  });
+  const first=new Date(year,month,1),offset=(first.getDay()+6)%7,days=new Date(year,month+1,0).getDate();
+  for(let i=0;i<offset;i++){const blank=document.createElement("span");grid.appendChild(blank)}
+  const today=new Date();
+  for(let day=1;day<=days;day++){
+    const btn=document.createElement("button");btn.type="button";btn.className="signal-calendar-day";btn.textContent=String(day);
+    if(nexfxSelectedDate&&nexfxSelectedDate.getFullYear()===year&&nexfxSelectedDate.getMonth()===month&&nexfxSelectedDate.getDate()===day)btn.classList.add("selected");
+    if(today.getFullYear()===year&&today.getMonth()===month&&today.getDate()===day)btn.classList.add("today");
+    const chosen=new Date(year,month,day);
+    if(chosen.getTime()>new Date(today.getFullYear(),today.getMonth(),today.getDate()).getTime())btn.disabled=true;
+    btn.addEventListener("click",()=>{
+      nexfxSelectedDate=chosen;
+      $("signalCalendarTime").value=$("signalCalendarTime").value||"12:00";
+      nexfxUpdateIssuedValue();nexfxRenderCalendar();
+    });
+    grid.appendChild(btn);
+  }
+  const ar=language==="ar";
+  $("signalCalendarTimeLabel").textContent=ar?"الوقت":new Intl.DateTimeFormat(locale,{hour:"numeric"}).formatToParts(new Date()).find(x=>x.type==="hour")?.value==="hour"?"Time":"Time";
+  $("signalCalendarApply").textContent=ar?"تأكيد":({tr:"Uygula",fr:"Valider",de:"Übernehmen",es:"Aplicar",pt:"Aplicar",it:"Applica",ru:"Применить",zh:"确定",ja:"適用",ko:"적용",hi:"लागू करें",id:"Terapkan",nl:"Toepassen"}[language]||"Apply");
+  $("signalCalendarPrev").setAttribute("aria-label",ar?"الشهر السابق":"Previous month");
+  $("signalCalendarNext").setAttribute("aria-label",ar?"الشهر التالي":"Next month");
+}
+function nexfxToggleCalendar(force){
+  const popup=$("signalCalendarPopup"),display=$("signalIssuedAtDisplay"),open=force===undefined?!popup.classList.contains("open"):force;
+  popup.classList.toggle("open",open);display.setAttribute("aria-expanded",String(open));
+  if(open){if(!nexfxSelectedDate){const now=new Date();nexfxSelectedDate=new Date(now.getFullYear(),now.getMonth(),now.getDate());$("signalCalendarTime").value="12:00";nexfxUpdateIssuedValue()}nexfxCalendarView=new Date(nexfxSelectedDate.getFullYear(),nexfxSelectedDate.getMonth(),1);nexfxRenderCalendar()}
+}
+function nexfxInitSignalDatePicker(){
+  const trigger=$("signalCalendarTrigger");if(!trigger)return;
+  const calendarPopup=$("signalCalendarPopup");
+  // Keep the popup as a direct child of body so fixed centering is relative to the real viewport,
+  // not to a transformed/overflowing form or dashboard container.
+  if(calendarPopup && calendarPopup.parentElement!==document.body) document.body.appendChild(calendarPopup);
+  $("signalIssuedAtDisplay").placeholder="YYYY-MM-DD HH:MM";
+  if(!trigger.dataset.ready){
+    trigger.dataset.ready="1";
+    $("signalIssuedAtDisplay").addEventListener("click",()=>nexfxToggleCalendar(true));
+    trigger.addEventListener("click",()=>nexfxToggleCalendar());
+    $("signalCalendarPrev").addEventListener("click",()=>{nexfxCalendarView.setMonth(nexfxCalendarView.getMonth()-1);nexfxRenderCalendar()});
+    $("signalCalendarNext").addEventListener("click",()=>{const next=new Date(nexfxCalendarView.getFullYear(),nexfxCalendarView.getMonth()+1,1);if(next<=new Date(new Date().getFullYear(),new Date().getMonth(),1)){nexfxCalendarView=next;nexfxRenderCalendar()}});
+    $("signalCalendarSymbols").addEventListener("click",e=>{const button=e.target.closest("[data-calendar-symbol]");if(!button)return;const field=$("signalIssuedAtDisplay"),symbol=button.dataset.calendarSymbol;const start=field.selectionStart??field.value.length,end=field.selectionEnd??field.value.length;field.value=field.value.slice(0,start)+symbol+field.value.slice(end);const caret=start+symbol.length;field.focus();field.setSelectionRange(caret,caret);field.dispatchEvent(new Event("input",{bubbles:true}));});
+    $("signalCalendarTime").addEventListener("input",e=>{const v=nexfxNormalizeTime(e.target.value);e.target.value=v;if(v.length===5&&Number(v.slice(0,2))<=23&&Number(v.slice(3))<=59)nexfxUpdateIssuedValue()});
+    $("signalCalendarTime").addEventListener("change",e=>{const v=nexfxNormalizeTime(e.target.value);let valid=v.length===5&&Number(v.slice(0,2))<=23&&Number(v.slice(3))<=59;if(valid&&nexfxSelectedDate&&nexfxDateTimeIsFuture(nexfxSelectedDate,v)){valid=false;alert(nexfxFutureDateMessage())}e.target.value=valid?v:"12:00";nexfxUpdateIssuedValue()});
+    $("signalIssuedAtDisplay").addEventListener("input",e=>{e.target.value=nexfxLatin(e.target.value).replace(/[^0-9\- :.,!?/]/g,"").slice(0,24)});
+    $("signalIssuedAtDisplay").addEventListener("change",e=>{const parsed=nexfxParseManualDate(e.target.value);if(!parsed){e.target.setCustomValidity("Use YYYY-MM-DD HH:MM");e.target.reportValidity();return}if(nexfxDateTimeIsFuture(parsed.date,parsed.time)){e.target.setCustomValidity(nexfxFutureDateMessage());e.target.reportValidity();return}e.target.setCustomValidity("");nexfxSelectedDate=parsed.date;$("signalCalendarTime").value=parsed.time;nexfxCalendarView=new Date(parsed.date.getFullYear(),parsed.date.getMonth(),1);nexfxUpdateIssuedValue();nexfxRenderCalendar()});
+    $("signalCalendarApply").addEventListener("click",()=>{if(!nexfxSelectedDate)return;const time=nexfxNormalizeTime($("signalCalendarTime").value)||"12:00";if(nexfxDateTimeIsFuture(nexfxSelectedDate,time)){alert(nexfxFutureDateMessage());return}$("signalIssuedAtDisplay").setCustomValidity("");nexfxUpdateIssuedValue();nexfxToggleCalendar(false)});
+    document.addEventListener("click",e=>{if(!e.target.closest("#signalDatePicker")&&!e.target.closest("#signalCalendarPopup"))nexfxToggleCalendar(false)});
+    document.addEventListener("keydown",e=>{if(e.key==="Escape")nexfxToggleCalendar(false)});
+  }
+  const label=document.querySelector('[data-signal-issued-label]');
+  if(label)label.textContent=({ar:"وقت صدور التوصية",en:"Signal issue date and time",tr:"Sinyal yayınlanma tarihi ve saati",fr:"Date et heure du signal",de:"Datum und Uhrzeit des Signals",es:"Fecha y hora de la señal",pt:"Data e hora do sinal",it:"Data e ora del segnale",ru:"Дата и время сигнала",zh:"信号发布时间",ja:"シグナル発行日時",ko:"신호 발행 날짜 및 시간",hi:"सिग्नल जारी करने की तिथि और समय",id:"Tanggal dan waktu sinyal",nl:"Signaaldatum en -tijd"}[language]||"Signal issue date and time");
+  nexfxRenderCalendar();
+}
+
 function setLanguage(lang){
   if(!translations[lang])lang="en";
   language=lang;
+  nexfxInitSignalDatePicker();
+  if($("signalCalendarPopup")&&$("signalCalendarPopup").classList.contains("open"))nexfxRenderCalendar();
   updateDocumentDirection();
   translateInterface();
   renderAssets();
@@ -3217,6 +3592,8 @@ function setLanguage(lang){
   saveState();
   renderChart();
 }
+
+nexfxInitSignalDatePicker();
 
 function isFavorite(symbol){return favorites.includes(symbol)}
 
@@ -3254,6 +3631,17 @@ function updateSideInformation(){
   $("chartPair").textContent=selected[2];
   if($("sidePair"))$("sidePair").textContent=selected[0];
   if($("sideTime"))$("sideTime").textContent=$("timeframe").selectedOptions[0].textContent;
+  const toolbar=$("chartTimeframeToolbar");
+  const cryptoMode=market==="crypto";
+  if(toolbar)toolbar.classList.toggle("crypto-mode",cryptoMode);
+  const timeframeSelect=$("timeframe");
+  if(timeframeSelect){timeframeSelect.setAttribute("aria-hidden",cryptoMode?"true":"false");timeframeSelect.setAttribute("tabindex",cryptoMode?"-1":"0");}
+  const sourceLabel=document.querySelector(".chart-source-label");
+  if(sourceLabel)sourceLabel.textContent=cryptoMode?"BINANCE SPOT":"TRADINGVIEW";
+  const marketSymbol=$("chartMarketSymbol");
+  const pair=cryptoPairFromTradingView(selected[2]);
+  if(marketSymbol&&cryptoMode&&pair)marketSymbol.textContent=pair.replace(/USDT$/,"/USDT");
+  updateTimeframeButtons();
 }
 
 function selectAsset(item){
@@ -3342,7 +3730,7 @@ function renderFavorites(){
 
 
 
-function renderChart(){
+function renderTradingViewChart(){
   const generation=++chartGeneration;
   const container=$("tradingviewChart");
   const placeholder=$("chartPlaceholder");
@@ -3391,9 +3779,10 @@ function renderChart(){
     theme:"dark",
     style:"1",
     locale:language,
-    allow_symbol_change:true,
+    allow_symbol_change:false,
     calendar:false,
     hide_side_toolbar:false,
+    hide_top_toolbar:false,
     details:false,
     hotlist:false,
     hide_volume:true,
@@ -3419,6 +3808,374 @@ function renderChart(){
 
   container.appendChild(script);
 }
+const NEXFX_LIGHTWEIGHT_CHARTS_URL="https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.2/dist/lightweight-charts.standalone.production.js";
+let nexfxLightweightChartsPromise=null;
+function loadNexfxLightweightCharts(){
+  if(window.LightweightCharts)return Promise.resolve(window.LightweightCharts);
+  if(nexfxLightweightChartsPromise)return nexfxLightweightChartsPromise;
+  nexfxLightweightChartsPromise=new Promise((resolve,reject)=>{
+    const script=document.createElement("script");
+    let settled=false;
+    const timeoutId=setTimeout(()=>finish(new Error("انتهت مهلة تحميل مكتبة الشارت. أعد المحاولة بعد التأكد من الاتصال.")),18000);
+    function finish(error,value){
+      if(settled)return;settled=true;clearTimeout(timeoutId);
+      script.onload=null;script.onerror=null;
+      if(error)reject(error);else resolve(value);
+    }
+    script.src=NEXFX_LIGHTWEIGHT_CHARTS_URL;script.async=true;
+    script.onload=()=>window.LightweightCharts?finish(null,window.LightweightCharts):finish(new Error("Chart library did not initialize."));
+    script.onerror=()=>finish(new Error("تعذر تحميل مكتبة الشارت المجانية. تحقق من الاتصال ثم أعد المحاولة."));
+    document.head.appendChild(script);
+  }).catch(error=>{nexfxLightweightChartsPromise=null;throw error;});
+  return nexfxLightweightChartsPromise;
+}
+function stopNexfxCryptoChart(){
+  // Clear the active reference before closing so an intentional close cannot
+  // schedule a reconnect for an obsolete chart generation.
+  const oldSocket=nexfxCryptoSocket;
+  nexfxCryptoSocket=null;
+  if(oldSocket){try{oldSocket.close();}catch(_){}}
+  if(nexfxCryptoResizeObserver){nexfxCryptoResizeObserver.disconnect();nexfxCryptoResizeObserver=null;}
+  if(nexfxCryptoReconnectTimer){clearTimeout(nexfxCryptoReconnectTimer);nexfxCryptoReconnectTimer=null;}
+  nexfxCryptoReconnectAttempt=0;
+  if(nexfxCryptoChart){try{nexfxCryptoChart.remove();}catch(_){}nexfxCryptoChart=null;nexfxCryptoCandleSeries=null;}
+}
+function setCryptoChartStatus(message){
+  const status=$("chartTimeframeStatus");if(status)status.textContent=message;
+}
+const NEXFX_CANDLE_CACHE_PREFIX="nexfx_binance_candles_v1:";
+const NEXFX_CANDLE_CACHE_MAX_AGE=15*60*1000;
+function readNexfxCandleCache(symbol,interval){
+  try{
+    const raw=localStorage.getItem(NEXFX_CANDLE_CACHE_PREFIX+symbol+"_"+interval);
+    if(!raw)return null;
+    const saved=JSON.parse(raw);
+    if(!saved||!Number.isFinite(saved.savedAt)||Date.now()-saved.savedAt>NEXFX_CANDLE_CACHE_MAX_AGE||!Array.isArray(saved.candles)||!saved.candles.length)return null;
+    return saved.candles;
+  }catch(_){return null;}
+}
+function saveNexfxCandleCache(symbol,interval,candles){
+  try{
+    if(!Array.isArray(candles)||!candles.length)return;
+    localStorage.setItem(NEXFX_CANDLE_CACHE_PREFIX+symbol+"_"+interval,JSON.stringify({savedAt:Date.now(),candles:candles.slice(-250)}));
+  }catch(_){}
+}
+function mergeCryptoCandlesPreferStream(baseCandles,incomingCandles){
+  const byTime=new Map();
+  [...(baseCandles||[]),...(incomingCandles||[])].forEach(c=>byTime.set(c.time,c));
+  // A live kline event is newer than any REST snapshot that raced with it.
+  nexfxCryptoStreamCandles.forEach((c,time)=>byTime.set(time,c));
+  return [...byTime.values()].sort((a,b)=>a.time-b.time);
+}
+async function fetchCryptoChartCandles(symbol,interval,endTime=null,limit=250,minCandles=1){
+  const params=new URLSearchParams({symbol,interval,limit:String(Math.min(1000,Math.max(1,limit)))});
+  if(Number.isFinite(endTime))params.set("endTime",String(Math.floor(endTime)));
+  const url=NEXFX_BINANCE_BASE+"/klines?"+params.toString();
+  const response=await fetchNexfxWithTimeout(url,{cache:"no-store",headers:{Accept:"application/json"}},18000);
+  if(!response.ok)throw new Error("Binance HTTP "+response.status);
+  const raw=await response.json();
+  if(!Array.isArray(raw))throw new Error("Binance returned an unexpected candle response.");
+  const candles=raw.filter(k=>Array.isArray(k)&&k.length>=7).map(k=>({
+    time:Math.floor(Number(k[0])/1000),open:Number(k[1]),high:Number(k[2]),low:Number(k[3]),close:Number(k[4]),volume:Number(k[5]),closeTime:Number(k[6])
+  })).filter(c=>[c.time,c.open,c.high,c.low,c.close,c.volume,c.closeTime].every(Number.isFinite)&&c.time>0&&c.open>0&&c.high>0&&c.low>0&&c.close>0&&c.volume>=0&&c.high>=Math.max(c.open,c.close,c.low)&&c.low<=Math.min(c.open,c.close,c.high));
+  candles.sort((a,b)=>a.time-b.time);
+  const unique=candles.filter((c,i)=>i===0||c.time!==candles[i-1].time);
+  if(unique.length<minCandles)throw new Error(at("insufficient"));
+  return unique;
+}
+function updateTimeframeButtons(){
+  const selectedTimeframe=$("timeframe")?.value||"1h";
+  document.querySelectorAll("#chartTimeframeButtons [data-timeframe]").forEach(button=>{
+    const active=button.dataset.timeframe===selectedTimeframe;
+    button.classList.toggle("active",active);
+    button.setAttribute("aria-pressed",active?"true":"false");
+  });
+}
+function setCryptoLivePrice(value){
+  const price=$("chartLivePrice");
+  if(price&&Number.isFinite(Number(value))&&Number(value)>0)price.textContent=formatMarketPrice(value);
+}
+function setCryptoLiveState(message,isLive=false){
+  const state=$("chartLiveState");
+  if(state){state.textContent=message;state.style.color=isLive?"#16a34a":"#e0b84f";}
+}
+async function fetchCryptoLivePrice(symbol,generation){
+  const requestStartedAt=Date.now();
+  const response=await fetchNexfxWithTimeout(NEXFX_BINANCE_BASE+"/ticker/price?symbol="+encodeURIComponent(symbol),{cache:"no-store",headers:{Accept:"application/json"}},12000);
+  if(!response.ok)throw new Error("Binance ticker HTTP "+response.status);
+  const data=await response.json();
+  const price=Number(data&&data.price);
+  // REST is only the initial quote. Never let a late REST response replace a
+  // more recent aggTrade already received from Binance's live stream.
+  if(generation===chartGeneration&&nexfxCryptoLastWsTradeAt<=requestStartedAt&&Number.isFinite(price)&&price>0)setCryptoLivePrice(price);
+}
+
+function connectNexfxCryptoStream(symbol,interval,generation,recoverAfterReconnect){
+  if(generation!==chartGeneration)return;
+  if(typeof WebSocket!=="function"){
+    setCryptoChartStatus(chartText("loaded"));
+    setCryptoLiveState(chartText("liveUnsupported"),false);
+    return;
+  }
+  // Do not allow an older socket's close event to start a second reconnect loop.
+  const previousSocket=nexfxCryptoSocket;
+  nexfxCryptoSocket=null;
+  if(previousSocket){try{previousSocket.close();}catch(_){}}
+  if(nexfxCryptoReconnectTimer){clearTimeout(nexfxCryptoReconnectTimer);nexfxCryptoReconnectTimer=null;}
+
+  const base=symbol.toLowerCase();
+  const streams=base+"@aggTrade/"+base+"@kline_"+interval;
+  let socket=null;
+  try{
+    socket=new WebSocket("wss://stream.binance.com:9443/stream?streams="+streams);
+  }catch(error){
+    scheduleReconnect();
+    return;
+  }
+  nexfxCryptoSocket=socket;
+
+  function scheduleReconnect(){
+    if(generation!==chartGeneration||nexfxCryptoSocket!==socket)return;
+    if(nexfxCryptoReconnectTimer)return;
+    nexfxCryptoReconnectAttempt=Math.min(nexfxCryptoReconnectAttempt+1,6);
+    const delay=Math.min(30000,4000*Math.pow(2,nexfxCryptoReconnectAttempt-1));
+    setCryptoChartStatus(chartText("retry",{seconds:Math.ceil(delay/1000)}));
+    setCryptoLiveState(liveText("reconnect"),false);
+    nexfxCryptoReconnectTimer=setTimeout(()=>{
+      nexfxCryptoReconnectTimer=null;
+      if(generation===chartGeneration&&nexfxCryptoSocket===socket){
+        nexfxCryptoSocket=null;
+        connectNexfxCryptoStream(symbol,interval,generation,recoverAfterReconnect);
+      }
+    },delay);
+  }
+
+  socket.onopen=async()=>{
+    if(generation!==chartGeneration||nexfxCryptoSocket!==socket)return;
+    setCryptoChartStatus(chartText("syncing"));
+    setCryptoLiveState(liveText("connected"),false);
+    // Recover candles missed while disconnected from Binance's REST kline endpoint.
+    // The callback merges the latest exchange candles without replacing chart history.
+    if(typeof recoverAfterReconnect==="function"){
+      try{
+        await recoverAfterReconnect(recentStreamCandles);
+      }catch(error){
+        console.warn("NEXFX Binance reconnect candle recovery:",error);
+      }
+    }
+    if(generation!==chartGeneration||nexfxCryptoSocket!==socket)return;
+    // Refresh the quote after reconnect; fetchCryptoLivePrice prevents a late REST
+    // response from overwriting a newer aggTrade received while the request was in flight.
+    fetchCryptoLivePrice(symbol,generation).catch(error=>{
+      if(generation===chartGeneration&&nexfxCryptoSocket===socket&&!nexfxCryptoLastWsTradeAt){
+        console.warn("Binance reconnect ticker:",error);
+        setCryptoLiveState(liveText("waiting"),false);
+      }
+    });
+  };
+
+  const recentStreamCandles=new Map();
+  socket.onmessage=event=>{
+    if(generation!==chartGeneration||nexfxCryptoSocket!==socket)return;
+    try{
+      const envelope=JSON.parse(event.data);
+      const payload=envelope&&envelope.data?envelope.data:envelope;
+      if(payload&&payload.e==="aggTrade"){
+        const tradePrice=Number(payload.p);
+        if(Number.isFinite(tradePrice)&&tradePrice>0){
+          nexfxCryptoReconnectAttempt=0;
+          nexfxCryptoLastWsTradeAt=Date.now();
+          setCryptoLivePrice(tradePrice);
+          setCryptoLiveState(liveText("live"),true);
+        }
+        return;
+      }
+      const k=payload&&payload.k;
+      if(!k||!nexfxCryptoCandleSeries)return;
+      const candle={time:Math.floor(Number(k.t)/1000),open:Number(k.o),high:Number(k.h),low:Number(k.l),close:Number(k.c)};
+      if(![candle.time,candle.open,candle.high,candle.low,candle.close].every(Number.isFinite))return;
+      const streamCandle={...candle,volume:Number(k.v||0),closeTime:Number(k.T||0)};
+      recentStreamCandles.set(candle.time,streamCandle);
+      nexfxCryptoStreamCandles.set(candle.time,streamCandle);
+      if(recentStreamCandles.size>20)recentStreamCandles.delete(recentStreamCandles.keys().next().value);
+      if(nexfxCryptoStreamCandles.size>100)nexfxCryptoStreamCandles.delete(nexfxCryptoStreamCandles.keys().next().value);
+      nexfxCryptoCandleSeries.update(candle);
+      setCryptoLiveState(k.x?liveText("closed"):liveText("live"),true);
+    }catch(error){console.warn("NEXFX crypto stream message:",error);}
+  };
+  socket.onerror=()=>{
+    if(generation===chartGeneration&&nexfxCryptoSocket===socket){
+      setCryptoChartStatus(chartText("recover"));
+      setCryptoLiveState(liveText("unstable"),false);
+    }
+  };
+  socket.onclose=()=>{
+    if(generation!==chartGeneration||nexfxCryptoSocket!==socket)return;
+    scheduleReconnect();
+  };
+}
+async function renderCryptoChart(){
+  const generation=++chartGeneration;
+  stopNexfxCryptoChart();
+  const container=$("tradingviewChart"),placeholder=$("chartPlaceholder");
+  let symbol=cryptoPairFromTradingView(selected[2]);
+  const interval=binanceIntervals[$("timeframe").value];
+  updateSideInformation();
+  const marketSymbol=$("chartMarketSymbol");
+  if(marketSymbol)marketSymbol.textContent=symbol?symbol.replace(/USDT$/,"/USDT"):selected[0];
+  setCryptoLivePrice(NaN);
+  nexfxCryptoLastWsTradeAt=0;
+  nexfxCryptoStreamCandles=new Map();
+  setCryptoLiveState(chartText("liveConnecting"),false);
+  updateTimeframeButtons();
+  placeholder.style.display="grid";placeholder.textContent=t("loadingChart");
+  placeholder.style.cursor="";placeholder.onclick=null;
+  container.innerHTML="";
+  setCryptoChartStatus(chartText("loading"));
+  try{
+    if(!symbol||!interval)throw new Error(at("unsupported"));
+    // Start Binance's large exchangeInfo catalogue refresh in the background.
+    // It must not block the chart library and the selected pair's real candles.
+    const catalogueSync=syncCryptoAssetsWithBinance().catch(error=>{
+      console.warn("NEXFX Binance catalogue refresh:",error);
+      return false;
+    });
+    if(generation!==chartGeneration)return;
+    symbol=cryptoPairFromTradingView(selected[2]);
+    if(!symbol)throw new Error(at("invalidSymbol"));
+    if(marketSymbol)marketSymbol.textContent=symbol.replace(/USDT$/,"/USDT");
+    // Reuse a recent local snapshot to show the chart immediately on repeat
+    // timeframe visits; always refresh from Binance in the background.
+    const cachedCandles=readNexfxCandleCache(symbol,interval);
+    const freshCandlesPromise=fetchCryptoChartCandles(symbol,interval);
+    const [Charts,candles]=await Promise.all([
+      loadNexfxLightweightCharts(),
+      cachedCandles?Promise.resolve(cachedCandles):freshCandlesPromise
+    ]);
+    if(generation!==chartGeneration)return;
+    saveNexfxCandleCache(symbol,interval,candles);
+    // Do not wait for the full exchange catalogue: the selected symbol's successful
+    // Binance klines response is the immediate validity check for this chart.
+    if(binanceSpotReady&&!binanceSpotSymbols.has(symbol))throw new Error(at("invalidSymbol"));
+    if(generation!==chartGeneration)return;
+    const chartWidth=Math.max(320,container.clientWidth||600);
+    // Keep a readable screen-sized window on every interval, from 1m to 1M.
+    // Historical candles are fetched only when the user scrolls left.
+    const targetVisibleCandles=Math.max(24,Math.min(42,Math.floor(chartWidth/10)));
+    const initialBarSpacing=Math.max(9,Math.min(16,(chartWidth/targetVisibleCandles)*0.9));
+    const chart=Charts.createChart(container,{
+      width:chartWidth,height:Math.max(280,container.clientHeight||460),
+      layout:{background:{type:"solid",color:"#041020"},textColor:"#cbd5e1",fontFamily:"Arial, sans-serif"},
+      grid:{vertLines:{color:"#14263b"},horzLines:{color:"#14263b"}},
+      rightPriceScale:{borderColor:"#34465c",autoScale:true},
+      timeScale:{borderColor:"#34465c",timeVisible:true,secondsVisible:false,barSpacing:initialBarSpacing,minBarSpacing:2,rightOffset:5},
+      crosshair:{mode:Charts.CrosshairMode.Normal},
+      localization:{locale:language==="ar"?"ar":"en-US"}
+    });
+    const series=chart.addCandlestickSeries({
+      upColor:"#16a36a",downColor:"#e05260",borderUpColor:"#16a36a",borderDownColor:"#e05260",
+      wickUpColor:"#16a36a",wickDownColor:"#e05260",priceLineVisible:true
+    });
+    series.setData(candles.map(c=>({time:c.time,open:c.open,high:c.high,low:c.low,close:c.close})));
+    // Do not fit all 250 candles: show only a readable recent window initially.
+    chart.timeScale().setVisibleLogicalRange({from:Math.max(0,candles.length-targetVisibleCandles),to:candles.length+5});
+    nexfxCryptoChart=chart;nexfxCryptoCandleSeries=series;
+    let oldestLoadedCandleTime=candles[0].time;
+    if(cachedCandles){
+      freshCandlesPromise.then(fresh=>{
+        if(generation!==chartGeneration||!nexfxCryptoCandleSeries)return;
+        const currentRange=chart.timeScale().getVisibleLogicalRange();
+        const merged=mergeCryptoCandlesPreferStream(candles,fresh);
+        candles.splice(0,candles.length,...merged);
+        oldestLoadedCandleTime=candles[0]?.time||oldestLoadedCandleTime;
+        saveNexfxCandleCache(symbol,interval,candles);
+        nexfxCryptoCandleSeries.setData(candles.map(c=>({time:c.time,open:c.open,high:c.high,low:c.low,close:c.close})));
+        if(currentRange)chart.timeScale().setVisibleLogicalRange(currentRange);
+        setCryptoChartStatus(chartText("updated",{count:candles.length}));
+      }).catch(error=>{
+        if(generation===chartGeneration)console.warn("NEXFX background candle refresh:",error);
+      });
+    }else{
+      saveNexfxCandleCache(symbol,interval,candles);
+    }
+    let loadingOlderCandles=false;
+    let olderHistoryExhausted=candles.length<250;
+    const loadOlderCandles=async()=>{
+      if(loadingOlderCandles||olderHistoryExhausted||generation!==chartGeneration)return;
+      loadingOlderCandles=true;
+      const visibleLogicalRange=chart.timeScale().getVisibleLogicalRange();
+      const visibleRange=chart.timeScale().getVisibleRange();
+      try{
+        const older=await fetchCryptoChartCandles(symbol,interval,oldestLoadedCandleTime*1000-1,1000,1);
+        if(generation!==chartGeneration||!nexfxCryptoCandleSeries)return;
+        if(!older.length||older[older.length-1].time>=oldestLoadedCandleTime){olderHistoryExhausted=true;return;}
+        const previousCount=candles.length;
+        const merged=mergeCryptoCandlesPreferStream(older,candles);
+        const addedCount=merged.length-previousCount;
+        candles.splice(0,candles.length,...merged);
+        oldestLoadedCandleTime=candles[0].time;
+        olderHistoryExhausted=older.length<1000;
+        nexfxCryptoCandleSeries.setData(candles.map(c=>({time:c.time,open:c.open,high:c.high,low:c.low,close:c.close})));
+        // Preserve the user's exact viewport after prepending older candles.
+        if(visibleLogicalRange&&addedCount>0){
+          chart.timeScale().setVisibleLogicalRange({from:visibleLogicalRange.from+addedCount,to:visibleLogicalRange.to+addedCount});
+        }else if(visibleRange){
+          chart.timeScale().setVisibleRange(visibleRange);
+        }
+        setCryptoChartStatus(chartText("older",{count:candles.length}));
+      }catch(error){console.warn("NEXFX older candle history:",error);}
+      finally{loadingOlderCandles=false;}
+    };
+    chart.timeScale().subscribeVisibleLogicalRangeChange(range=>{
+      if(range&&range.from<35)loadOlderCandles();
+    });
+    nexfxCryptoResizeObserver=new ResizeObserver(entries=>{
+      if(generation!==chartGeneration||!nexfxCryptoChart)return;
+      const width=Math.floor(entries[0].contentRect.width);
+      const height=Math.floor(entries[0].contentRect.height);
+      if(width>0&&height>0)nexfxCryptoChart.applyOptions({width,height});
+    });
+    nexfxCryptoResizeObserver.observe(container);
+    placeholder.style.display="none";
+    setCryptoChartStatus(chartText("spot"));
+    fetchCryptoLivePrice(symbol,generation).catch(error=>{
+      // A REST ticker failure must not overwrite the LIVE state if aggTrade
+      // has already delivered a valid WebSocket price for this chart.
+      if(generation===chartGeneration&&!nexfxCryptoLastWsTradeAt){
+        console.warn("Binance live ticker:",error);
+        setCryptoLiveState(liveText("priceUnavailable"),false);
+      }
+    });
+    const recoverRecentBinanceCandles=async(streamCandles)=>{
+      if(generation!==chartGeneration||!nexfxCryptoCandleSeries)return;
+      const latest=await fetchCryptoChartCandles(symbol,interval,null,5,1);
+      if(generation!==chartGeneration||!nexfxCryptoCandleSeries)return;
+      if(streamCandles)streamCandles.forEach(c=>nexfxCryptoStreamCandles.set(c.time,c));
+      const merged=mergeCryptoCandlesPreferStream(candles,latest);
+      candles.splice(0,candles.length,...merged);
+      oldestLoadedCandleTime=candles[0]?.time||oldestLoadedCandleTime;
+      saveNexfxCandleCache(symbol,interval,candles);
+      nexfxCryptoCandleSeries.setData(candles.map(c=>({time:c.time,open:c.open,high:c.high,low:c.low,close:c.close})));
+      setCryptoChartStatus(chartText("reconnected",{count:candles.length}));
+    };
+    connectNexfxCryptoStream(symbol,interval,generation,recoverRecentBinanceCandles);
+  }catch(error){
+    if(generation!==chartGeneration)return;
+    console.error("NEXFX crypto chart:",error);
+    placeholder.textContent=(error&&error.message?error.message:t("chartError"))+"\n"+chartRetryHint();
+    placeholder.style.display="grid";
+    placeholder.style.cursor="pointer";
+    placeholder.onclick=()=>{placeholder.onclick=null;renderCryptoChart();};
+    setCryptoChartStatus(chartText("error"));
+  }
+}
+function renderChart(){
+  if(market==="crypto")return renderCryptoChart();
+  stopNexfxCryptoChart();
+  const status=$("chartTimeframeStatus");if(status)status.textContent=chartText("other");
+  return renderTradingViewChart();
+}
+
 function displaySavedAnalysis(){
   if(lastAnalysis && lastAnalysis.pair!==selected[0])lastAnalysis=null;
   if(!lastAnalysis){
@@ -3435,10 +4192,25 @@ function displaySavedAnalysis(){
   const savedDirection=lastAnalysis.direction||"neutral";
   const savedTitle=lastAnalysis.mode==="manual"
     ? (savedDirection==="buy"?t("buy"):t("sell"))
-    : savedDirection==="buy"?at("bull"):savedDirection==="sell"?at("bear"):at("neutral");
+    : savedDirection==="buy"?adt("buyAction"):savedDirection==="sell"?adt("sellAction"):adt("waitAction");
   $("resultTitle").textContent=savedTitle||lastAnalysis.title||t("notRun");
-  const savedAnalysisText=lastAnalysis.text||"";
-  $("resultText").textContent=savedAnalysisText.startsWith("مصدر البيانات:")?"":savedAnalysisText;
+  let savedAnalysisText=lastAnalysis.text||"";
+  if(lastAnalysis.mode==="technical"||lastAnalysis.mode==="auto"){
+    const biasText=lastAnalysis.marketBias==="bull"?adt("bullBias"):lastAnalysis.marketBias==="bear"?adt("bearBias"):adt("neutralBias");
+    const levels=lastAnalysis.levels||{};
+    const supportLine=`${reportText("support")}: ${levels.support==null?reportText("unavailable"):formatMarketPrice(levels.support)} | ${reportText("resistance")}: ${levels.resistance==null?reportText("unavailable"):formatMarketPrice(levels.resistance)}`;
+    const rrLine=`${reportText("rewardRisk")}: TP1 ${lastAnalysis.rewardRiskTP1==null?"—":Number(lastAnalysis.rewardRiskTP1).toFixed(2)}R | TP2 ${lastAnalysis.rewardRiskTP2==null?"—":Number(lastAnalysis.rewardRiskTP2).toFixed(2)}R`;
+    const updatedAt=lastAnalysis.asOf?new Date(lastAnalysis.asOf).toLocaleString((NEXFX_DATE_LOCALES[language]||"en-GB")+"-u-nu-latn",{dateStyle:"medium",timeStyle:"short",numberingSystem:"latn"}):"—";
+    const selectedTimeframeLabel=$("timeframe").selectedOptions[0]?.textContent||lastAnalysis.timeframe||"—";
+    const metaLine=`${reportText("source")}: ${lastAnalysis.source||"—"} | ${reportText("timeframe")}: ${selectedTimeframeLabel} | ${reportText("updated")}: ${updatedAt}`;
+    savedAnalysisText=[biasText,supportLine,rrLine,metaLine].join("\n");
+  }else if(lastAnalysis.mode==="manual"){
+    const manualTimeframe=$("timeframe").selectedOptions[0]?.textContent||lastAnalysis.timeframe||"—";
+    const issuedLocal=lastAnalysis.issuedAt?new Date(lastAnalysis.issuedAt).toLocaleString((NEXFX_DATE_LOCALES[language]||"en-GB")+"-u-nu-latn",{dateStyle:"medium",timeStyle:"short",numberingSystem:"latn"}):"—";
+    const stateKey=({valid:"within",stale:"stale",stopped:"stopped",target:"target",missed:"missed"})[lastAnalysis.validityState]||"within";
+    savedAnalysisText=adt("manualPlan")+"\n"+`${reportText("timeframe")}: ${manualTimeframe} | ${reportText("issued")}: ${issuedLocal} | ${reportText("livePrice")}: ${formatMarketPrice(lastAnalysis.livePrice)} | ${reportText("entry")}: ${formatMarketPrice(lastAnalysis.entry)} | ${reportText("rewardRisk")}: TP1 1:${lastAnalysis.rewardRiskTP1}, TP2 1:${lastAnalysis.rewardRiskTP2}.\n${reportText("status")}: ${reportText(stateKey)}`;
+  }
+  $("resultText").textContent=savedAnalysisText;
   paintAnalysisDirection(savedDirection);
   $("outMode").textContent=lastAnalysis.mode==="manual"?t("manual"):lastAnalysis.mode==="auto"?at("automatic"):lastAnalysis.mode==="technical"?at("technical"):lastAnalysis.mode||"—";
   $("outPair").textContent=lastAnalysis.pair||"—";
@@ -3448,34 +4220,100 @@ function displaySavedAnalysis(){
   $("outTP2").textContent=lastAnalysis.tp2??"—";
 }
 
+function parseManualPrice(raw){
+  let value=String(raw??"").trim();
+  if(!value)return NaN;
+  value=value
+    .replace(/[٠-٩]/g,ch=>String("٠١٢٣٤٥٦٧٨٩".indexOf(ch)))
+    .replace(/[۰-۹]/g,ch=>String("۰۱۲۳۴۵۶۷۸۹".indexOf(ch)))
+    .replace(/٫/g,".")
+    .replace(/[٬\s]/g,"");
+  // Accept a comma as a decimal separator when no dot is present.
+  if(value.includes(",")&&!value.includes("."))value=value.replace(",",".");
+  else value=value.replace(/,/g,"");
+  return Number(value);
+}
+
 async function runAnalysis(){
   const mode=$("analysisMode").value;
   const direction=$("direction").value;
-  const entry=Number($("entry").value);
-  const stop=Number($("stop").value);
-  const tp1=Number($("tp1").value);
-  const tp2=Number($("tp2").value);
+  const entry=parseManualPrice($("entry").value);
+  const stop=parseManualPrice($("stop").value);
+  const tp1=parseManualPrice($("tp1").value);
+  const tp2=parseManualPrice($("tp2").value);
 
   if(mode==="technical"||mode==="auto"){
     await runMarketAnalysis(mode);
     return;
   }
 
-  if(![entry,stop,tp1,tp2].every(n=>Number.isFinite(n)&&n>0)){
-    alert(t("badEntry"));return;
+  // A manual submission supersedes any technical/automatic request still in flight.
+  analysisRunToken++;
+  const manualFields=[
+    ["entry",entry,reportText("entry")],
+    ["stop",stop,"SL"],
+    ["tp1",tp1,"TP1"],
+    ["tp2",tp2,"TP2"]
+  ];
+  const invalidField=manualFields.find(([,value])=>!Number.isFinite(value)||value<=0);
+  if(invalidField){
+    const field=$(invalidField[0]);
+    field.focus();
+    alert(reportText("manualInvalid",{field:invalidField[2]}));
+    return;
   }
   const valid=direction==="buy"?(stop<entry&&tp1>entry&&tp2>tp1):(stop>entry&&tp1<entry&&tp2<tp1);
   if(!valid){
     alert(at("levels"));return;
   }
+  const issuedAtValue=$("signalIssuedAt").value;
+  const issuedAt=issuedAtValue?new Date(issuedAtValue).getTime():NaN;
+  if(!Number.isFinite(issuedAt)||issuedAt>Date.now()+60000){
+    $("signalIssuedAt").focus();
+    alert(reportText("future"));
+    return;
+  }
+  const symbol=cryptoPairFromTradingView(selected[2]);
+  if(market!=="crypto"||!symbol){
+    alert(reportText("cryptoOnly"));
+    return;
+  }
+  let livePrice;
+  try{
+    const response=await fetchNexfxWithTimeout(NEXFX_BINANCE_BASE+"/ticker/price?symbol="+encodeURIComponent(symbol),{cache:"no-store",headers:{Accept:"application/json"}},12000);
+    if(!response.ok)throw new Error("Binance ticker HTTP "+response.status);
+    const quote=await response.json();livePrice=Number(quote&&quote.price);
+    if(!Number.isFinite(livePrice)||livePrice<=0)throw new Error("Invalid Binance ticker price");
+  }catch(error){
+    alert(reportText("priceFail"));
+    return;
+  }
+  const timeframe=$("timeframe").value;
+  const timeframeMs={"1m":60000,"3m":180000,"5m":300000,"15m":900000,"30m":1800000,"1h":3600000,"2h":7200000,"4h":14400000,"6h":21600000,"8h":28800000,"12h":43200000,"1d":86400000,"3d":259200000,"1w":604800000,"1M":2592000000}[timeframe]||3600000;
+  const ageMs=Date.now()-issuedAt;
+  const maxAgeMs=timeframeMs*3;
   const risk=Math.abs(entry-stop),reward1=Math.abs(tp1-entry),reward2=Math.abs(tp2-entry);
   const rr1=(reward1/risk).toFixed(2),rr2=(reward2/risk).toFixed(2);
   const title=direction==="buy"?t("buy"):t("sell");
-  const text="";
-  $("resultTitle").textContent=title; $("resultText").textContent=text; paintAnalysisDirection(direction);
+  const manualTimeframe=$("timeframe").selectedOptions[0]?.textContent||timeframe;
+  let validity=reportText("within");
+  let validityState="valid";
+  if(ageMs>maxAgeMs){validity=reportText("stale");validityState="stale";}
+  else if((direction==="buy"&&livePrice<=stop)||(direction==="sell"&&livePrice>=stop)){
+    validity=reportText("stopped");validityState="stopped";
+  }
+  else if((direction==="buy"&&livePrice>=tp1)||(direction==="sell"&&livePrice<=tp1)){
+    validity=reportText("target");validityState="target";
+  }
+  else if((direction==="buy"&&livePrice>entry)||(direction==="sell"&&livePrice<entry)){
+    validity=reportText("missed");validityState="missed";
+  }
+  const issuedLocal=new Date(issuedAt).toLocaleString((NEXFX_DATE_LOCALES[language]||"en-GB")+"-u-nu-latn",{dateStyle:"medium",timeStyle:"short",numberingSystem:"latn"});
+  const text=adt("manualPlan")+"\n"+`${reportText("timeframe")}: ${manualTimeframe} | ${reportText("issued")}: ${issuedLocal} | ${reportText("livePrice")}: ${formatMarketPrice(livePrice)} | ${reportText("entry")}: ${formatMarketPrice(entry)} | ${reportText("rewardRisk")}: TP1 1:${rr1}, TP2 1:${rr2}.\n${reportText("status")}: ${validity}`;
+  $("resultTitle").textContent=title; $("resultText").textContent=text; paintAnalysisDirection(validityState==="valid"?direction:"neutral");
   $("outMode").textContent=t("manual"); $("outPair").textContent=selected[0];
   $("outEntry").textContent=entry; $("outStop").textContent=stop; $("outTP1").textContent=tp1; $("outTP2").textContent=tp2;
-  lastAnalysis={title,text,mode:"manual",pair:selected[0],entry,stop,tp1,tp2,direction,rewardRiskTP1:rr1,rewardRiskTP2:rr2};
+  lastAnalysis={title,text,mode:"manual",pair:selected[0],entry,stop,tp1,tp2,direction,rewardRiskTP1:rr1,rewardRiskTP2:rr2,timeframe,issuedAt,livePrice,validityState};
   saveState();
 }
 
@@ -3505,7 +4343,28 @@ $("showFav").addEventListener("click",()=>{
   renderAssets(); saveState();
 });
 
-$("timeframe").addEventListener("change",()=>{ clearAnalysisOutput(); updateSideInformation(); renderChart(); saveState(); });
+function applySelectedTimeframe(){
+  // A manual trade plan belongs to the timeframe on which it was created.
+  // Clear its inputs and displayed result whenever the timeframe changes.
+  $("direction").value="buy";
+  $("entry").value="";
+  $("stop").value="";
+  $("tp1").value="";
+  $("tp2").value="";
+  clearAnalysisOutput();
+  updateTimeframeButtons();
+  updateSideInformation();
+  renderChart();
+  saveState();
+}
+$("timeframe").addEventListener("change",applySelectedTimeframe);
+$("chartTimeframeButtons").addEventListener("click",event=>{
+  const button=event.target.closest("button[data-timeframe]");
+  if(!button||!binanceIntervals[button.dataset.timeframe])return;
+  if($("timeframe").value===button.dataset.timeframe)return;
+  $("timeframe").value=button.dataset.timeframe;
+  applySelectedTimeframe();
+});
 
 $("executionConnectBtn").addEventListener("click",()=>{
   const platform=$("executionPlatform").value;
@@ -3662,11 +4521,23 @@ saveState();
   cards.forEach(card => {
     card.addEventListener("click", () => setAnalysisCard(card.dataset.analysisCard, true));
   });
+  let activeMode = modeSelect.value || "technical";
   modeSelect.addEventListener("change", () => {
+    const nextMode = modeSelect.value;
     cards.forEach(card => {
       card.setAttribute("aria-pressed",
-        card.dataset.analysisCard === modeSelect.value ? "true" : "false");
+        card.dataset.analysisCard === nextMode ? "true" : "false");
     });
+    if (nextMode !== activeMode) {
+      // Clear only the visible/transient form fields and current output.
+      // Previously saved analysis history is intentionally left untouched.
+      ["entry", "stop", "tp1", "tp2", "signalIssuedAt", "signalIssuedAtDisplay"]
+        .forEach(id => { const field = document.getElementById(id); if (field) field.value = ""; });
+      const direction = document.getElementById("direction");
+      if (direction) direction.value = "buy";
+      if (typeof clearAnalysisOutput === "function") clearAnalysisOutput("");
+      activeMode = nextMode;
+    }
   });
   setAnalysisCard(modeSelect.value || "technical", false);
 })();
