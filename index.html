@@ -1284,6 +1284,14 @@ body{background:radial-gradient(ellipse at 50% 0%,#15365b 0%,#0b1b30 58%,#071326
   .panel{padding:8px!important}
   #analysis{margin-top:5px!important}
 }
+
+/* Five-timeframe opportunity scanner */
+.opportunity-results{display:grid;grid-template-columns:1fr;gap:8px;margin-top:9px}
+.opportunity-card{padding:10px;border:1px solid var(--line);border-radius:9px;background:#071629;color:var(--white);font-size:12px}
+.opportunity-card strong{color:var(--gold2)}
+.opportunity-card .opportunity-meta{color:var(--muted);margin-top:4px;line-height:1.7}
+.opportunity-card .opportunity-levels{direction:ltr;text-align:left;margin-top:5px;color:#d9e6f5}
+
 </style>
 <script type="module" src="https://www.tradingview-widget.com/w/en/tv-ticker-tape.js"></script>
 
@@ -1557,6 +1565,87 @@ body{background:radial-gradient(ellipse at 50% 0%,#15365b 0%,#0b1b30 58%,#071326
   }
 }
 </style>
+
+<style id="nexfx-arabic-automatic-analysis-visual">
+#analysis .nexfx-auto-visual{margin:10px 0 12px;display:grid;gap:10px;direction:rtl}
+#analysis .nexfx-auto-visual[hidden]{display:none!important}
+#analysis .auto-status-card{display:flex;align-items:center;gap:13px;padding:14px;border:1px solid #b58b32;border-radius:14px;background:linear-gradient(135deg,#332b16,#10243a);min-width:0}
+#analysis .auto-status-icon{display:grid;place-items:center;flex:0 0 48px;width:48px;height:48px;border-radius:13px;background:#e0b84f20;font-size:30px;font-weight:900;color:#facc15}
+#analysis .auto-status-copy{min-width:0;display:grid;gap:3px}
+#analysis .auto-status-copy small{font-size:11px;color:#b9c9da}
+#analysis .auto-status-copy strong{font-size:25px;line-height:1.25;color:#facc15}
+#analysis .auto-status-copy p{margin:0;color:#e1e9f3;font-size:12px;line-height:1.6}
+#analysis .auto-status-card.is-buy{border-color:#1c9b69;background:linear-gradient(135deg,#103b30,#0b2034)}
+#analysis .auto-status-card.is-buy .auto-status-icon{color:#4ade80;background:#4ade8020}
+#analysis .auto-status-card.is-buy .auto-status-copy strong{color:#4ade80}
+#analysis .auto-status-card.is-sell{border-color:#c34d59;background:linear-gradient(135deg,#402329,#0b2034)}
+#analysis .auto-status-card.is-sell .auto-status-icon{color:#fb7185;background:#fb718520}
+#analysis .auto-status-card.is-sell .auto-status-copy strong{color:#fb7185}
+#analysis .auto-frames-heading{font-size:13px;font-weight:800;color:#ffe39a}
+#analysis .auto-frame-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+#analysis .auto-frame-card{min-width:0;padding:9px 5px;border:1px solid #29496a;border-radius:10px;background:#0b1d33;text-align:center;display:grid;gap:6px}
+#analysis .auto-frame-card small{font-size:10px;color:#b9c9da;white-space:nowrap}
+#analysis .auto-frame-card b{font-size:11px;color:#cbd5e1;white-space:nowrap}
+#analysis .auto-frame-card.is-up{border-color:#23845e;background:#103329}
+#analysis .auto-frame-card.is-up b{color:#4ade80}
+#analysis .auto-frame-card.is-down{border-color:#a83e4c;background:#351e29}
+#analysis .auto-frame-card.is-down b{color:#fb7185}
+#analysis .auto-frame-card.is-wait b{color:#facc15}
+#analysis .auto-agreement-card{padding:11px 12px;border:1px solid #29496a;border-radius:11px;background:#081a2e;display:grid;gap:8px}
+#analysis .auto-agreement-head{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#dce6f2;font-size:12px;font-weight:700}
+#analysis .auto-agreement-head strong{font-size:20px;color:#ffe39a;font-variant-numeric:tabular-nums}
+#analysis .auto-agreement-track{height:9px;border-radius:20px;background:#26384d;overflow:hidden}
+#analysis .auto-agreement-track span{display:block;width:0;height:100%;border-radius:20px;background:linear-gradient(90deg,#b88728,#ffe39a);transition:width .25s ease}
+#analysis .auto-agreement-card>small{font-size:10px;color:#aebfd2;line-height:1.5}
+#analysis .auto-agreement-breakdown{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+#analysis .auto-agreement-breakdown>div{display:flex;align-items:center;justify-content:space-between;gap:4px;padding:6px 8px;border:1px solid #29496a;border-radius:7px;background:#10243a}
+#analysis .auto-agreement-breakdown small{font-size:10px;color:#aebfd2}
+#analysis .auto-agreement-breakdown b{font-size:12px;color:#f1f5f9;font-variant-numeric:tabular-nums}
+#analysis #autoSupportValue{color:#4ade80}
+#analysis #autoOppositionValue{color:#fb7185}
+#analysis #autoUncertainValue{color:#facc15}
+@media(max-width:380px){#analysis .auto-agreement-breakdown>div{flex-direction:column;align-items:flex-start;gap:2px;padding:5px}}
+#analysis .auto-details{border:1px solid #29496a;border-radius:10px;background:#0a1b30;padding:10px 12px}
+#analysis .auto-details summary{cursor:pointer;color:#ffe39a;font-size:12px;font-weight:800}
+#analysis .auto-details p{margin:9px 0 0;color:#d5dfed;font-size:11px;line-height:1.8;white-space:normal}
+@media(max-width:560px){#analysis .auto-frame-grid{gap:4px}#analysis .auto-frame-card{padding:8px 2px}#analysis .auto-frame-card small{font-size:9px}#analysis .auto-frame-card b{font-size:10px}#analysis .auto-status-copy strong{font-size:22px}}
+</style>
+
+<style id="nexfx-trade-monitor-styles">
+.nexfx-trade-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0}.nexfx-trade-toolbar select{min-width:150px;background:#0d2340;color:inherit;border:1px solid #52657d;border-radius:9px;padding:9px}.nexfx-trade-toolbar span{font-size:12px;opacity:.75}.nexfx-trade-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:10px auto;width:100%;max-width:100%;min-width:0;direction:rtl}.nexfx-trade-stats>div{min-width:0;overflow:hidden;background:#091a31;border:1px solid rgba(217,165,46,.28);border-radius:8px;padding:6px 3px;text-align:center}.nexfx-trade-stats small{display:block;min-width:0;font-size:10px;line-height:1.35;white-space:normal;overflow-wrap:anywhere;opacity:.78}.nexfx-trade-stats b{display:block;font-size:16px;line-height:1.25;color:#ffe39a;margin-top:2px;font-variant-numeric:tabular-nums}.nexfx-trade-table-wrap{overflow:auto}.nexfx-trade-table{min-width:900px;width:100%;border-collapse:collapse}.nexfx-trade-table th,.nexfx-trade-table td{padding:10px 9px;border-bottom:1px solid rgba(160,180,205,.16);text-align:center;white-space:nowrap}.nexfx-trade-table th{color:#ffe39a;font-size:12px}.nexfx-trade-table td{font-size:12px}.trade-status{display:inline-block;padding:4px 8px;border-radius:20px;background:#263449}.trade-status.open,.trade-status.tp1{color:#ffe39a}.trade-status.win{color:#65d69a}.trade-status.loss{color:#ff8585}.trade-status.pending{color:#f4ce68}.trade-status.review{color:#ffb36b}.trade-row-actions{display:flex;gap:5px;justify-content:center;margin-top:6px}.trade-row-actions button{font-size:11px;padding:5px 7px;border-radius:7px;border:1px solid #64748b;background:#10233b;color:inherit}.nexfx-trade-footnote{font-size:11px;line-height:1.7;opacity:.7;margin-top:12px}.trade-approval-wrap{margin-top:14px;padding:12px;border:1px solid rgba(217,165,46,.35);border-radius:10px;background:rgba(9,26,49,.55)}.trade-approval-wrap small{display:block;margin-top:7px;opacity:.75;line-height:1.6}.trade-approval-btn{width:100%;max-width:360px}.trade-approval-wrap[hidden]{display:none!important}@media(max-width:600px){.nexfx-trade-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;margin:8px auto;padding:0 2px}.nexfx-trade-stats>div{padding:5px 2px;border-radius:7px}.nexfx-trade-stats small{font-size:9px;line-height:1.25}.nexfx-trade-stats b{font-size:15px;margin-top:2px}.nexfx-trade-toolbar{align-items:stretch}.nexfx-trade-toolbar select{flex:1}.nexfx-trade-table-wrap{width:100%;max-width:100%;overflow-x:hidden}.nexfx-trade-table{width:100%;min-width:0;table-layout:fixed}.nexfx-trade-table th,.nexfx-trade-table td{white-space:normal;overflow-wrap:anywhere;word-break:normal;padding:4px 2px;font-size:8px;line-height:1.25}.nexfx-trade-table th{font-size:8px;line-height:1.2}.nexfx-trade-table td[colspan="8"]{font-size:9px;line-height:1.5;padding:8px 4px}.nexfx-trade-table .trade-row-actions{flex-wrap:wrap}.nexfx-trade-table .trade-row-actions button{font-size:8px;padding:3px 4px}}
+
+/* NEXFX premium compact trade ledger — visual-only update */
+.nexfx-trade-stats>div{position:relative;border-color:rgba(217,165,46,.20);background:linear-gradient(145deg,#0d2340,#091a31)}
+.nexfx-trade-stats>div:nth-child(2) b{color:#35d18c}
+.nexfx-trade-stats>div:nth-child(3) b{color:#ff5b64}
+.nexfx-trade-stats>div:nth-child(4) b{color:#52b8f4}
+.trade-stat-icon{display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;margin-inline-end:4px;border-radius:6px;background:rgba(217,165,46,.10);color:#e6bd53;vertical-align:middle}
+.trade-stat-icon svg,.trade-tile-icon svg{width:13px;height:13px;display:block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nexfx-trade-cards-wrap{width:100%;min-width:0;overflow:visible}
+.nexfx-trade-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:8px;width:100%;min-width:0;direction:rtl}
+.nexfx-trade-card{min-width:0;display:flex;flex-direction:column;gap:7px;padding:9px;border:1px solid rgba(217,165,46,.24);border-radius:11px;background:linear-gradient(145deg,#0d2340,#091a31);box-shadow:0 5px 16px rgba(0,0,0,.12)}
+.nexfx-trade-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;min-width:0}
+.nexfx-trade-tile{min-width:0;min-height:48px;padding:6px 5px;border:1px solid rgba(148,169,194,.13);border-radius:8px;background:linear-gradient(145deg,#071629,#0a1b30);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center}
+.nexfx-trade-tile small{display:flex;align-items:center;justify-content:center;gap:4px;font-size:10px;line-height:1.2;color:#b8c7d9;overflow-wrap:anywhere}
+.trade-tile-icon{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:5px;color:#e6bd53;background:rgba(217,165,46,.10);flex:0 0 auto}
+.nexfx-trade-tile b{font-size:12px;line-height:1.3;color:#e8edf5;font-weight:800;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.nexfx-trade-tile.tone-gold b{color:#e6bd53}.nexfx-trade-tile.tone-entry b,.nexfx-trade-tile.tone-entry .trade-tile-icon{color:#52b8f4}.nexfx-trade-tile.tone-profit b,.nexfx-trade-tile.tone-target b,.nexfx-trade-tile.tone-buy b{color:#35d18c}.nexfx-trade-tile.tone-loss b,.nexfx-trade-tile.tone-stop b,.nexfx-trade-tile.tone-sell b{color:#ff5b64}.nexfx-trade-tile.tone-neutral b{color:#f1f5f9}
+.nexfx-trade-tile.status-tile{align-items:center}.nexfx-trade-card-actions{display:flex;align-items:center;justify-content:flex-start;gap:6px;flex-wrap:wrap}.nexfx-trade-card-actions .trade-row-actions{margin:0}.nexfx-trade-empty{grid-column:1/-1;padding:12px;text-align:center;border:1px dashed rgba(217,165,46,.3);border-radius:8px;font-size:12px;color:#cbd5e1}
+@media(min-width:900px){.nexfx-trade-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.nexfx-trade-card-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:601px) and (max-width:899px){.nexfx-trade-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.nexfx-trade-card-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:600px){.nexfx-trade-stats{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin:8px auto;padding:0}.nexfx-trade-stats>div{padding:6px 2px;border-radius:8px}.nexfx-trade-stats small{font-size:8px;line-height:1.2}.nexfx-trade-stats b{font-size:14px;margin-top:2px}.trade-stat-icon{width:16px;height:16px;margin-inline-end:2px}.trade-stat-icon svg{width:11px;height:11px}.nexfx-trade-toolbar{align-items:stretch}.nexfx-trade-toolbar select{flex:1}.nexfx-trade-cards{grid-template-columns:minmax(0,1fr);gap:6px}.nexfx-trade-card{padding:7px;gap:6px}.nexfx-trade-card-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}.nexfx-trade-tile{min-height:43px;padding:5px 2px;gap:3px}.nexfx-trade-tile small{font-size:9px}.nexfx-trade-tile b{font-size:10px}.trade-tile-icon{width:15px;height:15px}.trade-tile-icon svg{width:11px;height:11px}.nexfx-trade-card-actions button{font-size:9px!important;padding:4px 5px!important}}
+@media(max-width:350px){.nexfx-trade-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.nexfx-trade-stats small{font-size:7px}}
+
+/* Final approved trade monitor presentation: clear open/completed groups and icon-led labels. */
+.nexfx-trade-group{min-width:0;margin:12px 0 15px}
+.nexfx-trade-group-title{display:flex;align-items:center;gap:7px;margin:0 0 8px;padding:7px 9px;border-inline-start:3px solid #d9a52e;border-radius:7px;background:linear-gradient(90deg,rgba(217,165,46,.10),rgba(9,26,49,.35));color:#ffe39a;font-size:13px;font-weight:800}
+.nexfx-trade-group-title .trade-tile-icon{width:20px;height:20px}
+.nexfx-trade-group-completed .nexfx-trade-group-title{border-inline-start-color:#35d18c}
+.nexfx-trade-group-review .nexfx-trade-group-title{border-inline-start-color:#e6bd53}
+.nexfx-trade-tile small{flex-direction:row;gap:5px}
+@media(max-width:600px){.nexfx-trade-group{margin:9px 0 12px}.nexfx-trade-group-title{font-size:12px;padding:6px 8px;margin-bottom:6px}}
+</style>
+
 </head>
 
 <body>
@@ -1771,6 +1860,38 @@ html.nx-skip #nx-cover{display:none!important}
       <div class="signal-box">
         <h3 id="resultTitle" data-t="notRun">لم يتم تشغيل تحليل</h3>
         <p class="muted" id="resultText"></p>
+        <section class="nexfx-auto-visual" id="autoVisualPanel" hidden aria-label="ملخص التحليل متعدد الأطر">
+          <div class="auto-status-card is-wait" id="autoStatusCard">
+            <span class="auto-status-icon" id="autoStatusIcon" aria-hidden="true">◷</span>
+            <div class="auto-status-copy">
+              <small>نتيجة التحليل الذكي</small>
+              <strong id="autoStatusLabel">انتظار</strong>
+              <p id="autoStatusSummary">بانتظار اكتمال التحليل.</p>
+            </div>
+          </div>
+          <div class="auto-frames-heading">توافق الأطر الزمنية</div>
+          <div class="auto-frame-grid" id="autoFrameGrid">
+            <div class="auto-frame-card" data-frame="5M"><small>5 دقائق</small><b>—</b></div>
+            <div class="auto-frame-card" data-frame="15M"><small>15 دقيقة</small><b>—</b></div>
+            <div class="auto-frame-card" data-frame="1H"><small>ساعة</small><b>—</b></div>
+            <div class="auto-frame-card" data-frame="4H"><small>4 ساعات</small><b>—</b></div>
+            <div class="auto-frame-card" data-frame="1D"><small>يومي</small><b>—</b></div>
+          </div>
+          <div class="auto-agreement-card">
+            <div class="auto-agreement-head"><span>صافي التوافق مع اتجاه الإشارة</span><strong id="autoAgreementValue">—</strong></div>
+            <div class="auto-agreement-track"><span id="autoAgreementBar"></span></div>
+            <div class="auto-agreement-breakdown" aria-label="توزيع أوزان الأطر الزمنية">
+              <div><small>مؤيدة</small><b id="autoSupportValue">—</b></div>
+              <div><small>معارضة</small><b id="autoOppositionValue">—</b></div>
+              <div><small>غير واضحة</small><b id="autoUncertainValue">—</b></div>
+            </div>
+            <small id="autoAgreementHint">الصافي = المؤيدة ناقص المعارضة. الأطر غير الواضحة لا تُحسب مع أي اتجاه. هذه نسب توافق فني وليست احتمالاً للربح.</small>
+          </div>
+          <details class="auto-details">
+            <summary>تفاصيل التحليل وسبب القرار</summary>
+            <p id="autoDetailsText"></p>
+          </details>
+        </section>
         <div class="signal-grid nexfx-result-grid">
           <div class="signal-cell result-support"><small><span aria-hidden="true">📈</span> <span data-t="support">أقرب دعم</span></small><b id="outSupport">—</b></div>
           <div class="signal-cell result-resistance"><small><span aria-hidden="true">🚩</span> <span data-t="resistance">أقرب مقاومة</span></small><b id="outResistance">—</b></div>
@@ -1780,6 +1901,7 @@ html.nx-skip #nx-cover{display:none!important}
           <div class="signal-cell result-tp2"><small><span aria-hidden="true">🏆</span> TP2</small><b id="outTP2">—</b></div>
         </div>
         <div class="result-meta"><span>⏱️ <span data-t="timeframe">الفريم</span>: <b id="outResultTimeframe">—</b></span><span>🕒 <span data-t="updated">وقت التحديث</span>: <b id="outResultUpdated">—</b></span><span>🔷 <span data-t="source">المصدر</span>: <b id="outResultSource">—</b></span></div>
+        <div id="tradeApprovalWrap" class="trade-approval-wrap" hidden><button type="button" id="approveTradeBtn" class="primary trade-approval-btn">اعتماد وفتح الصفقة في المراقبة</button><small>لن تُسجّل نتيجة الانتظار. يلزم تأكيدك قبل إضافة أي توصية إلى سجل الصفقات.</small></div>
         <div class="result-legacy-values" aria-hidden="true"><span id="outMode">—</span><span id="outPair">—</span></div>
       </div>
     </div>
@@ -1799,16 +1921,24 @@ html.nx-skip #nx-cover{display:none!important}
   <div class="info-popover" id="tradeMonitorInfo" hidden data-t="tradeMonitorInfo">
     تابع صفقاتك المفتوحة والمغلقة، واطّلع على حالة كل صفقة ومستويات الدخول ووقف الخسارة والأهداف ونتائجها عندما تكون بيانات التداول متصلة.
   </div>
-  <div style="overflow:auto">
-    <table>
-      <thead><tr>
-        <th data-t="asset">الأصل</th><th data-t="type">النوع</th>
-        <th data-t="entry">الدخول</th><th data-t="stop">وقف الخسارة</th>
-        <th>TP</th><th data-t="status">الحالة</th>
-      </tr></thead>
-      <tbody><tr><td colspan="6" data-t="noTrades">لا توجد صفقات متصلة حالياً.</td></tr></tbody>
-    </table>
+  <div class="nexfx-trade-toolbar">
+    <label for="tradeSourceFilter">عرض الصفقات</label>
+    <select id="tradeSourceFilter" aria-label="تصفية الصفقات حسب المحرك">
+      <option value="all">كل المحركات</option><option value="technical">الفني</option>
+      <option value="auto">التلقائي</option><option value="manual">اليدوي</option>
+    </select>
+    <span id="tradeMonitorStatus" role="status">المراقبة تعمل عند إبقاء الصفحة مفتوحة</span>
   </div>
+  <div class="nexfx-trade-stats" id="tradeMonitorStats">
+    <div><small><span class="trade-stat-icon" aria-hidden="true">▤</span>إجمالي الصفقات</small><b id="tradeStatTotal">0</b></div>
+    <div><small><span class="trade-stat-icon" aria-hidden="true">↗</span>الرابحة</small><b id="tradeStatWins">0</b></div>
+    <div><small><span class="trade-stat-icon" aria-hidden="true">↘</span>الخاسرة</small><b id="tradeStatLosses">0</b></div>
+    <div><small><span class="trade-stat-icon" aria-hidden="true">◷</span>قيد المتابعة</small><b id="tradeStatActive">0</b></div>
+  </div>
+  <div class="nexfx-trade-table-wrap nexfx-trade-cards-wrap">
+    <div id="tradeMonitorRows" class="nexfx-trade-cards" aria-live="polite"><div class="nexfx-trade-empty">لا توجد صفقات مسجلة حالياً. شغّل تحليلاً مؤكداً ثم اضغط «اعتماد وفتح الصفقة».</div></div>
+  </div>
+  <p class="nexfx-trade-footnote">السجل محفوظ على هذا الجهاز وحساب المستخدم. تحديث المراقبة يعتمد على شموع Binance المكتملة بدقيقة واحدة، ويعمل أثناء بقاء الصفحة مفتوحة فقط. لا يتم إرسال أوامر تداول حقيقية.</p>
 </section>
 
 
@@ -1859,6 +1989,13 @@ html.nx-skip #nx-cover{display:none!important}
       <button class="primary execution-action" id="executionScanBtn" type="button" data-t="executionScan">فحص قائمة الأصول</button>
       <div class="execution-feedback" id="executionScanFeedback" role="status" aria-live="polite" data-t="executionScanIdle">لم يبدأ الفحص بعد.</div>
       <div class="execution-scan-results" id="executionScanResults" aria-live="polite"></div>
+      <div class="opportunity-engine" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--line)">
+        <h4 style="margin:0 0 6px;color:var(--gold2)">محرك الفرص متعدد الفريمات</h4>
+        <p style="margin:0 0 8px;font-size:12px;color:var(--muted)">يفحص أهم 8 عملات رقمية متاحة على Binance Spot باستخدام 5M و15M و1H و4H و1D، ويعرض شراء أو بيع أو انتظار حسب توافق الاتجاهات.</p>
+        <button class="primary execution-action" id="opportunityScanBtn" type="button">ابدأ فحص الفرص — 5 فريمات</button>
+        <div class="execution-feedback" id="opportunityScanFeedback" role="status" aria-live="polite">لم يبدأ فحص الفرص بعد.</div>
+        <div id="opportunityScanResults" class="opportunity-results" aria-live="polite"></div>
+      </div>
     </div>
 
     <div class="execution-card">
@@ -2556,6 +2693,7 @@ const AuthController = {
       this.currentUser = user ? {uid:user.uid,email:user.email,provider:user.providerData?.[0]?.providerId || "password"} : null;
       this.updateAuthUI();
       loadUserScopedState();
+      if(typeof initNexfxTradeMonitor==="function")initNexfxTradeMonitor();
       loadRiskSettingsForUser(nextUID);
       if(user){
         await restoreCloudStateForUser(user.uid);
@@ -2776,23 +2914,48 @@ nl:{reconnect:"Opnieuw verbinden…",connected:"Verbonden · gegevens bijwerken"
 function liveText(key){const pack=chartLiveI18n[language]||chartLiveI18n.en;return pack[key]||chartLiveI18n.en[key]||key;}
 
 const analysisReportI18n={
-ar:{support:"أقرب دعم",resistance:"أقرب مقاومة",unavailable:"غير متاح",rewardRisk:"العائد/المخاطرة",source:"المصدر",timeframe:"الفريم",updated:"آخر تحديث",entry:"الدخول",issued:"وقت صدور التوصية",livePrice:"السعر الحالي من Binance",status:"حالة التوصية",within:"التوصية ضمن المدة المحددة.",stale:"منتهية الصلاحية: عمر التوصية تجاوز ثلاثة أضعاف الإطار الزمني.",stopped:"السعر الحالي عند وقف الخسارة أو تجاوزه؛ التوصية غير صالحة للدخول.",target:"تم الوصول إلى الهدف الأول أو تجاوزه؛ لا تدخل اعتماداً على التوصية الأصلية.",missed:"فرصة الدخول قد فاتت: السعر الحالي تجاوز مستوى الدخول باتجاه الصفقة.",buy:"شراء",sell:"بيع",manualInvalid:"أدخل سعراً صحيحاً في خانة {field}. جميع الخانات الأربع مطلوبة: الدخول ووقف الخسارة وTP1 وTP2.",future:"أدخل وقت صدور التوصية بشكل صحيح؛ لا يمكن أن يكون في المستقبل.",cryptoOnly:"التحقق اللحظي من التوصيات اليدوية متاح حالياً للعملات الرقمية عبر Binance فقط. ربط الفوركس والمعادن والأسهم يتطلب خادم بيانات سوق.",priceFail:"تعذر التحقق من السعر الحالي عبر Binance؛ لم نعتمد التوصية. أعد المحاولة عند عودة الاتصال.",cryptoChecking:'Binance Spot-paren controleren…',cryptoVerified:'Binance Spot geverifieerd: {active} actieve paren, {archive} gearchiveerd.',cryptoVerifyFail:'Binance-paren konden niet worden geverifieerd. Cryptoanalyse blijft vergrendeld totdat verificatie slaagt.',liveConnecting:'Verbinden…',liveUnsupported:'Live-updates worden niet ondersteund',live:'Live'},
-en:{support:"Nearest support",resistance:"Nearest resistance",unavailable:"Unavailable",rewardRisk:"Reward/risk",source:"Source",timeframe:"Timeframe",updated:"Last update",entry:"Entry",issued:"Signal issued",livePrice:"Current Binance price",status:"Signal status",within:"Signal is within the allowed age.",stale:"Expired: signal age exceeds three timeframe intervals.",stopped:"Current price is at or beyond stop-loss; the signal is invalid for entry.",target:"TP1 appears reached or passed; do not enter using the original signal.",missed:"Entry likely missed: price has moved beyond the entry in the trade direction.",buy:"BUY",sell:"SELL",manualInvalid:"Enter a valid price for {field}. All four fields are required: entry, stop-loss, TP1 and TP2.",future:"Enter a valid signal issue time; it cannot be in the future.",cryptoOnly:"Manual signal verification currently supports Crypto through Binance only. Forex, metals and stocks require a market-data server.",priceFail:"Could not verify the current Binance price; the signal was not accepted. Retry when connected."},
-fr:{support:"Support le plus proche",resistance:"Résistance la plus proche",unavailable:"Indisponible",rewardRisk:"Rendement/risque",source:"Source",timeframe:"Période",updated:"Dernière mise à jour",entry:"Entrée",issued:"Émise le",livePrice:"Prix Binance actuel",status:"État du signal",within:"Le signal respecte la durée autorisée.",stale:"Expiré : le signal dépasse trois périodes.",stopped:"Le prix actuel a atteint ou dépassé le stop-loss ; entrée invalide.",target:"TP1 semble atteint ou dépassé ; n’entrez pas sur la base du signal initial.",missed:"Entrée probablement manquée : le prix a dépassé le niveau d’entrée dans le sens du trade.",buy:"ACHAT",sell:"VENTE",manualInvalid:"Saisissez un prix valide pour {field}. Les quatre champs sont obligatoires.",future:"Saisissez une heure d’émission valide, qui ne peut pas être future.",cryptoOnly:"La vérification manuelle est actuellement disponible uniquement pour les cryptos via Binance. Les autres marchés nécessitent un serveur de données.",priceFail:"Impossible de vérifier le prix Binance actuel ; le signal n’a pas été accepté."},
-tr:{support:"En yakın destek",resistance:"En yakın direnç",unavailable:"Kullanılamıyor",rewardRisk:"Getiri/risk",source:"Kaynak",timeframe:"Zaman aralığı",updated:"Son güncelleme",entry:"Giriş",issued:"Sinyal zamanı",livePrice:"Güncel Binance fiyatı",status:"Sinyal durumu",within:"Sinyal izin verilen süre içinde.",stale:"Süresi doldu: sinyal yaşı üç zaman aralığını aşıyor.",stopped:"Güncel fiyat zarar durdur seviyesinde veya ötesinde; giriş için geçersiz.",target:"TP1'e ulaşılmış veya aşılmış görünüyor; ilk sinyale göre giriş yapmayın.",missed:"Giriş fırsatı kaçmış olabilir: fiyat giriş seviyesini işlem yönünde geçti.",buy:"ALIŞ",sell:"SATIŞ",manualInvalid:"{field} alanına geçerli fiyat girin. Dört alanın tamamı zorunludur.",future:"Geçerli bir sinyal zamanı girin; gelecek bir zaman olamaz.",cryptoOnly:"Manuel sinyal doğrulaması şu anda yalnızca Binance üzerinden kripto için kullanılabilir. Diğer piyasalar veri sunucusu gerektirir.",priceFail:"Güncel Binance fiyatı doğrulanamadı; sinyal kabul edilmedi."},
-de:{support:"Nächste Unterstützung",resistance:"Nächster Widerstand",unavailable:"Nicht verfügbar",rewardRisk:"Chance/Risiko",source:"Quelle",timeframe:"Zeitrahmen",updated:"Letzte Aktualisierung",entry:"Einstieg",issued:"Signalzeit",livePrice:"Aktueller Binance-Preis",status:"Signalstatus",within:"Das Signal liegt innerhalb des zulässigen Zeitraums.",stale:"Abgelaufen: Das Signal ist älter als drei Zeitintervalle.",stopped:"Der aktuelle Preis liegt am oder jenseits des Stop-Loss; Einstieg ungültig.",target:"TP1 scheint erreicht oder überschritten; nicht anhand des ursprünglichen Signals einsteigen.",missed:"Einstieg vermutlich verpasst: Der Preis hat den Einstieg in Handelsrichtung überschritten.",buy:"KAUF",sell:"VERKAUF",manualInvalid:"Geben Sie einen gültigen Preis für {field} ein. Alle vier Felder sind erforderlich.",future:"Geben Sie eine gültige Signalzeit ein; sie darf nicht in der Zukunft liegen.",cryptoOnly:"Die manuelle Signalprüfung unterstützt derzeit nur Krypto über Binance. Andere Märkte benötigen einen Datenserver.",priceFail:"Der aktuelle Binance-Preis konnte nicht geprüft werden; das Signal wurde nicht angenommen."},
-es:{support:"Soporte más cercano",resistance:"Resistencia más cercana",unavailable:"No disponible",rewardRisk:"Rentabilidad/riesgo",source:"Fuente",timeframe:"Temporalidad",updated:"Última actualización",entry:"Entrada",issued:"Emisión",livePrice:"Precio actual de Binance",status:"Estado de la señal",within:"La señal está dentro del plazo permitido.",stale:"Caducada: la antigüedad supera tres intervalos.",stopped:"El precio actual está en el stop-loss o lo ha superado; entrada no válida.",target:"TP1 parece alcanzado o superado; no entres con la señal original.",missed:"Entrada probablemente perdida: el precio superó la entrada en la dirección de la operación.",buy:"COMPRA",sell:"VENTA",manualInvalid:"Introduce un precio válido para {field}. Los cuatro campos son obligatorios.",future:"Introduce una hora de emisión válida; no puede ser futura.",cryptoOnly:"La verificación manual solo está disponible actualmente para criptomonedas mediante Binance. Otros mercados requieren un servidor de datos.",priceFail:"No se pudo verificar el precio actual de Binance; la señal no se aceptó."},
-pt:{support:"Suporte mais próximo",resistance:"Resistência mais próxima",unavailable:"Indisponível",rewardRisk:"Retorno/risco",source:"Fonte",timeframe:"Período",updated:"Última atualização",entry:"Entrada",issued:"Emissão do sinal",livePrice:"Preço atual da Binance",status:"Estado do sinal",within:"O sinal está dentro do prazo permitido.",stale:"Expirado: a idade do sinal excede três períodos.",stopped:"O preço atual está no stop-loss ou além dele; entrada inválida.",target:"TP1 parece ter sido atingido ou ultrapassado; não entre com o sinal original.",missed:"Entrada provavelmente perdida: o preço ultrapassou a entrada na direção da operação.",buy:"COMPRA",sell:"VENDA",manualInvalid:"Insira um preço válido para {field}. Os quatro campos são obrigatórios.",future:"Insira uma hora de emissão válida; não pode estar no futuro.",cryptoOnly:"A verificação manual está disponível apenas para cripto via Binance. Outros mercados exigem um servidor de dados.",priceFail:"Não foi possível verificar o preço atual da Binance; o sinal não foi aceite."},
-it:{support:"Supporto più vicino",resistance:"Resistenza più vicina",unavailable:"Non disponibile",rewardRisk:"Rendimento/rischio",source:"Fonte",timeframe:"Intervallo",updated:"Ultimo aggiornamento",entry:"Ingresso",issued:"Emissione del segnale",livePrice:"Prezzo Binance attuale",status:"Stato del segnale",within:"Il segnale rientra nel periodo consentito.",stale:"Scaduto: l’età del segnale supera tre intervalli.",stopped:"Il prezzo attuale è al livello di stop-loss o oltre; ingresso non valido.",target:"TP1 sembra raggiunto o superato; non entrare usando il segnale originale.",missed:"Ingresso probabilmente perso: il prezzo ha superato il livello nella direzione dell’operazione.",buy:"ACQUISTA",sell:"VENDI",manualInvalid:"Inserisci un prezzo valido per {field}. Tutti e quattro i campi sono obbligatori.",future:"Inserisci un orario di emissione valido, non futuro.",cryptoOnly:"La verifica manuale è attualmente disponibile solo per le criptovalute tramite Binance. Gli altri mercati richiedono un server dati.",priceFail:"Impossibile verificare il prezzo Binance attuale; il segnale non è stato accettato."},
-ru:{support:"Ближайшая поддержка",resistance:"Ближайшее сопротивление",unavailable:"Недоступно",rewardRisk:"Доходность/риск",source:"Источник",timeframe:"Таймфрейм",updated:"Обновлено",entry:"Вход",issued:"Время сигнала",livePrice:"Текущая цена Binance",status:"Статус сигнала",within:"Сигнал находится в допустимом временном диапазоне.",stale:"Срок истёк: возраст сигнала превышает три таймфрейма.",stopped:"Текущая цена достигла стоп-лосса или прошла его; вход недействителен.",target:"Похоже, TP1 достигнут или пройден; не входите по исходному сигналу.",missed:"Вход, вероятно, упущен: цена прошла уровень входа по направлению сделки.",buy:"ПОКУПКА",sell:"ПРОДАЖА",manualInvalid:"Введите корректную цену для поля «{field}». Все четыре поля обязательны.",future:"Укажите корректное время сигнала; оно не может быть в будущем.",cryptoOnly:"Проверка ручных сигналов сейчас доступна только для криптовалют через Binance. Для других рынков нужен сервер данных.",priceFail:"Не удалось проверить текущую цену Binance; сигнал не принят."},
-zh:{support:"最近支撑位",resistance:"最近阻力位",unavailable:"不可用",rewardRisk:"收益/风险",source:"数据源",timeframe:"时间周期",updated:"最后更新",entry:"入场价",issued:"信号发布时间",livePrice:"Binance 当前价格",status:"信号状态",within:"信号处于允许的有效时间内。",stale:"已过期：信号时间超过三个周期。",stopped:"当前价格已达到或超过止损位；该信号不适合入场。",target:"TP1 似乎已达到或突破；请勿依据原始信号入场。",missed:"可能错过入场：价格已沿交易方向越过入场位。",buy:"买入",sell:"卖出",manualInvalid:"请为 {field} 输入有效价格。四个价格字段均为必填项。",future:"请输入有效的信号发布时间，不能晚于当前时间。",cryptoOnly:"目前仅支持通过 Binance 验证加密货币手动信号。其他市场需要部署行情数据服务器。",priceFail:"无法验证 Binance 当前价格；未接受该信号。"},
-ja:{support:"最寄りのサポート",resistance:"最寄りのレジスタンス",unavailable:"利用不可",rewardRisk:"リターン/リスク",source:"データソース",timeframe:"時間足",updated:"最終更新",entry:"エントリー",issued:"シグナル発行時刻",livePrice:"Binance現在価格",status:"シグナル状態",within:"シグナルは許容期間内です。",stale:"期限切れ：シグナルの経過時間が3時間足分を超えています。",stopped:"現在価格が損切り価格に達したか超えています。エントリーは無効です。",target:"TP1に到達または突破した可能性があります。元のシグナルでエントリーしないでください。",missed:"エントリー機会を逃した可能性があります。価格が取引方向にエントリー価格を超えました。",buy:"買い",sell:"売り",manualInvalid:"{field}に有効な価格を入力してください。4つの価格欄はすべて必須です。",future:"有効な発行時刻を入力してください。未来の時刻は指定できません。",cryptoOnly:"手動シグナル検証は現在Binance経由の暗号資産のみ対応しています。他市場にはデータサーバーが必要です。",priceFail:"Binanceの現在価格を検証できなかったため、シグナルは受け付けられませんでした。"},
-ko:{support:"가장 가까운 지지선",resistance:"가장 가까운 저항선",unavailable:"사용할 수 없음",rewardRisk:"수익/위험",source:"출처",timeframe:"시간 간격",updated:"최근 업데이트",entry:"진입가",issued:"신호 발행 시각",livePrice:"Binance 현재 가격",status:"신호 상태",within:"신호가 허용된 유효 기간 내에 있습니다.",stale:"만료됨: 신호 경과 시간이 세 개의 시간 간격을 초과했습니다.",stopped:"현재 가격이 손절가에 도달했거나 넘어섰습니다. 진입할 수 없습니다.",target:"TP1에 도달했거나 넘어선 것으로 보입니다. 원래 신호로 진입하지 마세요.",missed:"진입 기회를 놓쳤을 수 있습니다. 가격이 거래 방향으로 진입가를 넘어섰습니다.",buy:"매수",sell:"매도",manualInvalid:"{field}에 올바른 가격을 입력하세요. 네 가격 항목은 모두 필수입니다.",future:"올바른 신호 발행 시각을 입력하세요. 미래 시각은 사용할 수 없습니다.",cryptoOnly:"현재 수동 신호 검증은 Binance를 통한 암호화폐만 지원합니다. 다른 시장은 데이터 서버가 필요합니다.",priceFail:"Binance 현재 가격을 확인할 수 없어 신호를 승인하지 않았습니다."},
-hi:{support:"निकटतम समर्थन",resistance:"निकटतम प्रतिरोध",unavailable:"उपलब्ध नहीं",rewardRisk:"रिटर्न/जोखिम",source:"स्रोत",timeframe:"समय-सीमा",updated:"अंतिम अपडेट",entry:"प्रवेश",issued:"सिग्नल जारी समय",livePrice:"वर्तमान Binance मूल्य",status:"सिग्नल स्थिति",within:"सिग्नल अनुमत समय-सीमा के भीतर है।",stale:"समाप्त: सिग्नल की आयु तीन समय-अंतराल से अधिक है।",stopped:"वर्तमान मूल्य स्टॉप-लॉस पर या उससे आगे है; प्रवेश अमान्य है।",target:"TP1 संभवतः प्राप्त या पार हो गया है; मूल सिग्नल के आधार पर प्रवेश न करें।",missed:"प्रवेश का अवसर संभवतः निकल गया: मूल्य ट्रेड दिशा में प्रवेश स्तर से आगे बढ़ गया।",buy:"खरीदें",sell:"बेचें",manualInvalid:"{field} के लिए मान्य मूल्य दर्ज करें। चारों फ़ील्ड आवश्यक हैं।",future:"मान्य सिग्नल समय दर्ज करें; यह भविष्य में नहीं हो सकता।",cryptoOnly:"मैन्युअल सिग्नल सत्यापन अभी केवल Binance के माध्यम से क्रिप्टो के लिए उपलब्ध है। अन्य बाज़ारों के लिए डेटा सर्वर चाहिए।",priceFail:"वर्तमान Binance मूल्य सत्यापित नहीं हो सका; सिग्नल स्वीकार नहीं किया गया।"},
-id:{support:"Support terdekat",resistance:"Resistance terdekat",unavailable:"Tidak tersedia",rewardRisk:"Imbal hasil/risiko",source:"Sumber",timeframe:"Kerangka waktu",updated:"Pembaruan terakhir",entry:"Harga masuk",issued:"Waktu sinyal",livePrice:"Harga Binance saat ini",status:"Status sinyal",within:"Sinyal masih dalam batas waktu yang diizinkan.",stale:"Kedaluwarsa: usia sinyal melebihi tiga interval waktu.",stopped:"Harga saat ini berada pada atau melewati stop-loss; sinyal tidak valid untuk masuk.",target:"TP1 tampaknya telah tercapai atau terlewati; jangan masuk berdasarkan sinyal awal.",missed:"Peluang masuk mungkin terlewat: harga bergerak melewati level masuk searah transaksi.",buy:"BELI",sell:"JUAL",manualInvalid:"Masukkan harga valid untuk {field}. Keempat kolom wajib diisi.",future:"Masukkan waktu penerbitan sinyal yang valid; tidak boleh di masa depan.",cryptoOnly:"Verifikasi sinyal manual saat ini hanya mendukung kripto melalui Binance. Pasar lain memerlukan server data.",priceFail:"Harga Binance saat ini tidak dapat diverifikasi; sinyal tidak diterima."},
-nl:{support:"Dichtstbijzijnde steun",resistance:"Dichtstbijzijnde weerstand",unavailable:"Niet beschikbaar",rewardRisk:"Rendement/risico",source:"Bron",timeframe:"Tijdsbestek",updated:"Laatst bijgewerkt",entry:"Instap",issued:"Signaaltijd",livePrice:"Huidige Binance-prijs",status:"Signaalstatus",within:"Het signaal valt binnen de toegestane geldigheidsduur.",stale:"Verlopen: de signaalleeftijd is langer dan drie tijdsperioden.",stopped:"De huidige prijs staat op of voorbij de stop-loss; instap is ongeldig.",target:"TP1 lijkt bereikt of gepasseerd; stap niet in op basis van het oorspronkelijke signaal.",missed:"Instap waarschijnlijk gemist: de prijs is voorbij het instapniveau in de handelsrichting gegaan.",buy:"KOPEN",sell:"VERKOPEN",manualInvalid:"Voer een geldige prijs in voor {field}. Alle vier velden zijn verplicht.",future:"Voer een geldige signaaltijd in; deze mag niet in de toekomst liggen.",cryptoOnly:"Handmatige signaalcontrole ondersteunt momenteel alleen crypto via Binance. Andere markten vereisen een dataserver.",priceFail:"De huidige Binance-prijs kon niet worden gecontroleerd; het signaal is niet geaccepteerd."}
+ar:{support:"أقرب دعم",resistance:"أقرب مقاومة",unavailable:"غير متاح",rewardRisk:"العائد/المخاطرة",source:"المصدر",timeframe:"الفريم",updated:"آخر تحديث",entry:"الدخول",issued:"وقت صدور التوصية",livePrice:"السعر الحالي من Binance",status:"حالة التوصية",within:"التوصية ضمن المدة المحددة.",stale:"تحتاج إلى إعادة تقييم: مرّ وقت طويل على التوصية؛ تحقّق من السعر قبل الدخول.",stopped:"السعر الحالي عند وقف الخسارة أو تجاوزه؛ التوصية غير صالحة للدخول.",target:"تم الوصول إلى الهدف الأول أو تجاوزه؛ لا تدخل اعتماداً على التوصية الأصلية.",missed:"فرصة الدخول قد فاتت: السعر الحالي تجاوز مستوى الدخول باتجاه الصفقة.",buy:"شراء",sell:"بيع",manualInvalid:"أدخل سعراً صحيحاً في خانة {field}. جميع الخانات الأربع مطلوبة: الدخول ووقف الخسارة وTP1 وTP2.",future:"أدخل وقت صدور التوصية بشكل صحيح؛ لا يمكن أن يكون في المستقبل.",cryptoOnly:"التحقق اللحظي من التوصيات اليدوية متاح حالياً للعملات الرقمية عبر Binance فقط. ربط الفوركس والمعادن والأسهم يتطلب خادم بيانات سوق.",priceFail:"تعذر التحقق من السعر الحالي عبر Binance؛ لم نعتمد التوصية. أعد المحاولة عند عودة الاتصال.",cryptoChecking:'Binance Spot-paren controleren…',cryptoVerified:'Binance Spot geverifieerd: {active} actieve paren, {archive} gearchiveerd.',cryptoVerifyFail:'Binance-paren konden niet worden geverifieerd. Cryptoanalyse blijft vergrendeld totdat verificatie slaagt.',liveConnecting:'Verbinden…',liveUnsupported:'Live-updates worden niet ondersteund',live:'Live'},
+en:{support:"Nearest support",resistance:"Nearest resistance",unavailable:"Unavailable",rewardRisk:"Reward/risk",source:"Source",timeframe:"Timeframe",updated:"Last update",entry:"Entry",issued:"Signal issued",livePrice:"Current Binance price",status:"Signal status",within:"Signal is within the allowed age.",stale:"Needs reassessment: the signal is old; verify current price before entry.",stopped:"Current price is at or beyond stop-loss; the signal is invalid for entry.",target:"TP1 appears reached or passed; do not enter using the original signal.",missed:"Entry likely missed: price has moved beyond the entry in the trade direction.",buy:"BUY",sell:"SELL",manualInvalid:"Enter a valid price for {field}. All four fields are required: entry, stop-loss, TP1 and TP2.",future:"Enter a valid signal issue time; it cannot be in the future.",cryptoOnly:"Manual signal verification currently supports Crypto through Binance only. Forex, metals and stocks require a market-data server.",priceFail:"Could not verify the current Binance price; the signal was not accepted. Retry when connected."},
+fr:{support:"Support le plus proche",resistance:"Résistance la plus proche",unavailable:"Indisponible",rewardRisk:"Rendement/risque",source:"Source",timeframe:"Période",updated:"Dernière mise à jour",entry:"Entrée",issued:"Émise le",livePrice:"Prix Binance actuel",status:"État du signal",within:"Le signal respecte la durée autorisée.",stale:"À réévaluer : le signal date ; vérifiez le prix avant toute entrée.",stopped:"Le prix actuel a atteint ou dépassé le stop-loss ; entrée invalide.",target:"TP1 semble atteint ou dépassé ; n’entrez pas sur la base du signal initial.",missed:"Entrée probablement manquée : le prix a dépassé le niveau d’entrée dans le sens du trade.",buy:"ACHAT",sell:"VENTE",manualInvalid:"Saisissez un prix valide pour {field}. Les quatre champs sont obligatoires.",future:"Saisissez une heure d’émission valide, qui ne peut pas être future.",cryptoOnly:"La vérification manuelle est actuellement disponible uniquement pour les cryptos via Binance. Les autres marchés nécessitent un serveur de données.",priceFail:"Impossible de vérifier le prix Binance actuel ; le signal n’a pas été accepté."},
+tr:{support:"En yakın destek",resistance:"En yakın direnç",unavailable:"Kullanılamıyor",rewardRisk:"Getiri/risk",source:"Kaynak",timeframe:"Zaman aralığı",updated:"Son güncelleme",entry:"Giriş",issued:"Sinyal zamanı",livePrice:"Güncel Binance fiyatı",status:"Sinyal durumu",within:"Sinyal izin verilen süre içinde.",stale:"Yeniden değerlendirilmeli: sinyal eski; girişten önce güncel fiyatı kontrol edin.",stopped:"Güncel fiyat zarar durdur seviyesinde veya ötesinde; giriş için geçersiz.",target:"TP1'e ulaşılmış veya aşılmış görünüyor; ilk sinyale göre giriş yapmayın.",missed:"Giriş fırsatı kaçmış olabilir: fiyat giriş seviyesini işlem yönünde geçti.",buy:"ALIŞ",sell:"SATIŞ",manualInvalid:"{field} alanına geçerli fiyat girin. Dört alanın tamamı zorunludur.",future:"Geçerli bir sinyal zamanı girin; gelecek bir zaman olamaz.",cryptoOnly:"Manuel sinyal doğrulaması şu anda yalnızca Binance üzerinden kripto için kullanılabilir. Diğer piyasalar veri sunucusu gerektirir.",priceFail:"Güncel Binance fiyatı doğrulanamadı; sinyal kabul edilmedi."},
+de:{support:"Nächste Unterstützung",resistance:"Nächster Widerstand",unavailable:"Nicht verfügbar",rewardRisk:"Chance/Risiko",source:"Quelle",timeframe:"Zeitrahmen",updated:"Letzte Aktualisierung",entry:"Einstieg",issued:"Signalzeit",livePrice:"Aktueller Binance-Preis",status:"Signalstatus",within:"Das Signal liegt innerhalb des zulässigen Zeitraums.",stale:"Neubewertung nötig: Das Signal ist älter; prüfen Sie vor dem Einstieg den aktuellen Preis.",stopped:"Der aktuelle Preis liegt am oder jenseits des Stop-Loss; Einstieg ungültig.",target:"TP1 scheint erreicht oder überschritten; nicht anhand des ursprünglichen Signals einsteigen.",missed:"Einstieg vermutlich verpasst: Der Preis hat den Einstieg in Handelsrichtung überschritten.",buy:"KAUF",sell:"VERKAUF",manualInvalid:"Geben Sie einen gültigen Preis für {field} ein. Alle vier Felder sind erforderlich.",future:"Geben Sie eine gültige Signalzeit ein; sie darf nicht in der Zukunft liegen.",cryptoOnly:"Die manuelle Signalprüfung unterstützt derzeit nur Krypto über Binance. Andere Märkte benötigen einen Datenserver.",priceFail:"Der aktuelle Binance-Preis konnte nicht geprüft werden; das Signal wurde nicht angenommen."},
+es:{support:"Soporte más cercano",resistance:"Resistencia más cercana",unavailable:"No disponible",rewardRisk:"Rentabilidad/riesgo",source:"Fuente",timeframe:"Temporalidad",updated:"Última actualización",entry:"Entrada",issued:"Emisión",livePrice:"Precio actual de Binance",status:"Estado de la señal",within:"La señal está dentro del plazo permitido.",stale:"Requiere reevaluación: la señal es antigua; verifica el precio antes de entrar.",stopped:"El precio actual está en el stop-loss o lo ha superado; entrada no válida.",target:"TP1 parece alcanzado o superado; no entres con la señal original.",missed:"Entrada probablemente perdida: el precio superó la entrada en la dirección de la operación.",buy:"COMPRA",sell:"VENTA",manualInvalid:"Introduce un precio válido para {field}. Los cuatro campos son obligatorios.",future:"Introduce una hora de emisión válida; no puede ser futura.",cryptoOnly:"La verificación manual solo está disponible actualmente para criptomonedas mediante Binance. Otros mercados requieren un servidor de datos.",priceFail:"No se pudo verificar el precio actual de Binance; la señal no se aceptó."},
+pt:{support:"Suporte mais próximo",resistance:"Resistência mais próxima",unavailable:"Indisponível",rewardRisk:"Retorno/risco",source:"Fonte",timeframe:"Período",updated:"Última atualização",entry:"Entrada",issued:"Emissão do sinal",livePrice:"Preço atual da Binance",status:"Estado do sinal",within:"O sinal está dentro do prazo permitido.",stale:"Requer reavaliação: o sinal é antigo; verifique o preço antes de entrar.",stopped:"O preço atual está no stop-loss ou além dele; entrada inválida.",target:"TP1 parece ter sido atingido ou ultrapassado; não entre com o sinal original.",missed:"Entrada provavelmente perdida: o preço ultrapassou a entrada na direção da operação.",buy:"COMPRA",sell:"VENDA",manualInvalid:"Insira um preço válido para {field}. Os quatro campos são obrigatórios.",future:"Insira uma hora de emissão válida; não pode estar no futuro.",cryptoOnly:"A verificação manual está disponível apenas para cripto via Binance. Outros mercados exigem um servidor de dados.",priceFail:"Não foi possível verificar o preço atual da Binance; o sinal não foi aceite."},
+it:{support:"Supporto più vicino",resistance:"Resistenza più vicina",unavailable:"Non disponibile",rewardRisk:"Rendimento/rischio",source:"Fonte",timeframe:"Intervallo",updated:"Ultimo aggiornamento",entry:"Ingresso",issued:"Emissione del segnale",livePrice:"Prezzo Binance attuale",status:"Stato del segnale",within:"Il segnale rientra nel periodo consentito.",stale:"Da rivalutare: il segnale è datato; verifica il prezzo prima di entrare.",stopped:"Il prezzo attuale è al livello di stop-loss o oltre; ingresso non valido.",target:"TP1 sembra raggiunto o superato; non entrare usando il segnale originale.",missed:"Ingresso probabilmente perso: il prezzo ha superato il livello nella direzione dell’operazione.",buy:"ACQUISTA",sell:"VENDI",manualInvalid:"Inserisci un prezzo valido per {field}. Tutti e quattro i campi sono obbligatori.",future:"Inserisci un orario di emissione valido, non futuro.",cryptoOnly:"La verifica manuale è attualmente disponibile solo per le criptovalute tramite Binance. Gli altri mercati richiedono un server dati.",priceFail:"Impossibile verificare il prezzo Binance attuale; il segnale non è stato accettato."},
+ru:{support:"Ближайшая поддержка",resistance:"Ближайшее сопротивление",unavailable:"Недоступно",rewardRisk:"Доходность/риск",source:"Источник",timeframe:"Таймфрейм",updated:"Обновлено",entry:"Вход",issued:"Время сигнала",livePrice:"Текущая цена Binance",status:"Статус сигнала",within:"Сигнал находится в допустимом временном диапазоне.",stale:"Требуется переоценка: сигнал устарел; проверьте цену перед входом.",stopped:"Текущая цена достигла стоп-лосса или прошла его; вход недействителен.",target:"Похоже, TP1 достигнут или пройден; не входите по исходному сигналу.",missed:"Вход, вероятно, упущен: цена прошла уровень входа по направлению сделки.",buy:"ПОКУПКА",sell:"ПРОДАЖА",manualInvalid:"Введите корректную цену для поля «{field}». Все четыре поля обязательны.",future:"Укажите корректное время сигнала; оно не может быть в будущем.",cryptoOnly:"Проверка ручных сигналов сейчас доступна только для криптовалют через Binance. Для других рынков нужен сервер данных.",priceFail:"Не удалось проверить текущую цену Binance; сигнал не принят."},
+zh:{support:"最近支撑位",resistance:"最近阻力位",unavailable:"不可用",rewardRisk:"收益/风险",source:"数据源",timeframe:"时间周期",updated:"最后更新",entry:"入场价",issued:"信号发布时间",livePrice:"Binance 当前价格",status:"信号状态",within:"信号处于允许的有效时间内。",stale:"需要重新评估：信号发布时间较久，入场前请核对当前价格。",stopped:"当前价格已达到或超过止损位；该信号不适合入场。",target:"TP1 似乎已达到或突破；请勿依据原始信号入场。",missed:"可能错过入场：价格已沿交易方向越过入场位。",buy:"买入",sell:"卖出",manualInvalid:"请为 {field} 输入有效价格。四个价格字段均为必填项。",future:"请输入有效的信号发布时间，不能晚于当前时间。",cryptoOnly:"目前仅支持通过 Binance 验证加密货币手动信号。其他市场需要部署行情数据服务器。",priceFail:"无法验证 Binance 当前价格；未接受该信号。"},
+ja:{support:"最寄りのサポート",resistance:"最寄りのレジスタンス",unavailable:"利用不可",rewardRisk:"リターン/リスク",source:"データソース",timeframe:"時間足",updated:"最終更新",entry:"エントリー",issued:"シグナル発行時刻",livePrice:"Binance現在価格",status:"シグナル状態",within:"シグナルは許容期間内です。",stale:"再評価が必要です：シグナルから時間が経過しています。エントリー前に現在価格を確認してください。",stopped:"現在価格が損切り価格に達したか超えています。エントリーは無効です。",target:"TP1に到達または突破した可能性があります。元のシグナルでエントリーしないでください。",missed:"エントリー機会を逃した可能性があります。価格が取引方向にエントリー価格を超えました。",buy:"買い",sell:"売り",manualInvalid:"{field}に有効な価格を入力してください。4つの価格欄はすべて必須です。",future:"有効な発行時刻を入力してください。未来の時刻は指定できません。",cryptoOnly:"手動シグナル検証は現在Binance経由の暗号資産のみ対応しています。他市場にはデータサーバーが必要です。",priceFail:"Binanceの現在価格を検証できなかったため、シグナルは受け付けられませんでした。"},
+ko:{support:"가장 가까운 지지선",resistance:"가장 가까운 저항선",unavailable:"사용할 수 없음",rewardRisk:"수익/위험",source:"출처",timeframe:"시간 간격",updated:"최근 업데이트",entry:"진입가",issued:"신호 발행 시각",livePrice:"Binance 현재 가격",status:"신호 상태",within:"신호가 허용된 유효 기간 내에 있습니다.",stale:"재평가 필요: 신호가 오래되었습니다. 진입 전에 현재 가격을 확인하세요.",stopped:"현재 가격이 손절가에 도달했거나 넘어섰습니다. 진입할 수 없습니다.",target:"TP1에 도달했거나 넘어선 것으로 보입니다. 원래 신호로 진입하지 마세요.",missed:"진입 기회를 놓쳤을 수 있습니다. 가격이 거래 방향으로 진입가를 넘어섰습니다.",buy:"매수",sell:"매도",manualInvalid:"{field}에 올바른 가격을 입력하세요. 네 가격 항목은 모두 필수입니다.",future:"올바른 신호 발행 시각을 입력하세요. 미래 시각은 사용할 수 없습니다.",cryptoOnly:"현재 수동 신호 검증은 Binance를 통한 암호화폐만 지원합니다. 다른 시장은 데이터 서버가 필요합니다.",priceFail:"Binance 현재 가격을 확인할 수 없어 신호를 승인하지 않았습니다."},
+hi:{support:"निकटतम समर्थन",resistance:"निकटतम प्रतिरोध",unavailable:"उपलब्ध नहीं",rewardRisk:"रिटर्न/जोखिम",source:"स्रोत",timeframe:"समय-सीमा",updated:"अंतिम अपडेट",entry:"प्रवेश",issued:"सिग्नल जारी समय",livePrice:"वर्तमान Binance मूल्य",status:"सिग्नल स्थिति",within:"सिग्नल अनुमत समय-सीमा के भीतर है।",stale:"पुनर्मूल्यांकन आवश्यक: सिग्नल पुराना है; प्रवेश से पहले वर्तमान मूल्य जाँचें।",stopped:"वर्तमान मूल्य स्टॉप-लॉस पर या उससे आगे है; प्रवेश अमान्य है।",target:"TP1 संभवतः प्राप्त या पार हो गया है; मूल सिग्नल के आधार पर प्रवेश न करें।",missed:"प्रवेश का अवसर संभवतः निकल गया: मूल्य ट्रेड दिशा में प्रवेश स्तर से आगे बढ़ गया।",buy:"खरीदें",sell:"बेचें",manualInvalid:"{field} के लिए मान्य मूल्य दर्ज करें। चारों फ़ील्ड आवश्यक हैं।",future:"मान्य सिग्नल समय दर्ज करें; यह भविष्य में नहीं हो सकता।",cryptoOnly:"मैन्युअल सिग्नल सत्यापन अभी केवल Binance के माध्यम से क्रिप्टो के लिए उपलब्ध है। अन्य बाज़ारों के लिए डेटा सर्वर चाहिए।",priceFail:"वर्तमान Binance मूल्य सत्यापित नहीं हो सका; सिग्नल स्वीकार नहीं किया गया।"},
+id:{support:"Support terdekat",resistance:"Resistance terdekat",unavailable:"Tidak tersedia",rewardRisk:"Imbal hasil/risiko",source:"Sumber",timeframe:"Kerangka waktu",updated:"Pembaruan terakhir",entry:"Harga masuk",issued:"Waktu sinyal",livePrice:"Harga Binance saat ini",status:"Status sinyal",within:"Sinyal masih dalam batas waktu yang diizinkan.",stale:"Perlu evaluasi ulang: sinyal sudah lama; periksa harga saat ini sebelum masuk.",stopped:"Harga saat ini berada pada atau melewati stop-loss; sinyal tidak valid untuk masuk.",target:"TP1 tampaknya telah tercapai atau terlewati; jangan masuk berdasarkan sinyal awal.",missed:"Peluang masuk mungkin terlewat: harga bergerak melewati level masuk searah transaksi.",buy:"BELI",sell:"JUAL",manualInvalid:"Masukkan harga valid untuk {field}. Keempat kolom wajib diisi.",future:"Masukkan waktu penerbitan sinyal yang valid; tidak boleh di masa depan.",cryptoOnly:"Verifikasi sinyal manual saat ini hanya mendukung kripto melalui Binance. Pasar lain memerlukan server data.",priceFail:"Harga Binance saat ini tidak dapat diverifikasi; sinyal tidak diterima."},
+nl:{support:"Dichtstbijzijnde steun",resistance:"Dichtstbijzijnde weerstand",unavailable:"Niet beschikbaar",rewardRisk:"Rendement/risico",source:"Bron",timeframe:"Tijdsbestek",updated:"Laatst bijgewerkt",entry:"Instap",issued:"Signaaltijd",livePrice:"Huidige Binance-prijs",status:"Signaalstatus",within:"Het signaal valt binnen de toegestane geldigheidsduur.",stale:"Opnieuw beoordelen: het signaal is ouder; controleer de actuele prijs vóór instap.",stopped:"De huidige prijs staat op of voorbij de stop-loss; instap is ongeldig.",target:"TP1 lijkt bereikt of gepasseerd; stap niet in op basis van het oorspronkelijke signaal.",missed:"Instap waarschijnlijk gemist: de prijs is voorbij het instapniveau in de handelsrichting gegaan.",buy:"KOPEN",sell:"VERKOPEN",manualInvalid:"Voer een geldige prijs in voor {field}. Alle vier velden zijn verplicht.",future:"Voer een geldige signaaltijd in; deze mag niet in de toekomst liggen.",cryptoOnly:"Handmatige signaalcontrole ondersteunt momenteel alleen crypto via Binance. Andere markten vereisen een dataserver.",priceFail:"De huidige Binance-prijs kon niet worden gecontroleerd; het signaal is niet geaccepteerd."}
 };
 function reportText(key,values={}){const pack=analysisReportI18n[language]||analysisReportI18n.en;return (pack[key]||analysisReportI18n.en[key]||key).replace(/\{(\w+)\}/g,(_,k)=>String(values[k]??""));}
+const NEXFX_MARKET_TIME_ZONE="Europe/Istanbul";
+function nexfxIstanbulParts(timestamp=Date.now()){
+  const parts=new Intl.DateTimeFormat("en-GB",{timeZone:NEXFX_MARKET_TIME_ZONE,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit",hourCycle:"h23"}).formatToParts(new Date(timestamp));
+  const out={};parts.forEach(p=>{if(p.type!=="literal")out[p.type]=Number(p.value)});return out;
+}
+function nexfxIstanbulTimestamp(year,month,day,hour,minute){
+  const desired=Date.UTC(year,month-1,day,hour,minute,0,0);
+  let guess=desired;
+  for(let i=0;i<6;i++){
+    const p=nexfxIstanbulParts(guess);
+    const represented=Date.UTC(p.year,p.month-1,p.day,p.hour,p.minute,0,0);
+    const delta=desired-represented;
+    if(delta===0)break;
+    guess+=delta;
+  }
+  const check=nexfxIstanbulParts(guess);
+  return check.year===year&&check.month===month&&check.day===day&&check.hour===hour&&check.minute===minute?guess:NaN;
+}
+function nexfxFormatIstanbulDateTime(value){
+  const timestamp=value instanceof Date?value.getTime():typeof value==="string"?Date.parse(value):Number(value);
+  if(!Number.isFinite(timestamp))return "—";
+  return new Intl.DateTimeFormat((NEXFX_DATE_LOCALES[language]||"en-GB")+"-u-nu-latn",{timeZone:NEXFX_MARKET_TIME_ZONE,dateStyle:"medium",timeStyle:"short",numberingSystem:"latn"}).format(new Date(timestamp));
+}
+function manualUnverifiedText(){return ({ar:"تعذّر التأكد من ترتيب حركة السعر بعد صدور التوصية؛ لم يتم تأكيد وصول الهدف أو وقف الخسارة.",en:"Unable to verify the price sequence after the signal was issued; neither target nor stop is confirmed.",tr:"Sinyal verildikten sonraki fiyat sırası doğrulanamadı; hedef veya zarar durdurma teyit edilmedi.",fr:"Impossible de vérifier l’ordre des mouvements après le signal ; ni l’objectif ni le stop ne sont confirmés.",de:"Die Kursreihenfolge nach Signal-Ausgabe konnte nicht bestätigt werden; Ziel und Stop sind nicht bestätigt.",es:"No se pudo verificar la secuencia del precio tras la señal; no se confirma ni el objetivo ni el stop.",pt:"Não foi possível verificar a sequência do preço após o sinal; nem o alvo nem o stop foram confirmados.",it:"Impossibile verificare la sequenza dei prezzi dopo il segnale; né target né stop sono confermati.",ru:"Не удалось проверить последовательность цены после сигнала; цель и стоп не подтверждены.",zh:"无法核实信号发出后的价格顺序；目标和止损均未得到确认。",ja:"シグナル発行後の価格順序を確認できず、利確・損切りのいずれも確定できません。",ko:"신호 발행 후 가격 순서를 확인할 수 없어 목표가와 손절가를 확정하지 못했습니다.",hi:"सिग्नल जारी होने के बाद कीमतों का क्रम सत्यापित नहीं हो सका; लक्ष्य या स्टॉप की पुष्टि नहीं हुई।",id:"Urutan harga setelah sinyal diterbitkan tidak dapat diverifikasi; target maupun stop belum terkonfirmasi.",nl:"De prijsvolgorde na het signaal kon niet worden geverifieerd; doel en stop zijn niet bevestigd."}[language]||"Unable to verify the price sequence after the signal was issued.");}
+function manualValidityText(state){if(state==="unverified")return manualUnverifiedText();const key=({valid:"within",stale:"stale",stopped:"stopped",target:"target",missed:"missed"})[state]||"within";return reportText(key);}
 
 function safeRead(key,fallback=null){
   try{
@@ -2857,7 +3020,7 @@ let lastAnalysis=null;
 let analysisRunToken=0;
 // Set this to the deployed server.py service URL (no trailing slash).
 // Example: window.NEXFX_API_BASE = "https://your-service.example.com";
-const NEXFX_API_BASE=""; // بعد نشر server.py ضع هنا رابط الخادم بدون / في النهاية
+const NEXFX_API_BASE=(window.NEXFX_API_BASE||"").replace(/\/+$/,""); // رابط خادم المراقبة المستقل بعد نشره
 
 // Public Binance spot market data. No API key is required for public quotes/klines.
 const NEXFX_BINANCE_BASE="https://data-api.binance.vision/api/v3";
@@ -2939,6 +3102,14 @@ function formatMarketPrice(value){
   const opts=n>=1000?{minimumFractionDigits:2,maximumFractionDigits:2}:n>=1?{minimumFractionDigits:2,maximumFractionDigits:4}:{minimumFractionDigits:4,maximumFractionDigits:8};
   return new Intl.NumberFormat("en-US-u-nu-latn",opts).format(n);
 }
+// Parse prices rendered with en-US thousands separators before validation/storage.
+function nexfxParseMarketPrice(value){
+  if(typeof value==="number")return Number.isFinite(value)?value:NaN;
+  const normalized=String(value??"").trim().replace(/,/g,"");
+  if(!normalized||normalized==="—")return NaN;
+  const parsed=Number(normalized);
+  return Number.isFinite(parsed)?parsed:NaN;
+}
 function sma(values,period){
   if(!Array.isArray(values)||values.length<period)return null;
   const slice=values.slice(-period);
@@ -2979,7 +3150,7 @@ function rsi(values,period=14){
   for(let i=1;i<=period;i++){const d=values[i]-values[i-1];if(d>0)gain+=d;else loss-=d;}
   let avgGain=gain/period,avgLoss=loss/period;
   for(let i=period+1;i<values.length;i++){const d=values[i]-values[i-1];avgGain=(avgGain*(period-1)+Math.max(d,0))/period;avgLoss=(avgLoss*(period-1)+Math.max(-d,0))/period;}
-  return avgLoss===0?100:100-(100/(1+avgGain/avgLoss));
+  return avgLoss===0?(avgGain===0?50:100):100-(100/(1+avgGain/avgLoss));
 }
 function calculateAtr(candles,period=14){
   if(!Array.isArray(candles)||candles.length<=period)return null;
@@ -3013,7 +3184,7 @@ async function fetchSelectedMarketCandles(asset, marketName, interval){
     if(!Array.isArray(raw))throw new Error("Binance returned an unexpected candle response.");
     const now=Date.now();
     const candles=raw.filter(k=>Array.isArray(k)&&k.length>=7&&Number(k[6])<now).map(k=>({
-      time:Number(k[0]),open:Number(k[1]),high:Number(k[2]),low:Number(k[3]),close:Number(k[4]),volume:Number(k[5])
+      time:Number(k[0]),closeTime:Number(k[6]),open:Number(k[1]),high:Number(k[2]),low:Number(k[3]),close:Number(k[4]),volume:Number(k[5])
     })).filter(c=>[
       c.time,c.open,c.high,c.low,c.close,c.volume
     ].every(Number.isFinite)&&c.time>0&&c.open>0&&c.high>0&&c.low>0&&c.close>0&&c.volume>=0&&c.high>=Math.max(c.open,c.close,c.low)&&c.low<=Math.min(c.open,c.close,c.high));
@@ -3022,7 +3193,7 @@ async function fetchSelectedMarketCandles(asset, marketName, interval){
     // 34 completed candles are sufficient to seed EMA26 and its EMA9 signal,
     // RSI14 and ATR14. EMA50 is reported only when 50 candles exist.
     if(uniqueCandles.length<34)throw new Error(at("insufficient")+" (34 completed candles are required; received "+uniqueCandles.length+").");
-    return {symbol,interval,candles:uniqueCandles,source:"Binance Spot API",asOf:new Date(uniqueCandles[uniqueCandles.length-1].time).toISOString()};
+    return {symbol,interval,candles:uniqueCandles,source:"Binance Spot API",asOf:new Date(uniqueCandles[uniqueCandles.length-1].closeTime??uniqueCandles[uniqueCandles.length-1].time).toISOString()};
   }
   if(!NEXFX_API_BASE)throw new Error(at("serverNeeded"));
   const url=NEXFX_API_BASE+"/api/market/klines?market="+encodeURIComponent(marketName)+"&symbol="+encodeURIComponent(tvSymbol)+"&interval="+encodeURIComponent(interval)+"&limit=250";
@@ -3036,7 +3207,9 @@ async function fetchSelectedMarketCandles(asset, marketName, interval){
 function clearAnalysisOutput(message=""){
   analysisRunToken++;
   lastAnalysis=null;
+  if($("tradeApprovalWrap"))$("tradeApprovalWrap").hidden=true;
   const title=$("resultTitle"),text=$("resultText");
+  renderAutomaticVisual(null);
   title.textContent=at("notRun");
   title.classList.remove("signal-up","signal-down","signal-neutral");
   text.textContent=message;
@@ -3052,6 +3225,7 @@ function paintAnalysisDirection(direction){
   title.classList.add(direction==="buy"?"signal-up":direction==="sell"?"signal-down":"signal-neutral");
 }
 async function runMarketAnalysis(mode){
+  renderAutomaticVisual(null);
   syncAnalysisResultMode(mode);
   const runToken=++analysisRunToken;
   lastAnalysis=null;
@@ -3088,8 +3262,10 @@ async function runMarketAnalysis(mode){
     // Separate market bias from an actionable entry decision.
     const bullishBias=ema9>ema21&&macdLine>signal;
     const bearishBias=ema9<ema21&&macdLine<signal;
-    const bullish=bullishBias&&rsi14>=50&&rsi14<70;
-    const bearish=bearishBias&&rsi14<=50&&rsi14>30;
+    // Keep EMA + MACD agreement mandatory, while widening RSI confirmation bands
+    // so ordinary trend conditions are not unnecessarily classified as WAIT.
+    const bullish=bullishBias&&rsi14>=45&&rsi14<75;
+    const bearish=bearishBias&&rsi14<=55&&rsi14>25;
     const direction=bullish?"buy":bearish?"sell":"neutral";
     const marketBias=bullishBias?"bull":bearishBias?"bear":"neutral";
     const entry=last.close,distance=atr*1.5;
@@ -3097,21 +3273,32 @@ async function runMarketAnalysis(mode){
     const tp1=direction==="buy"?entry+distance:direction==="sell"?entry-distance:null;
     const tp2=direction==="buy"?entry+distance*2:direction==="sell"?entry-distance*2:null;
     const fmt=n=>formatMarketPrice(n);
-    const title=direction==="buy"?adt("buyAction"):direction==="sell"?adt("sellAction"):adt("waitAction");
+    // WAIT remains WAIT. Always show one technical reference scenario, never two
+    // competing prices in the same field. If EMA/MACD bias is mixed, use price vs EMA21
+    // only to choose which reference scenario to display; this does NOT create a signal.
+    const waitSide=direction==="neutral"?(marketBias==="bull"?"buy":marketBias==="bear"?"sell":(last.close>=ema21?"buy":"sell")):null;
+    const waitSideLabel=waitSide==="buy"?(language==="ar"?"مرجع شراء":language==="tr"?"ALIŞ referansı":"BUY reference"):
+      waitSide==="sell"?(language==="ar"?"مرجع بيع":language==="tr"?"SATIŞ referansı":"SELL reference"):null;
+    const waitStop=direction==="neutral"&&waitSide?`${waitSideLabel}: ${fmt(waitSide==="buy"?entry-distance:entry+distance)}`:null;
+    const waitTP1=direction==="neutral"&&waitSide?`${waitSideLabel}: ${fmt(waitSide==="buy"?entry+distance:entry-distance)}`:null;
+    const waitTP2=direction==="neutral"&&waitSide?`${waitSideLabel}: ${fmt(waitSide==="buy"?entry+distance*2:entry-distance*2)}`:null;
+    const title=direction==="buy"?adt("buyAction"):direction==="sell"?adt("sellAction"):adt("neutralAction");
     const biasText=marketBias==="bull"?adt("bullBias"):marketBias==="bear"?adt("bearBias"):adt("neutralBias");
     $("resultTitle").textContent=title;
-    // Keep the visible report fast to scan: the decision is in the colored title;
-    // the description contains only market direction and actionable context.
-    $("resultText").textContent=biasText;
+    // Show the directional bias and a useful explanation when the setup is neutral.
+    const neutralReason=marketBias==="bull"?adt("bullWait"):marketBias==="bear"?adt("bearWait"):adt("neutralWait");
+    $("resultText").textContent=direction==="neutral"?`${biasText}. ${neutralReason}`:biasText;
     paintAnalysisDirection(direction);
     $("outMode").textContent=mode==="auto"?(at("automatic")):(at("technical"));
     $("outPair").textContent=asset[0];
-    $("outEntry").textContent=direction==="neutral"?"—":fmt(entry);
-    $("outStop").textContent=stop===null?"—":fmt(stop);
-    $("outTP1").textContent=tp1===null?"—":fmt(tp1);
-    $("outTP2").textContent=tp2===null?"—":fmt(tp2);
-    const analysisAsOf=new Date(last.time).toISOString();
-    const analysisAsOfLocal=new Date(last.time).toLocaleString((NEXFX_DATE_LOCALES[language]||"en-GB")+"-u-nu-latn",{dateStyle:"medium",timeStyle:"short",numberingSystem:"latn"});
+    $("outEntry").textContent=fmt(entry);
+    $("outStop").textContent=direction==="neutral"?(waitStop||"—"):fmt(stop);
+    $("outTP1").textContent=direction==="neutral"?(waitTP1||"—"):fmt(tp1);
+    $("outTP2").textContent=direction==="neutral"?(waitTP2||"—"):fmt(tp2);
+    status.textContent=direction==="neutral"?`${biasText}. ${neutralReason}`:biasText;
+    const technicalCandleCloseTime=last.closeTime??last.time;
+    const analysisAsOf=new Date(technicalCandleCloseTime).toISOString();
+    const analysisAsOfLocal=nexfxFormatIstanbulDateTime(technicalCandleCloseTime);
     const selectedTimeframeLabel=$("timeframe").selectedOptions[0]?.textContent||usedInterval;
     $("outSupport").textContent=priceLevels.support===null?"—":fmt(priceLevels.support);
     $("outResistance").textContent=priceLevels.resistance===null?"—":fmt(priceLevels.resistance);
@@ -3126,9 +3313,11 @@ async function runMarketAnalysis(mode){
     const indicatorLine=`EMA9: ${fmt(ema9)} | EMA21: ${fmt(ema21)} | EMA50: ${ema50===null?"—":fmt(ema50)} | RSI14: ${rsi14.toFixed(2)} | MACD: ${macdLine.toFixed(8)} | Signal: ${signal.toFixed(8)} | ATR14: ${fmt(atr)}`;
     const closeLine=`${reportText("entry")}: ${fmt(last.close)} · Binance Spot candle close`;
     const analysisMeta=`${reportText("source")}: ${source} | ${reportText("timeframe")}: ${selectedTimeframeLabel} | ${reportText("updated")}: ${analysisAsOfLocal}`;
-    status.textContent=[biasText,levelLine,analysisMeta].join(" · ");
-    lastAnalysis={title,text:status.textContent,mode:mode,pair:asset[0],entry:direction==="neutral"?"—":fmt(entry),stop:stop===null?"—":fmt(stop),tp1:tp1===null?"—":fmt(tp1),tp2:tp2===null?"—":fmt(tp2),direction,marketBias,indicators:{ema9,ema21,ema50,sma20,sma50,rsi14,macd:macdLine,macdSignal:signal,atr},levels:priceLevels,rewardRiskTP1:rr1,rewardRiskTP2:rr2,source,timeframe:usedInterval,asOf:analysisAsOf,candleClose:fmt(last.close)};
+    const technicalResultText=direction==="neutral"?`${biasText}. ${neutralReason}`:`${biasText}. ${rrLine}`;
+    status.textContent=technicalResultText;
+    lastAnalysis={title,text:technicalResultText,mode:mode,pair:asset[0],entry:fmt(entry),stop:direction==="neutral"?(waitStop||"—"):fmt(stop),tp1:direction==="neutral"?(waitTP1||"—"):fmt(tp1),tp2:direction==="neutral"?(waitTP2||"—"):fmt(tp2),direction,marketBias,waitSide,indicators:{ema9,ema21,ema50,sma20,sma50,rsi14,macd:macdLine,macdSignal:signal,atr},levels:priceLevels,rewardRiskTP1:rr1,rewardRiskTP2:rr2,source,timeframe:usedInterval,asOf:analysisAsOf,candleClose:fmt(last.close)};
     saveState();
+    renderTradeApproval();
   }catch(error){
     if(runToken!==analysisRunToken)return;
     console.error("NEXFX analysis:",error);
@@ -3140,6 +3329,221 @@ async function runMarketAnalysis(mode){
   }
 }
 
+
+// Unified, user-scoped crypto trade ledger. This records only trades the user explicitly approves.
+const NEXFX_TRADE_STORAGE_PREFIX="nexfx_trade_monitor_v1_";
+let nexfxTradeMonitorTimer=null;
+let nexfxTradeMonitorBusy=false;
+function nexfxTradeStorageKey(){return NEXFX_TRADE_STORAGE_PREFIX+encodeURIComponent(AuthController.getActiveUID()||"guest");}
+function nexfxReadTrades(){try{const value=JSON.parse(localStorage.getItem(nexfxTradeStorageKey())||"[]");return Array.isArray(value)?value:[]}catch(_){return[]}}
+function nexfxWriteTrades(items){try{localStorage.setItem(nexfxTradeStorageKey(),JSON.stringify(items));if(NEXFX_API_BASE&&AuthController.currentUser)void nexfxPushTradesToServer(items);return true}catch(error){console.warn("NEXFX trade ledger save failed:",error);const status=$("tradeMonitorStatus");if(status)status.textContent="تعذّر حفظ سجل الصفقات على هذا الجهاز";return false}}
+let nexfxServerSyncBusy=false;
+async function nexfxServerRequest(path,options={}){
+  if(!NEXFX_API_BASE)throw new Error("لم يتم ضبط رابط خادم المراقبة");
+  const user=firebase.auth().currentUser;if(!user)throw new Error("يجب تسجيل الدخول لمزامنة الصفقات مع الخادم");
+  const token=await user.getIdToken();
+  const response=await fetch(NEXFX_API_BASE+path,{...options,headers:{"Content-Type":"application/json","Authorization":"Bearer "+token,...(options.headers||{})},cache:"no-store"});
+  if(!response.ok)throw new Error("Trade server HTTP "+response.status);
+  return response.status===204?null:response.json();
+}
+async function nexfxPushTradesToServer(items){
+  if(!NEXFX_API_BASE||nexfxServerSyncBusy||!AuthController.currentUser)return;
+  try{await nexfxServerRequest("/api/trades",{method:"PUT",body:JSON.stringify({trades:items})});const status=$("tradeMonitorStatus");if(status)status.textContent="تم حفظ الصفقات على خادم المراقبة المستقل";}
+  catch(error){console.warn("NEXFX server trade sync:",error);const status=$("tradeMonitorStatus");if(status)status.textContent="الحفظ المحلي يعمل؛ تعذرت مزامنة خادم المراقبة";}
+}
+async function nexfxSyncTradesFromServer(){
+  if(!NEXFX_API_BASE||nexfxServerSyncBusy||!AuthController.currentUser)return;
+  nexfxServerSyncBusy=true;
+  try{
+    const remote=await nexfxServerRequest("/api/trades"),remoteTrades=Array.isArray(remote.trades)?remote.trades:[];
+    const local=nexfxReadTrades();
+    if(!remoteTrades.length&&local.length){await nexfxServerRequest("/api/trades",{method:"PUT",body:JSON.stringify({trades:local})});}
+    else if(remoteTrades.length){
+      const byId=new Map(remoteTrades.map(t=>[t.id,t]));
+      for(const t of local)if(t&&t.id&&!byId.has(t.id))byId.set(t.id,t);
+      const merged=[...byId.values()];localStorage.setItem(nexfxTradeStorageKey(),JSON.stringify(merged));
+      if(merged.length!==remoteTrades.length)await nexfxServerRequest("/api/trades",{method:"PUT",body:JSON.stringify({trades:merged})});
+    }
+    renderTradeMonitor();const status=$("tradeMonitorStatus");if(status)status.textContent="المراقبة المستقلة متصلة؛ الخادم يتابع الصفقات حتى عند إغلاق الموقع";
+  }catch(error){console.warn("NEXFX server initial sync:",error);const status=$("tradeMonitorStatus");if(status)status.textContent="خادم المراقبة غير متصل حالياً؛ الصفقات محفوظة محلياً";}
+  finally{nexfxServerSyncBusy=false;}
+}
+async function nexfxRefreshTradesFromServer(){
+  if(!NEXFX_API_BASE||nexfxServerSyncBusy||!AuthController.currentUser)return;
+  nexfxServerSyncBusy=true;
+  try{const remote=await nexfxServerRequest("/api/trades"),items=Array.isArray(remote.trades)?remote.trades:[];localStorage.setItem(nexfxTradeStorageKey(),JSON.stringify(items));renderTradeMonitor();}
+  catch(error){console.warn("NEXFX server refresh:",error);}
+  finally{nexfxServerSyncBusy=false;}
+}
+function nexfxTradeSourceLabel(source){return source==="technical"?"فني":source==="auto"?"تلقائي":"يدوي"}
+function nexfxTradeStatusLabel(status){return ({pending:"بانتظار الدخول",open:"مفتوحة",tp1:"تحقق الهدف الأول",win:"مغلقة — ربح",loss:"مغلقة — وقف خسارة",review:"مراجعة لازمة",closed:"مغلقة يدوياً"})[status]||status}
+function nexfxTradeNumber(value){const n=Number(value);return Number.isFinite(n)?formatMarketPrice(n):"—"}
+function nexfxCanApproveAnalysis(data=lastAnalysis){
+  if(!data||market!=="crypto"||data.pair!==selected[0]||!(["technical","auto","manual"].includes(data.mode))||!(data.direction==="buy"||data.direction==="sell"))return false;
+  if(data.mode==="manual"&&data.validityState!=="valid")return false;
+  return [data.entry,data.stop,data.tp1,data.tp2].every(v=>nexfxParseMarketPrice(v)>0)&&!!cryptoPairFromTradingView(selected[2]);
+}
+function renderTradeApproval(){
+  const wrap=$("tradeApprovalWrap"),button=$("approveTradeBtn");if(!wrap||!button)return;
+  const eligible=nexfxCanApproveAnalysis();wrap.hidden=!eligible;if(!eligible)return;
+  const data=lastAnalysis,exists=nexfxReadTrades().some(t=>t.analysisKey===`${data.mode}|${data.pair}|${data.asOf||data.issuedAt||data.timeframe}|${data.direction}`&&t.status!=="deleted");
+  button.disabled=exists;button.textContent=exists?"هذه التوصية مسجلة بالفعل":"اعتماد وفتح الصفقة في المراقبة";
+}
+async function nexfxApproveCurrentTrade(){
+  const data=lastAnalysis;if(!nexfxCanApproveAnalysis(data))return;
+  const symbol=cryptoPairFromTradingView(selected[2]);if(!symbol)return;
+  const analysisKey=`${data.mode}|${data.pair}|${data.asOf||data.issuedAt||data.timeframe}|${data.direction}`;
+  const trades=nexfxReadTrades();if(trades.some(t=>t.analysisKey===analysisKey)){renderTradeApproval();return;}
+  const button=$("approveTradeBtn");if(button){button.disabled=true;button.textContent="جارٍ التحقق من سعر Binance…";}
+  try{
+    const response=await fetchNexfxWithTimeout(NEXFX_BINANCE_BASE+"/ticker/price?symbol="+encodeURIComponent(symbol),{cache:"no-store",headers:{Accept:"application/json"}},12000);
+    if(!response.ok)throw new Error("Binance ticker HTTP "+response.status);
+    const quote=await response.json(),price=Number(quote&&quote.price);if(!Number.isFinite(price)||price<=0)throw new Error("Invalid Binance ticker price");
+    const now=Date.now();
+    const entry=nexfxParseMarketPrice(data.entry),stop=nexfxParseMarketPrice(data.stop),tp1=nexfxParseMarketPrice(data.tp1),tp2=nexfxParseMarketPrice(data.tp2);
+    if(![entry,stop,tp1,tp2].every(value=>Number.isFinite(value)&&value>0))throw new Error("Invalid approved trade levels");
+    const trade={id:"tr_"+now+"_"+Math.random().toString(36).slice(2,8),analysisKey,source:data.mode,symbol,pair:data.pair,direction:data.direction,entry,stop,tp1,tp2,timeframe:data.timeframe||"—",createdAt:now,lastCheckedAt:now,lastPrice:price,status:"pending",tp1Reached:false,openedAt:null,closedAt:null,exitPrice:null,result:null};
+    trades.unshift(trade);if(!nexfxWriteTrades(trades))throw new Error("تعذر حفظ الصفقة");
+    renderTradeMonitor();renderTradeApproval();
+    const status=$("tradeMonitorStatus");if(status)status.textContent="تمت إضافة الصفقة — بانتظار وصول السعر إلى نقطة الدخول";
+  }catch(error){console.error("NEXFX trade approval:",error);alert("لم تتم إضافة الصفقة؛ تعذّر التحقق من سعر Binance أو حفظها. حاول مجدداً عند توفر الاتصال.");if(button){button.disabled=false;button.textContent="اعتماد وفتح الصفقة في المراقبة";}}
+}
+function nexfxTradeAction(id,action){
+  const trades=nexfxReadTrades(),trade=trades.find(t=>t.id===id);if(!trade)return;
+  if(action==="close"){
+    if(!confirm("هل تريد إغلاق هذه الصفقة يدوياً؟"))return;
+    trade.status="closed";trade.closedAt=Date.now();trade.exitPrice=Number(trade.lastPrice)||null;trade.result=trade.exitPrice==null?null:(trade.direction==="buy"?trade.exitPrice-trade.entry:trade.entry-trade.exitPrice);
+  }else if(action==="delete"){
+    if(!confirm("هل تريد حذف هذه الصفقة من السجل؟"))return;
+    trade.status="deleted";trade.deletedAt=Date.now();
+  }
+  nexfxWriteTrades(trades);renderTradeMonitor();renderTradeApproval();
+}
+function renderTradeMonitor(){
+  const body=$("tradeMonitorRows");if(!body)return;
+  const all=nexfxReadTrades(),filter=$("tradeSourceFilter")?.value||"all",items=all.filter(t=>t.status!=="deleted"&&(filter==="all"||t.source===filter));
+  const wins=all.filter(t=>t.status==="win").length,losses=all.filter(t=>t.status==="loss").length,active=all.filter(t=>["pending","open","tp1","review"].includes(t.status)).length;
+  $("tradeStatTotal").textContent=String(all.length);$("tradeStatWins").textContent=String(wins);$("tradeStatLosses").textContent=String(losses);$("tradeStatActive").textContent=String(active);
+  body.replaceChildren();
+  const activeItems=items.filter(t=>["pending","open","tp1","review"].includes(t.status));
+  const completedItems=items.filter(t=>["win","loss","closed"].includes(t.status));
+  if(!items.length){const empty=document.createElement("div");empty.className="nexfx-trade-empty";empty.textContent=all.length?"لا توجد صفقات ضمن هذا الفلتر.":"لا توجد صفقات مسجلة حالياً. شغّل تحليلاً مؤكداً ثم اضغط «اعتماد وفتح الصفقة».";body.appendChild(empty);return;}
+  const iconPaths={
+    source:'<path d="M4 5h16M4 10h16M4 15h10M4 20h7"/>',
+    pair:'<circle cx="8" cy="8" r="4"/><circle cx="16" cy="16" r="4"/>',
+    buy:'<path d="M12 19V5m-6 6 6-6 6 6"/>',sell:'<path d="M12 5v14m-6-6 6 6 6-6"/>',
+    entry:'<path d="M4 12h13m-5-5 5 5-5 5"/><path d="M20 5v14"/>',
+    price:'<path d="M3 17l5-5 4 3 8-9"/><path d="M15 6h5v5"/>',
+    stop:'<path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 9 6 6m0-6-6 6"/>',
+    target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+    status:'<path d="m5 12 4 4L19 6"/>',
+    clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    exit:'<path d="M10 17l5-5-5-5M15 12H3"/><path d="M14 3h5a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-5"/>'
+  };
+  const makeIcon=(name)=>{const span=document.createElement("span");span.className="trade-tile-icon";span.setAttribute("aria-hidden","true");span.innerHTML='<svg viewBox="0 0 24 24">'+(iconPaths[name]||iconPaths.status)+'</svg>';return span;};
+  const makeGroup=(title,icon,groupItems,kind)=>{
+    if(!groupItems.length)return;
+    const section=document.createElement("section");section.className="nexfx-trade-group nexfx-trade-group-"+kind;
+    const heading=document.createElement("h3");heading.className="nexfx-trade-group-title";heading.append(makeIcon(icon),document.createTextNode(title));
+    const cards=document.createElement("div");cards.className="nexfx-trade-cards";
+    section.append(heading,cards);body.appendChild(section);
+    groupItems.forEach(t=>{
+      const card=document.createElement("article");card.className="nexfx-trade-card";
+      const grid=document.createElement("div");grid.className="nexfx-trade-card-grid";
+      const addTile=(label,value,icon,tone="neutral")=>{const tile=document.createElement("div");tile.className="nexfx-trade-tile tone-"+tone;const small=document.createElement("small");small.append(makeIcon(icon),document.createTextNode(label));const b=document.createElement("b");b.textContent=value;tile.append(small,b);grid.appendChild(tile);};
+      addTile("المحرك",nexfxTradeSourceLabel(t.source),"source","gold");
+      addTile("الزوج",t.pair,"pair","gold");
+      addTile("الاتجاه",t.direction==="buy"?"شراء":"بيع",t.direction==="buy"?"buy":"sell",t.direction==="buy"?"buy":"sell");
+      addTile("سعر الدخول",nexfxTradeNumber(t.entry),"entry","entry");
+      if(["win","loss","closed"].includes(t.status)){
+        addTile("سعر الخروج",nexfxTradeNumber(t.exitPrice),"exit","neutral");
+      }else{
+        addTile("السعر الحالي",nexfxTradeNumber(t.lastPrice),"price","neutral");
+      }
+      addTile("وقف الخسارة SL",nexfxTradeNumber(t.stop),"stop","stop");
+      addTile("TP1",nexfxTradeNumber(t.tp1),"target","target");
+      addTile("TP2",nexfxTradeNumber(t.tp2),"target","target");
+      if(t.tp3!==undefined&&t.tp3!==null&&t.tp3!=="")addTile("TP3",nexfxTradeNumber(t.tp3),"target","target");
+      const resultTone=t.status==="win"?"profit":t.status==="loss"?"loss":"neutral";
+      const resultValue=t.result==null?"—":((Number(t.result)>0?"+":"")+nexfxTradeNumber(t.result));
+      addTile("النتيجة",resultValue,"status",resultTone);
+      const statusTile=document.createElement("div");statusTile.className="nexfx-trade-tile status-tile";const statusLabel=document.createElement("small");statusLabel.append(makeIcon("clock"),document.createTextNode("الحالة"));const badge=document.createElement("span");badge.className="trade-status "+(t.status||"pending");badge.textContent=nexfxTradeStatusLabel(t.status);statusTile.append(statusLabel,badge);grid.appendChild(statusTile);
+      card.appendChild(grid);
+      const actions=document.createElement("div");actions.className="nexfx-trade-card-actions";
+      if(["pending","open","tp1","review"].includes(t.status)){const close=document.createElement("button");close.type="button";close.textContent="إغلاق يدوي";close.addEventListener("click",()=>nexfxTradeAction(t.id,"close"));actions.appendChild(close)}
+      const del=document.createElement("button");del.type="button";del.textContent="حذف";del.addEventListener("click",()=>nexfxTradeAction(t.id,"delete"));actions.appendChild(del);
+      card.appendChild(actions);cards.appendChild(card);
+    });
+  };
+  makeGroup("الصفقات قيد المراقبة","clock",activeItems,"active");
+  makeGroup("سجل الصفقات المكتملة","status",completedItems,"completed");
+  const otherItems=items.filter(t=>!["pending","open","tp1","review","win","loss","closed"].includes(t.status));
+  makeGroup("حالات تحتاج مراجعة","source",otherItems,"review");
+}
+async function nexfxMonitorTradesOnce(){
+  if(nexfxTradeMonitorBusy||document.hidden||market!=="crypto")return;
+  const trades=nexfxReadTrades().filter(t=>["pending","open","tp1"].includes(t.status));if(!trades.length)return;
+  nexfxTradeMonitorBusy=true;
+  try{
+    const symbols=[...new Set(trades.map(t=>t.symbol))],updates=await Promise.all(symbols.map(async symbol=>{
+      const oldestCheckpoint=Math.min(...trades.filter(t=>t.symbol===symbol).map(t=>Number(t.lastCheckedAt||t.createdAt||Date.now())));
+      const startTime=Math.max(0,oldestCheckpoint-60000);
+      const [tickerResponse,klinesResponse]=await Promise.all([
+        fetchNexfxWithTimeout(NEXFX_BINANCE_BASE+"/ticker/price?symbol="+encodeURIComponent(symbol),{cache:"no-store",headers:{Accept:"application/json"}},10000),
+        fetchNexfxWithTimeout(NEXFX_BINANCE_BASE+"/klines?symbol="+encodeURIComponent(symbol)+"&interval=1m&startTime="+encodeURIComponent(startTime)+"&limit=1000",{cache:"no-store",headers:{Accept:"application/json"}},10000)
+      ]);
+      if(!tickerResponse.ok||!klinesResponse.ok)throw new Error("Binance monitor HTTP error for "+symbol);
+      const ticker=await tickerResponse.json(),raw=await klinesResponse.json(),price=Number(ticker.price),now=Date.now();
+      if(!Number.isFinite(price)||price<=0||!Array.isArray(raw))throw new Error("Invalid Binance monitor response");
+      const candles=raw.map(k=>({openTime:Number(k[0]),high:Number(k[2]),low:Number(k[3]),close:Number(k[4]),closeTime:Number(k[6])})).filter(c=>c.closeTime<=now);
+      const historyGap=candles.length>0&&candles[0].openTime>Math.floor(startTime/60000)*60000+60000;
+      return [symbol,{price,candles,now,historyGap}];
+    }));
+    const bySymbol=Object.fromEntries(updates),all=nexfxReadTrades();let changed=false;
+    for(const trade of all){
+      if(!["pending","open","tp1"].includes(trade.status))continue;
+      const feed=bySymbol[trade.symbol];if(!feed)continue;
+      trade.lastPrice=feed.price;
+      if(feed.historyGap){trade.status="review";trade.reviewReason="monitor_history_gap";trade.lastMonitorAt=feed.now;changed=true;continue;}
+      // Use only complete one-minute candles that began after this trade's last checkpoint.
+      // This avoids counting price movement from the partially elapsed candle in which the user approved the trade.
+      const relevant=feed.candles.filter(c=>c.openTime>=Number(trade.lastCheckedAt||trade.createdAt||0));
+      let processedThrough=Number(trade.lastCheckedAt||trade.createdAt||0);
+      for(const candle of relevant){
+        processedThrough=Math.max(processedThrough,candle.closeTime);
+        const entryHit=candle.low<=trade.entry&&candle.high>=trade.entry;
+        const stopHit=trade.direction==="buy"?candle.low<=trade.stop:candle.high>=trade.stop;
+        const tp1Hit=trade.direction==="buy"?candle.high>=trade.tp1:candle.low<=trade.tp1;
+        const tp2Hit=trade.direction==="buy"?candle.high>=trade.tp2:candle.low<=trade.tp2;
+        if(trade.status==="pending"){
+          if(!entryHit)continue;
+          if(stopHit||tp1Hit||tp2Hit){trade.status="review";trade.closedAt=candle.closeTime;trade.reviewReason="entry_and_exit_same_candle";break;}
+          trade.status="open";trade.openedAt=candle.closeTime;continue;
+        }
+        if(stopHit&&(tp1Hit||tp2Hit)){trade.status="review";trade.closedAt=candle.closeTime;trade.reviewReason="stop_and_target_same_candle";break;}
+        if(stopHit){trade.status="loss";trade.closedAt=candle.closeTime;trade.exitPrice=trade.stop;trade.result=trade.direction==="buy"?trade.stop-trade.entry:trade.entry-trade.stop;break;}
+        if(tp2Hit){trade.status="win";trade.tp1Reached=true;trade.closedAt=candle.closeTime;trade.exitPrice=trade.tp2;trade.result=trade.direction==="buy"?trade.tp2-trade.entry:trade.entry-trade.tp2;break;}
+        if(tp1Hit)trade.tp1Reached=true;
+        if(trade.tp1Reached)trade.status="tp1";
+      }
+      trade.lastCheckedAt=processedThrough;trade.lastMonitorAt=feed.now;changed=true;
+    }
+    if(changed){nexfxWriteTrades(all);renderTradeMonitor();const status=$("tradeMonitorStatus");if(status)status.textContent="آخر تحديث للمراقبة: "+nexfxFormatIstanbulDateTime(Date.now());}
+  }catch(error){console.warn("NEXFX trade monitor update:",error);const status=$("tradeMonitorStatus");if(status)status.textContent="تعذّر تحديث بعض الأسعار من Binance؛ ستتم إعادة المحاولة تلقائياً";}
+  finally{nexfxTradeMonitorBusy=false;}
+}
+let nexfxTradeVisibilityListenerReady=false;
+function initNexfxTradeMonitor(){
+  renderTradeMonitor();renderTradeApproval();
+  const filter=$("tradeSourceFilter");if(filter&&!filter.dataset.ready){filter.dataset.ready="1";filter.addEventListener("change",renderTradeMonitor)}
+  const approve=$("approveTradeBtn");if(approve&&!approve.dataset.ready){approve.dataset.ready="1";approve.addEventListener("click",nexfxApproveCurrentTrade)}
+  if(nexfxTradeMonitorTimer)clearInterval(nexfxTradeMonitorTimer);
+  nexfxTradeMonitorTimer=setInterval(nexfxMonitorTradesOnce,30000);
+  if(!nexfxTradeVisibilityListenerReady){document.addEventListener("visibilitychange",()=>{if(!document.hidden)nexfxMonitorTradesOnce()});nexfxTradeVisibilityListenerReady=true;}
+  nexfxMonitorTradesOnce();
+  if(NEXFX_API_BASE&&AuthController.currentUser){void nexfxSyncTradesFromServer();if(!nexfxServerRefreshTimer)nexfxServerRefreshTimer=setInterval(nexfxRefreshTradesFromServer,30000);}
+}
+let nexfxServerRefreshTimer=null;
 
 function loadUserScopedState(){
   const savedState=safeRead(AuthController.getStorageKey(),{})||{};
@@ -3174,10 +3578,12 @@ function restoreForm(savedState={}){
   const form=savedState.form||{};
   $("search").value=typeof savedState.search==="string"?savedState.search:"";
   $("analysisMode").value=["technical","manual","auto"].includes(form.mode)?form.mode:"technical";
-  $("direction").value=form.direction==="sell"?"sell":"buy";
-  ["entry","stop","tp1","tp2"].forEach(id=>{
-    $(id).value=form[id]??"";
+  $("direction").value="buy";
+  ["entry","stop","tp1","tp2","signalIssuedAt","signalIssuedAtDisplay"].forEach(id=>{
+    const field=$(id);if(field)field.value="";
   });
+  const calendarTime=$("signalCalendarTime");if(calendarTime)calendarTime.value="";
+  nexfxSelectedDate=null;
 }
 
 let nexfxCloudSaveTimer=null;
@@ -3350,18 +3756,18 @@ async function restoreCloudStateForUser(uid){
 function saveState(){
   const form={
     mode:$("analysisMode").value,
-    direction:$("direction").value,
-    entry:$("entry").value,
-    stop:$("stop").value,
-    tp1:$("tp1").value,
-    tp2:$("tp2").value
+    direction:"buy",
+    entry:"",
+    stop:"",
+    tp1:"",
+    tp2:""
   };
   const state={
     uid:AuthController.getActiveUID(),
     language,market,selectedSymbol:selected[2],
     timeframe:$("timeframe").value,
     favorites,search:$("search").value,
-    onlyFavorites,form,lastAnalysis
+    onlyFavorites,form,lastAnalysis:null
   };
   safeWrite(AuthController.getStorageKey(),state);
   scheduleCloudStateSave(state);
@@ -3426,8 +3832,8 @@ function closeLanguageMenu(){
 
 // Dedicated translations for analysis cards and live analysis feedback (all 15 UI languages).
 const analysisI18n={
- ar:{technicalTitle:"التحليل الفني",technicalDesc:"تحليل العملات الرقمية من شموع Binance Spot المكتملة، مع حساب المؤشرات من بيانات العملة والفريم المختارين.",manualTitle:"التحليل اليدوي",manualDesc:"إدخال مستويات الدخول ووقف الخسارة والأهداف يدوياً",autoTitle:"التحليل التلقائي",autoDesc:"تجهيز التحليل الآلي بعد ربط البيانات ومحرك الذكاء الاصطناعي",loading:"جارٍ جلب بيانات السوق وحساب المؤشرات…",analyzing:"جارٍ تحليل الأصل المحدد",technical:"فني",automatic:"تلقائي",bull:"ميل فني صاعد",bear:"ميل فني هابط",neutral:"لا توجد إشارة مكتملة",failed:"تعذر إكمال التحليل",noData:"تعذر جلب بيانات موثوقة.",levels:"تحقق من ترتيب المستويات: في الشراء يجب أن يكون SL أقل من الدخول وTP1 ثم TP2 أعلى منه؛ وفي البيع العكس.",notRun:"لم يتم تشغيل تحليل",binanceLive:"بيانات Binance المباشرة · تم التحديث ",binanceError:"تعذر جلب بيانات Binance حالياً؛ أعد المحاولة لاحقاً.",unsupported:"الإطار الزمني غير مدعوم.",invalidSymbol:"رمز العملة الرقمية غير صالح.",insufficient:"بيانات الشموع غير كافية لهذا الأصل والإطار الزمني.",serverNeeded:"يلزم نشر server.py أولاً ثم ضبط رابط الخادم لتفعيل تحليل الفوركس والمعادن والأسهم.",loadingPrice:"بانتظار السعر",saveError:"تعذر الحفظ على هذا الجهاز."},
- en:{technicalTitle:"Technical analysis",technicalDesc:"Crypto analysis uses completed Binance Spot candles; indicators are calculated for the selected symbol and timeframe.",manualTitle:"Manual analysis",manualDesc:"Enter entry, stop-loss and target levels manually",autoTitle:"Automatic analysis",autoDesc:"Prepare automated analysis after connecting market data and the AI engine",loading:"Fetching market data and calculating indicators…",analyzing:"Analyzing selected asset",technical:"Technical",automatic:"Automatic",bull:"Bullish technical bias",bear:"Bearish technical bias",neutral:"No confirmed signal",failed:"Analysis unavailable",noData:"Could not retrieve verified market data.",levels:"Check level order: for BUY, SL < entry < TP1 < TP2; for SELL, SL > entry > TP1 > TP2.",notRun:"Analysis not run",binanceLive:"Live Binance data · Updated ",binanceError:"Binance data is temporarily unavailable; retry later.",unsupported:"Unsupported timeframe.",invalidSymbol:"Invalid crypto symbol.",insufficient:"Not enough candles for this asset and timeframe.",serverNeeded:"Deploy server.py and configure its URL to enable forex, metals and stock analysis.",loadingPrice:"Loading",saveError:"Could not save settings on this device."},
+ ar:{technicalTitle:"التحليل الفني",technicalDesc:"تحليل العملات الرقمية من شموع Binance Spot المكتملة، مع حساب المؤشرات من بيانات العملة والفريم المختارين.",manualTitle:"التحليل اليدوي",manualDesc:"إدخال مستويات الدخول ووقف الخسارة والأهداف يدوياً",autoTitle:"التحليل التلقائي",autoDesc:"فحص العملة المختارة عبر خمسة فريمات واكتشاف خمسة أنماط فرص باستخدام بيانات Binance الحقيقية",loading:"جارٍ جلب بيانات السوق وحساب المؤشرات…",analyzing:"جارٍ تحليل الأصل المحدد",technical:"فني",automatic:"تلقائي",bull:"ميل فني صاعد",bear:"ميل فني هابط",neutral:"لا توجد إشارة مكتملة",failed:"تعذر إكمال التحليل",noData:"تعذر جلب بيانات موثوقة.",levels:"تحقق من ترتيب المستويات: في الشراء يجب أن يكون SL أقل من الدخول وTP1 ثم TP2 أعلى منه؛ وفي البيع العكس.",notRun:"لم يتم تشغيل تحليل",binanceLive:"بيانات Binance المباشرة · تم التحديث ",binanceError:"تعذر جلب بيانات Binance حالياً؛ أعد المحاولة لاحقاً.",unsupported:"الإطار الزمني غير مدعوم.",invalidSymbol:"رمز العملة الرقمية غير صالح.",insufficient:"بيانات الشموع غير كافية لهذا الأصل والإطار الزمني.",serverNeeded:"يلزم نشر server.py أولاً ثم ضبط رابط الخادم لتفعيل تحليل الفوركس والمعادن والأسهم.",loadingPrice:"بانتظار السعر",saveError:"تعذر الحفظ على هذا الجهاز."},
+ en:{technicalTitle:"Technical analysis",technicalDesc:"Crypto analysis uses completed Binance Spot candles; indicators are calculated for the selected symbol and timeframe.",manualTitle:"Manual analysis",manualDesc:"Enter entry, stop-loss and target levels manually",autoTitle:"Automatic analysis",autoDesc:"Scan the selected crypto across five timeframes and detect five setup patterns using live Binance data",loading:"Fetching market data and calculating indicators…",analyzing:"Analyzing selected asset",technical:"Technical",automatic:"Automatic",bull:"Bullish technical bias",bear:"Bearish technical bias",neutral:"No confirmed signal",failed:"Analysis unavailable",noData:"Could not retrieve verified market data.",levels:"Check level order: for BUY, SL < entry < TP1 < TP2; for SELL, SL > entry > TP1 > TP2.",notRun:"Analysis not run",binanceLive:"Live Binance data · Updated ",binanceError:"Binance data is temporarily unavailable; retry later.",unsupported:"Unsupported timeframe.",invalidSymbol:"Invalid crypto symbol.",insufficient:"Not enough candles for this asset and timeframe.",serverNeeded:"Deploy server.py and configure its URL to enable forex, metals and stock analysis.",loadingPrice:"Loading",saveError:"Could not save settings on this device."},
  fr:{technicalTitle:"Analyse technique",technicalDesc:"L’analyse crypto utilise les bougies Binance Spot clôturées et calcule les indicateurs pour le symbole et la période choisis.",manualTitle:"Analyse manuelle",manualDesc:"Saisissez manuellement l'entrée, le stop-loss et les objectifs",autoTitle:"Analyse automatique",autoDesc:"Préparez l'analyse automatique après connexion des données et du moteur IA",loading:"Récupération des données et calcul des indicateurs…",analyzing:"Analyse de l'actif sélectionné",technical:"Technique",automatic:"Automatique",bull:"Biais technique haussier",bear:"Biais technique baissier",neutral:"Aucun signal confirmé",failed:"Analyse indisponible",noData:"Impossible de récupérer des données fiables.",levels:"Vérifiez l'ordre des niveaux : ACHAT, SL < entrée < TP1 < TP2 ; VENTE, SL > entrée > TP1 > TP2.",notRun:"Analyse non lancée",binanceLive:"Données Binance en direct · Mise à jour ",binanceError:"Données Binance temporairement indisponibles.",unsupported:"Unité de temps non prise en charge.",invalidSymbol:"Symbole crypto invalide.",insufficient:"Données de chandeliers insuffisantes.",serverNeeded:"Déployez server.py et configurez son URL pour activer l'analyse forex, métaux et actions.",loadingPrice:"Chargement",saveError:"Impossible d'enregistrer sur cet appareil."},
  tr:{technicalTitle:"Teknik analiz",technicalDesc:"Kripto analizi, seçilen sembol ve zaman aralığı için kapanmış Binance Spot mumlarını kullanır ve göstergeleri bunlardan hesaplar.",manualTitle:"Manuel analiz",manualDesc:"Giriş, zarar durdurma ve hedef seviyelerini elle girin",autoTitle:"Otomatik analiz",autoDesc:"Piyasa verileri ve yapay zekâ motoru bağlandıktan sonra otomatik analizi hazırlayın",loading:"Piyasa verileri alınıyor ve göstergeler hesaplanıyor…",analyzing:"Seçilen varlık analiz ediliyor",technical:"Teknik",automatic:"Otomatik",bull:"Yükseliş yönlü teknik görünüm",bear:"Düşüş yönlü teknik görünüm",neutral:"Doğrulanmış sinyal yok",failed:"Analiz kullanılamıyor",noData:"Doğrulanmış piyasa verileri alınamadı.",levels:"Seviye sırasını kontrol edin: ALIŞ için SL < giriş < TP1 < TP2; SATIŞ için SL > giriş > TP1 > TP2.",notRun:"Analiz çalıştırılmadı",binanceLive:"Canlı Binance verileri · Güncelleme ",binanceError:"Binance verileri geçici olarak kullanılamıyor.",unsupported:"Desteklenmeyen zaman aralığı.",invalidSymbol:"Geçersiz kripto sembolü.",insufficient:"Bu varlık ve zaman aralığı için yeterli mum verisi yok.",serverNeeded:"Forex, metal ve hisse analizini etkinleştirmek için server.py dosyasını dağıtın ve sunucu URL'sini ayarlayın.",loadingPrice:"Yükleniyor",saveError:"Bu cihaza kaydedilemedi."},
  de:{technicalTitle:"Technische Analyse",technicalDesc:"Die Kryptoanalyse verwendet abgeschlossene Binance-Spot-Kerzen und berechnet Indikatoren für Symbol und Zeitraum.",manualTitle:"Manuelle Analyse",manualDesc:"Einstiegs-, Stop-Loss- und Kurszielwerte manuell eingeben",autoTitle:"Automatische Analyse",autoDesc:"Automatische Analyse nach Verbindung von Marktdaten und KI-Modul vorbereiten",loading:"Marktdaten werden geladen und Indikatoren berechnet…",analyzing:"Ausgewählter Vermögenswert wird analysiert",technical:"Technisch",automatic:"Automatisch",bull:"Technisch bullische Tendenz",bear:"Technisch bärische Tendenz",neutral:"Kein bestätigtes Signal",failed:"Analyse nicht verfügbar",noData:"Keine verlässlichen Marktdaten verfügbar.",levels:"Reihenfolge prüfen: KAUF, SL < Einstieg < TP1 < TP2; VERKAUF, SL > Einstieg > TP1 > TP2.",notRun:"Analyse nicht ausgeführt",binanceLive:"Live-Binance-Daten · Aktualisiert ",binanceError:"Binance-Daten sind vorübergehend nicht verfügbar.",unsupported:"Nicht unterstützter Zeitraum.",invalidSymbol:"Ungültiges Krypto-Symbol.",insufficient:"Nicht genügend Kerzendaten.",serverNeeded:"server.py bereitstellen und Server-URL konfigurieren, um Forex-, Metall- und Aktienanalysen zu aktivieren.",loadingPrice:"Laden",saveError:"Speichern auf diesem Gerät nicht möglich."},
@@ -3443,21 +3849,21 @@ const analysisI18n={
  nl:{technicalTitle:"Technische analyse",technicalDesc:"Cryptoanalyse gebruikt afgesloten Binance Spot-kaarsen en berekent indicatoren voor het geselecteerde symbool en tijdsbestek.",manualTitle:"Handmatige analyse",manualDesc:"Voer instap-, stop-loss- en koersdoelniveaus handmatig in",autoTitle:"Automatische analyse",autoDesc:"Bereid automatische analyse voor nadat marktgegevens en de AI-engine zijn gekoppeld",loading:"Marktgegevens ophalen en indicatoren berekenen…",analyzing:"Geselecteerd activum analyseren",technical:"Technisch",automatic:"Automatisch",bull:"Technisch bullish beeld",bear:"Technisch bearish beeld",neutral:"Geen bevestigd signaal",failed:"Analyse niet beschikbaar",noData:"Betrouwbare marktgegevens konden niet worden opgehaald.",levels:"Controleer de volgorde: KOOP, SL < instap < TP1 < TP2; VERKOOP, SL > instap > TP1 > TP2.",notRun:"Analyse niet uitgevoerd",binanceLive:"Live Binance-gegevens · Bijgewerkt ",binanceError:"Binance-gegevens zijn tijdelijk niet beschikbaar.",unsupported:"Niet-ondersteund tijdsbestek.",invalidSymbol:"Ongeldig cryptosymbool.",insufficient:"Onvoldoende candlegegevens.",serverNeeded:"Implementeer server.py en stel de server-URL in om forex-, metaal- en aandelenanalyse in te schakelen.",loadingPrice:"Laden",saveError:"Opslaan op dit apparaat is mislukt."}
 };
 const analysisDecisionI18n={
- ar:{buyAction:"شراء محتمل · BUY",sellAction:"بيع محتمل · SELL",waitAction:"انتظار · WAIT",bullBias:"اتجاه السوق: صاعد",bearBias:"اتجاه السوق: هابط",neutralBias:"اتجاه السوق: محايد",buyReason:"اكتملت شروط الشراء وفق المؤشرات الفنية المستخدمة. راجع مستويات الدخول ووقف الخسارة قبل اتخاذ القرار.",sellReason:"اكتملت شروط البيع وفق المؤشرات الفنية المستخدمة. راجع مستويات الدخول ووقف الخسارة قبل اتخاذ القرار.",bullWait:"الاتجاه يميل للصعود، لكن شروط الدخول للشراء غير مكتملة حالياً. الأفضل الانتظار.",bearWait:"الاتجاه يميل للهبوط، لكن شروط الدخول للبيع غير مكتملة حالياً. الأفضل الانتظار.",neutralWait:"المؤشرات غير متوافقة على اتجاه واضح؛ لا توجد فرصة دخول مؤكدة حالياً. الأفضل الانتظار.",manualPlan:"خطة يدوية حسب المستويات التي أدخلتها؛ هذه ليست إشارة آلية."},
- en:{buyAction:"Potential BUY",sellAction:"Potential SELL",waitAction:"WAIT",bullBias:"Market bias: Bullish",bearBias:"Market bias: Bearish",neutralBias:"Market bias: Neutral",buyReason:"The configured technical conditions for a buy signal are met. Review entry and stop-loss levels before acting.",sellReason:"The configured technical conditions for a sell signal are met. Review entry and stop-loss levels before acting.",bullWait:"The market bias is bullish, but the buy-entry conditions are not fully met. Waiting is preferred.",bearWait:"The market bias is bearish, but the sell-entry conditions are not fully met. Waiting is preferred.",neutralWait:"The indicators do not agree on a clear direction. No confirmed entry opportunity is present; waiting is preferred.",manualPlan:"Manual plan based on the levels you entered; this is not an automated signal."},
- fr:{buyAction:"ACHAT potentiel",sellAction:"VENTE potentielle",waitAction:"ATTENTE",bullBias:"Tendance du marché : haussière",bearBias:"Tendance du marché : baissière",neutralBias:"Tendance du marché : neutre",buyReason:"Les conditions techniques définies pour un achat sont réunies. Vérifiez l'entrée et le stop-loss avant d'agir.",sellReason:"Les conditions techniques définies pour une vente sont réunies. Vérifiez l'entrée et le stop-loss avant d'agir.",bullWait:"La tendance est haussière, mais les conditions d'entrée à l'achat ne sont pas toutes réunies. Il est préférable d'attendre.",bearWait:"La tendance est baissière, mais les conditions d'entrée à la vente ne sont pas toutes réunies. Il est préférable d'attendre.",neutralWait:"Les indicateurs ne confirment pas de direction claire. Aucune entrée confirmée ; mieux vaut attendre.",manualPlan:"Plan manuel basé sur les niveaux saisis ; ce n'est pas un signal automatisé."},
- tr:{buyAction:"Olası ALIŞ",sellAction:"Olası SATIŞ",waitAction:"BEKLE",bullBias:"Piyasa yönü: Yükseliş",bearBias:"Piyasa yönü: Düşüş",neutralBias:"Piyasa yönü: Yatay",buyReason:"Alış için tanımlanan teknik koşullar oluştu. İşlemden önce giriş ve zarar durdurma seviyelerini kontrol edin.",sellReason:"Satış için tanımlanan teknik koşullar oluştu. İşlemden önce giriş ve zarar durdurma seviyelerini kontrol edin.",bullWait:"Piyasa yükseliş eğiliminde ancak alış giriş koşulları henüz tamamlanmadı. Beklemek daha uygundur.",bearWait:"Piyasa düşüş eğiliminde ancak satış giriş koşulları henüz tamamlanmadı. Beklemek daha uygundur.",neutralWait:"Göstergeler net bir yönde uyuşmuyor. Doğrulanmış giriş fırsatı yok; beklemek daha uygundur.",manualPlan:"Girdiğiniz seviyelere dayalı manuel plan; otomatik sinyal değildir."},
- de:{buyAction:"Möglicher KAUF",sellAction:"Möglicher VERKAUF",waitAction:"WARTEN",bullBias:"Markttendenz: Aufwärts",bearBias:"Markttendenz: Abwärts",neutralBias:"Markttendenz: Neutral",buyReason:"Die festgelegten technischen Kaufbedingungen sind erfüllt. Einstieg und Stop-Loss vor einer Entscheidung prüfen.",sellReason:"Die festgelegten technischen Verkaufsbedingungen sind erfüllt. Einstieg und Stop-Loss vor einer Entscheidung prüfen.",bullWait:"Die Tendenz ist aufwärtsgerichtet, aber die Kauf-Einstiegsbedingungen sind noch nicht vollständig erfüllt. Warten ist vorzuziehen.",bearWait:"Die Tendenz ist abwärtsgerichtet, aber die Verkaufs-Einstiegsbedingungen sind noch nicht vollständig erfüllt. Warten ist vorzuziehen.",neutralWait:"Die Indikatoren zeigen keine klare gemeinsame Richtung. Kein bestätigter Einstieg; besser abwarten.",manualPlan:"Manueller Plan anhand Ihrer Eingaben; kein automatisches Signal."},
- es:{buyAction:"COMPRA potencial",sellAction:"VENTA potencial",waitAction:"ESPERAR",bullBias:"Tendencia del mercado: alcista",bearBias:"Tendencia del mercado: bajista",neutralBias:"Tendencia del mercado: neutral",buyReason:"Se cumplen las condiciones técnicas definidas para compra. Revisa la entrada y el stop-loss antes de actuar.",sellReason:"Se cumplen las condiciones técnicas definidas para venta. Revisa la entrada y el stop-loss antes de actuar.",bullWait:"La tendencia es alcista, pero aún no se cumplen todas las condiciones de entrada para comprar. Es preferible esperar.",bearWait:"La tendencia es bajista, pero aún no se cumplen todas las condiciones de entrada para vender. Es preferible esperar.",neutralWait:"Los indicadores no coinciden en una dirección clara. No hay una entrada confirmada; es preferible esperar.",manualPlan:"Plan manual basado en los niveles introducidos; no es una señal automática."},
- pt:{buyAction:"COMPRA potencial",sellAction:"VENDA potencial",waitAction:"AGUARDAR",bullBias:"Tendência do mercado: alta",bearBias:"Tendência do mercado: baixa",neutralBias:"Tendência do mercado: neutra",buyReason:"As condições técnicas definidas para compra foram cumpridas. Verifique a entrada e o stop-loss antes de agir.",sellReason:"As condições técnicas definidas para venda foram cumpridas. Verifique a entrada e o stop-loss antes de agir.",bullWait:"A tendência é de alta, mas as condições de entrada para compra ainda não foram totalmente cumpridas. É melhor aguardar.",bearWait:"A tendência é de baixa, mas as condições de entrada para venda ainda não foram totalmente cumpridas. É melhor aguardar.",neutralWait:"Os indicadores não apontam para uma direção clara. Não há entrada confirmada; é melhor aguardar.",manualPlan:"Plano manual baseado nos níveis inseridos; não é um sinal automático."},
- it:{buyAction:"ACQUISTO potenziale",sellAction:"VENDITA potenziale",waitAction:"ATTENDI",bullBias:"Tendenza del mercato: rialzista",bearBias:"Tendenza del mercato: ribassista",neutralBias:"Tendenza del mercato: neutrale",buyReason:"Le condizioni tecniche definite per l'acquisto sono soddisfatte. Controlla ingresso e stop-loss prima di agire.",sellReason:"Le condizioni tecniche definite per la vendita sono soddisfatte. Controlla ingresso e stop-loss prima di agire.",bullWait:"La tendenza è rialzista, ma le condizioni d'ingresso per l'acquisto non sono complete. Meglio attendere.",bearWait:"La tendenza è ribassista, ma le condizioni d'ingresso per la vendita non sono complete. Meglio attendere.",neutralWait:"Gli indicatori non concordano su una direzione chiara. Nessun ingresso confermato; meglio attendere.",manualPlan:"Piano manuale basato sui livelli inseriti; non è un segnale automatico."},
- ru:{buyAction:"Возможная ПОКУПКА",sellAction:"Возможная ПРОДАЖА",waitAction:"ОЖИДАНИЕ",bullBias:"Направление рынка: восходящее",bearBias:"Направление рынка: нисходящее",neutralBias:"Направление рынка: нейтральное",buyReason:"Выполнены заданные технические условия для покупки. Перед решением проверьте вход и стоп-лосс.",sellReason:"Выполнены заданные технические условия для продажи. Перед решением проверьте вход и стоп-лосс.",bullWait:"Рынок склонен к росту, но условия входа в покупку выполнены не полностью. Лучше подождать.",bearWait:"Рынок склонен к снижению, но условия входа в продажу выполнены не полностью. Лучше подождать.",neutralWait:"Индикаторы не показывают согласованного направления. Подтверждённого входа нет; лучше подождать.",manualPlan:"Ручной план по введённым вами уровням; это не автоматический сигнал."},
- zh:{buyAction:"潜在买入",sellAction:"潜在卖出",waitAction:"观望",bullBias:"市场方向：看涨",bearBias:"市场方向：看跌",neutralBias:"市场方向：中性",buyReason:"已满足设定的技术买入条件。采取行动前请检查入场价和止损价。",sellReason:"已满足设定的技术卖出条件。采取行动前请检查入场价和止损价。",bullWait:"市场倾向看涨，但买入入场条件尚未全部满足。建议等待。",bearWait:"市场倾向看跌，但卖出入场条件尚未全部满足。建议等待。",neutralWait:"指标未形成一致方向，目前没有确认的入场机会。建议等待。",manualPlan:"根据您输入的价位形成的手动计划；不是自动信号。"},
- ja:{buyAction:"買い候補",sellAction:"売り候補",waitAction:"様子見",bullBias:"市場方向：上昇",bearBias:"市場方向：下降",neutralBias:"市場方向：中立",buyReason:"設定された買い条件を満たしています。実行前にエントリーと損切りを確認してください。",sellReason:"設定された売り条件を満たしています。実行前にエントリーと損切りを確認してください。",bullWait:"上昇傾向ですが、買いのエントリー条件はまだ揃っていません。様子見が適切です。",bearWait:"下降傾向ですが、売りのエントリー条件はまだ揃っていません。様子見が適切です。",neutralWait:"指標の方向が一致していません。確定したエントリー機会はなく、様子見が適切です。",manualPlan:"入力された価格に基づく手動プランであり、自動シグナルではありません。"},
- ko:{buyAction:"매수 가능 신호",sellAction:"매도 가능 신호",waitAction:"대기",bullBias:"시장 방향: 상승",bearBias:"시장 방향: 하락",neutralBias:"시장 방향: 중립",buyReason:"설정된 기술적 매수 조건이 충족되었습니다. 실행 전에 진입가와 손절가를 확인하세요.",sellReason:"설정된 기술적 매도 조건이 충족되었습니다. 실행 전에 진입가와 손절가를 확인하세요.",bullWait:"상승 흐름이지만 매수 진입 조건이 아직 모두 충족되지 않았습니다. 대기를 권장합니다.",bearWait:"하락 흐름이지만 매도 진입 조건이 아직 모두 충족되지 않았습니다. 대기를 권장합니다.",neutralWait:"지표가 뚜렷한 방향으로 일치하지 않습니다. 확인된 진입 기회가 없어 대기를 권장합니다.",manualPlan:"입력한 가격 수준에 따른 수동 계획이며 자동 신호가 아닙니다."},
- hi:{buyAction:"संभावित खरीद",sellAction:"संभावित बिक्री",waitAction:"प्रतीक्षा करें",bullBias:"बाज़ार दिशा: तेज़ी",bearBias:"बाज़ार दिशा: मंदी",neutralBias:"बाज़ार दिशा: तटस्थ",buyReason:"खरीद के लिए निर्धारित तकनीकी शर्तें पूरी हैं। कार्रवाई से पहले एंट्री और स्टॉप-लॉस जाँचें।",sellReason:"बिक्री के लिए निर्धारित तकनीकी शर्तें पूरी हैं। कार्रवाई से पहले एंट्री और स्टॉप-लॉस जाँचें।",bullWait:"बाज़ार तेज़ी की ओर है, लेकिन खरीद की एंट्री शर्तें पूरी नहीं हैं। प्रतीक्षा करना बेहतर है।",bearWait:"बाज़ार मंदी की ओर है, लेकिन बिक्री की एंट्री शर्तें पूरी नहीं हैं। प्रतीक्षा करना बेहतर है।",neutralWait:"संकेतक किसी स्पष्ट दिशा पर सहमत नहीं हैं। पुष्टि किया हुआ प्रवेश अवसर नहीं है; प्रतीक्षा करें।",manualPlan:"आपके दर्ज स्तरों पर आधारित मैन्युअल योजना; यह स्वचालित संकेत नहीं है।"},
- id:{buyAction:"Potensi BELI",sellAction:"Potensi JUAL",waitAction:"TUNGGU",bullBias:"Arah pasar: Bullish",bearBias:"Arah pasar: Bearish",neutralBias:"Arah pasar: Netral",buyReason:"Kondisi teknikal yang ditetapkan untuk beli telah terpenuhi. Periksa entry dan stop-loss sebelum bertindak.",sellReason:"Kondisi teknikal yang ditetapkan untuk jual telah terpenuhi. Periksa entry dan stop-loss sebelum bertindak.",bullWait:"Arah pasar cenderung naik, tetapi syarat entry beli belum lengkap. Sebaiknya tunggu.",bearWait:"Arah pasar cenderung turun, tetapi syarat entry jual belum lengkap. Sebaiknya tunggu.",neutralWait:"Indikator belum sepakat pada arah yang jelas. Belum ada peluang masuk terkonfirmasi; sebaiknya tunggu.",manualPlan:"Rencana manual berdasarkan level yang Anda masukkan; bukan sinyal otomatis."},
- nl:{buyAction:"Mogelijke KOOP",sellAction:"Mogelijke VERKOOP",waitAction:"WACHTEN",bullBias:"Marktrichting: stijgend",bearBias:"Marktrichting: dalend",neutralBias:"Marktrichting: neutraal",buyReason:"De ingestelde technische voorwaarden voor kopen zijn vervuld. Controleer instap en stop-loss voordat u handelt.",sellReason:"De ingestelde technische voorwaarden voor verkopen zijn vervuld. Controleer instap en stop-loss voordat u handelt.",bullWait:"De markt neigt omhoog, maar de instapvoorwaarden voor kopen zijn nog niet volledig vervuld. Wachten heeft de voorkeur.",bearWait:"De markt neigt omlaag, maar de instapvoorwaarden voor verkopen zijn nog niet volledig vervuld. Wachten heeft de voorkeur.",neutralWait:"De indicatoren geven geen duidelijke gezamenlijke richting. Er is geen bevestigde instap; wachten heeft de voorkeur.",manualPlan:"Handmatig plan op basis van uw ingevoerde niveaus; geen automatisch signaal."}
+ ar:{buyAction:"شراء",sellAction:"بيع",waitAction:"انتظار",neutralAction:"انتظار",bullBias:"اتجاه السوق: صاعد",bearBias:"اتجاه السوق: هابط",neutralBias:"الاتجاه غير واضح",waitLevelsNote:"السعر الحالي مرجعي؛ مستويات الشراء والبيع احتمالات فنية وليست توصية دخول مؤكدة.",buyReason:"اكتملت شروط الشراء وفق المؤشرات الفنية المستخدمة. راجع مستويات الدخول ووقف الخسارة قبل اتخاذ القرار.",sellReason:"اكتملت شروط البيع وفق المؤشرات الفنية المستخدمة. راجع مستويات الدخول ووقف الخسارة قبل اتخاذ القرار.",bullWait:"الاتجاه يميل للصعود، لكن شروط الدخول للشراء غير مكتملة حالياً. الأفضل الانتظار.",bearWait:"الاتجاه يميل للهبوط، لكن شروط الدخول للبيع غير مكتملة حالياً. الأفضل الانتظار.",neutralWait:"المؤشرات غير متوافقة على اتجاه واضح؛ لا توجد فرصة دخول مؤكدة حالياً. الأفضل الانتظار.",manualPlan:"خطة يدوية حسب المستويات التي أدخلتها؛ هذه ليست إشارة آلية."},
+ en:{buyAction:"Potential BUY",sellAction:"Potential SELL",waitAction:"WAIT",neutralAction:"NEUTRAL",bullBias:"Market bias: Bullish",bearBias:"Market bias: Bearish",neutralBias:"Market bias: Neutral",waitLevelsNote:"Current price is a reference; buy/sell levels are technical scenarios, not confirmed entries.",buyReason:"The configured technical conditions for a buy signal are met. Review entry and stop-loss levels before acting.",sellReason:"The configured technical conditions for a sell signal are met. Review entry and stop-loss levels before acting.",bullWait:"The market bias is bullish, but the buy-entry conditions are not fully met. Waiting is preferred.",bearWait:"The market bias is bearish, but the sell-entry conditions are not fully met. Waiting is preferred.",neutralWait:"The indicators do not agree on a clear direction. No confirmed entry opportunity is present; waiting is preferred.",manualPlan:"Manual plan based on the levels you entered; this is not an automated signal."},
+ fr:{buyAction:"ACHAT potentiel",sellAction:"VENTE potentielle",waitAction:"ATTENTE",neutralAction:"NEUTRE",bullBias:"Tendance du marché : haussière",bearBias:"Tendance du marché : baissière",neutralBias:"Tendance du marché : neutre",buyReason:"Les conditions techniques définies pour un achat sont réunies. Vérifiez l'entrée et le stop-loss avant d'agir.",sellReason:"Les conditions techniques définies pour une vente sont réunies. Vérifiez l'entrée et le stop-loss avant d'agir.",bullWait:"La tendance est haussière, mais les conditions d'entrée à l'achat ne sont pas toutes réunies. Il est préférable d'attendre.",bearWait:"La tendance est baissière, mais les conditions d'entrée à la vente ne sont pas toutes réunies. Il est préférable d'attendre.",neutralWait:"Les indicateurs ne confirment pas de direction claire. Aucune entrée confirmée ; mieux vaut attendre.",manualPlan:"Plan manuel basé sur les niveaux saisis ; ce n'est pas un signal automatisé."},
+ tr:{buyAction:"Olası ALIŞ",sellAction:"Olası SATIŞ",waitAction:"BEKLE",neutralAction:"NÖTR",bullBias:"Piyasa yönü: Yükseliş",bearBias:"Piyasa yönü: Düşüş",neutralBias:"Piyasa yönü: Yatay",waitLevelsNote:"Güncel fiyat referanstır; alış/satış seviyeleri teyit edilmiş giriş değil, teknik senaryolardır.",buyReason:"Alış için tanımlanan teknik koşullar oluştu. İşlemden önce giriş ve zarar durdurma seviyelerini kontrol edin.",sellReason:"Satış için tanımlanan teknik koşullar oluştu. İşlemden önce giriş ve zarar durdurma seviyelerini kontrol edin.",bullWait:"Piyasa yükseliş eğiliminde ancak alış giriş koşulları henüz tamamlanmadı. Beklemek daha uygundur.",bearWait:"Piyasa düşüş eğiliminde ancak satış giriş koşulları henüz tamamlanmadı. Beklemek daha uygundur.",neutralWait:"Göstergeler net bir yönde uyuşmuyor. Doğrulanmış giriş fırsatı yok; beklemek daha uygundur.",manualPlan:"Girdiğiniz seviyelere dayalı manuel plan; otomatik sinyal değildir."},
+ de:{buyAction:"Möglicher KAUF",sellAction:"Möglicher VERKAUF",waitAction:"WARTEN",neutralAction:"NEUTRAL",bullBias:"Markttendenz: Aufwärts",bearBias:"Markttendenz: Abwärts",neutralBias:"Markttendenz: Neutral",buyReason:"Die festgelegten technischen Kaufbedingungen sind erfüllt. Einstieg und Stop-Loss vor einer Entscheidung prüfen.",sellReason:"Die festgelegten technischen Verkaufsbedingungen sind erfüllt. Einstieg und Stop-Loss vor einer Entscheidung prüfen.",bullWait:"Die Tendenz ist aufwärtsgerichtet, aber die Kauf-Einstiegsbedingungen sind noch nicht vollständig erfüllt. Warten ist vorzuziehen.",bearWait:"Die Tendenz ist abwärtsgerichtet, aber die Verkaufs-Einstiegsbedingungen sind noch nicht vollständig erfüllt. Warten ist vorzuziehen.",neutralWait:"Die Indikatoren zeigen keine klare gemeinsame Richtung. Kein bestätigter Einstieg; besser abwarten.",manualPlan:"Manueller Plan anhand Ihrer Eingaben; kein automatisches Signal."},
+ es:{buyAction:"COMPRA potencial",sellAction:"VENTA potencial",waitAction:"ESPERAR",neutralAction:"NEUTRAL",bullBias:"Tendencia del mercado: alcista",bearBias:"Tendencia del mercado: bajista",neutralBias:"Tendencia del mercado: neutral",buyReason:"Se cumplen las condiciones técnicas definidas para compra. Revisa la entrada y el stop-loss antes de actuar.",sellReason:"Se cumplen las condiciones técnicas definidas para venta. Revisa la entrada y el stop-loss antes de actuar.",bullWait:"La tendencia es alcista, pero aún no se cumplen todas las condiciones de entrada para comprar. Es preferible esperar.",bearWait:"La tendencia es bajista, pero aún no se cumplen todas las condiciones de entrada para vender. Es preferible esperar.",neutralWait:"Los indicadores no coinciden en una dirección clara. No hay una entrada confirmada; es preferible esperar.",manualPlan:"Plan manual basado en los niveles introducidos; no es una señal automática."},
+ pt:{buyAction:"COMPRA potencial",sellAction:"VENDA potencial",waitAction:"AGUARDAR",neutralAction:"NEUTRO",bullBias:"Tendência do mercado: alta",bearBias:"Tendência do mercado: baixa",neutralBias:"Tendência do mercado: neutra",buyReason:"As condições técnicas definidas para compra foram cumpridas. Verifique a entrada e o stop-loss antes de agir.",sellReason:"As condições técnicas definidas para venda foram cumpridas. Verifique a entrada e o stop-loss antes de agir.",bullWait:"A tendência é de alta, mas as condições de entrada para compra ainda não foram totalmente cumpridas. É melhor aguardar.",bearWait:"A tendência é de baixa, mas as condições de entrada para venda ainda não foram totalmente cumpridas. É melhor aguardar.",neutralWait:"Os indicadores não apontam para uma direção clara. Não há entrada confirmada; é melhor aguardar.",manualPlan:"Plano manual baseado nos níveis inseridos; não é um sinal automático."},
+ it:{buyAction:"ACQUISTO potenziale",sellAction:"VENDITA potenziale",waitAction:"ATTENDI",neutralAction:"NEUTRALE",bullBias:"Tendenza del mercato: rialzista",bearBias:"Tendenza del mercato: ribassista",neutralBias:"Tendenza del mercato: neutrale",buyReason:"Le condizioni tecniche definite per l'acquisto sono soddisfatte. Controlla ingresso e stop-loss prima di agire.",sellReason:"Le condizioni tecniche definite per la vendita sono soddisfatte. Controlla ingresso e stop-loss prima di agire.",bullWait:"La tendenza è rialzista, ma le condizioni d'ingresso per l'acquisto non sono complete. Meglio attendere.",bearWait:"La tendenza è ribassista, ma le condizioni d'ingresso per la vendita non sono complete. Meglio attendere.",neutralWait:"Gli indicatori non concordano su una direzione chiara. Nessun ingresso confermato; meglio attendere.",manualPlan:"Piano manuale basato sui livelli inseriti; non è un segnale automatico."},
+ ru:{buyAction:"Возможная ПОКУПКА",sellAction:"Возможная ПРОДАЖА",waitAction:"ОЖИДАНИЕ",neutralAction:"НЕЙТРАЛЬНО",bullBias:"Направление рынка: восходящее",bearBias:"Направление рынка: нисходящее",neutralBias:"Направление рынка: нейтральное",buyReason:"Выполнены заданные технические условия для покупки. Перед решением проверьте вход и стоп-лосс.",sellReason:"Выполнены заданные технические условия для продажи. Перед решением проверьте вход и стоп-лосс.",bullWait:"Рынок склонен к росту, но условия входа в покупку выполнены не полностью. Лучше подождать.",bearWait:"Рынок склонен к снижению, но условия входа в продажу выполнены не полностью. Лучше подождать.",neutralWait:"Индикаторы не показывают согласованного направления. Подтверждённого входа нет; лучше подождать.",manualPlan:"Ручной план по введённым вами уровням; это не автоматический сигнал."},
+ zh:{buyAction:"潜在买入",sellAction:"潜在卖出",waitAction:"观望",neutralAction:"中性",bullBias:"市场方向：看涨",bearBias:"市场方向：看跌",neutralBias:"市场方向：中性",buyReason:"已满足设定的技术买入条件。采取行动前请检查入场价和止损价。",sellReason:"已满足设定的技术卖出条件。采取行动前请检查入场价和止损价。",bullWait:"市场倾向看涨，但买入入场条件尚未全部满足。建议等待。",bearWait:"市场倾向看跌，但卖出入场条件尚未全部满足。建议等待。",neutralWait:"指标未形成一致方向，目前没有确认的入场机会。建议等待。",manualPlan:"根据您输入的价位形成的手动计划；不是自动信号。"},
+ ja:{buyAction:"買い候補",sellAction:"売り候補",waitAction:"様子見",neutralAction:"中立",bullBias:"市場方向：上昇",bearBias:"市場方向：下降",neutralBias:"市場方向：中立",buyReason:"設定された買い条件を満たしています。実行前にエントリーと損切りを確認してください。",sellReason:"設定された売り条件を満たしています。実行前にエントリーと損切りを確認してください。",bullWait:"上昇傾向ですが、買いのエントリー条件はまだ揃っていません。様子見が適切です。",bearWait:"下降傾向ですが、売りのエントリー条件はまだ揃っていません。様子見が適切です。",neutralWait:"指標の方向が一致していません。確定したエントリー機会はなく、様子見が適切です。",manualPlan:"入力された価格に基づく手動プランであり、自動シグナルではありません。"},
+ ko:{buyAction:"매수 가능 신호",sellAction:"매도 가능 신호",waitAction:"대기",neutralAction:"중립",bullBias:"시장 방향: 상승",bearBias:"시장 방향: 하락",neutralBias:"시장 방향: 중립",buyReason:"설정된 기술적 매수 조건이 충족되었습니다. 실행 전에 진입가와 손절가를 확인하세요.",sellReason:"설정된 기술적 매도 조건이 충족되었습니다. 실행 전에 진입가와 손절가를 확인하세요.",bullWait:"상승 흐름이지만 매수 진입 조건이 아직 모두 충족되지 않았습니다. 대기를 권장합니다.",bearWait:"하락 흐름이지만 매도 진입 조건이 아직 모두 충족되지 않았습니다. 대기를 권장합니다.",neutralWait:"지표가 뚜렷한 방향으로 일치하지 않습니다. 확인된 진입 기회가 없어 대기를 권장합니다.",manualPlan:"입력한 가격 수준에 따른 수동 계획이며 자동 신호가 아닙니다."},
+ hi:{buyAction:"संभावित खरीद",sellAction:"संभावित बिक्री",waitAction:"प्रतीक्षा करें",neutralAction:"तटस्थ",bullBias:"बाज़ार दिशा: तेज़ी",bearBias:"बाज़ार दिशा: मंदी",neutralBias:"बाज़ार दिशा: तटस्थ",buyReason:"खरीद के लिए निर्धारित तकनीकी शर्तें पूरी हैं। कार्रवाई से पहले एंट्री और स्टॉप-लॉस जाँचें।",sellReason:"बिक्री के लिए निर्धारित तकनीकी शर्तें पूरी हैं। कार्रवाई से पहले एंट्री और स्टॉप-लॉस जाँचें।",bullWait:"बाज़ार तेज़ी की ओर है, लेकिन खरीद की एंट्री शर्तें पूरी नहीं हैं। प्रतीक्षा करना बेहतर है।",bearWait:"बाज़ार मंदी की ओर है, लेकिन बिक्री की एंट्री शर्तें पूरी नहीं हैं। प्रतीक्षा करना बेहतर है।",neutralWait:"संकेतक किसी स्पष्ट दिशा पर सहमत नहीं हैं। पुष्टि किया हुआ प्रवेश अवसर नहीं है; प्रतीक्षा करें।",manualPlan:"आपके दर्ज स्तरों पर आधारित मैन्युअल योजना; यह स्वचालित संकेत नहीं है।"},
+ id:{buyAction:"Potensi BELI",sellAction:"Potensi JUAL",waitAction:"TUNGGU",neutralAction:"NETRAL",bullBias:"Arah pasar: Bullish",bearBias:"Arah pasar: Bearish",neutralBias:"Arah pasar: Netral",buyReason:"Kondisi teknikal yang ditetapkan untuk beli telah terpenuhi. Periksa entry dan stop-loss sebelum bertindak.",sellReason:"Kondisi teknikal yang ditetapkan untuk jual telah terpenuhi. Periksa entry dan stop-loss sebelum bertindak.",bullWait:"Arah pasar cenderung naik, tetapi syarat entry beli belum lengkap. Sebaiknya tunggu.",bearWait:"Arah pasar cenderung turun, tetapi syarat entry jual belum lengkap. Sebaiknya tunggu.",neutralWait:"Indikator belum sepakat pada arah yang jelas. Belum ada peluang masuk terkonfirmasi; sebaiknya tunggu.",manualPlan:"Rencana manual berdasarkan level yang Anda masukkan; bukan sinyal otomatis."},
+ nl:{buyAction:"Mogelijke KOOP",sellAction:"Mogelijke VERKOOP",waitAction:"WACHTEN",neutralAction:"NEUTRAAL",bullBias:"Marktrichting: stijgend",bearBias:"Marktrichting: dalend",neutralBias:"Marktrichting: neutraal",buyReason:"De ingestelde technische voorwaarden voor kopen zijn vervuld. Controleer instap en stop-loss voordat u handelt.",sellReason:"De ingestelde technische voorwaarden voor verkopen zijn vervuld. Controleer instap en stop-loss voordat u handelt.",bullWait:"De markt neigt omhoog, maar de instapvoorwaarden voor kopen zijn nog niet volledig vervuld. Wachten heeft de voorkeur.",bearWait:"De markt neigt omlaag, maar de instapvoorwaarden voor verkopen zijn nog niet volledig vervuld. Wachten heeft de voorkeur.",neutralWait:"De indicatoren geven geen duidelijke gezamenlijke richting. Er is geen bevestigde instap; wachten heeft de voorkeur.",manualPlan:"Handmatig plan op basis van uw ingevoerde niveaus; geen automatisch signaal."}
 };
 function adt(key){const words=analysisDecisionI18n[language]||analysisDecisionI18n.en;return words[key]||analysisDecisionI18n.en[key]||key;}
 
@@ -3522,11 +3928,11 @@ function toggleSectionInfo(panelId,button){
 
 
 const NEXFX_DATE_LOCALES={ar:"ar",en:"en-GB",tr:"tr",fr:"fr",de:"de",es:"es",pt:"pt",it:"it",ru:"ru",zh:"zh-CN",ja:"ja",ko:"ko",hi:"hi",id:"id",nl:"nl"};
-let nexfxCalendarView=new Date();
+let nexfxCalendarView=(()=>{const p=nexfxIstanbulParts();return new Date(Date.UTC(p.year,p.month-1,1))})();
 let nexfxSelectedDate=null;
 function nexfxDateLocale(){return NEXFX_DATE_LOCALES[language]||"en-GB"}
 function nexfxLatin(value){return String(value).replace(/[٠-٩۰-۹]/g,ch=>"٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹".indexOf(ch)>=0?String("٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹".indexOf(ch)%10):ch)}
-function nexfxDateParts(date){return [date.getFullYear(),String(date.getMonth()+1).padStart(2,"0"),String(date.getDate()).padStart(2,"0")]}
+function nexfxDateParts(date){return [date.getUTCFullYear(),String(date.getUTCMonth()+1).padStart(2,"0"),String(date.getUTCDate()).padStart(2,"0")]}
 function nexfxNormalizeTime(value){
   const latin=nexfxLatin(value).replace(/[^0-9:]/g,"").slice(0,5);
   const digits=latin.replace(/:/g,"").slice(0,4);
@@ -3537,15 +3943,16 @@ function nexfxParseManualDate(value){
   const m=v.match(/^(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2})$/);
   if(!m)return null;
   const [y,mo,d,hh,mm]=m.slice(1).map(Number);
-  const date=new Date(y,mo-1,d);
-  if(date.getFullYear()!==y||date.getMonth()!==mo-1||date.getDate()!==d||hh>23||mm>59)return null;
+  const date=new Date(Date.UTC(y,mo-1,d));
+  if(date.getUTCFullYear()!==y||date.getUTCMonth()!==mo-1||date.getUTCDate()!==d||hh>23||mm>59)return null;
   return {date,time:`${String(hh).padStart(2,"0")}:${String(mm).padStart(2,"0")}`};
 }
 function nexfxDateTimeIsFuture(date,time){
   if(!(date instanceof Date)||!Number.isFinite(date.getTime()))return true;
   const parts=String(time||"12:00").split(":").map(Number);
   if(parts.length!==2||!Number.isInteger(parts[0])||!Number.isInteger(parts[1])||parts[0]>23||parts[1]>59)return true;
-  return new Date(date.getFullYear(),date.getMonth(),date.getDate(),parts[0],parts[1],0,0).getTime()>Date.now();
+  const stamp=nexfxIstanbulTimestamp(date.getUTCFullYear(),date.getUTCMonth()+1,date.getUTCDate(),parts[0],parts[1]);
+  return !Number.isFinite(stamp)||stamp>Date.now();
 }
 function nexfxFutureDateMessage(){
   return ({ar:"لا يمكن اختيار تاريخ أو وقت في المستقبل.",en:"A future date or time cannot be selected.",tr:"Gelecekteki bir tarih veya saat seçilemez.",fr:"Une date ou une heure future ne peut pas être sélectionnée.",de:"Ein zukünftiges Datum oder eine zukünftige Uhrzeit ist nicht zulässig.",es:"No se puede seleccionar una fecha u hora futura.",pt:"Não é possível selecionar uma data ou hora futura.",it:"Non è possibile selezionare una data o un'ora futura.",ru:"Нельзя выбрать будущую дату или время.",zh:"不能选择未来的日期或时间。",ja:"未来の日付や時刻は選択できません。",ko:"미래 날짜 또는 시간은 선택할 수 없습니다.",hi:"भविष्य की तारीख या समय नहीं चुना जा सकता।",id:"Tanggal atau waktu di masa depan tidak dapat dipilih.",nl:"Een toekomstige datum of tijd kan niet worden geselecteerd."}[language]||"A future date or time cannot be selected.");
@@ -3554,31 +3961,34 @@ function nexfxUpdateIssuedValue(){
   const hidden=$("signalIssuedAt"),display=$("signalIssuedAtDisplay");
   if(!hidden||!display||!nexfxSelectedDate)return;
   const [y,m,d]=nexfxDateParts(nexfxSelectedDate),time=nexfxNormalizeTime($("signalCalendarTime").value)||"12:00";
-  hidden.value=`${y}-${m}-${d}T${time}`;
+  const [hh,mm]=time.split(":").map(Number);
+  const stamp=nexfxIstanbulTimestamp(Number(y),Number(m),Number(d),hh,mm);
+  if(!Number.isFinite(stamp)){hidden.value="";return;}
+  hidden.value=String(stamp);
   display.value=`${y}-${m}-${d} ${time}`;
 }
 function nexfxRenderCalendar(){
   const popup=$("signalCalendarPopup");if(!popup)return;
-  const locale=nexfxDateLocale(),year=nexfxCalendarView.getFullYear(),month=nexfxCalendarView.getMonth();
-  const fmtOpts={calendar:"gregory",numberingSystem:"latn"};
-  $("signalCalendarMonth").textContent=new Intl.DateTimeFormat(locale,{month:"long",year:"numeric",...fmtOpts}).format(new Date(year,month,1));
+  const locale=nexfxDateLocale(),year=nexfxCalendarView.getUTCFullYear(),month=nexfxCalendarView.getUTCMonth();
+  const fmtOpts={calendar:"gregory",numberingSystem:"latn",timeZone:NEXFX_MARKET_TIME_ZONE};
+  $("signalCalendarMonth").textContent=new Intl.DateTimeFormat(locale,{month:"long",year:"numeric",...fmtOpts}).format(new Date(Date.UTC(year,month,1)));
   const week=$("signalCalendarWeek"),grid=$("signalCalendarGrid");week.innerHTML="";grid.innerHTML="";
   const mondayFirst=[1,2,3,4,5,6,0];
   mondayFirst.forEach(day=>{
-    const d=new Date(2024,0,day-1);
+    const d=new Date(Date.UTC(2024,0,day-1));
     const span=document.createElement("span");
     span.textContent=new Intl.DateTimeFormat(locale,{weekday:"short",...fmtOpts}).format(d);
     week.appendChild(span);
   });
-  const first=new Date(year,month,1),offset=(first.getDay()+6)%7,days=new Date(year,month+1,0).getDate();
+  const first=new Date(Date.UTC(year,month,1)),offset=(first.getUTCDay()+6)%7,days=new Date(Date.UTC(year,month+1,0)).getUTCDate();
   for(let i=0;i<offset;i++){const blank=document.createElement("span");grid.appendChild(blank)}
-  const today=new Date();
+  const todayParts=nexfxIstanbulParts(),today=new Date(Date.UTC(todayParts.year,todayParts.month-1,todayParts.day));
   for(let day=1;day<=days;day++){
     const btn=document.createElement("button");btn.type="button";btn.className="signal-calendar-day";btn.textContent=String(day);
-    if(nexfxSelectedDate&&nexfxSelectedDate.getFullYear()===year&&nexfxSelectedDate.getMonth()===month&&nexfxSelectedDate.getDate()===day)btn.classList.add("selected");
-    if(today.getFullYear()===year&&today.getMonth()===month&&today.getDate()===day)btn.classList.add("today");
-    const chosen=new Date(year,month,day);
-    if(chosen.getTime()>new Date(today.getFullYear(),today.getMonth(),today.getDate()).getTime())btn.disabled=true;
+    if(nexfxSelectedDate&&nexfxSelectedDate.getUTCFullYear()===year&&nexfxSelectedDate.getUTCMonth()===month&&nexfxSelectedDate.getUTCDate()===day)btn.classList.add("selected");
+    if(todayParts.year===year&&todayParts.month===month+1&&todayParts.day===day)btn.classList.add("today");
+    const chosen=new Date(Date.UTC(year,month,day));
+    if(chosen.getTime()>today.getTime())btn.disabled=true;
     btn.addEventListener("click",()=>{
       nexfxSelectedDate=chosen;
       $("signalCalendarTime").value=$("signalCalendarTime").value||"12:00";
@@ -3587,7 +3997,7 @@ function nexfxRenderCalendar(){
     grid.appendChild(btn);
   }
   const ar=language==="ar";
-  $("signalCalendarTimeLabel").textContent=ar?"الوقت":new Intl.DateTimeFormat(locale,{hour:"numeric"}).formatToParts(new Date()).find(x=>x.type==="hour")?.value==="hour"?"Time":"Time";
+  $("signalCalendarTimeLabel").textContent=ar?"الوقت":"Time";
   $("signalCalendarApply").textContent=ar?"تأكيد":({tr:"Uygula",fr:"Valider",de:"Übernehmen",es:"Aplicar",pt:"Aplicar",it:"Applica",ru:"Применить",zh:"确定",ja:"適用",ko:"적용",hi:"लागू करें",id:"Terapkan",nl:"Toepassen"}[language]||"Apply");
   $("signalCalendarPrev").setAttribute("aria-label",ar?"الشهر السابق":"Previous month");
   $("signalCalendarNext").setAttribute("aria-label",ar?"الشهر التالي":"Next month");
@@ -3595,7 +4005,10 @@ function nexfxRenderCalendar(){
 function nexfxToggleCalendar(force){
   const popup=$("signalCalendarPopup"),display=$("signalIssuedAtDisplay"),open=force===undefined?!popup.classList.contains("open"):force;
   popup.classList.toggle("open",open);display.setAttribute("aria-expanded",String(open));
-  if(open){if(!nexfxSelectedDate){const now=new Date();nexfxSelectedDate=new Date(now.getFullYear(),now.getMonth(),now.getDate());$("signalCalendarTime").value="12:00";nexfxUpdateIssuedValue()}nexfxCalendarView=new Date(nexfxSelectedDate.getFullYear(),nexfxSelectedDate.getMonth(),1);nexfxRenderCalendar()}
+  if(open){
+    if(!nexfxSelectedDate){const now=nexfxIstanbulParts();nexfxSelectedDate=new Date(Date.UTC(now.year,now.month-1,now.day));$("signalCalendarTime").value=`${String(now.hour).padStart(2,"0")}:${String(now.minute).padStart(2,"0")}`;nexfxUpdateIssuedValue();}
+    nexfxCalendarView=new Date(Date.UTC(nexfxSelectedDate.getUTCFullYear(),nexfxSelectedDate.getUTCMonth(),1));nexfxRenderCalendar();
+  }
 }
 function nexfxInitSignalDatePicker(){
   const trigger=$("signalCalendarTrigger");if(!trigger)return;
@@ -3608,13 +4021,13 @@ function nexfxInitSignalDatePicker(){
     trigger.dataset.ready="1";
     $("signalIssuedAtDisplay").addEventListener("click",()=>nexfxToggleCalendar(true));
     trigger.addEventListener("click",()=>nexfxToggleCalendar());
-    $("signalCalendarPrev").addEventListener("click",()=>{nexfxCalendarView.setMonth(nexfxCalendarView.getMonth()-1);nexfxRenderCalendar()});
-    $("signalCalendarNext").addEventListener("click",()=>{const next=new Date(nexfxCalendarView.getFullYear(),nexfxCalendarView.getMonth()+1,1);if(next<=new Date(new Date().getFullYear(),new Date().getMonth(),1)){nexfxCalendarView=next;nexfxRenderCalendar()}});
+    $("signalCalendarPrev").addEventListener("click",()=>{nexfxCalendarView.setUTCMonth(nexfxCalendarView.getUTCMonth()-1);nexfxRenderCalendar()});
+    $("signalCalendarNext").addEventListener("click",()=>{const next=new Date(Date.UTC(nexfxCalendarView.getUTCFullYear(),nexfxCalendarView.getUTCMonth()+1,1));const now=nexfxIstanbulParts();const currentMonth=new Date(Date.UTC(now.year,now.month-1,1));if(next<=currentMonth){nexfxCalendarView=next;nexfxRenderCalendar()}});
     $("signalCalendarSymbols").addEventListener("click",e=>{const button=e.target.closest("[data-calendar-symbol]");if(!button)return;const field=$("signalIssuedAtDisplay"),symbol=button.dataset.calendarSymbol;const start=field.selectionStart??field.value.length,end=field.selectionEnd??field.value.length;field.value=field.value.slice(0,start)+symbol+field.value.slice(end);const caret=start+symbol.length;field.focus();field.setSelectionRange(caret,caret);field.dispatchEvent(new Event("input",{bubbles:true}));});
     $("signalCalendarTime").addEventListener("input",e=>{const v=nexfxNormalizeTime(e.target.value);e.target.value=v;if(v.length===5&&Number(v.slice(0,2))<=23&&Number(v.slice(3))<=59)nexfxUpdateIssuedValue()});
     $("signalCalendarTime").addEventListener("change",e=>{const v=nexfxNormalizeTime(e.target.value);let valid=v.length===5&&Number(v.slice(0,2))<=23&&Number(v.slice(3))<=59;if(valid&&nexfxSelectedDate&&nexfxDateTimeIsFuture(nexfxSelectedDate,v)){valid=false;alert(nexfxFutureDateMessage())}e.target.value=valid?v:"12:00";nexfxUpdateIssuedValue()});
     $("signalIssuedAtDisplay").addEventListener("input",e=>{e.target.value=nexfxLatin(e.target.value).replace(/[^0-9\- :.,!?/]/g,"").slice(0,24)});
-    $("signalIssuedAtDisplay").addEventListener("change",e=>{const parsed=nexfxParseManualDate(e.target.value);if(!parsed){e.target.setCustomValidity("Use YYYY-MM-DD HH:MM");e.target.reportValidity();return}if(nexfxDateTimeIsFuture(parsed.date,parsed.time)){e.target.setCustomValidity(nexfxFutureDateMessage());e.target.reportValidity();return}e.target.setCustomValidity("");nexfxSelectedDate=parsed.date;$("signalCalendarTime").value=parsed.time;nexfxCalendarView=new Date(parsed.date.getFullYear(),parsed.date.getMonth(),1);nexfxUpdateIssuedValue();nexfxRenderCalendar()});
+    $("signalIssuedAtDisplay").addEventListener("change",e=>{const parsed=nexfxParseManualDate(e.target.value);if(!parsed){e.target.setCustomValidity("Use YYYY-MM-DD HH:MM");e.target.reportValidity();return}if(nexfxDateTimeIsFuture(parsed.date,parsed.time)){e.target.setCustomValidity(nexfxFutureDateMessage());e.target.reportValidity();return}e.target.setCustomValidity("");nexfxSelectedDate=parsed.date;$("signalCalendarTime").value=parsed.time;nexfxCalendarView=new Date(Date.UTC(parsed.date.getUTCFullYear(),parsed.date.getUTCMonth(),1));nexfxUpdateIssuedValue();nexfxRenderCalendar()});
     $("signalCalendarApply").addEventListener("click",()=>{if(!nexfxSelectedDate)return;const time=nexfxNormalizeTime($("signalCalendarTime").value)||"12:00";if(nexfxDateTimeIsFuture(nexfxSelectedDate,time)){alert(nexfxFutureDateMessage());return}$("signalIssuedAtDisplay").setCustomValidity("");nexfxUpdateIssuedValue();nexfxToggleCalendar(false)});
     document.addEventListener("click",e=>{if(!e.target.closest("#signalDatePicker")&&!e.target.closest("#signalCalendarPopup"))nexfxToggleCalendar(false)});
     document.addEventListener("keydown",e=>{if(e.key==="Escape")nexfxToggleCalendar(false)});
@@ -4224,10 +4637,57 @@ function renderChart(){
   return renderTradingViewChart();
 }
 
+function renderAutomaticVisual(data){
+  const panel=$("autoVisualPanel"),legacyText=$("resultText");
+  if(!panel)return;
+  if(!data||data.mode!=="auto"){
+    panel.hidden=true;
+    if(legacyText)legacyText.hidden=false;
+    return;
+  }
+  panel.hidden=false;
+  if(legacyText)legacyText.hidden=true;
+  const direction=data.direction||"neutral";
+  const statusCard=$("autoStatusCard"),icon=$("autoStatusIcon"),label=$("autoStatusLabel"),summary=$("autoStatusSummary");
+  statusCard.classList.remove("is-buy","is-sell","is-wait");
+  if(direction==="buy"){
+    statusCard.classList.add("is-buy");icon.textContent="↑";label.textContent="شراء";
+    summary.textContent="اكتملت شروط إشارة الشراء وفق التحليل متعدد الأطر.";
+  }else if(direction==="sell"){
+    statusCard.classList.add("is-sell");icon.textContent="↓";label.textContent="بيع";
+    summary.textContent="اكتملت شروط إشارة البيع وفق التحليل متعدد الأطر.";
+  }else{
+    statusCard.classList.add("is-wait");icon.textContent="◷";label.textContent="انتظار";
+    summary.textContent="لا توجد فرصة دخول مؤكدة حالياً؛ ننتظر توافقاً أوضح بين الأطر.";
+  }
+  const votes=data.frameVotes||{};
+  document.querySelectorAll("#autoFrameGrid .auto-frame-card").forEach(card=>{
+    const frame=card.dataset.frame,vote=Number(votes[frame]);
+    card.classList.remove("is-up","is-down","is-wait");
+    const value=card.querySelector("b");
+    if(vote===1){card.classList.add("is-up");value.textContent="↑ صاعد";}
+    else if(vote===-1){card.classList.add("is-down");value.textContent="↓ هابط";}
+    else{card.classList.add("is-wait");value.textContent="◷ غير واضح";}
+  });
+  const agreement=Math.max(-100,Math.min(100,Number(data.alignmentScore??0)));
+  const support=Math.max(0,Math.min(100,Number(data.supportScore||0)));
+  const opposition=Math.max(0,Math.min(100,Number(data.oppositionScore||0)));
+  const uncertain=Math.max(0,100-support-opposition);
+  $("autoAgreementValue").textContent=(agreement>0?"+":"")+agreement+"%";
+  $("autoAgreementBar").style.width=Math.abs(agreement)+"%";
+  $("autoAgreementBar").style.background=agreement<0?"linear-gradient(90deg,#a83d45,#ef8585)":"linear-gradient(90deg,#b88728,#ffe39a)";
+  $("autoSupportValue").textContent=support+"%";
+  $("autoOppositionValue").textContent=opposition+"%";
+  $("autoUncertainValue").textContent=uncertain+"%";
+  $("autoAgreementHint").textContent="الصافي = المؤيدة ناقص المعارضة. الأطر غير الواضحة لا تُحسب مع أي اتجاه. هذه نسب توافق فني وليست احتمالاً للربح.";
+  $("autoDetailsText").textContent=data.text||"لا توجد تفاصيل إضافية.";
+}
+
 function displaySavedAnalysis(){
   if(lastAnalysis && lastAnalysis.pair!==selected[0])lastAnalysis=null;
   syncAnalysisResultMode(lastAnalysis?.mode||$("analysisMode").value);
   if(!lastAnalysis){
+    renderAutomaticVisual(null);
     $("resultTitle").textContent=t("notRun");
     $("resultText").textContent=t("enterLevels");
     $("outMode").textContent="—";
@@ -4236,28 +4696,20 @@ function displaySavedAnalysis(){
     $("outStop").textContent="—";
     $("outTP1").textContent="—";
     $("outTP2").textContent="—";
+    ["outSupport","outResistance","outResultTimeframe","outResultUpdated","outResultSource"].forEach(id=>{if($(id))$(id).textContent="—";});
+    paintAnalysisDirection("neutral");
     return;
   }
   const savedDirection=lastAnalysis.direction||"neutral";
   const savedTitle=lastAnalysis.mode==="manual"
     ? (savedDirection==="buy"?t("buy"):t("sell"))
-    : savedDirection==="buy"?adt("buyAction"):savedDirection==="sell"?adt("sellAction"):adt("waitAction");
+    : savedDirection==="buy"?adt("buyAction"):savedDirection==="sell"?adt("sellAction"):adt("neutralAction");
   $("resultTitle").textContent=savedTitle||lastAnalysis.title||t("notRun");
   let savedAnalysisText=lastAnalysis.text||"";
   if(lastAnalysis.mode==="technical"||lastAnalysis.mode==="auto"){
-    const biasText=lastAnalysis.marketBias==="bull"?adt("bullBias"):lastAnalysis.marketBias==="bear"?adt("bearBias"):adt("neutralBias");
-    const levels=lastAnalysis.levels||{};
-    const supportLine=`${reportText("support")}: ${levels.support==null?reportText("unavailable"):formatMarketPrice(levels.support)} | ${reportText("resistance")}: ${levels.resistance==null?reportText("unavailable"):formatMarketPrice(levels.resistance)}`;
-    const rrLine=`${reportText("rewardRisk")}: TP1 ${lastAnalysis.rewardRiskTP1==null?"—":Number(lastAnalysis.rewardRiskTP1).toFixed(2)}R | TP2 ${lastAnalysis.rewardRiskTP2==null?"—":Number(lastAnalysis.rewardRiskTP2).toFixed(2)}R`;
-    const updatedAt=lastAnalysis.asOf?new Date(lastAnalysis.asOf).toLocaleString((NEXFX_DATE_LOCALES[language]||"en-GB")+"-u-nu-latn",{dateStyle:"medium",timeStyle:"short",numberingSystem:"latn"}):"—";
-    const selectedTimeframeLabel=$("timeframe").selectedOptions[0]?.textContent||lastAnalysis.timeframe||"—";
-    const metaLine=`${reportText("source")}: ${lastAnalysis.source||"—"} | ${reportText("timeframe")}: ${selectedTimeframeLabel} | ${reportText("updated")}: ${updatedAt}`;
-    savedAnalysisText=[biasText,supportLine,rrLine,metaLine].join("\n");
+    savedAnalysisText=lastAnalysis.text|| (savedDirection==="neutral"?adt("waitLevelsNote"):"");
   }else if(lastAnalysis.mode==="manual"){
-    const manualTimeframe=$("timeframe").selectedOptions[0]?.textContent||lastAnalysis.timeframe||"—";
-    const issuedLocal=lastAnalysis.issuedAt?new Date(lastAnalysis.issuedAt).toLocaleString((NEXFX_DATE_LOCALES[language]||"en-GB")+"-u-nu-latn",{dateStyle:"medium",timeStyle:"short",numberingSystem:"latn"}):"—";
-    const stateKey=({valid:"within",stale:"stale",stopped:"stopped",target:"target",missed:"missed"})[lastAnalysis.validityState]||"within";
-    savedAnalysisText=adt("manualPlan")+"\n"+`${reportText("timeframe")}: ${manualTimeframe} | ${reportText("issued")}: ${issuedLocal} | ${reportText("livePrice")}: ${formatMarketPrice(lastAnalysis.livePrice)} | ${reportText("entry")}: ${formatMarketPrice(lastAnalysis.entry)} | ${reportText("rewardRisk")}: TP1 1:${lastAnalysis.rewardRiskTP1}, TP2 1:${lastAnalysis.rewardRiskTP2}.\n${reportText("status")}: ${reportText(stateKey)}`;
+    savedAnalysisText=lastAnalysis.text||`${reportText("status")}: ${manualValidityText(lastAnalysis.validityState)}`;
   }
   $("resultText").textContent=savedAnalysisText;
   paintAnalysisDirection(savedDirection);
@@ -4271,8 +4723,9 @@ function displaySavedAnalysis(){
   $("outSupport").textContent=savedLevels.support==null?"—":formatMarketPrice(savedLevels.support);
   $("outResistance").textContent=savedLevels.resistance==null?"—":formatMarketPrice(savedLevels.resistance);
   $("outResultTimeframe").textContent=$("timeframe").selectedOptions[0]?.textContent||lastAnalysis.timeframe||"—";
-  $("outResultUpdated").textContent=lastAnalysis.asOf?new Date(lastAnalysis.asOf).toLocaleString((NEXFX_DATE_LOCALES[language]||"en-GB")+"-u-nu-latn",{dateStyle:"medium",timeStyle:"short",numberingSystem:"latn"}):"—";
+  $("outResultUpdated").textContent=lastAnalysis.asOf?nexfxFormatIstanbulDateTime(lastAnalysis.asOf):"—";
   $("outResultSource").textContent=lastAnalysis.source||"—";
+  renderAutomaticVisual(lastAnalysis);
 }
 
 function parseManualPrice(raw){
@@ -4289,6 +4742,45 @@ function parseManualPrice(raw){
   return Number(value);
 }
 
+async function fetchManualSignalHistory(symbol,issuedAt){
+  const now=Date.now();
+  const firstFullMinute=Math.ceil(issuedAt/60000)*60000;
+  if(firstFullMinute>now-60000)return {complete:true,candles:[]};
+  const maxCandles=30000;
+  if(now-firstFullMinute>maxCandles*60000)return {complete:false,candles:[]};
+  const candles=[];
+  let cursor=firstFullMinute;
+  for(let page=0;page<31&&cursor<=now-60000;page++){
+    const params=new URLSearchParams({symbol,interval:"1m",startTime:String(cursor),endTime:String(now),limit:"1000"});
+    const response=await fetchNexfxWithTimeout(NEXFX_BINANCE_BASE+"/klines?"+params.toString(),{cache:"no-store",headers:{Accept:"application/json"}},15000);
+    if(!response.ok)throw new Error("Binance historical klines HTTP "+response.status);
+    const raw=await response.json();
+    if(!Array.isArray(raw))throw new Error("Invalid Binance historical candles");
+    if(!raw.length)break;
+    for(const k of raw){
+      if(!Array.isArray(k)||k.length<7)continue;
+      const candle={time:Number(k[0]),open:Number(k[1]),high:Number(k[2]),low:Number(k[3]),close:Number(k[4]),closeTime:Number(k[6])};
+      if([candle.time,candle.open,candle.high,candle.low,candle.close,candle.closeTime].every(Number.isFinite)&&candle.time>=firstFullMinute&&candle.time+60000<=now&&candle.open>0&&candle.high>=Math.max(candle.open,candle.close,candle.low)&&candle.low<=Math.min(candle.open,candle.close,candle.high))candles.push(candle);
+    }
+    const lastRaw=raw[raw.length-1];
+    const lastTime=Number(lastRaw&&lastRaw[0]);
+    if(!Number.isFinite(lastTime)||lastTime<cursor)break;
+    const next=lastTime+60000;
+    if(next<=cursor)break;
+    cursor=next;
+    if(raw.length<1000)break;
+  }
+  candles.sort((a,b)=>a.time-b.time);
+  const unique=candles.filter((c,i)=>i===0||c.time!==candles[i-1].time);
+  const expectedLast=Math.floor((now-60000)/60000)*60000;
+  let complete=expectedLast<firstFullMinute;
+  if(expectedLast>=firstFullMinute&&unique.length){
+    complete=unique[0].time===firstFullMinute&&unique[unique.length-1].time===expectedLast;
+    if(complete){for(let i=1;i<unique.length;i++){if(unique[i].time-unique[i-1].time!==60000){complete=false;break;}}}
+  }
+  return {complete,candles:unique};
+}
+
 function syncAnalysisResultMode(mode=$("analysisMode")?.value||"technical"){
   const box=document.querySelector("#analysis .signal-box");
   if(!box)return;
@@ -4303,12 +4795,17 @@ async function runAnalysis(){
   const tp1=parseManualPrice($("tp1").value);
   const tp2=parseManualPrice($("tp2").value);
 
-  if(mode==="technical"||mode==="auto"){
-    await runMarketAnalysis(mode);
+  if(mode==="technical"){
+    await runMarketAnalysis("technical");
+    return;
+  }
+  if(mode==="auto"){
+    await runAutomaticCryptoAnalysis();
     return;
   }
 
   // A manual submission supersedes any technical/automatic request still in flight.
+  renderAutomaticVisual(null);
   analysisRunToken++;
   const manualFields=[
     ["entry",entry,reportText("entry")],
@@ -4328,8 +4825,8 @@ async function runAnalysis(){
     alert(at("levels"));return;
   }
   const issuedAtValue=$("signalIssuedAt").value;
-  const issuedAt=issuedAtValue?new Date(issuedAtValue).getTime():NaN;
-  if(!Number.isFinite(issuedAt)||issuedAt>Date.now()+60000){
+  const issuedAt=issuedAtValue?Number(issuedAtValue):NaN;
+  if(!Number.isFinite(issuedAt)||issuedAt<=0||issuedAt>Date.now()+60000){
     $("signalIssuedAt").focus();
     alert(reportText("future"));
     return;
@@ -4357,20 +4854,47 @@ async function runAnalysis(){
   const rr1=(reward1/risk).toFixed(2),rr2=(reward2/risk).toFixed(2);
   const title=direction==="buy"?t("buy"):t("sell");
   const manualTimeframe=$("timeframe").selectedOptions[0]?.textContent||timeframe;
+  const issuedLocal=nexfxFormatIstanbulDateTime(issuedAt);
   let validity=reportText("within");
   let validityState="valid";
+  let history=null;
   if(ageMs>maxAgeMs){validity=reportText("stale");validityState="stale";}
-  else if((direction==="buy"&&livePrice<=stop)||(direction==="sell"&&livePrice>=stop)){
-    validity=reportText("stopped");validityState="stopped";
+  else{
+    try{history=await fetchManualSignalHistory(symbol,issuedAt);}
+    catch(error){alert(reportText("priceFail"));return;}
+    if(!history.complete){validity=manualUnverifiedText();validityState="unverified";}
+    else{
+    let entered=false,terminalState=null,ambiguous=false;
+    for(let i=0;i<history.candles.length;i++){
+      const candle=history.candles[i];
+      const entryTouched=candle.low<=entry&&candle.high>=entry;
+      const stopTouched=direction==="buy"?candle.low<=stop:candle.high>=stop;
+      const targetTouched=direction==="buy"?candle.high>=tp1:candle.low<=tp1;
+      if(!entered){
+        if(entryTouched){
+          // Entry and an exit level inside one 1m candle have no provable ordering from OHLC alone.
+          if(stopTouched||targetTouched)ambiguous=true;
+          else entered=true;
+        }
+        // Never mark an entry as missed merely because the first completed
+        // one-minute candle opened beyond the entry. That price may already
+        // have been beyond the level when the signal was issued. Without a
+        // verified post-issue crossing, keep the signal pending/valid.
+        if(ambiguous)break;
+        continue;
+      }
+      if(stopTouched&&targetTouched){ambiguous=true;break;}
+      if(stopTouched){terminalState="stopped";break;}
+      if(targetTouched){terminalState="target";break;}
+    }
+    if(ambiguous){validity=manualUnverifiedText();validityState="unverified";}
+    else if(terminalState){validity=manualValidityText(terminalState);validityState=terminalState;}
+    else if(entered&&((direction==="buy"&&livePrice<=stop)||(direction==="sell"&&livePrice>=stop))){validity=manualValidityText("stopped");validityState="stopped";}
+    else if(entered&&((direction==="buy"&&livePrice>=tp1)||(direction==="sell"&&livePrice<=tp1))){validity=manualValidityText("target");validityState="target";}
+    else if(!entered){validity=reportText("within");validityState="valid";}
+    }
   }
-  else if((direction==="buy"&&livePrice>=tp1)||(direction==="sell"&&livePrice<=tp1)){
-    validity=reportText("target");validityState="target";
-  }
-  else if((direction==="buy"&&livePrice>entry)||(direction==="sell"&&livePrice<entry)){
-    validity=reportText("missed");validityState="missed";
-  }
-  const issuedLocal=new Date(issuedAt).toLocaleString((NEXFX_DATE_LOCALES[language]||"en-GB")+"-u-nu-latn",{dateStyle:"medium",timeStyle:"short",numberingSystem:"latn"});
-  const text=adt("manualPlan")+"\n"+`${reportText("timeframe")}: ${manualTimeframe} | ${reportText("issued")}: ${issuedLocal} | ${reportText("livePrice")}: ${formatMarketPrice(livePrice)} | ${reportText("entry")}: ${formatMarketPrice(entry)} | ${reportText("rewardRisk")}: TP1 1:${rr1}, TP2 1:${rr2}.\n${reportText("status")}: ${validity}`;
+  const text=`${reportText("status")}: ${validity}\n${reportText("rewardRisk")}: TP1 ${rr1}R | TP2 ${rr2}R`;
   $("resultTitle").textContent=title; $("resultText").textContent=text; paintAnalysisDirection(validityState==="valid"?direction:"neutral");
   $("outMode").textContent=t("manual"); $("outPair").textContent=selected[0];
   $("outEntry").textContent=entry; $("outStop").textContent=stop; $("outTP1").textContent=tp1; $("outTP2").textContent=tp2;
@@ -4378,6 +4902,7 @@ async function runAnalysis(){
   $("outResultTimeframe").textContent=manualTimeframe; $("outResultUpdated").textContent=issuedLocal; $("outResultSource").textContent="—";
   lastAnalysis={title,text,mode:"manual",pair:selected[0],entry,stop,tp1,tp2,direction,rewardRiskTP1:rr1,rewardRiskTP2:rr2,timeframe,issuedAt,livePrice,validityState};
   saveState();
+  renderTradeApproval();
 }
 
 $("languageTrigger").addEventListener("click",()=>{
@@ -4447,6 +4972,266 @@ $("executionEnvironment").addEventListener("change",()=>{
     $("executionConnectionFeedback").textContent=t("executionNotConnected");
   }
 });
+// Multi-timeframe opportunity engine: completed Binance Spot candles only.
+const opportunityFrames=[
+  {interval:"5m",label:"5M",weight:10},
+  {interval:"15m",label:"15M",weight:15},
+  {interval:"1h",label:"1H",weight:20},
+  {interval:"4h",label:"4H",weight:25},
+  {interval:"1d",label:"1D",weight:30}
+];
+function scoreOpportunityFrame(candles){
+  const closes=candles.map(c=>c.close);
+  const fast=ema(closes,9),slow=ema(closes,21),r=rsi(closes,14);
+  const e12=emaSeries(closes,12),e26=emaSeries(closes,26),macd=[];
+  for(let i=0;i<e26.length;i++)macd.push(e12[i+14]-e26[i]);
+  const macdNow=macd[macd.length-1],signal=ema(macd,9);
+  if(![fast,slow,r,macdNow,signal].every(Number.isFinite))throw new Error("مؤشرات غير مكتملة");
+  // RSI is a context filter, not an unnecessarily narrow gate: wider bands
+  // prevent valid trend/momentum alignment from being discarded too often.
+  const bullish=fast>slow&&macdNow>signal&&r>=45&&r<75;
+  const bearish=fast<slow&&macdNow<signal&&r<=55&&r>25;
+  return {vote:bullish?1:bearish?-1:0,rsi:r,close:closes[closes.length-1],ema9:fast,ema21:slow,macd:macdNow,signal};
+}
+// Independent automatic crypto engine. Unlike technical analysis, this engine
+// always fetches all five confirmation timeframes and classifies a market setup.
+function detectAutomaticCryptoPattern(candles,frame){
+  if(!Array.isArray(candles)||candles.length<40)return null;
+  const current=candles[candles.length-1],previous=candles[candles.length-2];
+  const atr=calculateAtr(candles,14);
+  if(!Number.isFinite(atr)||atr<=0)return null;
+  const priorRows=candles.slice(-81,-1),swingLows=[],swingHighs=[];
+  for(let i=2;i<priorRows.length-2;i++){
+    const c=priorRows[i];
+    if(c.low<priorRows[i-1].low&&c.low<priorRows[i-2].low&&c.low<=priorRows[i+1].low&&c.low<=priorRows[i+2].low)swingLows.push(c.low);
+    if(c.high>priorRows[i-1].high&&c.high>priorRows[i-2].high&&c.high>=priorRows[i+1].high&&c.high>=priorRows[i+2].high)swingHighs.push(c.high);
+  }
+  const nearestLevels=findRecentPriceLevels(candles.slice(0,-1),80);
+  const breakoutResistance=swingHighs.filter(v=>v>previous.close).sort((a,b)=>a-b)[0]??null;
+  const breakdownSupport=swingLows.filter(v=>v<previous.close).sort((a,b)=>b-a)[0]??null;
+  const retestResistance=swingHighs.filter(v=>v<previous.close).sort((a,b)=>b-a)[0]??null;
+  const retestSupport=swingLows.filter(v=>v>previous.close).sort((a,b)=>a-b)[0]??null;
+  const support=nearestLevels.support,resistance=nearestLevels.resistance;
+  const bullishCandle=current.close>current.open;
+  const bearishCandle=current.close<current.open;
+  const patterns=[];
+  // 1) Confirmed range breakout / breakdown: the previous close was inside,
+  // while the latest completed candle closed beyond the prior swing level.
+  if(breakoutResistance!==null&&previous.close<=breakoutResistance&&current.close>breakoutResistance+atr*.04){
+    patterns.push({type:"اختراق مقاومة",direction:"buy",strength:88,reason:"إغلاق شمعة مكتملة فوق مقاومة سابقة"});
+  }
+  if(breakdownSupport!==null&&previous.close>=breakdownSupport&&current.close<breakdownSupport-atr*.04){
+    patterns.push({type:"كسر دعم",direction:"sell",strength:88,reason:"إغلاق شمعة مكتملة أسفل دعم سابق"});
+  }
+  // 2) Retest after a prior close beyond the broken level.
+  if(retestResistance!==null&&current.low<=retestResistance+atr*.22&&current.close>retestResistance&&bullishCandle){
+    patterns.push({type:"إعادة اختبار مقاومة مخترقة",direction:"buy",strength:82,reason:"السعر عاد لاختبار المقاومة المخترقة وأغلق فوقها"});
+  }
+  if(retestSupport!==null&&current.high>=retestSupport-atr*.22&&current.close<retestSupport&&bearishCandle){
+    patterns.push({type:"إعادة اختبار دعم مكسور",direction:"sell",strength:82,reason:"السعر أعاد اختبار الدعم المكسور وأغلق تحته"});
+  }
+  // 3) Rejection / bounce from a nearby swing level.
+  if(support!==null&&current.low<=support+atr*.16&&current.close>support&&bullishCandle&&current.close>previous.close){
+    patterns.push({type:"ارتداد من الدعم",direction:"buy",strength:76,reason:"رفض سعري صاعد قرب دعم سابق"});
+  }
+  if(resistance!==null&&current.high>=resistance-atr*.16&&current.close<resistance&&bearishCandle&&current.close<previous.close){
+    patterns.push({type:"ارتداد من المقاومة",direction:"sell",strength:76,reason:"رفض سعري هابط قرب مقاومة سابقة"});
+  }
+  // 4) Reversal: an exhaustion reading plus a completed-candle break of
+  // the previous candle's opposite extreme.
+  if(frame.rsi<=34&&bullishCandle&&current.close>previous.high){
+    patterns.push({type:"انعكاس صاعد",direction:"buy",strength:78,reason:"تشبع بيعي مع إغلاق صاعد يتجاوز قمة الشمعة السابقة"});
+  }
+  if(frame.rsi>=66&&bearishCandle&&current.close<previous.low){
+    patterns.push({type:"انعكاس هابط",direction:"sell",strength:78,reason:"تشبع شرائي مع إغلاق هابط يكسر قاع الشمعة السابقة"});
+  }
+  // 5) Trend continuation, only when momentum and EMA structure agree.
+  if(frame.vote===1&&current.close>frame.ema9&&frame.ema9>frame.ema21&&frame.rsi>=50&&frame.rsi<72){
+    patterns.push({type:"استمرار اتجاه صاعد",direction:"buy",strength:72,reason:"السعر فوق EMA9 وEMA9 فوق EMA21 والزخم مؤيد"});
+  }
+  if(frame.vote===-1&&current.close<frame.ema9&&frame.ema9<frame.ema21&&frame.rsi<=50&&frame.rsi>28){
+    patterns.push({type:"استمرار اتجاه هابط",direction:"sell",strength:72,reason:"السعر تحت EMA9 وEMA9 تحت EMA21 والزخم مؤيد"});
+  }
+  if(!patterns.length)return {pattern:null,atr,support,resistance};
+  // Prefer the strongest structural setup; ties favour the more recent/explicit
+  // breakout and retest signals because they have a clearly testable price level.
+  const priority={"اختراق مقاومة":5,"كسر دعم":5,"إعادة اختبار مقاومة مخترقة":4,"إعادة اختبار دعم مكسور":4,"انعكاس صاعد":3,"انعكاس هابط":3,"ارتداد من الدعم":2,"ارتداد من المقاومة":2,"استمرار اتجاه صاعد":1,"استمرار اتجاه هابط":1};
+  patterns.sort((a,b)=>(b.strength-a.strength)||((priority[b.type]||0)-(priority[a.type]||0)));
+  return {pattern:patterns[0],atr,support,resistance};
+}
+function automaticRiskLevels(entry,side,atr,support,resistance){
+  if(!Number.isFinite(entry)||!Number.isFinite(atr)||atr<=0||!side)return null;
+  let stop;
+  if(side==="buy"){
+    const structural=support!==null&&support<entry?support-atr*.2:null;
+    stop=structural!==null&&entry-structural>=atr*.8&&entry-structural<=atr*3?structural:entry-atr*1.5;
+  }else{
+    const structural=resistance!==null&&resistance>entry?resistance+atr*.2:null;
+    stop=structural!==null&&structural-entry>=atr*.8&&structural-entry<=atr*3?structural:entry+atr*1.5;
+  }
+  const risk=Math.abs(entry-stop);
+  return {stop,tp1:entry+(side==="buy"?1:-1)*risk*1.5,tp2:entry+(side==="buy"?1:-1)*risk*2.5,risk};
+}
+async function runAutomaticCryptoAnalysis(){
+  syncAnalysisResultMode("auto");
+  const runToken=++analysisRunToken;
+  const asset=[...selected],marketName=market;
+  const status=$("resultText"),title=$("resultTitle");
+  renderAutomaticVisual(null);
+  lastAnalysis=null;
+  if($("tradeApprovalWrap"))$("tradeApprovalWrap").hidden=true;
+  title.textContent=at("analyzing");title.classList.remove("signal-up","signal-down","signal-neutral");
+  status.textContent="جارٍ فحص العملة على خمسة أطر زمنية واكتشاف أنماط الفرص…";
+  $("outMode").textContent=at("automatic");$("outPair").textContent=asset[0];
+  $("outEntry").textContent="—";$("outStop").textContent="—";$("outTP1").textContent="—";$("outTP2").textContent="—";
+  ["outSupport","outResistance","outResultTimeframe","outResultUpdated","outResultSource"].forEach(id=>{if($(id))$(id).textContent="—";});
+  saveState();
+  try{
+    if(marketName!=="crypto")throw new Error("المحرك التلقائي الحالي مخصص للعملات الرقمية المرتبطة ببيانات Binance فقط.");
+    syncCryptoAssetsWithBinance().catch(error=>console.warn("Binance symbol catalogue refresh:",error));
+    const fetched=await Promise.all(opportunityFrames.map(async frame=>{
+      const data=await fetchSelectedMarketCandles(asset,"crypto",frame.interval);
+      const metrics=scoreOpportunityFrame(data.candles);
+      return {frame,data,metrics};
+    }));
+    if(runToken!==analysisRunToken||asset[2]!==selected[2]||marketName!==market)return;
+    const frames={};
+    fetched.forEach(({frame,data,metrics})=>frames[frame.label]={...metrics,candles:data.candles,asOf:data.asOf,source:data.source});
+    const totalWeight=opportunityFrames.reduce((sum,f)=>sum+f.weight,0);
+    const patternInfo=detectAutomaticCryptoPattern(frames["1H"].candles,frames["1H"]);
+    const pattern=patternInfo?.pattern||null;
+    const side=pattern?.direction||null;
+    const matchingWeight=side?opportunityFrames.reduce((sum,f)=>sum+(frames[f.label].vote===(side==="buy"?1:-1)?f.weight:0),0):0;
+    const opposingWeight=side?opportunityFrames.reduce((sum,f)=>sum+(frames[f.label].vote===(side==="buy"?-1:1)?f.weight:0),0):0;
+    // Keep the net score for the safety gate, but also expose positive and
+    // opposing weighted votes separately so a 0 net score is not mistaken for
+    // zero supporting frames when the votes are mixed.
+    const alignmentScore=side?Math.round((matchingWeight-opposingWeight)/totalWeight*100):0;
+    const supportScore=side?Math.round(matchingWeight/totalWeight*100):0;
+    const oppositionScore=side?Math.round(opposingWeight/totalWeight*100):0;
+    const highFrameAgreement=!!side&&frames["4H"].vote===(side==="buy"?1:-1)&&frames["1D"].vote===(side==="buy"?1:-1);
+    const hourlyAgreement=!!side&&frames["1H"].vote===(side==="buy"?1:-1);
+    const score=pattern?Math.round(pattern.strength*.35+Math.max(0,alignmentScore)*.65):Math.round(Math.abs(opportunityFrames.reduce((sum,f)=>sum+frames[f.label].vote*f.weight,0))/totalWeight*100);
+    const actionable=!!pattern&&alignmentScore>=45&&highFrameAgreement&&hourlyAgreement&&opposingWeight===0;
+    const direction=actionable?side:"neutral";
+    const referenceSide=side||(frames["1H"].close>=frames["1H"].ema21?"buy":"sell");
+    const hourly=frames["1H"],entry=hourly.close;
+    const atr=patternInfo?.atr||calculateAtr(hourly.candles,14);
+    const levels=patternInfo||{support:findRecentPriceLevels(hourly.candles,80).support,resistance:findRecentPriceLevels(hourly.candles,80).resistance};
+    const riskLevels=automaticRiskLevels(entry,actionable?direction:referenceSide,atr,levels.support??null,levels.resistance??null);
+    if(!riskLevels)throw new Error("تعذر حساب مستويات المخاطرة من بيانات Binance.");
+    const fmt=formatMarketPrice;
+    const directionLabel=direction==="buy"?"شراء":direction==="sell"?"بيع":"انتظار";
+    const titleText=direction==="buy"?adt("buyAction"):direction==="sell"?adt("sellAction"):adt("neutralAction");
+    const patternText=pattern?`النمط المكتشف: ${pattern.type} — ${pattern.reason}.`:`لم يكتمل أي نمط من أنماط الفرص الخمسة على إطار الساعة.`;
+    const agreementText=`صافي توافق الفريمات مع اتجاه النمط: ${alignmentScore}/100؛ الفريمات المؤيدة: ${supportScore}/100، والمعارضة: ${oppositionScore}/100؛ 5M ${frames["5M"].vote===1?"صاعد":frames["5M"].vote===-1?"هابط":"غير واضح"}، 15M ${frames["15M"].vote===1?"صاعد":frames["15M"].vote===-1?"هابط":"غير واضح"}، 1H ${frames["1H"].vote===1?"صاعد":frames["1H"].vote===-1?"هابط":"غير واضح"}، 4H ${frames["4H"].vote===1?"صاعد":frames["4H"].vote===-1?"هابط":"غير واضح"}، 1D ${frames["1D"].vote===1?"صاعد":frames["1D"].vote===-1?"هابط":"غير واضح"}.`;
+    const referenceText=`السيناريو المرجعي غير التنفيذي (${referenceSide==="buy"?"شراء":"بيع"}) — السعر: ${fmt(entry)}، وقف مرجعي: ${fmt(riskLevels.stop)}، هدف 1 مرجعي: ${fmt(riskLevels.tp1)}، هدف 2 مرجعي: ${fmt(riskLevels.tp2)}. نسبة العائد إلى المخاطرة: الهدف الأول 1.5R والهدف الثاني 2.5R.`;
+    const decisionReason=opposingWeight>0?"يوجد تعارض بين بعض الأطر الزمنية، لذلك لن نصدر دخولاً.":"تأكيد الأطر الزمنية غير كافٍ حتى الآن.";
+    const decisionText=actionable?`تم تأكيد اتجاه ${directionLabel} بتوافق إطار الساعة و4H واليومي ومن دون تعارض بين الأطر.`:`النتيجة ${directionLabel}: ${pattern?decisionReason:"لا توجد فرصة دخول مؤكدة حالياً."} لن تُعرض مستويات الدخول أو الوقف أو الأهداف كصفقة قابلة للتنفيذ. ${referenceText}`;
+    const explanation=`${patternText} ${agreementText} ${decisionText}`;
+    title.textContent=titleText;paintAnalysisDirection(direction);
+    status.textContent=explanation;
+    $("outMode").textContent=at("automatic");$("outPair").textContent=asset[0];
+    // Never populate execution-looking Entry/SL/TP cards for a neutral result.
+    // Keep the calculated scenario in the explanation and saved referenceLevels only.
+    $("outEntry").textContent=actionable?fmt(entry):"—";
+    $("outStop").textContent=actionable?fmt(riskLevels.stop):"—";
+    $("outTP1").textContent=actionable?fmt(riskLevels.tp1):"—";
+    $("outTP2").textContent=actionable?fmt(riskLevels.tp2):"—";
+    $("outSupport").textContent=levels.support==null?"—":fmt(levels.support);
+    $("outResistance").textContent=levels.resistance==null?"—":fmt(levels.resistance);
+    $("outResultTimeframe").textContent="5M + 15M + 1H + 4H + 1D";
+    // Entry and pattern reference the completed 1H candle. Timestamp that same
+    // candle rather than the newest 5M/15M candle, which could make the result
+    // appear newer than the data used to calculate its entry.
+    const primaryCandle=hourly.candles[hourly.candles.length-1];
+    const primaryCandleTime=primaryCandle.closeTime??primaryCandle.time;
+    const analysisAsOf=new Date(primaryCandleTime).toISOString();
+    $("outResultUpdated").textContent=nexfxFormatIstanbulDateTime(primaryCandleTime);
+    $("outResultSource").textContent="Binance Spot API · Multi-timeframe";
+    const risk=Math.abs(entry-riskLevels.stop);
+    lastAnalysis={title:titleText,text:explanation,mode:"auto",pair:asset[0],entry:actionable?fmt(entry):"—",stop:actionable?fmt(riskLevels.stop):"—",tp1:actionable?fmt(riskLevels.tp1):"—",tp2:actionable?fmt(riskLevels.tp2):"—",direction,marketBias:side||"neutral",waitSide:actionable?null:referenceSide,referenceLevels:actionable?null:{entry:fmt(entry),side:referenceSide,stop:fmt(riskLevels.stop),tp1:fmt(riskLevels.tp1),tp2:fmt(riskLevels.tp2)},pattern:pattern?.type||null,score,alignmentScore,supportScore,oppositionScore,frameVotes:Object.fromEntries(opportunityFrames.map(frame=>[frame.label,frames[frame.label].vote])),indicators:{rsi14:hourly.rsi,ema9:hourly.ema9,ema21:hourly.ema21,atr},levels:{support:levels.support??null,resistance:levels.resistance??null},rewardRiskTP1:1.5,rewardRiskTP2:2.5,source:"Binance Spot API",timeframe:"5m,15m,1h,4h,1d",asOf:analysisAsOf,candleClose:fmt(entry)};
+    renderAutomaticVisual(lastAnalysis);
+    saveState();
+    renderTradeApproval();
+  }catch(error){
+    if(runToken!==analysisRunToken)return;
+    console.error("NEXFX automatic crypto analysis:",error);
+    renderAutomaticVisual(null);
+    title.textContent=at("failed");title.classList.remove("signal-up","signal-down","signal-neutral");
+    status.textContent=error.message||at("noData");
+    $("outEntry").textContent="—";$("outStop").textContent="—";$("outTP1").textContent="—";$("outTP2").textContent="—";
+    lastAnalysis=null;saveState();
+  }
+}
+
+async function runFiveFrameOpportunityScan(){
+  const button=$("opportunityScanBtn"),feedback=$("opportunityScanFeedback"),holder=$("opportunityScanResults");
+  button.disabled=true;holder.replaceChildren();
+  try{
+    if(!await syncCryptoAssetsWithBinance())throw new Error("تعذر التحقق من أزواج Binance Spot");
+    // Use the eight major pairs already present in the site's crypto catalogue.
+    const preferred=["BTCUSDT","ETHUSDT","BNBUSDT","SOLUSDT","XRPUSDT","ADAUSDT","DOGEUSDT","TRXUSDT"];
+    const available=assets.crypto.filter(a=>preferred.includes(cryptoPairFromTradingView(a[2]))).slice(0,8);
+    if(!available.length)throw new Error("لا توجد أزواج USDT نشطة للفحص");
+    const results=[];let completed=0;
+    for(let offset=0;offset<available.length;offset+=2){
+      const batch=available.slice(offset,offset+2);
+      const batchResults=await Promise.all(batch.map(async asset=>{
+        const frames={};
+        const fetched=await Promise.all(opportunityFrames.map(async frame=>{
+          const data=await fetchSelectedMarketCandles(asset,"crypto",frame.interval);
+          return [frame.label,{...scoreOpportunityFrame(data.candles),candles:data.candles,asOf:data.asOf}];
+        }));
+        fetched.forEach(([label,value])=>frames[label]=value);
+        const weighted=opportunityFrames.reduce((sum,frame)=>sum+frames[frame.label].vote*frame.weight,0);
+        const total=opportunityFrames.reduce((sum,frame)=>sum+frame.weight,0);
+        const score=Math.round(Math.abs(weighted)/total*100);
+        const direction=weighted>0?"شراء":weighted<0?"بيع":"انتظار";
+        const aligned=(frames["4H"].vote!==0&&frames["4H"].vote===frames["1D"].vote);
+        const opposingWeight=opportunityFrames.reduce((sum,frame)=>sum+(weighted>0?(frames[frame.label].vote===-1?frame.weight:0):(weighted<0?(frames[frame.label].vote===1?frame.weight:0):0)),0);
+        const actionable=score>=50&&aligned&&opposingWeight===0&&((weighted>0&&frames["1H"].vote===1)||(weighted<0&&frames["1H"].vote===-1));
+        const chosen=actionable?direction:"انتظار";
+        const hourly=frames["1H"],atr=calculateAtr(hourly.candles,14);
+        const entry=hourly.close,dist=Number.isFinite(atr)&&atr>0?atr*1.5:null;
+        const buy=chosen==="شراء",sell=chosen==="بيع";
+        // A neutral scan still gets one clearly-labelled reference scenario.
+        // This fallback selects display direction only; chosen remains WAIT.
+        const waitSide=chosen==="انتظار"?(weighted>0?"شراء":weighted<0?"بيع":(hourly.close>=hourly.ema21?"شراء":"بيع")):null;
+        const referenceSide=buy?"شراء":sell?"بيع":waitSide;
+        const referenceLevels=dist&&referenceSide?{
+          side:referenceSide,
+          stop:referenceSide==="شراء"?entry-dist:entry+dist,
+          tp1:referenceSide==="شراء"?entry+dist:entry-dist,
+          tp2:referenceSide==="شراء"?entry+dist*2:entry-dist*2
+        }:null;
+        return {asset,frames,score,direction:chosen,actionable,entry,stop:dist?(buy?entry-dist:sell?entry+dist:null):null,tp1:dist?(buy?entry+dist:sell?entry-dist:null):null,tp2:dist?(buy?entry+dist*2:sell?entry-dist*2:null):null,referenceLevels,asOf:hourly.asOf};
+      }));
+      results.push(...batchResults);completed+=batch.length;
+      feedback.textContent=`تم فحص ${completed} من ${available.length} أصول عبر الفريمات الخمسة…`;
+    }
+    results.sort((a,b)=>b.score-a.score);
+    results.forEach((item,index)=>{
+      const card=document.createElement("div");card.className="opportunity-card";
+      const title=document.createElement("div");
+      const displayDirection=item.direction;
+      const strong=document.createElement("strong");strong.textContent=`${index+1}. ${item.asset[0]} — ${displayDirection}`;
+      title.appendChild(strong);
+      const score=document.createElement("span");score.textContent=` · توافق ${item.score}/100`;title.appendChild(score);card.appendChild(title);
+      const meta=document.createElement("div");meta.className="opportunity-meta";
+      meta.textContent=opportunityFrames.map(f=>`${f.label}: ${item.frames[f.label].vote>0?"صاعد":item.frames[f.label].vote<0?"هابط":"غير واضح"} (RSI ${item.frames[f.label].rsi.toFixed(1)})`).join(" | ");card.appendChild(meta);
+      const levels=document.createElement("div");levels.className="opportunity-levels";
+      levels.textContent=item.actionable&&item.stop!==null?`الدخول ${formatMarketPrice(item.entry)} · وقف الخسارة ${formatMarketPrice(item.stop)} · الهدف الأول ${formatMarketPrice(item.tp1)} · الهدف الثاني ${formatMarketPrice(item.tp2)}`:item.referenceLevels?`انتظار: السعر ${formatMarketPrice(item.entry)} مرجعي فقط · سيناريو ${item.referenceLevels.side} غير مؤكد · وقف الخسارة ${formatMarketPrice(item.referenceLevels.stop)} · الهدف الأول ${formatMarketPrice(item.referenceLevels.tp1)} · الهدف الثاني ${formatMarketPrice(item.referenceLevels.tp2)}. شروط الدخول متعددة الفريمات غير مكتملة.`:`انتظار: السعر ${formatMarketPrice(item.entry)} مرجعي فقط؛ لا يوجد اتجاه مرجعي واضح حالياً.`;
+      card.appendChild(levels);holder.appendChild(card);
+    });
+    const found=results.filter(x=>x.actionable).length;
+    feedback.textContent=`اكتمل فحص ${results.length} أصول على 5M و15M و1H و4H و1D. فرص شراء/بيع مستوفية للشروط: ${found}. ظهور «انتظار» يعني أن توافق الفريمات لم يكتمل أو أن بينها تعارضاً، وليس عطلاً في عرض النتيجة. مصدر البيانات: Binance Spot API. درجة التوافق ليست احتمال ربح.`;
+  }catch(error){
+    feedback.textContent="تعذر إكمال الفحص: "+(error&&error.message?error.message:"خطأ غير معروف")+". أعد المحاولة عند استقرار الاتصال.";
+  }finally{button.disabled=false;}
+}
+$("opportunityScanBtn").addEventListener("click",runFiveFrameOpportunityScan);
+
 $("executionScanBtn").addEventListener("click",()=>{
   const scope=$("executionScanScope").value;
   const markets=scope==="all"?Object.keys(assets):[scope];
@@ -4528,6 +5313,7 @@ syncAnalysisResultMode();
 
 AuthController.init();
 loadUserScopedState();
+initNexfxTradeMonitor();
 syncCryptoAssetsWithBinance().catch(error=>console.warn("NEXFX Binance Spot symbol verification:",error));
 saveState();
 // Sidebar quote polling disabled: asset rows show symbols, icons and favorites only.
@@ -4600,6 +5386,9 @@ saveState();
         .forEach(id => { const field = document.getElementById(id); if (field) field.value = ""; });
       const direction = document.getElementById("direction");
       if (direction) direction.value = "buy";
+      if (typeof nexfxSelectedDate !== "undefined") nexfxSelectedDate = null;
+      const calendarTime=document.getElementById("signalCalendarTime");if(calendarTime)calendarTime.value="";
+      if (typeof syncAnalysisResultMode === "function") syncAnalysisResultMode(nextMode);
       if (typeof clearAnalysisOutput === "function") clearAnalysisOutput("");
       activeMode = nextMode;
     }
